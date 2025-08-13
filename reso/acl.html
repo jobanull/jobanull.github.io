@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>ACL STANDAR - UpNote Replica</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title">ACL STANDAR</h2>
+    <p class="note-paragraph">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae augue vitae justo faucibus vestibulum.
+    </p>
+
+    <img src="img/github.png" alt="Diagram jaringan" class="note-image" />
+
+    <h3 class="note-subtitle">Testing</h3>
+    <p class="note-paragraph">Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, quam.</p>
+    <ul class="note-list">
+      <li>etst</li>
+      <li>item kedua</li>
+    </ul>
+
+    <pre class="note-codeblock"><code>
+Skenario : block segment 2.0 dari 1.0
+
+access-list 1 deny 192.168.2.0 0.0.0.255
+access-list 1 permit any
+    </code></pre>
+
+    <hr class="note-divider" />
+
+    <img src="img/github.png" alt="Diagram jaringan 2" class="note-image" />
+
+    <pre class="note-codeblock"><code>
+    Skenario Blokir 2.2 dari segment 1.0
+    access-list 1 deny host 192.168.2.2
+    access-list 1 permit any
+
+    interface FastEthernet0/1
+    ip access-group 1 in
+
+    Atau
+
+    access-list 1 deny host 192.168.2.2
+    access-list 1 permit any
+
+    interface FastEthernet0/0
+    ip access-group 1 out
+
+    ip 192.168.200.252 255.255.255.0 192.168.200.1
+    </code></pre>
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => {
+        img.classList.toggle('expanded');
+      });
+    });
+  </script>
+</body>
+</html>

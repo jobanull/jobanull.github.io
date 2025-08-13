@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>ACL STANDAR - UpNote Replica</title>
+  <style>
+    /* Container utama */
+    .note-container {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background-color: #f4f5f7;
+      color: #333;
+      line-height: 1.6;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Konten note */
+    .note-main {
+      max-width: 1100px; /* atur lebar di sini */
+      margin: 40px auto;
+      padding: 2rem;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      border-radius: 12px;
+      transition: transform 0.2s ease;
+    }
+
+    .note-main:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Judul utama */
+    .note-title {
+      font-size: 1.8rem;
+      margin-bottom: 0.8rem;
+      color: #007aff;
+      border-bottom: 2px solid #007aff22;
+      padding-bottom: 5px;
+    }
+
+    /* Subjudul */
+    .note-subtitle {
+      font-size: 1.3rem;
+      margin-top: 1rem;
+      margin-bottom: 0.4rem;
+      color: #444;
+    }
+
+    /* Paragraf */
+    .note-paragraph {
+      margin: 0.5rem 0 1rem 0;
+      font-size: 1rem;
+      color: #555;
+    }
+
+    /* List */
+    .note-list {
+      margin: 0.5rem 0 1.5rem 1.2rem;
+      padding: 0;
+    }
+
+    .note-list li {
+      margin-bottom: 0.4rem;
+      padding-left: 0.4rem;
+    }
+
+    /* Gambar */
+    .note-image {
+      max-width: 100%;
+      display: block;
+      margin: 1.5rem 0;
+      border-radius: 8px;
+      cursor: zoom-in;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .note-image:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .note-image.expanded {
+      transform: scale(2);
+      cursor: zoom-out;
+      z-index: 999;
+      position: relative;
+    }
+
+    /* Code block */
+    .note-codeblock {
+      background: #282c34;
+      color: #f5f5f5;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.95rem;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.2);
+      margin-top: 1rem;
+    }
+
+    .note-codeblock code {
+      font-family: 'Fira Code', monospace;
+    }
+
+    /* Garis pemisah */
+    .note-divider {
+      margin: 2rem 0;
+      border: none;
+      border-top: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title">ACL STANDAR</h2>
+    <p class="note-paragraph">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae augue vitae justo faucibus vestibulum.
+    </p>
+
+    <img src="img/github.png" alt="Diagram jaringan" class="note-image" />
+
+    <h3 class="note-subtitle">Testing</h3>
+    <p class="note-paragraph">Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, quam.</p>
+    <ul class="note-list">
+      <li>etst</li>
+      <li>item kedua</li>
+    </ul>
+
+    <pre class="note-codeblock"><code>
+Skenario : block segment 2.0 dari 1.0
+
+access-list 1 deny 192.168.2.0 0.0.0.255
+access-list 1 permit any
+    </code></pre>
+
+    <hr class="note-divider" />
+
+    <img src="image2.jpg" alt="Diagram jaringan 2" class="note-image" />
+
+    <pre class="note-codeblock"><code>
+Skenario Blokir 2.2 dari segment 1.0
+access-list 1 deny host 192.168.2.2
+access-list 1 permit any
+
+interface FastEthernet0/1
+ip access-group 1 in
+
+Atau
+
+access-list 1 deny host 192.168.2.2
+access-list 1 permit any
+
+interface FastEthernet0/0
+ip access-group 1 out
+
+ip 192.168.200.252 255.255.255.0 192.168.200.1
+    </code></pre>
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => {
+        img.classList.toggle('expanded');
+      });
+    });
+  </script>
+</body>
+</html>
