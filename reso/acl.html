@@ -3,12 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <title>Access Control List</title>
+      <!-- Bootstrap core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="note-container">
 
   <main class="note-main">
-    <h2 class="note-title">Access Control List</h2>
+    <h2 class="note-title text-center">Access Control List</h2>
     <p class="note-paragraph">
       Access List (ACL) adalah daftar aturan yang digunakan pada perangkat jaringan untuk mengatur lalu lintas data
       yang melewati interface. ACL dapat memeriksa paket berdasarkan kriteria tertentu, seperti alamat IP, protokol,
@@ -29,11 +32,14 @@
       <li>Mengurangi lalu lintas yang tidak diperlukan.</li>
 
     <h3 class="note-subtitle">CONTOH KASUS</h3>
-      <ul class="note-list">
-      <li>Konfigurasi supaya PC 2 tidak bisa melakukan ping ke :</li>
-      <li>192.168.100.252 & 253 dengan ACL Standard </li>
-      <li>192.168.200.252 & 253 dengan ACL Extended</li>
-      </ul>
+    <ul class="note-list">
+      <li>Tujuan: Membuat <strong>PC 3 tidak bisa melakukan ping</strong> ke alamat IP tertentu menggunakan ACL.</li>
+      <li><strong>ACL Standard:</strong> blokir akses PC 3 ke 192.168.100.252 & 192.168.100.253</li>
+      <li><strong>ACL Extended:</strong> blokir akses PC 3 ke 192.168.200.252 & 192.168.200.253</li>
+      <li>Topologi: PC-PC → VLAN 100 & VLAN 200 → Switch Distribusi → Router R1</li>
+      <li>Catatan: ACL Standard filter berdasarkan <em>alamat sumber</em>, ACL Extended filter berdasarkan <em>alamat sumber, tujuan, dan protokol</em></li>
+    </ul>
+
 
        <img src="img/acl1.png" alt="Diagram jaringan" class="note-image" />
        <p class="note-subtitle">SW DISTRIBUTE</p>

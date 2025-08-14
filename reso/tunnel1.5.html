@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>VPLS - Tunnel Non-VPN</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">VPLS (Virtual Private LAN Service) – Tunnel Non-VPN</h2>
+    <p class="note-paragraph">
+      <strong>VPLS</strong> adalah layanan Layer 2 berbasis MPLS yang memungkinkan beberapa site berada dalam satu <em>broadcast domain</em> seolah-olah berada di LAN yang sama. 
+      Data dienkapsulasi di atas MPLS, tetapi <strong>tidak dienkripsi</strong>, sehingga termasuk tunnel non-VPN.
+    </p>
+
+    <ul class="note-list">
+      <li><strong>Tujuan:</strong> Menghubungkan beberapa kantor atau site dalam satu LAN virtual menggunakan MPLS.</li>
+      <li><strong>Non-VPN:</strong> Data hanya dibungkus MPLS untuk transport; tidak ada enkripsi bawaan.</li>
+      <li><strong>Use Case:</strong> Backbone provider untuk LAN extension, bridging antar-site, multi-site data center.</li>
+      <li><strong>Kelebihan:</strong> Transparan Layer 2, mendukung VLAN, broadcast/multicast/ARP forwarding antar-site.</li>
+      <li><strong>Keterbatasan:</strong> Bergantung pada MPLS backbone, konfigurasi lebih kompleks dibanding tunnel sederhana.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Konfigurasi VPLS (MikroTik)</h3>
+    <p class="note-paragraph">
+      Contoh sederhana menghubungkan dua site melalui MPLS VPLS:
+    </p>
+    <pre class="note-codeblock"><code>
+# Site A
+/interface bridge add name=BRIDGE_VPLS
+/interface vpls add name=VPLS1 vpls-id=100 remote-peer=203.0.113.2
+/interface bridge port add bridge=BRIDGE_VPLS interface=ether2
+/interface bridge port add bridge=BRIDGE_VPLS interface=VPLS1
+/ip address add address=192.168.10.1/24 interface=BRIDGE_VPLS
+
+# Site B
+/interface bridge add name=BRIDGE_VPLS
+/interface vpls add name=VPLS1 vpls-id=100 remote-peer=203.0.113.1
+/interface bridge port add bridge=BRIDGE_VPLS interface=ether2
+/interface bridge port add bridge=BRIDGE_VPLS interface=VPLS1
+/ip address add address=192.168.10.2/24 interface=BRIDGE_VPLS
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Pastikan MPLS backbone sudah aktif dan LDP/RSVP berjalan.</li>
+      <li>VPLS optimal untuk LAN extension dan VLAN multi-site.</li>
+      <li>Monitoring broadcast/multicast penting untuk menghindari loop.</li>
+    </ul>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quality of Service (PCQ)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Quality of Service (PCQ)</h2>
+    <p class="note-paragraph">
+      <strong>PCQ (Per Connection Queue)</strong> adalah metode QoS di MikroTik yang secara otomatis membagi bandwidth
+      antar koneksi atau pengguna agar adil. Cocok untuk jaringan dengan banyak user yang membutuhkan distribusi bandwidth merata.
+    </p>
+
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Membagi bandwidth secara otomatis per koneksi, mudah setup, ideal untuk jaringan hotspot atau kantor.</li>
+      <li><strong>Keterbatasan:</strong> Satu koneksi bisa menggunakan lebih dari satu flow PCQ jika ada burst; kontrol granular per aplikasi terbatas.</li>
+      <li><strong>Gunakan Saat:</strong> Hotspot, kantor, warnet, atau jaringan multi-user agar tiap pengguna mendapat bandwidth adil.</li>
+    </ul>
+
+    
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li>Buat PCQ</li>
+    </ul>
+
+
+    <img src="img/qos.png" alt="Diagram jaringan" class="note-image" />
+    <h3 class="note-subtitle">R.PCQ</h3>
+    <pre class="note-codeblock"><code>
+/ip pool
+add name=dhcp_pool0 ranges=192.168.1.2-192.168.1.6
+/ip dhcp-server
+add address-pool=dhcp_pool0 disabled=no interface=LAN name=dhcp1
+/queue type
+add kind=pcq name=pcq-download pcq-rate=254k
+add kind=pcq name=pcq-upload pcq-rate=254k
+/queue simple
+add max-limit=1M/1M name=PCQ_Client queue=pcq-upload/pcq-upload target=\
+    192.168.1.0/29
+/interface bridge port
+add bridge=LAN interface=ether2
+add bridge=LAN interface=ether3
+/ip address
+add address=192.168.1.1/29 interface=LAN network=192.168.1.0
+/ip dhcp-client
+add disabled=no interface=ether1
+/ip dhcp-server network
+add address=192.168.1.0/29 gateway=192.168.1.1
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/system identity
+set name=R.PCQ
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan PCQ untuk distribusi bandwidth adil antar pengguna atau koneksi.</li>
+      <li>Sesuaikan pcq-rate sesuai kebutuhan; pastikan tidak lebih besar dari kapasitas link fisik.</li>
+      <li>PCQ cocok dipadukan dengan burst untuk fleksibilitas sementara saat trafik rendah.</li>
+      <li>Monitor antrean dengan `/queue simple print` untuk memastikan distribusi bandwidth merata.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      PCQ membagi bandwidth secara otomatis per koneksi atau per pengguna, memastikan distribusi adil di jaringan multi-user.
+      Ideal untuk hotspot, kantor, atau jaringan yang memerlukan fairness tanpa konfigurasi manual per user.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

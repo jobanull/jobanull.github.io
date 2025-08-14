@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quality of Service (QoS) dengan Burst</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Quality of Service (QoS) dengan Burst</h2>
+    <p class="note-paragraph">
+      <strong>QoS (Quality of Service) dengan Burst</strong> adalah teknik mengatur bandwidth untuk prioritas trafik tertentu, 
+      sambil memperbolehkan trafik “ledakan” sesaat (burst) melebihi limit normal agar aplikasi sensitif tetap responsif.
+      Cocok untuk jaringan yang memerlukan kontrol bandwidth tapi tetap fleksibel pada trafik tinggi sesaat.
+    </p>
+
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Memberikan prioritas dan kontrol bandwidth, tetap memungkinkan trafik sesaat melewati limit normal.</li>
+      <li><strong>Keterbatasan:</strong> Burst hanya sementara; jika trafik terus-menerus tinggi, akan kembali ke limit reguler.</li>
+      <li><strong>Gunakan Saat:</strong> Streaming, VoIP, gaming, atau aplikasi yang sensitif terhadap latency, tetapi tetap ingin limit bandwidth di jaringan sibuk.</li>
+    </ul>
+
+    </ul>
+        <h3 class="note-subtitle">CONTOH KASUS</h3>
+        <ul class="note-list">
+            <li>On Progress</li>
+        </ul>
+
+
+    <!-- <img src="img/qos.png" alt="Diagram jaringan" class="note-image" />
+    <h3 class="note-subtitle">R.SQ</h3>
+    <pre class="note-codeblock"><code>
+/ip pool
+add name=dhcp_pool0 ranges=192.168.1.2
+add name=dhcp_pool1 ranges=192.168.2.2
+/ip dhcp-server
+add address-pool=dhcp_pool0 disabled=no interface=ether2 name=dhcp1
+add address-pool=dhcp_pool1 disabled=no interface=ether3 name=dhcp2
+/queue simple
+add max-limit=1M/1M name=queue-parent target=192.168.1.0/30
+add max-limit=254k/254k name=child-queue1 parent=queue-parent target=\
+    192.168.1.2/32
+add max-limit=1M/1M name=queue-ether3 target=192.168.2.2/32
+/ip address
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0
+add address=192.168.2.1/30 interface=ether3 network=192.168.2.0
+/ip dhcp-client
+add disabled=no interface=ether1
+/ip dhcp-server network
+add address=192.168.1.0/30 gateway=192.168.1.1
+add address=192.168.2.0/30 gateway=192.168.2.1
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/system identity
+set name=R.SQ
+    </code></pre> -->
+
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Sesuaikan <em>burst-limit</em> tidak terlalu tinggi agar tidak mengganggu pengguna lain.</li>
+      <li>Gunakan <em>burst-threshold</em> agar burst hanya aktif saat trafik rendah.</li>
+      <li>Gunakan priority untuk memastikan aplikasi sensitif latency mendapatkan bandwidth lebih cepat.</li>
+      <li>Monitor antrean dengan `/queue simple print` untuk memastikan QoS bekerja sesuai harapan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      QoS dengan Burst mengatur bandwidth dengan fleksibilitas: memberikan limit normal, tetapi memperbolehkan ledakan trafik sesaat agar aplikasi sensitif tetap responsif. Sangat cocok untuk jaringan dengan banyak pengguna dan aplikasi latency-sensitive.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

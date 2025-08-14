@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>OpenVPN (OVPN) VPN</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">OpenVPN (OVPN) – VPN</h2>
+    <p class="note-paragraph">
+      <strong>OpenVPN</strong> adalah protokol VPN open-source yang menggunakan SSL/TLS untuk enkripsi, cocok untuk remote-access dan site-to-site VPN. 
+      OpenVPN mendukung TCP dan UDP, serta enkripsi kuat untuk keamanan data.
+    </p>
+
+    <ul class="note-list">
+      <li><strong>Tujuan:</strong> Membuat koneksi VPN aman antar site atau untuk akses remote user ke jaringan kantor.</li>
+      <li><strong>VPN:</strong> Data dienkripsi menggunakan SSL/TLS, termasuk autentikasi sertifikat dan username/password.</li>
+      <li><strong>Use Case:</strong> Remote access VPN, site-to-site VPN, mengamankan koneksi publik ke private network.</li>
+      <li><strong>Kelebihan:</strong> Enkripsi kuat, open-source, dapat berjalan di TCP/UDP, lintas platform (Windows, Linux, macOS, MikroTik).</li>
+      <li><strong>Keterbatasan:</strong> Konfigurasi lebih kompleks dibanding L2TP/PPTP; butuh sertifikat dan manajemen CA.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Konfigurasi OpenVPN Server (MikroTik)</h3>
+    <pre class="note-codeblock"><code>
+# Import sertifikat CA, server, dan key terlebih dahulu
+/certificate import file-name=ca.crt
+/certificate import file-name=server.crt
+/certificate import file-name=server.key
+
+# Buat profil OpenVPN
+/ppp profile add name=ovpn-profile local-address=10.0.0.1 remote-address=ovpn-pool use-encryption=yes
+
+# Tambahkan pool IP untuk klien
+/ip pool add name=ovpn-pool ranges=10.0.0.2-10.0.0.100
+
+# OpenVPN server
+/interface ovpn-server server
+set enabled=yes port=1194 mode=ip netmask=24 \
+    certificate=server-cert require-client-certificate=yes default-profile=ovpn-profile
+
+# Tambahkan user VPN
+/ppp secret add name=user1 password=rahasia service=ovpn profile=ovpn-profile
+
+# Firewall & NAT
+/ip firewall filter add chain=input protocol=tcp port=1194 action=accept
+/ip firewall nat add chain=srcnat out-interface=ether1 action=masquerade
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan sertifikat CA sendiri untuk autentikasi klien, jangan hanya user/password.</li>
+      <li>OpenVPN di MikroTik berjalan di TCP, pastikan port 1194 terbuka di firewall/NAT.</li>
+      <li>Gunakan IP pool berbeda dari jaringan lokal agar routing lebih mudah.</li>
+    </ul>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

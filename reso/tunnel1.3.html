@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>IPIP Tunnel (Non-VPN)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">IPIP (IP over IP) – Tunnel Non-VPN</h2>
+    <p class="note-paragraph">
+      <strong>IPIP</strong> adalah tunnel layer 3 sederhana yang mengenkapsulasi paket IP di dalam paket IP lain. 
+      Cocok untuk menghubungkan subnet antar lokasi berbeda melalui jaringan IP tanpa enkripsi.
+    </p>
+
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Ringan, mudah dikonfigurasi, overhead rendah, mendukung routing antar subnet.</li>
+      <li><strong>Keterbatasan:</strong> Tidak terenkripsi, hanya transport IP (tidak mengangkut layer 2 atau VLAN).</li>
+      <li><strong>Gunakan Saat:</strong> Site-to-site routing antar jaringan IP, menghubungkan subnet berbeda secara langsung, transport IP sederhana antar MikroTik atau perangkat lain yang mendukung IPIP.</li>
+    </ul>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li>IPIP</li>
+    </ul>
+
+
+    <img src="img/tunnel1.png" alt="Diagram jaringan" class="note-image" />
+    
+    <h3 class="note-subtitle">IPIP-RB1</h3>
+    <pre class="note-codeblock"><code>
+/interface ipip
+add local-address=192.168.190.102 name=ipip-tunnel1 remote-address=\
+    192.168.190.103
+/interface wireless security-profiles
+set [ find default=yes ] supplicant-identity=MikroTik
+/ip address
+add address=192.168.190.102/24 interface=ether1 network=192.168.190.0
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0
+add address=10.10.10.1/30 interface=ipip-tunnel1 network=10.10.10.0
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip route
+add distance=1 gateway=192.168.190.1
+add distance=1 dst-address=192.168.2.0/30 gateway=10.10.10.2
+    </code></pre>
+
+    <h3 class="note-subtitle">IPIP-RB2</h3>
+    <pre class="note-codeblock"><code>
+/interface ipip
+add local-address=192.168.190.103 name=ipip-tunnel1 remote-address=\
+    192.168.190.102
+/interface wireless security-profiles
+set [ find default=yes ] supplicant-identity=MikroTik
+/ip address
+add address=192.168.190.103/24 interface=ether1 network=192.168.190.0
+add address=192.168.2.1/30 interface=ether2 network=192.168.2.0
+add address=10.10.10.2/30 interface=ipip-tunnel1 network=10.10.10.0
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip route
+add distance=1 gateway=192.168.190.1
+add distance=1 dst-address=192.168.1.0/30 gateway=10.10.10.1
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis IPIP</h3>
+    <ul class="note-list">
+      <li>IPIP hanya mengangkut paket IP; jika butuh bridging layer 2, gunakan EOIP atau VXLAN.</li>
+      <li>Pastikan IP lokal/remote tunnel dapat saling jangkau melalui jaringan fisik.</li>
+      <li>Gunakan route statik untuk subnet yang ingin dilewatkan melalui tunnel IPIP.</li>
+      <li>Untuk keamanan di jaringan publik, kombinasikan IPIP dengan IPsec.</li>
+      <li>Overhead IPIP = 20 bytes per paket, perhatikan MTU jika melewati jaringan internet.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      IPIP adalah tunnel layer 3 non-VPN yang sederhana dan ringan untuk site-to-site routing antar subnet IP. Tidak terenkripsi, tapi mudah dikonfigurasi dan kompatibel dengan perangkat lain yang mendukung IPIP.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

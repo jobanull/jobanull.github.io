@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Load Balancing (PBR)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Load Balancing (Policy-Based Routing / PBR)</h2>
+    <p class="note-paragraph">
+      <strong>PBR (Policy-Based Routing)</strong> adalah teknik routing di mana keputusan jalur tidak hanya
+      berdasarkan routing table, tetapi juga kebijakan tertentu seperti sumber IP, jenis trafik, atau port.
+      Cocok untuk multi-WAN atau skenario khusus yang membutuhkan kontrol granular atas jalur trafik.
+    </p>
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Fleksibel, dapat menentukan jalur berbeda untuk user/servis/jenis trafik tertentu.</li>
+      <li><strong>Keterbatasan:</strong> Konfigurasi lebih kompleks; perlu pemeliharaan rutin agar kebijakan tetap konsisten.</li>
+      <li><strong>Gunakan Saat:</strong> Multi-WAN dengan prioritas pengguna, aplikasi tertentu harus melewati gateway spesifik, atau trafik VoIP/VoD butuh jalur khusus.</li>
+    </ul>
+
+    <pre class="note-codeblock"><code>
+# MikroTik: PBR berbasis sumber IP (2 WAN)
+/ip firewall mangle
+# Tandai koneksi dari subnet 192.168.1.0/24 untuk WAN1
+add chain=prerouting src-address=192.168.1.0/24 action=mark-routing new-routing-mark=to_wan1 passthrough=yes
+# Tandai koneksi dari subnet 192.168.2.0/24 untuk WAN2
+add chain=prerouting src-address=192.168.2.0/24 action=mark-routing new-routing-mark=to_wan2 passthrough=yes
+
+# Routing sesuai mark
+/ip route
+add dst-address=0.0.0.0/0 gateway=1.1.1.1 routing-mark=to_wan1 check-gateway=ping
+add dst-address=0.0.0.0/0 gateway=2.2.2.2 routing-mark=to_wan2 check-gateway=ping
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan routing mark secara konsisten agar trafik sesuai kebijakan yang diinginkan.</li>
+      <li>Periksa kombinasi PBR dan NAT jika trafik keluar harus diubah IP sumber.</li>
+      <li>Dokumentasikan kebijakan PBR untuk memudahkan troubleshooting dan future scaling.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      PBR memungkinkan kontrol granular atas jalur trafik berdasarkan kebijakan tertentu, seperti sumber IP, jenis aplikasi, atau port.
+      Sangat berguna pada multi-WAN untuk memastikan aplikasi/klien tertentu selalu melewati jalur yang diinginkan.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

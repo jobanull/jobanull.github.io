@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>PPPoE</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">PPPoE (Point-to-Point Protocol over Ethernet)</h2>
+    <p class="note-paragraph">
+      <strong>PPPoE</strong> adalah protokol yang mengenkapsulasi PPP dalam frame Ethernet. 
+      Umumnya digunakan untuk koneksi broadband DSL atau antar-site point-to-point melalui Ethernet. 
+      Meskipun bukan VPN, PPPoE menyediakan autentikasi, enkapsulasi, dan session management.
+    </p>
+
+    <ul class="note-list">
+      <li><strong>Tujuan:</strong> Menghubungkan client ke server menggunakan autentikasi PPP (username/password) melalui Ethernet.</li>
+      <li><strong>Use Case:</strong> ISP DSL, point-to-point antar kantor, manajemen user di layer 2.</li>
+      <li><strong>Kelebihan:</strong> Autentikasi built-in, session management, sederhana untuk koneksi point-to-point.</li>
+      <li><strong>Keterbatasan:</strong> Tidak menyediakan enkripsi; throughput terbatas oleh overhead PPPoE (~8 byte/header tambahan).</li>
+    </ul>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li>PPPoE</li>
+    </ul>
+
+
+    <img src="img/tunnel2.png" alt="Diagram jaringan" class="note-image" />
+    
+    <h3 class="note-subtitle">PPPoE-RB1</h3>
+    <pre class="note-codeblock"><code>
+/ip pool
+add name=pppoe_pool ranges=10.10.10.4
+/ppp profile
+add local-address=10.10.10.1 name=pppoe_profile remote-address=pppoe_pool
+/interface pppoe-server server
+add default-profile=pppoe_profile disabled=no interface=ether1 service-name=\
+    PPPOE_Server
+/ip address
+add address=192.168.190.108/24 interface=ether1 network=192.168.190.0
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0
+/ip route
+add distance=1 dst-address=192.168.2.0/30 gateway=10.10.10.4
+/ppp secret
+add name=pppoe1 password=pppoe1 profile=pppoe_profile service=pppoe
+/system identity
+set name=PPPOE-R1
+    </code></pre>
+    
+    <h3 class="note-subtitle">PPPoE-RB2</h3>
+    <pre class="note-codeblock"><code>
+/interface pppoe-client
+add disabled=no interface=ether1 name=pppoe-out1 password=pppoe1 \
+    service-name=PPPOE_Server user=pppoe1
+/interface wireless security-profiles
+set [ find default=yes ] supplicant-identity=MikroTik
+/ip pool
+add name=dhcp_pool0 ranges=192.168.2.2
+/ip address
+add address=192.168.190.109/24 interface=ether1 network=192.168.190.0
+add address=192.168.2.1/30 interface=ether2 network=192.168.2.0
+/ip route
+add distance=1 dst-address=192.168.1.0/30 gateway=10.10.10.1
+/system identity
+set name=PPPOE-R2
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>PPPoE cocok untuk point-to-point atau ISP DSL, tetapi overhead kecil perlu diperhatikan jika banyak session.</li>
+      <li>Gunakan pool IP yang cukup untuk semua klien agar tidak terjadi konflik IP.</li>
+      <li>Pastikan autentikasi username/password benar dan interface sudah diatur sesuai topologi.</li>
+    </ul>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

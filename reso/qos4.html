@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quality of Service (Q-Tree)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Quality of Service (Q-Tree)</h2>
+    <p class="note-paragraph">
+      <strong>Q-Tree</strong> adalah metode QoS berbasis hierarki di MikroTik yang memungkinkan pengaturan antrean (queue)
+      secara kompleks, termasuk prioritas, limit, dan pembagian bandwidth ke sub-queue. Cocok untuk jaringan dengan
+      kebutuhan kontrol bandwidth yang mendetail per user, departemen, atau jenis trafik.
+    </p>
+
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Mengatur bandwidth dan prioritas secara hierarkis; bisa menggabungkan PCQ, simple queue, dan queue tree; fleksibel untuk jaringan kompleks.</li>
+      <li><strong>Keterbatasan:</strong> Konfigurasi lebih kompleks dibanding simple queue; perlu pemahaman tentang parent/child queue.</li>
+      <li><strong>Gunakan Saat:</strong> Kantor besar, hotspot, ISP, atau jaringan yang ingin membagi bandwidth ke departemen, user, atau aplikasi tertentu secara hierarkis.</li>
+    </ul>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li>Buat Queue Tree</li>
+    </ul>
+
+
+    <img src="img/qos.png" alt="Diagram jaringan" class="note-image" />
+    <h3 class="note-subtitle">R.QT</h3>
+    <pre class="note-codeblock"><code>
+/ip pool
+add name=dhcp_pool0 ranges=192.168.1.2
+add name=dhcp_pool1 ranges=192.168.2.2
+/ip dhcp-server
+add address-pool=dhcp_pool0 disabled=no interface=ether2 name=dhcp1
+add address-pool=dhcp_pool1 disabled=no interface=ether3 name=dhcp2
+/queue tree
+add max-limit=1M name=queue-parent-upload parent=ether1
+add max-limit=254k name=queue1-upload packet-mark=packet-client1 parent=\
+    queue-parent-upload
+add max-limit=254k name=queue2-upload packet-mark=packet-client2 parent=\
+    queue-parent-upload
+/ip address
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0
+add address=192.168.2.1/30 interface=ether3 network=192.168.2.0
+/ip dhcp-client
+add disabled=no interface=ether1
+/ip dhcp-server network
+add address=192.168.1.0/30 gateway=192.168.1.1
+add address=192.168.2.0/30 gateway=192.168.2.1
+/ip firewall mangle
+add action=mark-connection chain=prerouting new-connection-mark=\
+    conn-client1 passthrough=yes src-address=192.168.1.2
+add action=mark-connection chain=prerouting new-connection-mark=\
+    conn-client2 passthrough=yes src-address=192.168.2.2
+add action=mark-packet chain=prerouting connection-mark=conn-client1 \
+    new-packet-mark=packet-client1 passthrough=no
+add action=mark-packet chain=prerouting connection-mark=conn-client2 \
+    new-packet-mark=packet-client2 passthrough=no
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/system identity
+set name=R.QT
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Pahami hierarki parent-child queue agar bandwidth dibagi sesuai rencana.</li>
+      <li>Gunakan packet mark atau mangle untuk mengarahkan trafik ke child queue tertentu.</li>
+      <li>Priority lebih rendah = angka lebih tinggi; gunakan untuk mengatur urutan antrean.</li>
+      <li>Monitor dengan `/queue tree print` untuk memastikan QoS bekerja sesuai harapan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      Q-Tree memungkinkan pengaturan bandwidth dan prioritas secara hierarkis, menggabungkan parent dan child queue untuk kontrol granular. Ideal untuk jaringan kompleks dengan banyak user, departemen, atau aplikasi yang memerlukan alokasi bandwidth spesifik.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

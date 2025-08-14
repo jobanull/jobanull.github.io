@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quality of Service (QoS Layer 7)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Quality of Service (QoS Layer 7)</h2>
+    <p class="note-paragraph">
+      <strong>QoS Layer 7 (L7)</strong> adalah metode mengatur bandwidth dan prioritas trafik berdasarkan pola aplikasi atau konten,
+      seperti HTTP, BitTorrent, atau streaming. MikroTik memanfaatkan <em>L7 protocol classifier</em> untuk mengenali trafik
+      spesifik dan mengatur antrean (queue) sesuai kebutuhan.
+    </p>
+
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Bisa mengatur prioritas trafik per aplikasi, membatasi bandwidth aplikasi tertentu, dan meningkatkan pengalaman pengguna untuk aplikasi penting.</li>
+      <li><strong>Keterbatasan:</strong> Analisis L7 membebani CPU router; tidak cocok untuk trafik tinggi atau ratusan ribu koneksi per detik.</li>
+      <li><strong>Gunakan Saat:</strong> Membatasi torrent, P2P, streaming non-kritis, atau memberi prioritas VoIP/HTTP/CRM di jaringan kantor.</li>
+    </ul>
+
+    <pre class="note-codeblock"><code>
+# MikroTik: QoS L7 untuk membatasi BitTorrent
+/ip firewall layer7-protocol
+add name=bittorrent regexp="^.*(peer_id|BitTorrent).*"
+
+# Tandai paket BitTorrent
+/ip firewall mangle
+add chain=forward layer7-protocol=bittorrent action=mark-packet new-packet-mark=bt passthrough=yes
+
+# Atur queue untuk paket BitTorrent
+/queue simple
+add name="Limit_BitTorrent" packet-marks=bt target=0.0.0.0/0 max-limit=2M/2M priority=8
+
+# Paket lain tetap prioritas normal
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan L7 classifier hanya untuk aplikasi tertentu agar router tidak overload.</li>
+      <li>Prioritaskan aplikasi penting dengan antrean (queue) berprioritas tinggi dan bandwidth memadai.</li>
+      <li>Monitor antrean dengan `/queue simple print` dan packet mark untuk memastikan QoS bekerja sesuai rencana.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      QoS Layer 7 memungkinkan pengaturan bandwidth dan prioritas berdasarkan aplikasi atau konten. Sangat berguna untuk membatasi aplikasi non-kritis, memprioritaskan layanan penting, dan menjaga kualitas jaringan meski trafik campur.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

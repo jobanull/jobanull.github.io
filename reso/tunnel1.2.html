@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>GRE Tunnel (Non-VPN)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">GRE (Generic Routing Encapsulation) – Tunnel Non-VPN</h2>
+    <p class="note-paragraph">
+      <strong>GRE</strong> adalah protokol tunnel layer 3 yang mengenkapsulasi paket IP di dalam paket IP lain.
+      Cocok untuk mengangkut berbagai protokol melalui jaringan IP tanpa enkripsi, ringan, dan fleksibel.
+    </p>
+
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Mendukung multi-protokol, ringan, mudah dikonfigurasi, tidak membutuhkan vendor khusus.</li>
+      <li><strong>Keterbatasan:</strong> Tidak terenkripsi; hanya mengangkut paket, tidak melakukan bridging layer 2.</li>
+      <li><strong>Gunakan Saat:</strong> Site-to-site routing antar jaringan IP, menghubungkan subnet di lokasi berbeda, atau untuk transport multi-protokol.</li>
+    </ul>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <img src="img/tunnel1.png" alt="Diagram jaringan" class="note-image" />
+    
+    <h3 class="note-subtitle">GRE-RB1</h3>
+    <pre class="note-codeblock"><code>
+/interface gre
+add local-address=192.168.190.104 name=gre-tunnel1 remote-address=\
+    192.168.190.105
+/ip address
+add address=192.168.190.104/24 interface=ether1 network=192.168.190.0
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0
+add address=10.10.10.1/30 interface=gre-tunnel1 network=10.10.10.0
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip route
+add distance=1 gateway=192.168.190.1
+add distance=1 dst-address=192.168.2.0/30 gateway=10.10.10.2
+    </code></pre>
+
+    <h3 class="note-subtitle">GRE-RB2</h3>
+    <pre class="note-codeblock"><code>
+/interface gre
+add local-address=192.168.190.105 name=gre-tunnel1 remote-address=\
+    192.168.190.104
+/ip address
+add address=192.168.190.105/24 interface=ether1 network=192.168.190.0
+add address=192.168.2.1/30 interface=ether2 network=192.168.2.0
+add address=10.10.10.2/30 interface=gre-tunnel1 network=10.10.10.0
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip route
+add distance=1 gateway=192.168.190.1
+add distance=1 dst-address=192.168.1.0/30 gateway=10.10.10.1
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis GRE</h3>
+    <ul class="note-list">
+      <li>GRE hanya mengenkapsulasi paket IP; jika butuh bridging layer 2, gunakan EOIP atau VXLAN.</li>
+      <li>Pastikan IP lokal/remote tunnel dapat saling jangkau melalui jaringan fisik.</li>
+      <li>Gunakan route statik untuk subnet yang ingin dilewatkan melalui tunnel GRE.</li>
+      <li>Untuk keamanan di jaringan publik, kombinasikan GRE dengan IPsec.</li>
+      <li>Overhead GRE = 24 bytes per paket, perhatikan MTU jika melewati jaringan internet.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      GRE adalah tunnel layer 3 non-VPN yang fleksibel dan ringan untuk site-to-site routing dan transport multi-protokol antar jaringan IP. Tidak terenkripsi, tapi mudah dikonfigurasi dan kompatibel dengan berbagai perangkat.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>EOIP Tunnel (Non-VPN)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">EOIP (Ethernet over IP) – Tunnel Non-VPN</h2>
+    <p class="note-paragraph">
+      <strong>EOIP</strong> adalah protokol MikroTik untuk mengenkapsulasi frame Ethernet di dalam paket IP. 
+      Digunakan untuk bridging antar-site MikroTik, memungkinkan LAN yang berbeda secara fisik terlihat seperti satu broadcast domain.
+    </p>
+
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Bridging antar-site, mendukung VLAN, multi-protokol, ideal untuk jaringan MikroTik murni.</li>
+      <li><strong>Keterbatasan:</strong> Hanya antar MikroTik; tidak ada enkripsi; overhead tinggi dibanding IPIP/GRE.</li>
+      <li><strong>Gunakan Saat:</strong> Menghubungkan LAN jarak jauh dengan broadcast domain sama, mengangkut VLAN, atau integrasi jaringan layer 2.</li>
+    </ul>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li>EOIP</li>
+    </ul>
+
+
+    <img src="img/tunnel1.png" alt="Diagram jaringan" class="note-image" />
+    
+    <h3 class="note-subtitle">EOIP-RB1</h3>
+    <pre class="note-codeblock"><code>
+/interface eoip
+add name=EOIP1 remote-address=192.168.190.101 \
+    tunnel-id=10
+/interface wireless security-profiles
+set [ find default=yes ] supplicant-identity=MikroTik
+/ip address
+add address=192.168.190.100/24 interface=ether1 network=192.168.190.0
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0
+add address=10.10.10.1/30 interface=EOIP1 network=10.10.10.0
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip route
+add distance=1 gateway=192.168.190.1
+add distance=1 dst-address=192.168.2.0/30 gateway=10.10.10.2
+    </code></pre>
+
+    <h3 class="note-subtitle">EOIP-RB2</h3>
+    <pre class="note-codeblock"><code>
+/interface eoip
+add name=EOIP1 remote-address=192.168.190.100 \
+    tunnel-id=10
+/interface wireless security-profiles
+set [ find default=yes ] supplicant-identity=MikroTik
+/ip address
+add address=192.168.190.101/24 interface=ether1 network=192.168.190.0
+add address=192.168.2.1/30 interface=ether2 network=192.168.2.0
+add address=10.10.10.2/30 interface=EOIP1 network=10.10.10.0
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip route
+add distance=1 gateway=192.168.190.1
+add distance=1 dst-address=192.168.1.0/30 gateway=10.10.10.1
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis EOIP</h3>
+    <ul class="note-list">
+      <li>EOIP optimal antar MikroTik, tidak kompatibel dengan vendor lain.</li>
+      <li>Gunakan tunnel-id unik untuk setiap EOIP tunnel.</li>
+      <li>Perhatikan MTU karena EOIP menambah overhead Ethernet frame.</li>
+      <li>Untuk keamanan, kombinasikan dengan IPsec jika melewati jaringan publik.</li>
+      <li>Bisa digabung dengan bridge atau VLAN untuk integrasi layer 2 penuh antar-site.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      EOIP memungkinkan bridging layer 2 antar MikroTik melalui jaringan IP. Cocok untuk site-to-site yang
+      membutuhkan LAN virtual yang sama, pengangkutan VLAN, dan multi-protokol antar site.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

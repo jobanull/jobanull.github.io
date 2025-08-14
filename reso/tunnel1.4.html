@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>MPLS-TE (Traffic Engineering)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">MPLS-TE (Multiprotocol Label Switching - Traffic Engineering)</h2>
+    <p class="note-paragraph">
+      <strong>MPLS-TE</strong> adalah ekstensi MPLS standar untuk mengarahkan trafik melalui jalur tertentu berdasarkan bandwidth, delay, atau constraint lain. Ideal untuk backbone ISP atau jaringan enterprise yang memerlukan kontrol penuh terhadap jalur trafik.
+    </p>
+
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Optimasi bandwidth, kontrol jalur, mendukung failover, QoS, L2/L3 VPN.</li>
+      <li><strong>Keterbatasan:</strong> Lebih kompleks dibanding MPLS biasa; butuh RSVP signaling dan reservasi bandwidth.</li>
+      <li><strong>Gunakan Saat:</strong> Backbone dengan traffic tinggi, site-to-site prioritas tertentu, link penuh, atau perlu jalur alternatif otomatis.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Konsep Dasar</h3>
+    <ul class="note-list">
+      <li>Jalur MPLS-TE tidak selalu jalur terpendek; dipilih sesuai constraint (bandwidth, delay, affinity).</li>
+      <li>Label tetap digunakan untuk forwarding, tapi jalur bisa diatur secara manual atau otomatis (RSVP-TE).</li>
+      <li>MPLS-TE memungkinkan failover otomatis jika jalur utama penuh atau down.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Topologi Sederhana</h3>
+    <p class="note-paragraph">RB1 → RB2 → RB3 dengan jalur TE utama via RB2 dan jalur cadangan langsung RB1→RB3.</p>
+
+    <h3 class="note-subtitle">Konfigurasi MPLS-TE di MikroTik</h3>
+
+    <h4>RB1</h4>
+    <pre class="note-codeblock"><code>
+/interface ethernet
+set ether1 name=to_RB2
+set ether2 name=to_RB3
+
+/mpls interface
+add interface=to_RB2
+add interface=to_RB3
+
+/mpls traffic-eng
+set enabled=yes
+
+/mpls traffic-eng tunnels
+add name=TE_tunnel1 to=10.0.23.3 path-option=primary bandwidth=5M
+add name=TE_tunnel2 to=10.0.23.3 path-option=secondary bandwidth=2M
+    </code></pre>
+
+    <h4>RB2</h4>
+    <pre class="note-codeblock"><code>
+/interface ethernet
+set ether1 name=to_RB1
+set ether2 name=to_RB3
+
+/mpls interface
+add interface=to_RB1
+add interface=to_RB3
+
+/mpls traffic-eng
+set enabled=yes
+    </code></pre>
+
+    <h4>RB3</h4>
+    <pre class="note-codeblock"><code>
+/interface ethernet
+set ether1 name=to_RB2
+set ether2 name=to_RB1
+
+/mpls interface
+add interface=to_RB2
+add interface=to_RB1
+
+/mpls traffic-eng
+set enabled=yes
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis MPLS-TE</h3>
+    <ul class="note-list">
+      <li>Gunakan <strong>RSVP-TE</strong> untuk reservasi jalur otomatis antar-router MPLS.</li>
+      <li>Pastikan semua router MPLS aware dan interface MPLS sudah aktif.</li>
+      <li>Monitoring jalur TE: <code>/mpls traffic-eng tunnels print</code> untuk melihat status jalur dan bandwidth.</li>
+      <li>Untuk failover, siapkan jalur cadangan dengan <em>secondary path-option</em>.</li>
+      <li>Kombinasikan dengan QoS untuk prioritas trafik kritikal.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      MPLS-TE memberikan kontrol penuh jalur trafik menggunakan label MPLS, memungkinkan traffic engineering, failover otomatis, dan QoS di backbone. Cocok untuk jaringan yang butuh optimasi jalur dan prioritas bandwidth.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

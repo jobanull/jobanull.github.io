@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Load Balancing (Failover)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Load Balancing (Failover)</h2>
+    <p class="note-paragraph">
+      <strong>Failover</strong> adalah teknik load balancing yang menempatkan satu link/gateway sebagai utama dan link lain sebagai cadangan.
+      Trafik normal melewati link utama, dan jika link utama gagal, trafik otomatis dialihkan ke link cadangan.
+    </p>
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Menjamin ketersediaan layanan (high availability) dengan setup yang sederhana.</li>
+      <li><strong>Keterbatasan:</strong> Tidak membagi beban, hanya aktif saat link utama gagal.</li>
+      <li><strong>Gunakan Saat:</strong> Kantor, retail, atau koneksi internet kritikal dengan satu link utama dan satu link backup.</li>
+    </ul>
+
+    <pre class="note-codeblock"><code>
+# MikroTik: failover via distance + check-gateway
+/ip route
+add dst-address=0.0.0.0/0 gateway=1.1.1.1 distance=1 check-gateway=ping comment="Primary WAN"
+add dst-address=0.0.0.0/0 gateway=2.2.2.2 distance=2 comment="Backup WAN"
+
+# Alternatif lebih andal: recursive routing monitor
+/ip route
+add dst-address=8.8.8.8/32 gateway=1.1.1.1 scope=10
+add dst-address=0.0.0.0/0 gateway=8.8.8.8 distance=1
+# Jika gateway 1.1.1.1 tidak bisa ke 8.8.8.8, default route utama invalid → aktifkan route distance=2 (backup).
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan <em>check-gateway</em> atau IP SLA untuk memonitor kesehatan link utama.</li>
+      <li>Pastikan route distance link backup lebih tinggi daripada link utama agar hanya aktif saat link utama gagal.</li>
+      <li>Dokumentasikan konfigurasi failover agar mudah di-troubleshoot.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      Failover menjaga layanan tetap berjalan saat link utama gagal. Cocok untuk koneksi kritikal yang membutuhkan
+      <em>high availability</em>. Tidak membagi beban; link cadangan hanya aktif jika link utama down.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

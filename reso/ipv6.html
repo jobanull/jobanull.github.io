@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <title>Internet Protocol Version 6 (IPv6)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="note-container">
 
   <main class="note-main">
-    <h2 class="note-title">Internet Protocol Version 6 (IPv6)</h2>
+    <h2 class="note-title text-center">Internet Protocol Version 6 (IPv6)</h2>
     <p class="note-paragraph">
       IPv6 adalah generasi terbaru dari Internet Protocol yang dirancang untuk menggantikan IPv4.
       Tujuan utamanya adalah menyediakan ruang alamat yang sangat besar, menyederhanakan pemrosesan paket,
@@ -90,34 +91,11 @@
 
     <h3 class="note-subtitle">CONTOH KASUS</h3>
     <ul class="note-list">
-        <li>Topologi ini mengimplementasikan <b>IPv6 over IPv4</b> menggunakan tunnel <code>6to4</code> di MikroTik.</li>
-        <li>RB1:
-            <ul>
-                <li>Memiliki alamat IPv4 <code>10.10.10.1/30</code> di <code>ether1</code> untuk koneksi ke RB2.</li>
-                <li>Memiliki alamat IPv6 <code>2001:a:b:10::1</code> di <code>ether2</code> untuk jaringan lokal.</li>
-                <li>Membuat tunnel <code>6to4-tunnel1</code> ke RB2 dan merutekan jaringan IPv6 <code>2001:a:b:20::/64</code> melalui tunnel tersebut.</li>
-            </ul>
-        </li>
-        <li>RB2:
-            <ul>
-                <li>Memiliki alamat IPv4 <code>10.10.10.2/30</code> di <code>ether1</code> untuk koneksi ke RB1.</li>
-                <li>Memiliki alamat IPv6 <code>2001:a:b:20::1</code> di <code>ether2</code> untuk jaringan lokal.</li>
-                <li>Membuat tunnel <code>6to4-tunnel2</code> ke RB1 dan merutekan jaringan IPv6 <code>2001:a:b:10::/64</code> melalui tunnel tersebut.</li>
-            </ul>
-        </li>
-        <li>RB3:
-            <ul>
-                <li>Terhubung ke RB1 dan berada di jaringan IPv6 <code>2001:a:b:10::/64</code>.</li>
-                <li>Memiliki alamat IPv6 <code>2001:a:b:10::2</code> dan merutekan jaringan <code>2001:a:b:20::/64</code> via RB1.</li>
-            </ul>
-        </li>
-        <li>RB4:
-            <ul>
-                <li>Terhubung ke RB2 dan berada di jaringan IPv6 <code>2001:a:b:20::/64</code>.</li>
-                <li>Memiliki alamat IPv6 <code>2001:a:b:20::2</code> dan merutekan jaringan <code>2001:a:b:10::/64</code> via RB2.</li>
-            </ul>
-        </li>
-        <li>Tujuan: Menghubungkan dua jaringan IPv6 yang berbeda melalui jaringan IPv4 sebagai transport tunnel.</li>
+      <li>Tujuan: Menghubungkan RB1, RB2, dan RB3 menggunakan <strong>protokol routing IS-IS</strong> untuk pertukaran routing.</li>
+      <li>RB1: Menetapkan IP untuk semua interface, membuat instance IS-IS dengan System-ID 0000.0000.0001, Level-1 & Level-2, dan NAT keluar ke internet.</li>
+      <li>RB2: Menetapkan IP, membuat instance IS-IS System-ID 0000.0000.0002, semua interface Level-1.</li>
+      <li>RB3: Menetapkan IP, membuat instance IS-IS System-ID 0000.0000.0003, semua interface Level-1.</li>
+      <li>Catatan: Level-1 digunakan untuk internal, Level-2 untuk eksternal/default route.</li>
     </ul>
 
 
@@ -155,8 +133,6 @@ set name=RB2
 
     <p class="note-subtitle">RB3</p>
     <pre class="note-codeblock"><code>
-/ip dhcp-client
-add disabled=no interface=ether1
 /ipv6 address
 add address=2001:a:b:10::2 interface=ether1
 /ipv6 route
@@ -167,8 +143,6 @@ set name=RB3
 
     <p class="note-subtitle">RB4</p>
     <pre class="note-codeblock"><code>
-/ip dhcp-client
-add disabled=no interface=ether1
 /ipv6 address
 add address=2001:a:b:20::2 interface=ether1
 /ipv6 route

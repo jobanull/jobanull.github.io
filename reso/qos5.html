@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quality of Service (Simple Queue)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Quality of Service (Simple Queue)</h2>
+    <p class="note-paragraph">
+      <strong>Simple Queue</strong> adalah metode QoS dasar di MikroTik untuk mengatur bandwidth secara langsung
+      per user, subnet, atau interface. Cocok untuk jaringan kecil hingga menengah yang ingin membatasi atau
+      membagi bandwidth dengan cepat dan mudah.
+    </p>
+
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Mudah di-setup, langsung mengatur limit bandwidth per target; cocok untuk jaringan kecil atau kantor dengan sedikit user/subnet.</li>
+      <li><strong>Keterbatasan:</strong> Kurang fleksibel untuk jaringan kompleks; tidak sebaik PCQ atau Q-Tree untuk distribusi per koneksi/user banyak.</li>
+      <li><strong>Gunakan Saat:</strong> Membatasi bandwidth user tertentu, subnet kantor, atau interface WAN agar tidak melebihi kapasitas link.</li>
+    </ul>
+
+    <pre class="note-codeblock"><code>
+# MikroTik: Contoh Simple Queue
+/queue simple
+add name="User1" target=192.168.1.10/32 max-limit=5M/5M
+add name="User2" target=192.168.1.11/32 max-limit=3M/3M
+add name="Subnet_Kantor" target=192.168.1.0/24 max-limit=20M/20M
+
+# max-limit -> upload/download maksimal per target
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan Simple Queue untuk jaringan kecil agar mudah dikelola.</li>
+      <li>Untuk banyak user, pertimbangkan PCQ agar distribusi bandwidth lebih adil otomatis.</li>
+      <li>Monitor antrean dengan `/queue simple print` untuk memastikan limit bekerja sesuai rencana.</li>
+      <li>Dapat dipadukan dengan burst agar user mendapat bandwidth lebih tinggi sesaat saat trafik rendah.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      Simple Queue adalah cara cepat dan mudah untuk membatasi atau membagi bandwidth per user, subnet, atau interface.
+      Ideal untuk jaringan kecil sampai menengah yang membutuhkan kontrol bandwidth langsung tanpa konfigurasi kompleks.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

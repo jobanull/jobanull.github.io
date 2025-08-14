@@ -2,141 +2,50 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Load Balancing (NTH, Bonding, Failover)</title>
+  <title>Load Balancing (ECMP)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="note-container">
 
   <main class="note-main">
-    <h2 class="note-title">Load Balancing (NTH, Bonding, Failover)</h2>
+    <h2 class="note-title text-center">Load Balancing (ECMP)</h2>
     <p class="note-paragraph">
-      Load balancing dapat dilakukan di beberapa lapisan dan teknik: <strong>NTH</strong> (hash/selector berbasis urutan),
-      <strong>Bonding</strong> (penggabungan link Layer-2), dan <strong>Failover</strong> (cadangan link otomatis).
-      Masing-masing memiliki tujuan dan karakteristik berbeda tergantung kebutuhan throughput, konsistensi koneksi,
-      dan ketersediaan (HA).
-    </p>
-
-    <!-- NTH -->
-    <h3 class="note-subtitle">NTH (Nth Packet/Classifer) – Per-Flow/Per-Connection Split (RouterOS)</h3>
-    <p class="note-paragraph">
-      NTH di MikroTik membagi trafik berdasarkan urutan paket/koneksi menggunakan hashing sederhana. Umum dipakai
-      untuk <em>multi-WAN</em> agar sesi/klien tertentu diarahkan ke uplink berbeda secara merata.
-      Direkomendasikan untuk <strong>per-connection</strong> (bukan per-packet) agar tidak menyebabkan reordering TCP.
+      <strong>ECMP (Equal-Cost Multi-Path)</strong> adalah teknik load balancing pada layer 3, yang membagi trafik
+      ke beberapa jalur dengan biaya (cost) yang sama. Ideal untuk jaringan dengan beberapa gateway atau link ke
+      tujuan yang sama.
     </p>
     <ul class="note-list">
-      <li><strong>Kelebihan:</strong> Mudah, tidak butuh routing protocol, cocok untuk membagi beban antarsesi/klien.</li>
-      <li><strong>Kekurangan:</strong> Tidak “aware” bandwidth realtime; perlu penandaan (mangle) yang rapi; hindari per-packet.</li>
-      <li><strong>Gunakan Saat:</strong> Multi-WAN rumahan/kantor, ingin pembagian koneksi yang konsisten.</li>
+      <li><strong>Kelebihan:</strong> Membagi beban trafik secara merata antar-gateway/link, meningkatkan throughput, dan memanfaatkan jalur redundan.</li>
+      <li><strong>Keterbatasan:</strong> Satu flow biasanya tetap pada satu jalur; perlu routing protocol atau static route dengan cost sama.</li>
+      <li><strong>Gunakan Saat:</strong> Multi-WAN, backbone dengan banyak jalur, link ke ISP/core yang setara.</li>
     </ul>
 
     <pre class="note-codeblock"><code>
-# MikroTik PCC/NTH-style (per-connection) 2 WAN (wan1 & wan2)
-# 1) Tandai koneksi berdasarkan src-address agar konsisten
-/ip firewall mangle
-add chain=prerouting src-address=192.168.1.0/24 \
-    per-connection-classifier=src-address:2/0 action=mark-connection new-connection-mark=conn_wan1 passthrough=yes
-add chain=prerouting src-address=192.168.1.0/24 \
-    per-connection-classifier=src-address:2/1 action=mark-connection new-connection-mark=conn_wan2 passthrough=yes
-
-# 2) Tandai paket mengikuti connection-mark
-add chain=prerouting connection-mark=conn_wan1 action=mark-routing new-routing-mark=to_wan1 passthrough=yes
-add chain=prerouting connection-mark=conn_wan2 action=mark-routing new-routing-mark=to_wan2 passthrough=yes
-
-# 3) Route policy ke masing-masing gateway
+# MikroTik: ECMP dengan 2 WAN statis
 /ip route
-add dst-address=0.0.0.0/0 gateway=1.1.1.1 routing-mark=to_wan1 check-gateway=ping
-add dst-address=0.0.0.0/0 gateway=2.2.2.2 routing-mark=to_wan2 check-gateway=ping
+add dst-address=0.0.0.0/0 gateway=1.1.1.1 check-gateway=ping
+add dst-address=0.0.0.0/0 gateway=2.2.2.2 check-gateway=ping
+
+# RouterOS akan secara otomatis load balance per-connection (per-flow)
+# Jika menggunakan routing protocol (OSPF/EIGRP/BGP), ECMP berlaku untuk semua rute dengan cost sama
     </code></pre>
-
-    <!-- Bonding -->
-    <h3 class="note-subtitle">Bonding (Link Aggregation) – Penggabungan Link L2</h3>
-    <p class="note-paragraph">
-      Bonding menggabungkan beberapa interface fisik menjadi satu interface logis untuk <em>throughput</em> dan/atau
-      <em>redundansi</em>. Biasa menggunakan <strong>IEEE 802.3ad (LACP)</strong> di switch/router.
-      <em>Hashing</em> (MAC/IP/port) menentukan ke link mana suatu flow dikirim: satu flow umumnya tetap pada satu link.
-    </p>
-    <ul class="note-list">
-      <li><strong>Mode umum:</strong> active-backup (mode 1), balance-xor (mode 2), 802.3ad/LACP (mode 4), balance-rr (mode 0).</li>
-      <li><strong>Kelebihan:</strong> Agregasi bandwidth multi-flow, failover antarlink, standar luas (LACP).</li>
-      <li><strong>Keterbatasan:</strong> Satu flow ≈ terbatas kecepatan 1 link; butuh dukungan switch yang sama (LACP).</li>
-      <li><strong>Gunakan Saat:</strong> Uplink ke switch/core, server-to-switch, backbone L2.</li>
-    </ul>
-
-    <pre class="note-codeblock"><code>
-# MikroTik: membuat bond LACP (802.3ad) dari ether1 & ether2
-/interface bonding
-add mode=802.3ad name=bond1 slaves=ether1,ether2 lacp-rate=1sec mii-interval=100ms
-
-# Assign IP/VLAN pada bond, bukan pada slave
-/ip address add address=10.10.10.2/30 interface=bond1
-
-# Switch sisi lawan: pastikan port-channel/LAG LACP untuk port yang sama
-    </code></pre>
-
-    <!-- Failover -->
-    <h3 class="note-subtitle">Failover – Cadangan Link Otomatis</h3>
-    <p class="note-paragraph">
-      Failover memindahkan trafik ke link cadangan ketika link utama gagal. Implementasi bisa sederhana (static
-      route dengan <em>distance</em> berbeda) atau cerdas (monitor target, IP SLA, recursive routing).
-    </p>
-    <ul class="note-list">
-      <li><strong>Kelebihan:</strong> Ketersediaan tinggi, sederhana di-setup.</li>
-      <li><strong>Kekurangan:</strong> Tidak membagi beban; hanya aktif saat terjadi gangguan.</li>
-      <li><strong>Gunakan Saat:</strong> Satu link utama + link backup (mis. fiber primer, seluler cadangan).</li>
-    </ul>
-
-    <pre class="note-codeblock"><code>
-# MikroTik: failover via distance + check-gateway
-/ip route
-add dst-address=0.0.0.0/0 gateway=1.1.1.1 distance=1 check-gateway=ping comment="Primary WAN"
-add dst-address=0.0.0.0/0 gateway=2.2.2.2 distance=2 comment="Backup WAN"
-
-# Alternatif lebih andal: recursive routing monitor via IP publik
-/ip route
-add dst-address=8.8.8.8/32 gateway=1.1.1.1 scope=10
-add dst-address=0.0.0.0/0 gateway=8.8.8.8 distance=1
-# Jika 1.1.1.1 putus (tidak bisa ke 8.8.8.8), default ini invalid → aktifkan route distance=2 (backup).
-
-# Cisco: IP SLA + track untuk failover
-ip sla 1
- icmp-echo 8.8.8.8 source-interface GigabitEthernet0/0
- frequency 5
-ip sla schedule 1 life forever start-time now
-track 1 ip sla 1 reachability
-ip route 0.0.0.0 0.0.0.0 203.0.113.1 track 1
-ip route 0.0.0.0 0.0.0.0 198.51.100.1 200
-    </code></pre>
-
-    <h3 class="note-subtitle">Pemilihan Metode (Kapan Pakai Apa?)</h3>
-    <ul class="note-list">
-      <li><strong>NTH (per-connection hashing):</strong> Multi-WAN berbasis router tanpa dukungan switch khusus; ingin bagi beban antarsesi pengguna.</li>
-      <li><strong>Bonding (LACP):</strong> Agregasi uplink antarperangkat yang mendukung 802.3ad; banyak flow paralel (server, core).</li>
-      <li><strong>Failover:</strong> Fokus <em>availability</em>—satu link aktif, link lain standby; cocok untuk kantor/retail.</li>
-    </ul>
 
     <h3 class="note-subtitle">Tips Praktis</h3>
     <ul class="note-list">
-      <li>Hindari per-packet balancing untuk trafik TCP; gunakan per-connection (stabil untuk sesi).</li>
-      <li>Di Bonding LACP, pastikan <em>hash policy</em> konsisten di kedua sisi; pahami batas 1-flow≈1-link.</li>
-      <li>Failover: monitor hingga target “internet” (recursive/IP SLA), bukan hanya gateway lokal.</li>
-      <li>Dokumentasikan rute kebijakan (mangle/route-mark) agar mudah di-troubleshoot.</li>
+      <li>Pastikan semua gateway/link yang digunakan ECMP memiliki cost yang sama.</li>
+      <li>Per-connection balancing lebih stabil untuk trafik TCP, hindari per-packet agar tidak terjadi reordering.</li>
+      <li>Monitor kesehatan jalur dengan <em>check-gateway</em> atau IP SLA untuk failover otomatis jika salah satu link putus.</li>
     </ul>
 
     <h3 class="note-subtitle">Ringkasan</h3>
     <p class="note-paragraph">
-      <strong>NTH</strong> membagi koneksi secara merata tanpa protokol routing, <strong>Bonding</strong> mengagregasi
-      link L2 (ideal untuk banyak flow paralel), dan <strong>Failover</strong> menjaga layanan tetap berjalan saat link
-      utama gagal. Kombinasikan sesuai kebutuhan throughput vs ketersediaan.
+      ECMP membagi trafik IP secara merata ke beberapa jalur dengan cost sama, meningkatkan throughput dan memanfaatkan jalur redundan.
+      Cocok untuk multi-WAN atau backbone dengan banyak link setara. Satu flow biasanya tetap pada jalur yang sama.
     </p>
 
     <hr class="note-divider" />
   </main>
 
-  <script>
-    // placeholder konsistensi interaksi
-    document.querySelectorAll('.note-image').forEach(img => {
-      img.addEventListener('click', () => img.classList.toggle('expanded'));
-    });
-  </script>
 </body>
 </html>

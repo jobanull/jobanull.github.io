@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>L2TP VPN</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">L2TP (Layer 2 Tunneling Protocol) – VPN</h2>
+    <p class="note-paragraph">
+      <strong>L2TP</strong> adalah protokol tunneling Layer 2 yang sering dipadukan dengan IPsec untuk keamanan end-to-end. 
+      L2TP VPN memungkinkan koneksi site-to-site atau remote-access dengan enkripsi data.
+    </p>
+
+    <ul class="note-list">
+      <li><strong>Tujuan:</strong> Membuat koneksi VPN Layer 2 untuk menghubungkan kantor, cabang, atau remote user.</li>
+      <li><strong>VPN:</strong> Umumnya dikombinasikan dengan IPsec agar data terenkripsi selama transport.</li>
+      <li><strong>Use Case:</strong> Remote access VPN, site-to-site VPN, menghubungkan jaringan antar lokasi secara aman.</li>
+      <li><strong>Kelebihan:</strong> Mendukung multi-protocol transport, enkripsi dengan IPsec, kompatibel dengan banyak platform.</li>
+      <li><strong>Keterbatasan:</strong> Lebih kompleks dibanding tunnel non-VPN, butuh sertifikat atau shared secret untuk IPsec.</li>
+    </ul>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li>L2TP</li>
+    </ul>
+
+
+    <img src="img/tunnel2.png" alt="Diagram jaringan" class="note-image" />
+    
+    <h3 class="note-subtitle">L2TP-RB1</h3>
+    <pre class="note-codeblock"><code>
+/ip pool
+add name=l2tp_pool ranges=10.10.10.3
+/ppp profile
+add local-address=10.10.10.1 name=l2tp_profile remote-address=l2tp_pool
+/interface l2tp-server server
+set default-profile=default enabled=yes ipsec-secret=rahasia use-ipsec=yes
+/ip address
+add address=192.168.190.104/24 interface=ether1 network=192.168.190.0
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0
+/ip route
+add distance=1 dst-address=192.168.2.0/30 gateway=10.10.10.3
+/ppp secret
+add name=l2tp1 password=l2tp1 profile=l2tp_profile service=l2tp
+/system identity
+set name=L2TP-R1
+    </code></pre>
+    <h3 class="note-subtitle">L2TP-RB2</h3>
+    <pre class="note-codeblock"><code>
+/interface l2tp-client
+add connect-to=192.168.190.104 disabled=no ipsec-secret=rahasia name=\
+    l2tp-out1 password=l2tp1 use-ipsec=yes user=l2tp1
+/ip pool
+add name=dhcp_pool0 ranges=192.168.2.2
+/ip dhcp-server
+add address-pool=dhcp_pool0 disabled=no interface=ether2 name=dhcp1
+/ip address
+add address=192.168.190.105/24 interface=ether1 network=192.168.190.0
+add address=192.168.2.1/30 interface=ether2 network=192.168.2.0
+/ip dhcp-client
+add disabled=no interface=ether1
+/ip dhcp-server network
+add address=192.168.2.0/30 gateway=192.168.2.1
+/ip route
+add distance=1 dst-address=192.168.1.0/30 gateway=10.10.10.1
+/system identity
+set name=L2TP-R2
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Selalu gunakan IPsec untuk keamanan, jangan hanya L2TP tanpa enkripsi.</li>
+      <li>Gunakan alamat IP remote-address dan local-address yang unik untuk menghindari konflik jaringan.</li>
+      <li>Pastikan port UDP 500, 1701, dan 4500 terbuka jika berada di belakang firewall/NAT.</li>
+    </ul>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

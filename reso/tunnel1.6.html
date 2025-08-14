@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>VXLAN - Tunnel Non-VPN</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">VXLAN (Virtual eXtensible LAN) – Tunnel Non-VPN</h2>
+    <p class="note-paragraph">
+      <strong>VXLAN</strong> adalah protokol untuk mengenkapsulasi frame Ethernet dalam UDP agar dapat berjalan di atas jaringan Layer 3. 
+      VXLAN memungkinkan pembuatan overlay network skala besar, mendukung banyak site atau data center. Data <strong>tidak dienkripsi</strong>, sehingga termasuk tunnel non-VPN.
+    </p>
+
+    <ul class="note-list">
+      <li><strong>Tujuan:</strong> Membuat overlay network Layer 2 di atas Layer 3, mendukung virtualisasi dan multi-tenant environment.</li>
+      <li><strong>Non-VPN:</strong> Frame dienkapsulasi dalam UDP, tidak ada enkripsi bawaan.</li>
+      <li><strong>Use Case:</strong> Data center, cloud environment, bridging antar-VM/site.</li>
+      <li><strong>Kelebihan:</strong> Skala besar (VNI sampai 16 juta), mendukung VLAN overlay, transport L2 over L3.</li>
+      <li><strong>Keterbatasan:</strong> Butuh IP multicast atau head-end replication untuk broadcast/multicast, konfigurasi lebih kompleks dibanding tunnel sederhana.</li>
+    </ul>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <img src="img/tunnel1.png" alt="Diagram jaringan" class="note-image" />
+    
+    <h3 class="note-subtitle">VXLAN-RB1</h3>
+   <pre class="note-codeblock"><code>
+/interface bridge
+add name=BRIDGE_VXlAN10
+/interface vxlan
+add name=vxlan10 vni=10
+/ip pool
+add name=dhcp_pool0 ranges=192.168.1.2-192.168.1.254
+/ip dhcp-server
+add address-pool=dhcp_pool0 interface=BRIDGE_VXlAN10 name=dhcp1
+/port
+set 0 name=serial0
+/interface bridge port
+add bridge=BRIDGE_VXlAN10 interface=vxlan10
+add bridge=BRIDGE_VXlAN10 interface=ether2
+/interface vxlan vteps
+add interface=vxlan10 remote-ip=192.168.190.107
+add interface=vxlan10 remote-ip=192.168.190.108
+/ip address
+add address=192.168.190.106/24 interface=ether1 network=192.168.190.0
+add address=192.168.1.1/24 interface=BRIDGE_VXlAN10 network=192.168.1.0
+/ip dhcp-server network
+add address=192.168.1.0/24 gateway=192.168.1.1
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip route
+add distance=1 gateway=192.168.190.1
+    </code></pre>
+
+    <h3 class="note-subtitle">VXLAN-RB2</h3>
+    <pre class="note-codeblock"><code>
+/interface bridge
+add name=BRIDGE_VXLAN10
+/interface vxlan
+add  name=vxlan10 vni=10
+/interface bridge port
+add bridge=BRIDGE_VXLAN10 interface=vxlan10
+add bridge=BRIDGE_VXLAN10 interface=ether2
+/interface vxlan vteps
+add interface=vxlan10 remote-ip=192.168.190.106
+/ip address
+add address=192.168.190.107/24 interface=ether1 network=192.168.190.0
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip route
+add distance=1 gateway=192.168.190.1
+    </code></pre>
+
+    <h3 class="note-subtitle">VXLAN-RB3</h3>
+    <pre class="note-codeblock"><code>
+/interface bridge
+add name=BRIDGE_VXLAN10
+/interface vxlan
+add  name=vxlan10 vni=10
+/interface bridge port
+add bridge=BRIDGE_VXLAN10 interface=vxlan10
+add bridge=BRIDGE_VXLAN10 interface=ether2
+/interface vxlan vteps
+add interface=vxlan10 remote-ip=192.168.190.106
+/ip address
+add address=192.168.190.108/24 interface=ether1 network=192.168.190.0
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip route
+add dst-address=0.0.0.0/0 gateway=192.168.190.1
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan VXLAN untuk overlay network antar-VM atau site di atas jaringan IP existing.</li>
+      <li>Pastikan MTU cukup karena overhead VXLAN (UDP encapsulation ~50 bytes).</li>
+      <li>Monitoring broadcast/multicast penting untuk performa optimal.</li>
+    </ul>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

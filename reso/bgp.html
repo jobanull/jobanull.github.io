@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <title>Border Gateway Protocol (BGP)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="note-container">
 
   <main class="note-main">
-    <h2 class="note-title">Border Gateway Protocol (BGP)</h2>
+    <h2 class="note-title text-center">Border Gateway Protocol (BGP)</h2>
     <p class="note-paragraph">
       Border Gateway Protocol (BGP) adalah protokol routing yang digunakan untuk bertukar informasi rute antar 
       <em>Autonomous System</em> (AS) di internet. BGP termasuk kategori <strong>path vector protocol</strong> 
@@ -59,8 +60,18 @@
 
      <h3 class="note-subtitle">CONTOH KASUS</h3>
       <ul class="note-list">
-      <li>Konfigurasi BGP dan Filter supaya PC 1 Hanya bisa melakukan ping ke PC2 saja</li>
+        <li>Tujuan: Mengonfigurasi <strong>BGP dan filter</strong> agar <strong>PC 1 hanya bisa melakukan ping ke PC2</strong>.</li>
+        <li>Filter BGP: RB4 menerima route hanya ke PC2 dan mengiklankan route hanya ke PC1.</li>
+        <li>Catatan:  
+          <ul>
+            <li>RB1: ASN 64112, mengiklankan jaringan link ke RB2 & RB3.</li>
+            <li>RB2 & RB3: Router transit, mengatur route ke RB4 & RB5.</li>
+            <li>RB4: ASN 64111, filter masuk hanya menerima prefix PC2, filter keluar hanya mengiklankan PC1.</li>
+            <li>RB5: ASN 64113, mengiklankan jaringan PC2 & PC3.</li>
+          </ul>
+        </li>
       </ul>
+
 
        <img src="img/bgp1.png" alt="Diagram jaringan" class="note-image" />
        <p class="note-subtitle">RB1</p>

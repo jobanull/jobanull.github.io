@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>PPTP VPN</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">PPTP (Point-to-Point Tunneling Protocol) – VPN</h2>
+    <p class="note-paragraph">
+      <strong>PPTP</strong> adalah protokol VPN Layer 2 yang menggunakan GRE untuk tunneling dan MPPE untuk enkripsi. 
+      Mudah dikonfigurasi, tetapi saat ini <strong>tidak direkomendasikan untuk produksi</strong> karena keamanan yang rendah.
+    </p>
+
+    <ul class="note-list">
+      <li><strong>Tujuan:</strong> Membuat koneksi VPN sederhana antar site atau untuk remote user.</li>
+      <li><strong>VPN:</strong> Data dienkripsi dengan MPPE, termasuk autentikasi username/password.</li>
+      <li><strong>Use Case:</strong> Lab/testing, pembelajaran, atau skenario legacy yang tidak membutuhkan keamanan tinggi.</li>
+      <li><strong>Kelebihan:</strong> Konfigurasi cepat dan mudah, kompatibel dengan banyak platform.</li>
+      <li><strong>Keterbatasan:</strong> Enkripsi lemah, mudah diserang, tidak cocok untuk data sensitif.</li>
+    </ul>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li>PPTP</li>
+    </ul>
+
+
+    <img src="img/tunnel2.png" alt="Diagram jaringan" class="note-image" />
+    
+    <h3 class="note-subtitle">PPTP-RB1</h3>
+    <pre class="note-codeblock"><code>
+/ip pool
+add name=pptp_pool ranges=10.10.10.2
+/ppp profile
+add local-address=10.10.10.1 name=pptp_profile remote-address=pptp_pool
+/interface pptp-server server
+set enabled=yes
+/ip address
+add address=192.168.190.100/24 interface=ether1 network=192.168.190.0
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0
+/ip route
+add distance=1 dst-address=192.168.2.0/30 gateway=10.10.10.2
+/ppp secret
+add name=pptp1 password=pptp1 profile=pptp_profile service=pptp
+/system identity
+set name=PPTP-R1
+    </code></pre>
+    
+    <h3 class="note-subtitle">PPTP-RB2</h3>
+    <pre class="note-codeblock"><code>
+/ip address
+add address=192.168.190.101/24 interface=ether1 network=192.168.190.0
+add address=192.168.2.1/30 interface=ether2 network=192.168.2.0
+/ip dhcp-server network
+add address=192.168.2.0/30 gateway=192.168.2.1
+/ip route
+add distance=1 dst-address=192.168.1.0/30 gateway=10.10.10.1
+/system identity
+set name=PPTP-R2
+    </code></pre>
+
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Hanya gunakan PPTP untuk lab atau testing; jangan untuk produksi karena keamanan lemah.</li>
+      <li>Pastikan port TCP 1723 dan protokol GRE (47) dibuka di firewall/NAT.</li>
+      <li>Gunakan L2TP/IPsec atau OpenVPN untuk koneksi yang aman.</li>
+    </ul>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

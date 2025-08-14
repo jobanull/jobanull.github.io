@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Hot Standby Router Protocol (HSRP)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="note-container">
@@ -61,7 +62,10 @@
     </ul>
 
     <h3 class="note-subtitle">Contoh Konfigurasi HSRP (Cisco)</h3>
-    <pre class="note-codeblock"><code>
+    <ul class="note-list">
+            <li>On Progress</li>
+    </ul>
+    <!-- <pre class="note-codeblock"><code>
 ! Konfigurasi pada Router 1 (Active)
 interface GigabitEthernet0/0
  ip address 192.168.1.2 255.255.255.0
@@ -75,7 +79,7 @@ interface GigabitEthernet0/0
  standby 1 ip 192.168.1.1
  standby 1 priority 100
  standby 1 preempt
-    </code></pre>
+    </code></pre> -->
 
     <h3 class="note-subtitle">Tips Praktis</h3>
     <ul class="note-list">

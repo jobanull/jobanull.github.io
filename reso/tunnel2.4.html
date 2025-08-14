@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>SSTP VPN</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">SSTP (Secure Socket Tunneling Protocol) – VPN</h2>
+    <p class="note-paragraph">
+      <strong>SSTP</strong> adalah protokol VPN Layer 3 yang berjalan di atas HTTPS (TCP 443). 
+      Menggunakan SSL/TLS untuk enkripsi, SSTP dapat melewati firewall dan NAT dengan mudah, serta aman untuk produksi.
+    </p>
+
+    <ul class="note-list">
+      <li><strong>Tujuan:</strong> Menghubungkan remote user atau site secara aman melalui internet.</li>
+      <li><strong>VPN:</strong> Data dienkripsi dengan SSL/TLS, mendukung autentikasi sertifikat dan username/password.</li>
+      <li><strong>Use Case:</strong> Remote access VPN, bypass firewall yang membatasi protokol VPN lainnya.</li>
+      <li><strong>Kelebihan:</strong> Aman, berjalan di TCP 443 sehingga mudah melewati NAT/firewall, kompatibel dengan Windows, Linux, dan MikroTik.</li>
+      <li><strong>Keterbatasan:</strong> Lebih lambat dibanding L2TP/IPsec atau OpenVPN UDP karena berjalan di TCP; butuh sertifikat SSL.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Konfigurasi SSTP Server (MikroTik)</h3>
+    <pre class="note-codeblock"><code>
+# Import sertifikat SSL untuk server
+/certificate import file-name=server.crt
+/certificate import file-name=server.key
+
+# Aktifkan SSTP Server
+/interface sstp-server server
+set enabled=yes certificate=server-cert require-client-certificate=no default-profile=default
+
+# Tambahkan user VPN
+/ppp secret add name=user1 password=rahasia service=sstp profile=default
+
+# Firewall & NAT
+/ip firewall filter add chain=input protocol=tcp port=443 action=accept
+/ip firewall nat add chain=srcnat out-interface=ether1 action=masquerade
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan sertifikat SSL yang valid untuk keamanan maksimal.</li>
+      <li>SSTP cocok untuk remote user yang sering berada di jaringan publik atau jaringan dengan NAT ketat.</li>
+      <li>Pastikan port TCP 443 terbuka di firewall/NAT agar klien dapat terkoneksi.</li>
+    </ul>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

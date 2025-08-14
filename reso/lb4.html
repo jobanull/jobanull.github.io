@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Load Balancing (NTH / PCC)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Load Balancing (NTH / PCC)</h2>
+    <p class="note-paragraph">
+      <strong>NTH / PCC (Per-Connection Classifier)</strong> membagi trafik berdasarkan urutan koneksi atau paket menggunakan hashing. 
+      Umum digunakan untuk <em>multi-WAN</em> agar sesi/klien tertentu diarahkan ke uplink berbeda secara merata.
+    </p>
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Mudah diimplementasikan, tidak memerlukan routing protocol, cocok untuk membagi beban antar-sesi/klien.</li>
+      <li><strong>Keterbatasan:</strong> Tidak aware terhadap bandwidth realtime; hindari per-packet balancing agar tidak terjadi reordering TCP.</li>
+      <li><strong>Gunakan Saat:</strong> Multi-WAN rumahan/kantor dengan beberapa koneksi internet, ingin pembagian koneksi yang konsisten per-user atau per-session.</li>
+    </ul>
+
+    <pre class="note-codeblock"><code>
+# MikroTik PCC / NTH-style 2 WAN (wan1 & wan2)
+# 1) Tandai koneksi berdasarkan src-address agar konsisten
+/ip firewall mangle
+add chain=prerouting src-address=192.168.1.0/24 \
+    per-connection-classifier=src-address:2/0 action=mark-connection new-connection-mark=conn_wan1 passthrough=yes
+add chain=prerouting src-address=192.168.1.0/24 \
+    per-connection-classifier=src-address:2/1 action=mark-connection new-connection-mark=conn_wan2 passthrough=yes
+
+# 2) Tandai paket mengikuti connection-mark
+add chain=prerouting connection-mark=conn_wan1 action=mark-routing new-routing-mark=to_wan1 passthrough=yes
+add chain=prerouting connection-mark=conn_wan2 action=mark-routing new-routing-mark=to_wan2 passthrough=yes
+
+# 3) Route policy ke masing-masing gateway
+/ip route
+add dst-address=0.0.0.0/0 gateway=1.1.1.1 routing-mark=to_wan1 check-gateway=ping
+add dst-address=0.0.0.0/0 gateway=2.2.2.2 routing-mark=to_wan2 check-gateway=ping
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan per-connection (bukan per-packet) agar trafik TCP tetap stabil.</li>
+      <li>Pastikan IP range atau pengguna dibagi merata agar load balancing efektif.</li>
+      <li>Dokumentasikan penandaan koneksi (connection mark) dan routing mark untuk memudahkan troubleshooting.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      NTH / PCC membagi koneksi antar WAN berdasarkan hash koneksi atau alamat sumber, meningkatkan distribusi trafik
+      tanpa perlu protokol routing. Cocok untuk multi-WAN di lingkungan kantor atau rumahan.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>
