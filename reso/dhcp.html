@@ -52,19 +52,79 @@
       <li>Berpotensi disalahgunakan jika ada rogue DHCP server.</li>
     </ul>
 
-    <h3 class="note-subtitle">Contoh Konfigurasi DHCP (Cisco Router)</h3>
-    <pre class="note-codeblock"><code>
-! Mengaktifkan DHCP dan menentukan pool
-ip dhcp pool JARINGAN-LOCAL
- network 192.168.10.0 255.255.255.0
- default-router 192.168.10.1
- dns-server 8.8.8.8 8.8.4.4
- lease 7
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li>Topologi ini menggunakan RB1 (MikroTik) dan R1 (Cisco) untuk konfigurasi DHCP Client & Server.</li>
+        <li>RB1 (MikroTik):
+            <ul>
+                <li>Mendapatkan IP dari jaringan upstream (DHCP Client) melalui <code>ether1</code>.</li>
+                <li>Memberikan IP ke jaringan lokal (DHCP Server) melalui <code>ether2</code> dengan rentang <code>192.168.1.11-192.168.1.254</code>.</li>
+            </ul>
+        </li>
+        <li>R1 (Cisco):
+            <ul>
+                <li>Mendapatkan IP di <code>FastEthernet0/0</code> sebagai DHCP Client.</li>
+                <li>Memberikan IP ke klien di <code>FastEthernet1/0</code> sebagai DHCP Server dengan gateway <code>192.168.1.1</code>.</li>
+                <li>Memberikan DNS <code>8.8.8.8</code> kepada klien.</li>
+            </ul>
+        </li>
+        <li>Tujuan: Menguji konektivitas DHCP di kedua perangkat, memastikan alokasi IP berjalan sesuai konfigurasi.</li>
+    </ul>
 
-! Mengecualikan IP agar tidak diberikan oleh DHCP
-ip dhcp excluded-address 192.168.10.1 192.168.10.10
+
+       <img src="img/dhcp.png" alt="Diagram jaringan" class="note-image" />
+    <p class="note-subtitle">RB1</p>
+    <pre class="note-codeblock"><code>
+/ip pool
+add name=dhcp_pool0 ranges=192.168.1.11-192.168.1.254
+# Membuat pool IP DHCP yang akan diberikan ke klien, mulai dari 192.168.1.11 sampai 192.168.1.254
+
+/ip dhcp-server
+add address-pool=dhcp_pool0 disabled=no interface=ether2 name=dhcp1
+# Membuat DHCP Server pada interface ether2 menggunakan pool yang sudah dibuat
+
+/ip address
+add address=192.168.1.1/24 interface=ether2 network=192.168.1.0
+# Memberikan IP statis pada ether2 sebagai gateway DHCP
+
+/ip dhcp-client
+add disabled=no interface=ether1
+# Mengaktifkan DHCP Client di ether1 agar RB1 bisa mendapat IP dari jaringan upstream
+
+/ip dhcp-server network
+add address=192.168.1.0/24 gateway=192.168.1.1
+# Menentukan parameter jaringan untuk klien DHCP, termasuk gateway
+
     </code></pre>
 
+    <p class="note-subtitle">R1</p>
+    <pre class="note-codeblock"><code>
+ip dhcp excluded-address 192.168.1.1 192.168.1.10
+! Mengecualikan IP yang tidak boleh dipakai DHCP (IP gateway dan IP cadangan manual)
+
+ip dhcp pool DHCP_LAN
+   network 192.168.1.0 255.255.255.0
+   default-router 192.168.1.1
+   dns-server 8.8.8.8
+! Membuat pool DHCP dengan network 192.168.1.0/24
+! default-router = gateway untuk klien
+! dns-server = server DNS yang digunakan klien
+
+ip tcp synwait-time 5
+! Mengatur waktu tunggu TCP SYN (opsional, biasanya untuk optimasi koneksi)
+
+interface FastEthernet0/0
+ ip address dhcp
+ duplex half
+! Interface F0/0 mendapatkan IP secara DHCP dari jaringan upstream
+! duplex half digunakan jika ada keterbatasan perangkat lama
+
+interface FastEthernet1/0
+ ip address 192.168.1.1 255.255.255.0
+ duplex half
+! Interface F1/0 diberi IP statis (gateway) untuk jaringan lokal
+
+    </code></pre>
     <h3 class="note-subtitle">Tips Praktis</h3>
     <ul class="note-list">
       <li>Gunakan <strong>IP reservation</strong> untuk perangkat penting seperti server dan printer.</li>

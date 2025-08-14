@@ -57,17 +57,131 @@
       <li>Sangat bergantung pada kebijakan dan pengaturan manual oleh administrator.</li>
     </ul>
 
-    <h3 class="note-subtitle">Contoh Konfigurasi Dasar (Cisco)</h3>
-    <pre class="note-codeblock"><code>
-! Router di AS 65001 terhubung ke ISP di AS 65002
-router bgp 65001
- neighbor 192.0.2.1 remote-as 65002
- neighbor 192.0.2.1 description LINK-TO-ISP
- network 203.0.113.0 mask 255.255.255.0
+     <h3 class="note-subtitle">CONTOH KASUS</h3>
+      <ul class="note-list">
+      <li>Konfigurasi BGP dan Filter supaya PC 1 Hanya bisa melakukan ping ke PC2 saja</li>
+      </ul>
 
-! Mengatur preferensi jalur keluar
-route-map SET-LOCALPREF permit 10
- set local-preference 200
+       <img src="img/bgp1.png" alt="Diagram jaringan" class="note-image" />
+       <p class="note-subtitle">RB1</p>
+    <pre class="note-codeblock"><code>
+/routing bgp instance
+set default as=64112                    # Set Autonomous System Number (ASN) RB1 = 64112
+
+/ip address
+add address=10.1.1.1/30 interface=ether2 network=10.1.1.0   # IP link ke RB2
+add address=11.1.1.1/30 interface=ether3 network=11.1.1.0   # IP link ke RB3
+
+/ip dhcp-client
+add disabled=no interface=ether1                           # Dapatkan IP dari ISP/internet di ether1
+
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1    # NAT keluar ke internet
+
+/ip route
+add distance=1 dst-address=12.1.1.0/30 gateway=10.1.1.2     # Route menuju RB4 via RB2
+add distance=1 dst-address=13.1.1.0/30 gateway=11.1.1.2     # Route menuju RB5 via RB3
+
+/routing bgp network
+add network=10.1.1.0/30 synchronize=no   # Iklankan network 10.1.1.0/30 ke BGP
+add network=11.1.1.0/30 synchronize=no   # Iklankan network 11.1.1.0/30 ke BGP
+
+/routing bgp peer
+add multihop=yes name=peer1 remote-address=12.1.1.2 remote-as=64111   # BGP ke RB4
+add multihop=yes name=peer2 remote-address=13.1.1.2 remote-as=64113   # BGP ke RB5
+
+/system identity
+set name=RB1                             # Set nama router
+
+    </code></pre>
+    
+       <p class="note-subtitle">RB2</p>
+    <pre class="note-codeblock"><code>
+/ip address
+add address=10.1.1.2/30 interface=ether1 network=10.1.1.0    # Link ke RB1
+add address=12.1.1.1/30 interface=ether2 network=12.1.1.0    # Link ke RB4
+
+/ip route
+add distance=1 gateway=10.1.1.1                             # Default route via RB1
+add distance=1 dst-address=192.168.1.0/30 gateway=12.1.1.2   # Route ke PC1 di RB4
+
+/system identity
+set name=RB2
+
+    </code></pre>
+
+       <p class="note-subtitle">RB3</p>
+    <pre class="note-codeblock"><code>
+/ip address
+add address=11.1.1.2/30 interface=ether1 network=11.1.1.0    # Link ke RB1
+add address=13.1.1.1/30 interface=ether2 network=13.1.1.0    # Link ke RB5
+
+/ip route
+add distance=1 gateway=11.1.1.1                             # Default route via RB1
+add distance=1 dst-address=192.168.2.0/30 gateway=13.1.1.2   # Route ke PC2 di RB5
+add distance=1 dst-address=192.168.3.0/30 gateway=13.1.1.2   # Route ke jaringan lain di RB5
+
+/system identity
+set name=RB3
+
+    </code></pre>
+
+       <p class="note-subtitle">RB4</p>
+    <pre class="note-codeblock"><code>
+/routing bgp instance
+set default as=64111                      # ASN RB4
+
+/ip address
+add address=12.1.1.2/30 interface=ether1 network=12.1.1.0   # Link ke RB2
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0   # Jaringan PC1
+
+/ip dns
+set servers=8.8.8.8,8.8.4.4                                # DNS Google
+
+/ip route
+add distance=1 dst-address=10.1.1.0/30 gateway=12.1.1.1     # Route ke RB1
+
+/routing bgp network
+add network=192.168.1.0/30 synchronize=no                  # Iklankan jaringan PC1
+
+/routing bgp peer
+add in-filter=test-in multihop=yes name=peer1 out-filter=test-out \
+    remote-address=10.1.1.1 remote-as=64112                 # BGP peer ke RB1 dengan filter masuk & keluar
+
+/routing filter
+add action=accept chain=test-in prefix=192.168.2.0/30       # Terima route hanya ke PC2
+add action=accept chain=test-out prefix=192.168.1.0/30      # Hanya iklankan jaringan PC1
+add action=discard chain=test-out prefix=0.0.0.0/0 prefix-length=0-128  # Tolak semua iklan lain
+add action=discard chain=test-in                           # Tolak semua prefix selain PC2
+
+/system identity
+set name=RB4
+
+    </code></pre>
+
+       <p class="note-subtitle">RB5</p>
+    <pre class="note-codeblock"><code>
+/routing bgp instance
+set default as=64113                      # ASN RB5
+
+/ip address
+add address=13.1.1.2/30 interface=ether1 network=13.1.1.0   # Link ke RB3
+add address=192.168.2.1/30 interface=ether2 network=192.168.2.0   # Jaringan PC2
+add address=192.168.3.1/30 interface=ether3 network=192.168.3.0   # Jaringan PC3
+
+/ip route
+add distance=1 gateway=13.1.1.1                            # Default route via RB3
+
+/routing bgp network
+add network=192.168.2.0/30 synchronize=no                  # Iklankan jaringan PC2
+add network=192.168.3.0/30 synchronize=no                  # Iklankan jaringan PC3
+
+/routing bgp peer
+add multihop=yes name=peer1 remote-address=11.1.1.1 remote-as=64112  # BGP ke RB1
+
+/system identity
+set name=RB5
+
     </code></pre>
 
     <h3 class="note-subtitle">Tips Praktis</h3>
