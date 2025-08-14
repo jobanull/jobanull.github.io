@@ -16,8 +16,6 @@
       sesuai kebijakan. ACL digunakan untuk meningkatkan keamanan, membatasi akses, dan mengoptimalkan lalu lintas jaringan.
     </p>
 
-    <img src="img/github.png" alt="Diagram jaringan" class="note-image" />
-
     <h3 class="note-subtitle">Jenis-jenis ACL</h3>
     <ul class="note-list">
       <li><strong>Standard ACL</strong> – Menyaring berdasarkan alamat IP sumber saja.</li>
@@ -28,93 +26,30 @@
     <h3 class="note-subtitle">Manfaat ACL</h3>
     <ul class="note-list">
       <li>Meningkatkan keamanan jaringan dengan membatasi akses tidak sah.</li>
-      <li>Mengurangi lalu lintas yang tidak diperlukan.</li>a<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <title>Border Gateway Protocol (BGP)</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body class="note-container">
+      <li>Mengurangi lalu lintas yang tidak diperlukan.</li>
 
-  <main class="note-main">
-    <h2 class="note-title">Border Gateway Protocol (BGP)</h2>
-    <p class="note-paragraph">
-      BGP (Border Gateway Protocol) adalah protokol routing eksternal (<em>Exterior Gateway Protocol</em>, EGP)
-      yang digunakan untuk bertukar informasi routing antar Autonomous System (AS) di internet.
-      BGP memungkinkan jaringan besar seperti ISP, data center, dan perusahaan untuk menentukan jalur terbaik 
-      berdasarkan kebijakan (policy-based routing), bukan hanya metrik teknis seperti jarak atau kecepatan.
-    </p>
+    <h3 class="note-subtitle">Skenario</h3>
 
-    <img src="img/bgp-diagram.png" alt="Diagram BGP" class="note-image" />
+       <img src="img/acl1.png" alt="Diagram jaringan" class="note-image" />
+       <pre class="note-codeblock"><code>
+! Router di AS 65001 terhubung ke ISP di AS 65002
+router bgp 65001
+ neighbor 192.0.2.1 remote-as 65002
+ neighbor 192.0.2.1 description LINK-TO-ISP
+ network 203.0.113.0 mask 255.255.255.0
 
-    <h3 class="note-subtitle">Jenis-jenis BGP</h3>
-    <ul class="note-list">
-      <li><strong>EBGP (External BGP)</strong> – Digunakan untuk pertukaran routing antar AS yang berbeda.</li>
-      <li><strong>IBGP (Internal BGP)</strong> – Digunakan untuk pertukaran routing antar router dalam AS yang sama.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Karakteristik BGP</h3>
-    <ul class="note-list">
-      <li>Berbasis protokol TCP (port 179) untuk koneksi yang andal.</li>
-      <li>Mendukung kebijakan routing yang kompleks.</li>
-      <li>Menggunakan path vector untuk memilih jalur terbaik.</li>
-      <li>Dapat menghindari loop routing dengan informasi AS Path.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Manfaat BGP</h3>
-    <ul class="note-list">
-      <li>Memungkinkan kontrol penuh terhadap rute keluar dan masuk.</li>
-      <li>Mendukung multi-homing untuk redundansi koneksi internet.</li>
-      <li>Dapat melakukan filter rute untuk keamanan dan efisiensi.</li>
-      <li>Menentukan jalur berdasarkan kebijakan perusahaan/ISP.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Konfigurasi BGP (Cisco Router)</h3>
-    <pre class="note-codeblock"><code>
-Skenario: Router R1 (AS 65001) terhubung ke Router ISP (AS 65002)
-
-R1(config)# router bgp 65001
-R1(config-router)# neighbor 192.0.2.1 remote-as 65002
-R1(config-router)# network 203.0.113.0 mask 255.255.255.0
+! Mengatur preferensi jalur keluar
+route-map SET-LOCALPREF permit 10
+ set local-preference 200
     </code></pre>
 
-    <hr class="note-divider" />
 
-  </main>
-
-  <script>
-    document.querySelectorAll('.note-image').forEach(img => {
-      img.addEventListener('click', () => {
-        img.classList.toggle('expanded');
+   
+    <script>
+      document.querySelectorAll('.note-image').forEach(img => {
+        img.addEventListener('click', () => {
+          img.classList.toggle('expanded');
+        });
       });
-    });
-  </script>
+    </script>
 </body>
-</html>
-
-      <li>Mengontrol akses ke sumber daya tertentu.</li>
-      <li>Membantu mengoptimalkan performa jaringan.</li>
-    </ul>
-
-    <h3 class="note-subtitle">R1</h3>
-    <pre class="note-codeblock"><code>
-Skenario: block segment 2.0 dari 1.0
-
-access-list 1 deny 192.168.2.0 0.0.0.255
-access-list 1 permit any
-    </code></pre>
-
-    <hr class="note-divider" />
-
-  </main>
-
-  <script>
-    document.querySelectorAll('.note-image').forEach(img => {
-      img.addEventListener('click', () => {
-        img.classList.toggle('expanded');
-      });
-    });
-  </script>
-</body>
-</html>

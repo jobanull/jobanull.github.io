@@ -66,11 +66,9 @@
     /* Gambar */
     .note-image {
       max-width: 100%;
-      display: block;
-      margin: 1.5rem 0;
-      border-radius: 8px;
+      height: auto;
       cursor: zoom-in;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.3s ease;
     }
 
     .note-image:hover {
@@ -79,10 +77,8 @@
     }
 
     .note-image.expanded {
-      transform: scale(2);
+      transform: scale(1.5); /* Perbesar 1,5 kali */
       cursor: zoom-out;
-      z-index: 999;
-      position: relative;
     }
 
     /* Code block */
