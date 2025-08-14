@@ -26,10 +26,38 @@
       <li><strong>Kekurangan:</strong> Tidak optimal untuk trafik kompleks atau banyak class.</li>
       <li><strong>Gunakan Saat:</strong> Membatasi bandwidth user individu.</li>
     </ul>
+        <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li>Topologi menggunakan protokol routing <b>OSPF</b> pada tujuh router MikroTik (RB1-RB7).</li>
+    </ul>
+
+
+    <img src="img/qos.png" alt="Diagram jaringan" class="note-image" />
+    <h3 class="note-subtitle">R.SQ</h3>
     <pre class="note-codeblock"><code>
-# Limit 2 Mbps untuk 192.168.1.10
+/ip pool
+add name=dhcp_pool0 ranges=192.168.1.2
+add name=dhcp_pool1 ranges=192.168.2.2
+/ip dhcp-server
+add address-pool=dhcp_pool0 disabled=no interface=ether2 name=dhcp1
+add address-pool=dhcp_pool1 disabled=no interface=ether3 name=dhcp2
 /queue simple
-add name=user1 target=192.168.1.10/32 max-limit=2M/2M
+add max-limit=1M/1M name=queue-parent target=192.168.1.0/30
+add max-limit=254k/254k name=child-queue1 parent=queue-parent target=\
+    192.168.1.2/32
+add max-limit=1M/1M name=queue-ether3 target=192.168.2.2/32
+/ip address
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0
+add address=192.168.2.1/30 interface=ether3 network=192.168.2.0
+/ip dhcp-client
+add disabled=no interface=ether1
+/ip dhcp-server network
+add address=192.168.1.0/30 gateway=192.168.1.1
+add address=192.168.2.0/30 gateway=192.168.2.1
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/system identity
+set name=R.SQ
     </code></pre>
 
     <!-- Queue Tree -->
@@ -43,17 +71,48 @@ add name=user1 target=192.168.1.10/32 max-limit=2M/2M
       <li><strong>Kekurangan:</strong> Konfigurasi lebih rumit; perlu mangle untuk menandai paket.</li>
       <li><strong>Gunakan Saat:</strong> ISP atau jaringan besar yang butuh pembagian bandwidth detail.</li>
     </ul>
-    <pre class="note-codeblock"><code>
-# Tandai paket HTTP & lainnya
-/ip firewall mangle
-add chain=prerouting protocol=tcp dst-port=80 action=mark-packet new-packet-mark=http passthrough=no
-add chain=prerouting action=mark-packet new-packet-mark=other passthrough=no
+        <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li>Topologi menggunakan protokol routing <b>OSPF</b> pada tujuh router MikroTik (RB1-RB7).</li>
+    </ul>
 
-# Queue Tree untuk total 10M, HTTP max 5M
+
+    <img src="img/qos.png" alt="Diagram jaringan" class="note-image" />
+    <h3 class="note-subtitle">R.QT</h3>
+    <pre class="note-codeblock"><code>
+/ip pool
+add name=dhcp_pool0 ranges=192.168.1.2
+add name=dhcp_pool1 ranges=192.168.2.2
+/ip dhcp-server
+add address-pool=dhcp_pool0 disabled=no interface=ether2 name=dhcp1
+add address-pool=dhcp_pool1 disabled=no interface=ether3 name=dhcp2
 /queue tree
-add name="total" parent=ether1 max-limit=10M
-add name="http" parent=total packet-mark=http max-limit=5M
-add name="other" parent=total packet-mark=other max-limit=5M
+add max-limit=1M name=queue-parent-upload parent=ether1
+add max-limit=254k name=queue1-upload packet-mark=packet-client1 parent=\
+    queue-parent-upload
+add max-limit=254k name=queue2-upload packet-mark=packet-client2 parent=\
+    queue-parent-upload
+/ip address
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0
+add address=192.168.2.1/30 interface=ether3 network=192.168.2.0
+/ip dhcp-client
+add disabled=no interface=ether1
+/ip dhcp-server network
+add address=192.168.1.0/30 gateway=192.168.1.1
+add address=192.168.2.0/30 gateway=192.168.2.1
+/ip firewall mangle
+add action=mark-connection chain=prerouting new-connection-mark=\
+    conn-client1 passthrough=yes src-address=192.168.1.2
+add action=mark-connection chain=prerouting new-connection-mark=\
+    conn-client2 passthrough=yes src-address=192.168.2.2
+add action=mark-packet chain=prerouting connection-mark=conn-client1 \
+    new-packet-mark=packet-client1 passthrough=no
+add action=mark-packet chain=prerouting connection-mark=conn-client2 \
+    new-packet-mark=packet-client2 passthrough=no
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/system identity
+set name=R.QT
     </code></pre>
 
     <!-- Burst Queue -->
@@ -109,15 +168,39 @@ add name="youtube" parent=ether1 packet-mark=yt max-limit=3M
       <li><strong>Kekurangan:</strong> Tidak bisa memprioritaskan user tertentu.</li>
       <li><strong>Gunakan Saat:</strong> ISP hotspot, warnet, kampus.</li>
     </ul>
-    <pre class="note-codeblock"><code>
-# Buat queue type PCQ
-/queue type
-add kind=pcq name=pcq-download pcq-classifier=dst-address pcq-rate=1M
-add kind=pcq name=pcq-upload pcq-classifier=src-address pcq-rate=1M
 
-# Terapkan di simple queue
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li>Topologi menggunakan protokol routing <b>OSPF</b> pada tujuh router MikroTik (RB1-RB7).</li>
+    </ul>
+
+
+    <img src="img/qos.png" alt="Diagram jaringan" class="note-image" />
+    <h3 class="note-subtitle">R.PCQ</h3>
+    <pre class="note-codeblock"><code>
+/ip pool
+add name=dhcp_pool0 ranges=192.168.1.2-192.168.1.6
+/ip dhcp-server
+add address-pool=dhcp_pool0 disabled=no interface=LAN name=dhcp1
+/queue type
+add kind=pcq name=pcq-download pcq-rate=254k
+add kind=pcq name=pcq-upload pcq-rate=254k
 /queue simple
-add name="all-users" target=192.168.1.0/24 queue=pcq-upload/pcq-download
+add max-limit=1M/1M name=PCQ_Client queue=pcq-upload/pcq-upload target=\
+    192.168.1.0/29
+/interface bridge port
+add bridge=LAN interface=ether2
+add bridge=LAN interface=ether3
+/ip address
+add address=192.168.1.1/29 interface=LAN network=192.168.1.0
+/ip dhcp-client
+add disabled=no interface=ether1
+/ip dhcp-server network
+add address=192.168.1.0/29 gateway=192.168.1.1
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/system identity
+set name=R.PCQ
     </code></pre>
 
     <!-- Tips -->

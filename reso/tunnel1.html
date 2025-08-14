@@ -106,6 +106,220 @@ set enabled=yes certificate=server-cert verify-client-certificate=no
       <tr><td>VXLAN</td><td>L2 over L3</td><td>-</td><td>Data center overlay network</td></tr>
     </table>
 
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li>EOIP</li>
+    </ul>
+
+
+    <img src="img/tunnel1.png" alt="Diagram jaringan" class="note-image" />
+    
+    <h3 class="note-subtitle">EOIP-RB1</h3>
+    <pre class="note-codeblock"><code>
+/interface eoip
+add name=EOIP1 remote-address=192.168.190.101 \
+    tunnel-id=10
+/interface wireless security-profiles
+set [ find default=yes ] supplicant-identity=MikroTik
+/ip address
+add address=192.168.190.100/24 interface=ether1 network=192.168.190.0
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0
+add address=10.10.10.1/30 interface=EOIP1 network=10.10.10.0
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip route
+add distance=1 gateway=192.168.190.1
+add distance=1 dst-address=192.168.2.0/30 gateway=10.10.10.2
+    </code></pre>
+
+    <h3 class="note-subtitle">EOIP-RB2</h3>
+    <pre class="note-codeblock"><code>
+/interface eoip
+add name=EOIP1 remote-address=192.168.190.100 \
+    tunnel-id=10
+/interface wireless security-profiles
+set [ find default=yes ] supplicant-identity=MikroTik
+/ip address
+add address=192.168.190.101/24 interface=ether1 network=192.168.190.0
+add address=192.168.2.1/30 interface=ether2 network=192.168.2.0
+add address=10.10.10.2/30 interface=EOIP1 network=10.10.10.0
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip route
+add distance=1 gateway=192.168.190.1
+add distance=1 dst-address=192.168.1.0/30 gateway=10.10.10.1
+    </code></pre>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li>IPIP</li>
+    </ul>
+
+
+    <img src="img/tunnel1.png" alt="Diagram jaringan" class="note-image" />
+    
+    <h3 class="note-subtitle">IPIP-RB1</h3>
+    <pre class="note-codeblock"><code>
+/interface ipip
+add local-address=192.168.190.102 name=ipip-tunnel1 remote-address=\
+    192.168.190.103
+/interface wireless security-profiles
+set [ find default=yes ] supplicant-identity=MikroTik
+/ip address
+add address=192.168.190.102/24 interface=ether1 network=192.168.190.0
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0
+add address=10.10.10.1/30 interface=ipip-tunnel1 network=10.10.10.0
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip route
+add distance=1 gateway=192.168.190.1
+add distance=1 dst-address=192.168.2.0/30 gateway=10.10.10.2
+    </code></pre>
+
+    <h3 class="note-subtitle">IPIP-RB2</h3>
+    <pre class="note-codeblock"><code>
+/interface ipip
+add local-address=192.168.190.103 name=ipip-tunnel1 remote-address=\
+    192.168.190.102
+/interface wireless security-profiles
+set [ find default=yes ] supplicant-identity=MikroTik
+/ip address
+add address=192.168.190.103/24 interface=ether1 network=192.168.190.0
+add address=192.168.2.1/30 interface=ether2 network=192.168.2.0
+add address=10.10.10.2/30 interface=ipip-tunnel1 network=10.10.10.0
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip route
+add distance=1 gateway=192.168.190.1
+add distance=1 dst-address=192.168.1.0/30 gateway=10.10.10.1
+    </code></pre>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <img src="img/tunnel1.png" alt="Diagram jaringan" class="note-image" />
+    
+    <h3 class="note-subtitle">GRE-RB1</h3>
+    <pre class="note-codeblock"><code>
+/interface gre
+add local-address=192.168.190.104 name=gre-tunnel1 remote-address=\
+    192.168.190.105
+/ip address
+add address=192.168.190.104/24 interface=ether1 network=192.168.190.0
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0
+add address=10.10.10.1/30 interface=gre-tunnel1 network=10.10.10.0
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip route
+add distance=1 gateway=192.168.190.1
+add distance=1 dst-address=192.168.2.0/30 gateway=10.10.10.2
+    </code></pre>
+
+    <h3 class="note-subtitle">GRE-RB2</h3>
+    <pre class="note-codeblock"><code>
+/interface gre
+add local-address=192.168.190.105 name=gre-tunnel1 remote-address=\
+    192.168.190.104
+/ip address
+add address=192.168.190.105/24 interface=ether1 network=192.168.190.0
+add address=192.168.2.1/30 interface=ether2 network=192.168.2.0
+add address=10.10.10.2/30 interface=gre-tunnel1 network=10.10.10.0
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip route
+add distance=1 gateway=192.168.190.1
+add distance=1 dst-address=192.168.1.0/30 gateway=10.10.10.1
+    </code></pre>
+
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <img src="img/tunnel1.png" alt="Diagram jaringan" class="note-image" />
+    
+    <h3 class="note-subtitle">VXLAN-RB1</h3>
+   <pre class="note-codeblock"><code>
+/interface bridge
+add name=BRIDGE_VXlAN10
+/interface vxlan
+add name=vxlan10 vni=10
+/ip pool
+add name=dhcp_pool0 ranges=192.168.1.2-192.168.1.254
+/ip dhcp-server
+add address-pool=dhcp_pool0 interface=BRIDGE_VXlAN10 name=dhcp1
+/port
+set 0 name=serial0
+/interface bridge port
+add bridge=BRIDGE_VXlAN10 interface=vxlan10
+add bridge=BRIDGE_VXlAN10 interface=ether2
+/interface vxlan vteps
+add interface=vxlan10 remote-ip=192.168.190.107
+add interface=vxlan10 remote-ip=192.168.190.108
+/ip address
+add address=192.168.190.106/24 interface=ether1 network=192.168.190.0
+add address=192.168.1.1/24 interface=BRIDGE_VXlAN10 network=192.168.1.0
+/ip dhcp-server network
+add address=192.168.1.0/24 gateway=192.168.1.1
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip route
+add distance=1 gateway=192.168.190.1
+    </code></pre>
+
+    <h3 class="note-subtitle">VXLAN-RB2</h3>
+    <pre class="note-codeblock"><code>
+/interface bridge
+add name=BRIDGE_VXLAN10
+/interface vxlan
+add  name=vxlan10 vni=10
+/interface bridge port
+add bridge=BRIDGE_VXLAN10 interface=vxlan10
+add bridge=BRIDGE_VXLAN10 interface=ether2
+/interface vxlan vteps
+add interface=vxlan10 remote-ip=192.168.190.106
+/ip address
+add address=192.168.190.107/24 interface=ether1 network=192.168.190.0
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip route
+add distance=1 gateway=192.168.190.1
+    </code></pre>
+
+    <h3 class="note-subtitle">VXLAN-RB3</h3>
+    <pre class="note-codeblock"><code>
+/interface bridge
+add name=BRIDGE_VXLAN10
+/interface vxlan
+add  name=vxlan10 vni=10
+/interface bridge port
+add bridge=BRIDGE_VXLAN10 interface=vxlan10
+add bridge=BRIDGE_VXLAN10 interface=ether2
+/interface vxlan vteps
+add interface=vxlan10 remote-ip=192.168.190.106
+/ip address
+add address=192.168.190.108/24 interface=ether1 network=192.168.190.0
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip route
+add dst-address=0.0.0.0/0 gateway=192.168.190.1
+    </code></pre>
+
+
+
     <!-- Tips -->
     <h3 class="note-subtitle">Tips</h3>
     <ul class="note-list">

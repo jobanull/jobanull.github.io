@@ -38,21 +38,50 @@
       <li><strong>Advertisement Interval</strong> – Waktu antar pengiriman iklan status dari Master.</li>
     </ul>
 
-    <h3 class="note-subtitle">Contoh Konfigurasi VRRP pada Cisco</h3>
-    <pre class="note-codeblock"><code>
-# Router 1 (Master)
-interface GigabitEthernet0/0
- ip address 192.168.1.1 255.255.255.0
- vrrp 1 ip 192.168.1.254
- vrrp 1 priority 110
- vrrp 1 preempt
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li>Topologi menggunakan protokol routing <b>OSPF</b> pada tujuh router MikroTik (RB1-RB7).</li>
+    </ul>
 
-# Router 2 (Backup)
-interface GigabitEthernet0/0
- ip address 192.168.1.2 255.255.255.0
- vrrp 1 ip 192.168.1.254
- vrrp 1 priority 100
- vrrp 1 preempt
+
+    <img src="img/vrrp.png" alt="Diagram jaringan" class="note-image" />
+    
+    <h3 class="note-subtitle">R.VRRP1</h3>
+    <pre class="note-codeblock"><code>
+/interface vrrp
+add interface=ether2 name=vrrp1 priority=254 vrid=49
+/ip pool
+add name=dhcp_pool1 ranges=192.168.2.1-192.168.2.253
+/ip dhcp-server
+add address-pool=dhcp_pool1 disabled=no interface=ether2 name=dhcp1
+/ip address
+add address=192.168.2.1/24 interface=ether2 network=192.168.2.0
+add address=192.168.2.254 interface=vrrp1 network=192.168.2.10
+/ip dhcp-client
+add disabled=no interface=ether1
+/ip dhcp-server network
+add address=192.168.2.0/24 gateway=192.168.2.254
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+    </code></pre>
+
+    <h3 class="note-subtitle">R.VRRP2</h3>
+    <pre class="note-codeblock"><code>
+/interface vrrp
+add interface=ether2 name=vrrp1 vrid=49
+/ip pool
+add name=dhcp_pool2 ranges=192.168.2.1-192.168.2.253
+/ip dhcp-server
+add address-pool=dhcp_pool2 disabled=no interface=ether2 name=dhcp1
+/ip address
+add address=192.168.2.2/24 interface=ether2 network=192.168.2.0
+add address=192.168.2.254 interface=vrrp1 network=192.168.2.10
+/ip dhcp-client
+add disabled=no interface=ether1
+/ip dhcp-server network
+add address=192.168.2.0/24 gateway=192.168.2.254
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
     </code></pre>
 
     <h3 class="note-subtitle">Kelebihan VRRP</h3>

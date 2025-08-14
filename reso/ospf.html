@@ -67,22 +67,226 @@
       <li>Mendukung autentikasi (plaintext dan MD5).</li>
     </ul>
 
-    <h3 class="note-subtitle">Contoh Konfigurasi OSPF (Cisco)</h3>
-    <pre class="note-codeblock"><code>
-router ospf 1
- router-id 1.1.1.1
- network 192.168.1.0 0.0.0.255 area 0
- network 10.0.0.0 0.0.0.3 area 1
-!
-interface GigabitEthernet0/0
- ip ospf cost 10
-!
-# Autentikasi OSPF
-interface GigabitEthernet0/1
- ip ospf authentication message-digest
- ip ospf message-digest-key 1 md5 cisco123
-    </code></pre>
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li>Topologi menggunakan protokol routing <b>OSPF</b> pada tujuh router MikroTik (RB1-RB7).</li>
+        <li>RB1:
+            <ul>
+                <li>IP: <code>10.1.1.1/30</code>, <code>11.1.1.1/30</code>, <code>192.168.190.3/24</code>.</li>
+                <li>Interface <code>ether1</code> dan <code>ether2</code> diikutkan OSPF area backbone.</li>
+            </ul>
+        </li>
+        <li>RB2:
+            <ul>
+                <li>IP: <code>10.1.1.2/30</code>, <code>12.1.1.1/30</code>, <code>16.1.1.1/30</code>, <code>17.1.1.1/30</code>.</li>
+                <li>Interface <code>ether1</code>, <code>ether2</code> di backbone, <code>ether3</code>, <code>ether4</code> di area2.</li>
+            </ul>
+        </li>
+        <li>RB3: Interface di backbone dan area3, IP: <code>11.1.1.2/30</code>, <code>12.1.1.2/30</code>, <code>13.1.1.1/30</code>, <code>14.1.1.1/30</code>.</li>
+        <li>RB4: IP <code>13.1.1.2/30</code>, <code>15.1.1.1/30</code>, berada di area3.</li>
+        <li>RB5: IP <code>14.1.1.2/30</code>, <code>15.1.1.2/30</code>, <code>192.168.2.1/30</code>, area3.</li>
+        <li>RB6: IP <code>16.1.1.2/30</code>, <code>18.1.1.1/30</code>, area2.</li>
+        <li>RB7: IP <code>17.1.1.2/30</code>, <code>18.1.1.2/30</code>, <code>192.168.1.1/30</code>, area2.</li>
+        <li>Tujuan: Menghubungkan semua router dalam beberapa OSPF area untuk pertukaran routing otomatis.</li>
+    </ul>
 
+
+    <img src="img/ospf.png" alt="Diagram jaringan" class="note-image" />
+    
+    <p class="note-subtitle">RB1</p>
+    <pre class="note-codeblock"><code>
+/ip address
+add address=10.1.1.1/30 interface=ether1 network=10.1.1.0
+add address=11.1.1.1/30 interface=ether2 network=11.1.1.0
+add address=192.168.190.3/24 interface=ether5 network=192.168.190.0
+# Menetapkan IP pada masing-masing interface
+
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+# Mengatur DNS server
+
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether5
+# NAT untuk keluar internet melalui ether5
+
+/ip route
+add distance=1 gateway=192.168.190.1
+# Default route ke gateway internet
+
+/routing ospf interface
+add interface=ether1
+add interface=ether2
+# Menambahkan interface ke OSPF
+
+/routing ospf network
+add area=backbone network=10.1.1.0/30
+add area=backbone network=11.1.1.0/30
+# Menentukan network yang masuk OSPF area backbone
+
+/system identity
+set name=R1
+# Memberi nama router
+
+    </code></pre>
+    
+    <p class="note-subtitle">RB2</p>
+    <pre class="note-codeblock"><code>
+/routing ospf area
+add area-id=2.2.2.2 name=area2
+# Membuat area OSPF tambahan (area2)
+
+/ip address
+add address=10.1.1.2/30 interface=ether1 network=10.1.1.0
+add address=12.1.1.1/30 interface=ether2 network=12.1.1.0
+add address=16.1.1.1/30 interface=ether3 network=16.1.1.0
+add address=17.1.1.1/30 interface=ether4 network=17.1.1.0
+# IP untuk masing-masing interface
+
+/routing ospf interface
+add interface=ether1
+add interface=ether2
+add interface=ether3
+add interface=ether4
+# Semua interface ikut OSPF
+
+/routing ospf network
+add area=backbone network=10.1.1.0/30
+add area=backbone network=12.1.1.0/30
+add area=area2 network=16.1.1.0/30
+add area=area2 network=17.1.1.0/30
+# Memetakan network ke area masing-masing
+
+/system identity
+set name=R2
+
+
+    </code></pre>
+    
+    <p class="note-subtitle">RB3</p>
+    <pre class="note-codeblock"><code>
+/routing ospf area
+add area-id=3.3.3.3 name=area3
+# Membuat area OSPF area3
+
+/ip address
+add address=11.1.1.2/30 interface=ether1 network=11.1.1.0
+add address=12.1.1.2/30 interface=ether2 network=12.1.1.0
+add address=13.1.1.1/30 interface=ether3 network=13.1.1.0
+add address=14.1.1.1/30 interface=ether4 network=14.1.1.0
+
+/routing ospf interface
+add interface=ether1
+add interface=ether2
+add interface=ether3
+add interface=ether4
+
+/routing ospf network
+add area=backbone network=12.1.1.0/30
+add area=backbone network=11.1.1.0/30
+add area=area3 network=13.1.1.0/30
+add area=area3 network=14.1.1.0/30
+
+/system identity
+set name=R3
+
+    </code></pre>
+    
+    <p class="note-subtitle">RB4</p>
+    <pre class="note-codeblock"><code>
+/ip address
+add address=13.1.1.2/30 interface=ether1 network=13.1.1.0
+add address=15.1.1.1/30 interface=ether2 network=15.1.1.0
+
+/routing ospf interface
+add interface=ether1
+add interface=ether2
+
+/routing ospf network
+add area=area3 network=13.1.1.0/30
+add area=area3 network=15.1.1.0/30
+
+/system identity
+set name=R4
+
+
+    </code></pre>
+    
+    <p class="note-subtitle">RB5</p>
+    <pre class="note-codeblock"><code>
+/routing ospf area
+add area-id=3.3.3.3 name=area3
+
+/ip address
+add address=14.1.1.2/30 interface=ether1 network=14.1.1.0
+add address=15.1.1.2/30 interface=ether2 network=15.1.1.0
+add address=192.168.2.1/30 interface=ether3 network=192.168.2.0
+
+/routing ospf interface
+add interface=ether1
+add interface=ether2
+
+/routing ospf network
+add area=area3 network=15.1.1.0/30
+add area=area3 network=14.1.1.0/30
+add area=area3 network=192.168.2.0/30
+
+/system identity
+set name=R5
+
+    </code></pre>
+    
+    <p class="note-subtitle">RB6</p>
+    <pre class="note-codeblock"><code>
+/routing ospf area
+add area-id=2.2.2.2 name=area2
+
+/ip address
+add address=16.1.1.2/30 interface=ether1 network=16.1.1.0
+add address=18.1.1.1/30 interface=ether2 network=18.1.1.0
+
+/routing ospf interface
+add interface=ether1
+add interface=ether2
+
+/routing ospf network
+add area=area2 network=16.1.1.0/30
+add area=area2 network=18.1.1.0/30
+
+/system identity
+set name=R6
+
+    </code></pre>
+    
+    <p class="note-subtitle">RB7</p>
+    <pre class="note-codeblock"><code>
+/routing ospf area
+add area-id=2.2.2.2 name=area2
+
+/ip address
+add address=17.1.1.2/30 interface=ether1 network=17.1.1.0
+add address=18.1.1.2/30 interface=ether2 network=18.1.1.0
+add address=192.168.1.1/30 interface=ether3 network=192.168.1.0
+
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+
+/ip firewall nat
+add action=masquerade chain=srcnat disabled=yes out-interface=ether1
+add action=masquerade chain=srcnat disabled=yes out-interface=ether2
+
+/routing ospf interface
+add interface=ether1
+add interface=ether2
+
+/routing ospf network
+add area=area2 network=17.1.1.0/30
+add area=area2 network=18.1.1.0/30
+add area=area2 network=192.168.1.0/30
+
+/system identity
+set name=R7
+
+    </code></pre>
     <h3 class="note-subtitle">Ringkasan</h3>
     <p class="note-paragraph">
       OSPF adalah protokol routing IGP yang efisien, scalable, dan handal. Dengan dukungan multi-area, 

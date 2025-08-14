@@ -37,22 +37,35 @@
       <li>Mengurangi kebutuhan perangkat fisik terpisah.</li>
     </ul>
 
-    <h3 class="note-subtitle">Contoh Konfigurasi VRF pada Cisco</h3>
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li>Topologi menggunakan protokol routing <b>OSPF</b> pada tujuh router MikroTik (RB1-RB7).</li>
+    </ul>
+
+
+    <img src="img/vrf.png" alt="Diagram jaringan" class="note-image" />
+    <h3 class="note-subtitle">R.VRF</h3>
     <pre class="note-codeblock"><code>
-# Membuat VRF untuk departemen HR
-Router(config)# ip vrf HR
-Router(config-vrf)# rd 100:1
-Router(config-vrf)# route-target export 100:1
-Router(config-vrf)# route-target import 100:1
-Router(config-vrf)# exit
-
-# Mengaitkan interface dengan VRF
-Router(config)# interface GigabitEthernet0/0
-Router(config-if)# ip vrf forwarding HR
-Router(config-if)# ip address 192.168.10.1 255.255.255.0
-
-# Routing khusus dalam VRF
-Router(config)# ip route vrf HR 0.0.0.0 0.0.0.0 192.168.10.254
+/ip address
+add address=192.168.1.1/24 interface=ether2 network=192.168.1.0
+add address=192.168.1.1/24 interface=ether3 network=192.168.1.0
+/ip dhcp-client
+add disabled=no interface=ether1
+/ip firewall mangle
+add action=mark-connection chain=prerouting in-interface=ether3 \
+new-connection-mark=con-vrf passthrough=yes
+add action=mark-routing chain=prerouting connection-mark=con-vrf \
+in-interface=ether1 new-routing-mark=vrf1 passthrough=yes
+add action=mark-routing chain=output connection-mark=con-vrf disabled=yes \
+new-routing-mark=vrf1 passthrough=yes
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip route
+add distance=1 gateway=192.168.209.1@main routing-mark=vrf1
+/ip route vrf
+add interfaces=ether3 routing-mark=vrf1
+/system identity
+set name=R.VRF
     </code></pre>
 
     <h3 class="note-subtitle">Ringkasan</h3>
