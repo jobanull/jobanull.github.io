@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Open Shortest Path First (OSPF)</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title">Open Shortest Path First (OSPF)</h2>
+    <p class="note-paragraph">
+      OSPF adalah protokol routing <strong>IGP (Interior Gateway Protocol)</strong> berbasis <em>link-state</em> 
+      yang digunakan untuk mendistribusikan informasi routing di dalam satu Autonomous System (AS).  
+      OSPF menggunakan algoritma <strong>Dijkstra (Shortest Path First)</strong> untuk menentukan jalur terbaik.  
+      Protokol ini mendukung jaringan skala besar, multi-area, dan konvergensi cepat.
+    </p>
+
+    <h3 class="note-subtitle">Karakteristik OSPF</h3>
+    <ul class="note-list">
+      <li>Termasuk dalam kategori <em>link-state routing protocol</em>.</li>
+      <li>Menggunakan protokol transport IP (protocol number 89).</li>
+      <li>Konvergensi cepat dibandingkan RIP.</li>
+      <li>Mendukung VLSM/CIDR.</li>
+      <li>Mendukung konsep area untuk segmentasi routing.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Istilah Penting</h3>
+    <ul class="note-list">
+      <li><strong>Router ID:</strong> Identitas unik router OSPF (format IP address).</li>
+      <li><strong>Area:</strong> Segmentasi jaringan OSPF untuk mengurangi LSDB dan beban CPU.</li>
+      <li><strong>Backbone Area (Area 0):</strong> Area inti yang menghubungkan semua area lain.</li>
+      <li><strong>LSA (Link State Advertisement):</strong> Pesan yang menginformasikan status link.</li>
+      <li><strong>LSDB (Link State Database):</strong> Database topologi jaringan di tiap router.</li>
+      <li><strong>SPF Tree:</strong> Struktur pohon jalur terpendek hasil perhitungan algoritma Dijkstra.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Tipe Router di OSPF</h3>
+    <ul class="note-list">
+      <li><strong>Internal Router:</strong> Semua interface berada dalam satu area.</li>
+      <li><strong>Backbone Router:</strong> Terhubung ke Area 0.</li>
+      <li><strong>Area Border Router (ABR):</strong> Menghubungkan Area 0 dengan area lain.</li>
+      <li><strong>Autonomous System Boundary Router (ASBR):</strong> Menghubungkan OSPF dengan protokol routing lain.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Proses Kerja OSPF</h3>
+    <ol class="note-list">
+      <li>Router membentuk hubungan tetangga (<em>adjacency</em>) dengan OSPF Hello packet.</li>
+      <li>Menukar informasi LSA untuk membangun LSDB.</li>
+      <li>Menghitung jalur terpendek menggunakan algoritma Dijkstra.</li>
+      <li>Mengisi routing table dengan rute terbaik.</li>
+    </ol>
+
+    <h3 class="note-subtitle">Tipe LSA Umum</h3>
+    <ul class="note-list">
+      <li><strong>Type 1:</strong> Router LSA – informasi link di dalam area.</li>
+      <li><strong>Type 2:</strong> Network LSA – informasi jaringan multi-access.</li>
+      <li><strong>Type 3:</strong> Summary LSA – ringkasan rute antar-area.</li>
+      <li><strong>Type 5:</strong> AS External LSA – rute dari luar OSPF AS.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Keunggulan OSPF</h3>
+    <ul class="note-list">
+      <li>Konvergensi cepat.</li>
+      <li>Mendukung load balancing dengan cost yang sama (ECMP).</li>
+      <li>Dapat dioptimalkan dengan pembagian area.</li>
+      <li>Mendukung autentikasi (plaintext dan MD5).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Konfigurasi OSPF (Cisco)</h3>
+    <pre class="note-codeblock"><code>
+router ospf 1
+ router-id 1.1.1.1
+ network 192.168.1.0 0.0.0.255 area 0
+ network 10.0.0.0 0.0.0.3 area 1
+!
+interface GigabitEthernet0/0
+ ip ospf cost 10
+!
+# Autentikasi OSPF
+interface GigabitEthernet0/1
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 1 md5 cisco123
+    </code></pre>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      OSPF adalah protokol routing IGP yang efisien, scalable, dan handal. Dengan dukungan multi-area, 
+      OSPF dapat digunakan pada jaringan enterprise hingga ISP untuk memastikan rute optimal dengan konvergensi cepat.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => img.classList.toggle('expanded'));
+    });
+  </script>
+</body>
+</html>

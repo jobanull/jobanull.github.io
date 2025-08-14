@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>QoS (Simple-Q, Queue Tree, Burst-Q, Layer 7-Q, PCQ)</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title">QoS (Simple Queue, Queue Tree, Burst Queue, Layer 7 Queue, PCQ)</h2>
+    <p class="note-paragraph">
+      Quality of Service (QoS) mengatur prioritas dan pembagian bandwidth agar trafik penting mendapatkan kualitas yang sesuai.
+      Di MikroTik, terdapat beberapa metode: <strong>Simple Queue</strong>, <strong>Queue Tree</strong>, <strong>Burst Queue</strong>, 
+      <strong>Layer 7 Queue</strong>, dan <strong>PCQ</strong>. 
+    </p>
+
+    <!-- Simple Queue -->
+    <h3 class="note-subtitle">1. Simple Queue</h3>
+    <p class="note-paragraph">
+      Paling mudah dipakai, cocok untuk membatasi atau menjamin bandwidth per IP atau subnet.
+      Dapat menggunakan <em>Target Upload/Download</em> dan mendukung <strong>HTB</strong> untuk prioritas.
+    </p>
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Setup cepat, GUI-friendly.</li>
+      <li><strong>Kekurangan:</strong> Tidak optimal untuk trafik kompleks atau banyak class.</li>
+      <li><strong>Gunakan Saat:</strong> Membatasi bandwidth user individu.</li>
+    </ul>
+    <pre class="note-codeblock"><code>
+# Limit 2 Mbps untuk 192.168.1.10
+/queue simple
+add name=user1 target=192.168.1.10/32 max-limit=2M/2M
+    </code></pre>
+
+    <!-- Queue Tree -->
+    <h3 class="note-subtitle">2. Queue Tree</h3>
+    <p class="note-paragraph">
+      Digunakan untuk membuat <strong>hierarchical queues</strong> di sebuah interface. Cocok untuk pembagian bandwidth
+      berdasarkan kategori trafik atau prioritas.
+    </p>
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Sangat fleksibel, cocok untuk QoS kompleks.</li>
+      <li><strong>Kekurangan:</strong> Konfigurasi lebih rumit; perlu mangle untuk menandai paket.</li>
+      <li><strong>Gunakan Saat:</strong> ISP atau jaringan besar yang butuh pembagian bandwidth detail.</li>
+    </ul>
+    <pre class="note-codeblock"><code>
+# Tandai paket HTTP & lainnya
+/ip firewall mangle
+add chain=prerouting protocol=tcp dst-port=80 action=mark-packet new-packet-mark=http passthrough=no
+add chain=prerouting action=mark-packet new-packet-mark=other passthrough=no
+
+# Queue Tree untuk total 10M, HTTP max 5M
+/queue tree
+add name="total" parent=ether1 max-limit=10M
+add name="http" parent=total packet-mark=http max-limit=5M
+add name="other" parent=total packet-mark=other max-limit=5M
+    </code></pre>
+
+    <!-- Burst Queue -->
+    <h3 class="note-subtitle">3. Burst Queue</h3>
+    <p class="note-paragraph">
+      Memungkinkan user mendapatkan bandwidth lebih besar sementara (<em>burst</em>) jika rata-rata penggunaan masih di bawah 
+      <strong>burst-threshold</strong>.
+    </p>
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Memberi pengalaman “cepat” saat awal download.</li>
+      <li><strong>Kekurangan:</strong> Tidak menjaga kecepatan burst terus-menerus.</li>
+      <li><strong>Gunakan Saat:</strong> ISP rumahan atau kantor yang ingin respons awal cepat.</li>
+    </ul>
+    <pre class="note-codeblock"><code>
+# 1M normal, burst sampai 2M selama 10 detik
+/queue simple
+add target=192.168.1.20/32 max-limit=1M/1M \
+    burst-limit=2M/2M burst-threshold=800k/800k burst-time=10s
+    </code></pre>
+
+    <!-- Layer 7 Queue -->
+    <h3 class="note-subtitle">4. Layer 7 Queue</h3>
+    <p class="note-paragraph">
+      Menggunakan <em>Layer 7 protocol matcher</em> untuk mendeteksi trafik berdasarkan pola di payload (regex).
+      Cocok untuk memfilter atau memprioritaskan aplikasi/protokol tertentu.
+    </p>
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Bisa mengenali trafik spesifik (YouTube, Facebook, dll.).</li>
+      <li><strong>Kekurangan:</strong> CPU-heavy, tidak efektif untuk trafik terenkripsi (HTTPS).</li>
+      <li><strong>Gunakan Saat:</strong> Trafik masih plaintext atau protokol khusus.</li>
+    </ul>
+    <pre class="note-codeblock"><code>
+# Match YouTube
+/ip firewall layer7-protocol
+add name=yt regex="^.+(youtube.com|ytimg.com).*\$"
+
+/ip firewall mangle
+add chain=prerouting layer7-protocol=yt action=mark-packet new-packet-mark=yt
+
+# Queue untuk YouTube
+/queue tree
+add name="youtube" parent=ether1 packet-mark=yt max-limit=3M
+    </code></pre>
+
+    <!-- PCQ -->
+    <h3 class="note-subtitle">5. PCQ (Per Connection Queue)</h3>
+    <p class="note-paragraph">
+      Queue type yang otomatis membagi bandwidth secara adil ke setiap koneksi/host. Sering dipakai ISP
+      untuk membagi bandwidth ke banyak user tanpa membuat queue satu-satu.
+    </p>
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Fair bandwidth sharing otomatis.</li>
+      <li><strong>Kekurangan:</strong> Tidak bisa memprioritaskan user tertentu.</li>
+      <li><strong>Gunakan Saat:</strong> ISP hotspot, warnet, kampus.</li>
+    </ul>
+    <pre class="note-codeblock"><code>
+# Buat queue type PCQ
+/queue type
+add kind=pcq name=pcq-download pcq-classifier=dst-address pcq-rate=1M
+add kind=pcq name=pcq-upload pcq-classifier=src-address pcq-rate=1M
+
+# Terapkan di simple queue
+/queue simple
+add name="all-users" target=192.168.1.0/24 queue=pcq-upload/pcq-download
+    </code></pre>
+
+    <!-- Tips -->
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan <strong>HTB</strong> di Simple Queue untuk hierarki sederhana.</li>
+      <li>Queue Tree wajib punya parent interface/global, bukan target IP langsung.</li>
+      <li>Layer 7 sebaiknya dipakai untuk pola ringan dan non-HTTPS.</li>
+      <li>PCQ cocok untuk membagi rata bandwidth ke banyak client otomatis.</li>
+      <li>Burst memberi user kesan “cepat” tapi tetap menjaga rata-rata bandwidth.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      <strong>Simple Queue</strong> untuk konfigurasi cepat per user, <strong>Queue Tree</strong> untuk QoS kompleks,
+      <strong>Burst</strong> untuk percepatan sementara, <strong>Layer 7</strong> untuk deteksi aplikasi,
+      dan <strong>PCQ</strong> untuk pembagian bandwidth adil otomatis.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

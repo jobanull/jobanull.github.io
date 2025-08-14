@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Load Balancing (ECMP, PBR, PCC)</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title">Load Balancing (ECMP, PBR, PCC)</h2>
+    <p class="note-paragraph">
+      Load Balancing adalah teknik pembagian beban lalu lintas jaringan ke beberapa jalur atau koneksi
+      untuk meningkatkan kinerja, redundansi, dan ketersediaan layanan. Dalam jaringan, load balancing
+      memungkinkan distribusi trafik secara efisien sehingga tidak ada satu jalur yang terlalu terbebani.
+    </p>
+
+    <h3 class="note-subtitle">Metode Load Balancing</h3>
+    <ul class="note-list">
+      <li><strong>ECMP (Equal-Cost Multi-Path)</strong> – Membagi trafik ke beberapa jalur dengan biaya (cost) routing yang sama secara otomatis menggunakan protokol routing seperti OSPF, BGP, atau RIP.</li>
+      <li><strong>PBR (Policy-Based Routing)</strong> – Mengarahkan lalu lintas berdasarkan kebijakan tertentu, seperti alamat IP sumber, tujuan, atau jenis aplikasi, terlepas dari tabel routing standar.</li>
+      <li><strong>PCC (Per Connection Classifier)</strong> – Teknik khusus (umumnya di MikroTik) untuk membagi koneksi ke beberapa jalur berdasarkan parameter seperti alamat IP, port, atau kombinasi keduanya, sehingga koneksi yang sama tetap menggunakan jalur yang sama.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Cara Kerja Singkat</h3>
+    <p class="note-paragraph">
+      - **ECMP**: Router memilih jalur secara merata di antara semua path dengan metric yang sama.<br>
+      - **PBR**: Administrator menentukan aturan khusus, misalnya traffic dari subnet tertentu lewat link A, sedangkan yang lain lewat link B.<br>
+      - **PCC**: Menggunakan algoritma hashing untuk menetapkan koneksi ke link tertentu agar tidak terjadi pemecahan koneksi.
+    </p>
+
+    <h3 class="note-subtitle">Contoh Skenario</h3>
+    <pre class="note-codeblock"><code>
+# Contoh ECMP (Cisco)
+ip route 0.0.0.0 0.0.0.0 192.168.10.1
+ip route 0.0.0.0 0.0.0.0 192.168.20.1
+
+# Contoh PBR (Cisco)
+ip access-list standard LAN1
+ permit 192.168.1.0 0.0.0.255
+route-map PBR-LAN1 permit 10
+ match ip address LAN1
+ set ip next-hop 192.168.10.1
+
+# Contoh PCC (MikroTik)
+/ip firewall mangle
+ add chain=prerouting src-address=192.168.1.0/24 per-connection-classifier=src-address:2/0 action=mark-connection new-connection-mark=conn1
+ add chain=prerouting src-address=192.168.1.0/24 per-connection-classifier=src-address:2/1 action=mark-connection new-connection-mark=conn2
+    </code></pre>
+
+    <h3 class="note-subtitle">Kelebihan Load Balancing</h3>
+    <ul class="note-list">
+      <li>Meningkatkan throughput jaringan.</li>
+      <li>Memberikan redundansi jika salah satu link down.</li>
+      <li>Mengoptimalkan pemanfaatan bandwidth.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      ECMP cocok untuk routing otomatis berbasis protokol, PBR untuk kontrol rute yang lebih spesifik,
+      dan PCC sangat bermanfaat di jaringan yang memerlukan pembagian koneksi konsisten, seperti ISP atau kantor dengan banyak pengguna.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => img.classList.toggle('expanded'));
+    });
+  </script>
+</body>
+</html>

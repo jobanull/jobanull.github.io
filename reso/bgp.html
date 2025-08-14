@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Border Gateway Protocol (BGP)</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title">Border Gateway Protocol (BGP)</h2>
+    <p class="note-paragraph">
+      Border Gateway Protocol (BGP) adalah protokol routing yang digunakan untuk bertukar informasi rute antar 
+      <em>Autonomous System</em> (AS) di internet. BGP termasuk kategori <strong>path vector protocol</strong> 
+      yang mengandalkan <em>policy-based routing</em> untuk memilih jalur terbaik, bukan sekadar metrik teknis.
+      BGP berjalan di atas TCP port 179 sehingga komunikasi antar router bersifat andal dan terkontrol.
+    </p>
+
+    <h3 class="note-subtitle">Peran dan Fungsi BGP</h3>
+    <ul class="note-list">
+      <li>Memilih jalur terbaik untuk mencapai jaringan tujuan berdasarkan kebijakan.</li>
+      <li>Menghubungkan jaringan antar-AS di internet.</li>
+      <li>Memberikan kontrol penuh terhadap rute yang diumumkan atau diterima.</li>
+      <li>Menangani skala besar (puluhan ribu hingga jutaan rute).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis BGP</h3>
+    <ul class="note-list">
+      <li><strong>EBGP (External BGP)</strong> – Digunakan untuk pertukaran rute antar-AS yang berbeda.</li>
+      <li><strong>IBGP (Internal BGP)</strong> – Digunakan untuk pertukaran rute antar-router dalam AS yang sama.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Atribut Penting BGP</h3>
+    <p class="note-paragraph">
+      BGP menggunakan sejumlah atribut untuk menentukan jalur terbaik. Beberapa yang paling umum:
+    </p>
+    <ul class="note-list">
+      <li><strong>Weight</strong> – Atribut lokal pada router Cisco, nilai lebih besar lebih diutamakan.</li>
+      <li><strong>Local Preference (LOCAL_PREF)</strong> – Menentukan preferensi jalur keluar dalam satu AS; nilai lebih tinggi lebih diutamakan.</li>
+      <li><strong>AS Path</strong> – Menyimpan urutan AS yang dilewati; jalur terpendek biasanya diutamakan.</li>
+      <li><strong>Multi-Exit Discriminator (MED)</strong> – Memberi sinyal jalur keluar yang diinginkan kepada AS tetangga.</li>
+      <li><strong>Next Hop</strong> – Menentukan alamat router berikut yang harus dilalui paket untuk mencapai tujuan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan BGP</h3>
+    <ul class="note-list">
+      <li>Kontrol routing yang sangat fleksibel.</li>
+      <li>Mendukung multi-homing dan redundansi koneksi.</li>
+      <li>Skalabilitas tinggi untuk jaringan berskala global.</li>
+      <li>Dapat mengimplementasikan kebijakan keamanan dan filtering rute.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan BGP</h3>
+    <ul class="note-list">
+      <li>Konfigurasi dan pemeliharaan relatif kompleks.</li>
+      <li>Konsvergensi (waktu stabil) lebih lambat dibanding protokol routing internal seperti OSPF atau EIGRP.</li>
+      <li>Sangat bergantung pada kebijakan dan pengaturan manual oleh administrator.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Konfigurasi Dasar (Cisco)</h3>
+    <pre class="note-codeblock"><code>
+! Router di AS 65001 terhubung ke ISP di AS 65002
+router bgp 65001
+ neighbor 192.0.2.1 remote-as 65002
+ neighbor 192.0.2.1 description LINK-TO-ISP
+ network 203.0.113.0 mask 255.255.255.0
+
+! Mengatur preferensi jalur keluar
+route-map SET-LOCALPREF permit 10
+ set local-preference 200
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan <strong>prefix-list</strong> dan <strong>route-map</strong> untuk mengontrol rute yang diumumkan/didapat.</li>
+      <li>Monitor sesi BGP secara berkala untuk memastikan stabilitas.</li>
+      <li>Hindari menerima seluruh tabel BGP kecuali benar-benar dibutuhkan.</li>
+      <li>Gunakan <em>route reflector</em> pada IBGP untuk mengurangi kebutuhan full-mesh.</li>
+    </ul>
+
+    <hr class="note-divider" />
+
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => {
+        img.classList.toggle('expanded');
+      });
+    });
+  </script>
+</body>
+</html>

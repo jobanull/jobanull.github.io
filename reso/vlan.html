@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Virtual Local Area Network (VLAN)</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title">Virtual Local Area Network (VLAN)</h2>
+    <p class="note-paragraph">
+      VLAN (<strong>Virtual Local Area Network</strong>) adalah teknologi jaringan yang digunakan untuk
+      membagi satu jaringan fisik menjadi beberapa jaringan logis yang terpisah.  
+      Dengan VLAN, perangkat pada jaringan yang sama secara fisik dapat berada di segmen jaringan yang berbeda
+      sehingga meningkatkan keamanan, efisiensi, dan pengelolaan lalu lintas.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi VLAN</h3>
+    <ul class="note-list">
+      <li><strong>Pemisahan jaringan</strong> – Memisahkan departemen atau fungsi tertentu dalam organisasi.</li>
+      <li><strong>Keamanan</strong> – Membatasi akses antar segmen jaringan.</li>
+      <li><strong>Efisiensi</strong> – Mengurangi broadcast domain untuk mengoptimalkan performa.</li>
+      <li><strong>Fleksibilitas</strong> – Memudahkan pengaturan ulang jaringan tanpa mengubah kabel fisik.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis VLAN</h3>
+    <ul class="note-list">
+      <li><strong>Default VLAN</strong> – VLAN bawaan pada switch (biasanya VLAN 1).</li>
+      <li><strong>Data VLAN</strong> – Digunakan untuk memisahkan lalu lintas data pengguna.</li>
+      <li><strong>Voice VLAN</strong> – VLAN khusus untuk lalu lintas VoIP.</li>
+      <li><strong>Management VLAN</strong> – VLAN khusus untuk mengelola perangkat jaringan.</li>
+      <li><strong>Native VLAN</strong> – VLAN yang digunakan untuk frame untagged pada trunk link.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Trunk dan Access Port</h3>
+    <ul class="note-list">
+      <li><strong>Access Port</strong> – Hanya mengirim dan menerima lalu lintas dari satu VLAN.</li>
+      <li><strong>Trunk Port</strong> – Dapat membawa lalu lintas dari beberapa VLAN sekaligus, menggunakan tagging seperti IEEE 802.1Q.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Keunggulan VLAN</h3>
+    <ul class="note-list">
+      <li>Meningkatkan keamanan jaringan.</li>
+      <li>Mengurangi broadcast domain.</li>
+      <li>Menyederhanakan manajemen jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Konfigurasi VLAN pada Cisco Switch</h3>
+    <pre class="note-codeblock"><code>
+# Membuat VLAN
+Switch(config)# vlan 10
+Switch(config-vlan)# name HR
+Switch(config-vlan)# exit
+
+# Mengatur port ke VLAN 10
+Switch(config)# interface fastEthernet 0/1
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 10
+
+# Mengatur port trunk
+Switch(config)# interface fastEthernet 0/24
+Switch(config-if)# switchport mode trunk
+Switch(config-if)# switchport trunk allowed vlan 10,20,30
+    </code></pre>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      VLAN memungkinkan segmentasi jaringan secara logis tanpa mengubah topologi fisik.  
+      Dengan memanfaatkan VLAN, organisasi dapat meningkatkan keamanan, mengurangi broadcast, dan mengelola lalu lintas jaringan lebih efisien.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => img.classList.toggle('expanded'));
+    });
+  </script>
+</body>
+</html>

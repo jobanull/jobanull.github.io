@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Multiprotocol Label Switching (MPLS)</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title">Multiprotocol Label Switching (MPLS)</h2>
+    <p class="note-paragraph">
+      MPLS adalah teknologi forwarding paket yang menggunakan <strong>label</strong> sebagai pengenal aliran lalu lintas, 
+      bukan hanya berdasarkan alamat IP. MPLS bekerja di antara Layer 2 dan Layer 3, sehingga sering disebut 
+      <em>Layer 2.5</em>. Teknologi ini digunakan untuk mempercepat proses forwarding, mendukung QoS, dan 
+      mengimplementasikan VPN skala besar.
+    </p>
+
+    <h3 class="note-subtitle">Konsep Dasar</h3>
+    <ul class="note-list">
+      <li><strong>Label:</strong> ID 20-bit yang ditambahkan pada header MPLS untuk mengidentifikasi aliran paket.</li>
+      <li><strong>Label Stack:</strong> MPLS dapat membawa beberapa label secara berurutan (label stacking).</li>
+      <li><strong>LSP (Label Switched Path):</strong> jalur forwarding yang telah ditentukan untuk paket berlabel.</li>
+      <li><strong>FEC (Forwarding Equivalence Class):</strong> sekumpulan paket yang diperlakukan sama oleh MPLS.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Komponen Utama</h3>
+    <ul class="note-list">
+      <li><strong>LER (Label Edge Router):</strong> Router di tepi MPLS domain yang menambahkan atau menghapus label.</li>
+      <li><strong>LSR (Label Switch Router):</strong> Router di dalam MPLS domain yang hanya mengganti label sesuai tabel forwarding.</li>
+      <li><strong>LDP (Label Distribution Protocol):</strong> Protokol yang mendistribusikan label antar router MPLS.</li>
+      <li><strong>RSVP-TE:</strong> Protokol signaling untuk MPLS Traffic Engineering.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Header MPLS</h3>
+    <ul class="note-list">
+      <li><strong>Label:</strong> 20 bit.</li>
+      <li><strong>EXP:</strong> 3 bit (QoS/CoS).</li>
+      <li><strong>S:</strong> 1 bit (Bottom of Stack indicator).</li>
+      <li><strong>TTL:</strong> 8 bit (Time To Live).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis Layanan MPLS</h3>
+    <ul class="note-list">
+      <li><strong>MPLS L3VPN:</strong> VPN berbasis IP yang memisahkan routing antar pelanggan.</li>
+      <li><strong>MPLS L2VPN:</strong> Menghubungkan site secara Layer 2 (contoh: VPLS, VPWS).</li>
+      <li><strong>MPLS TE (Traffic Engineering):</strong> Mengatur jalur lalu lintas untuk optimasi kapasitas.</li>
+      <li><strong>MPLS QoS:</strong> Memberikan prioritas layanan berdasarkan label EXP.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Proses Forwarding MPLS</h3>
+    <ol class="note-list">
+      <li>Paket masuk ke LER ingress → dicocokkan dengan FEC → diberi label.</li>
+      <li>LSR di tengah jaringan mengganti label sesuai tabel LFIB (Label Forwarding Information Base).</li>
+      <li>Paket sampai di LER egress → label dihapus → paket diteruskan ke tujuan akhir.</li>
+    </ol>
+
+    <h3 class="note-subtitle">Keuntungan MPLS</h3>
+    <ul class="note-list">
+      <li>Forwarding lebih cepat dibanding routing murni.</li>
+      <li>Mendukung multi-protocol (IPv4, IPv6, Ethernet, Frame Relay, ATM).</li>
+      <li>Mendukung QoS untuk aplikasi real-time (VoIP, video).</li>
+      <li>Mudah mengimplementasikan VPN skala besar.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Konfigurasi MPLS L3VPN (Cisco)</h3>
+    <pre class="note-codeblock"><code>
+# Aktifkan MPLS di interface backbone
+mpls ip
+!
+interface GigabitEthernet0/0
+ ip address 10.1.1.1 255.255.255.0
+ mpls ip
+!
+# Aktifkan LDP
+mpls label protocol ldp
+mpls ldp router-id Loopback0 force
+!
+# Routing antar PE via OSPF
+router ospf 1
+ network 10.1.1.0 0.0.0.255 area 0
+!
+# VRF untuk pelanggan
+ip vrf CUSTOMER_A
+ rd 100:1
+ route-target export 100:1
+ route-target import 100:1
+!
+interface GigabitEthernet0/1
+ ip vrf forwarding CUSTOMER_A
+ ip address 192.168.1.1 255.255.255.0
+!
+router bgp 65000
+ address-family ipv4 vrf CUSTOMER_A
+  neighbor 192.168.1.2 remote-as 65001
+ exit-address-family
+    </code></pre>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      MPLS adalah teknologi backbone modern yang digunakan oleh ISP dan perusahaan besar untuk 
+      mengoptimalkan forwarding, mendukung VPN, dan memastikan QoS. Fleksibilitasnya dalam 
+      mendukung berbagai protokol menjadikannya pilihan utama di jaringan skala besar.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => img.classList.toggle('expanded'));
+    });
+  </script>
+</body>
+</html>

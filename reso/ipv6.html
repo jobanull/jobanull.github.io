@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Internet Protocol Version 6 (IPv6)</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title">Internet Protocol Version 6 (IPv6)</h2>
+    <p class="note-paragraph">
+      IPv6 adalah generasi terbaru dari Internet Protocol yang dirancang untuk menggantikan IPv4.
+      Tujuan utamanya adalah menyediakan ruang alamat yang sangat besar, menyederhanakan pemrosesan paket,
+      dan meningkatkan otomatisasi konfigurasi jaringan.
+    </p>
+
+    <h3 class="note-subtitle">Mengapa IPv6?</h3>
+    <ul class="note-list">
+      <li><strong>Ruang alamat masif</strong> (128-bit): ~3.4×10<sup>38</sup> alamat.</li>
+      <li><strong>Otomatisasi</strong>: SLAAC (stateless) & DHCPv6 (stateful).</li>
+      <li><strong>Header lebih sederhana</strong> & dukungan <em>extension headers</em>.</li>
+      <li><strong>Keamanan & operasi</strong>: ICMPv6, ND, dan dukungan IPsec (wajib diimplementasi).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Format Alamat & Penulisan</h3>
+    <ul class="note-list">
+      <li>Hexadecimal 128-bit, dipisah “:”, contoh <code>2001:db8:85a3:0000:0000:8a2e:0370:7334</code>.</li>
+      <li><strong>Kompresi nol</strong>: hapus nol depan tiap blok (<code>0370</code> → <code>370</code>), 
+          ganti rangkaian nol dengan <code>::</code> sekali saja, contoh <code>2001:db8:85a3::8a2e:370:7334</code>.</li>
+      <li><strong>Prefix</strong>: notasi CIDR, mis. <code>2001:db8::/32</code>.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Tipe & Ruang Alamat</h3>
+    <ul class="note-list">
+      <li><strong>Global Unicast</strong> (publik): umumnya <code>2000::/3</code>.</li>
+      <li><strong>Link-Local</strong>: <code>fe80::/10</code> (otomatis, tidak di-route, wajib ada di setiap interface).</li>
+      <li><strong>Unique Local Address (ULA)</strong>: <code>fc00::/7</code> (praktisnya <code>fdxx:</code>), mirip RFC1918.</li>
+      <li><strong>Multicast</strong>: <code>ff00::/8</code> (mengganti broadcast di IPv4).</li>
+      <li><strong>Anycast</strong>: satu alamat dipakai banyak node, dikirim ke node “terdekat”.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Prinsip Subnetting IPv6</h3>
+    <ul class="note-list">
+      <li><strong>/64 untuk segmen host</strong> (SLAAC butuh /64).</li>
+      <li>Penyedia sering memberi <strong>/48</strong> atau <strong>/56</strong> untuk site; Anda pecah ke banyak /64.</li>
+      <li><strong>EUI-64</strong> vs <strong>Privacy Extensions</strong> (RFC 4941) untuk membentuk Interface ID.</li>
+    </ul>
+
+    <h3 class="note-subtitle">ICMPv6 & Neighbor Discovery (ND)</h3>
+    <ul class="note-list">
+      <li><strong>ND</strong> (ganti ARP): Neighbor Solicitation/Advertisement, Router Solicitation/Advertisement.</li>
+      <li><strong>DAD</strong> (Duplicate Address Detection) memastikan alamat tidak duplikat.</li>
+      <li><strong>Penting:</strong> jangan blokir ICMPv6 sembarangan; banyak fitur inti IPv6 bergantung padanya.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Otomatisasi Alamat</h3>
+    <ul class="note-list">
+      <li><strong>SLAAC</strong> (Stateless): host membentuk alamat dari RA (Router Advertisement) + /64.</li>
+      <li><strong>DHCPv6</strong> (Stateful/Stateless): bagi yang butuh kontrol lease/opsi (DNS, domain, dsb.).</li>
+      <li><strong>Prefix Delegation</strong>: CPE mendapatkan prefix (mis. /56) dari ISP, lalu menyebar ke LAN.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Perbedaan Utama IPv4 vs IPv6</h3>
+    <ul class="note-list">
+      <li>Tidak ada broadcast; gunakan multicast.</li>
+      <li>Router <strong>tidak mem-fragment</strong> paket; host melakukan Path MTU Discovery (MTU min 1280).</li>
+      <li>Header lebih ringkas; opsi dipindah ke extension headers.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Transisi & Konektivitas</h3>
+    <ul class="note-list">
+      <li><strong>Dual-Stack</strong>: IPv4 dan IPv6 berjalan berdampingan (metode paling umum).</li>
+      <li><strong>Tunneling</strong>: GRE/IP-in-IP over IPv6/IPv4, 6rd (provider), 6to4 (legacy).</li>
+      <li><strong>NAT64/DNS64</strong>: akses IPv4-only dari klien IPv6-only.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Routing IPv6 (Sekilas)</h3>
+    <ul class="note-list">
+      <li><strong>OSPFv3</strong>, <strong>EIGRP for IPv6</strong>, <strong>IS-IS</strong> multi-topology.</li>
+      <li><strong>BGP</strong> multiprotocol (AFI/SAFI) untuk IPv6 global routing.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Keamanan & Praktik Baik</h3>
+    <ul class="note-list">
+      <li>Aktifkan <strong>RA Guard</strong> & <strong>DHCPv6 Guard</strong> di switch untuk cegah iklan palsu.</li>
+      <li>Filter inbound dengan <strong>prefix-list</strong>/<strong>ACL IPv6</strong>; izinkan ICMPv6 esensial.</li>
+      <li>Gunakan <strong>ULA + overlay</strong> atau <strong>segmentation</strong> bila butuh isolasi internal.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Konfigurasi Dasar</h3>
+    <pre class="note-codeblock"><code>
+# Cisco IOS: Interface IPv6 + SLAAC (Router Advertisement)
+ipv6 unicast-routing
+interface GigabitEthernet0/0
+ description LAN
+ ipv6 address 2001:db8:10:1::1/64
+ ipv6 enable
+ ipv6 nd other-config-flag
+# (opsional) iklankan DNS via DHCPv6 (stateful/stateless sesuai kebutuhan)
+
+# Cisco IOS: Static route IPv6
+ipv6 route 2001:db8:20::/64 2001:db8:10:1::2
+
+# MikroTik RouterOS v7: Interface & Prefix Advertisement
+/ipv6 settings set disable-ipv6=no
+/ipv6 address add address=2001:db8:10:1::1/64 interface=bridge1 advertise=yes
+/ipv6 nd set [find interface=bridge1] ra-interval=3s-10s managed-address-configuration=no \
+  other-configuration=yes
+
+# Linux (NetworkManager nmcli contoh singkat)
+nmcli con mod "LAN" ipv6.method auto ipv6.addr-gen-mode stable-privacy
+    </code></pre>
+
+    <h3 class="note-subtitle">Troubleshooting Cepat</h3>
+    <ul class="note-list">
+      <li><code>ping6</code>, <code>traceroute6</code> / <code>tracert -6</code>.</li>
+      <li><code>show ipv6 interface</code>, <code>show ipv6 neighbors</code> (Cisco); 
+          MikroTik: <code>/ipv6 neighbor print</code>.</li>
+      <li>Cek RA/DHCPv6, MTU, dan izin ICMPv6 (RS/RA, NS/NA) di firewall.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      IPv6 menyelesaikan keterbatasan IPv4 dengan ruang alamat besar, otomatisasi konfigurasi, dan arsitektur
+      yang lebih bersih. Gunakan /64 per segmen, pertahankan ICMPv6 penting, dan terapkan dual-stack sebagai
+      jalur adopsi yang mulus.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+  <script>
+    // placeholder interaksi agar konsisten dengan halaman lain
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => img.classList.toggle('expanded'));
+    });
+  </script>
+</body>
+</html>

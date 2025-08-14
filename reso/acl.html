@@ -2,28 +2,104 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>ACL STANDAR - UpNote Replica</title>
+  <title>Access Control List</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="note-container">
 
   <main class="note-main">
-    <h2 class="note-title">ACL STANDAR</h2>
+    <h2 class="note-title">Access Control List</h2>
     <p class="note-paragraph">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae augue vitae justo faucibus vestibulum.
+      Access List (ACL) adalah daftar aturan yang digunakan pada perangkat jaringan untuk mengatur lalu lintas data
+      yang melewati interface. ACL dapat memeriksa paket berdasarkan kriteria tertentu, seperti alamat IP, protokol,
+      atau nomor port. Berdasarkan pemeriksaan tersebut, paket akan diizinkan (<em>permit</em>) atau ditolak (<em>deny</em>)
+      sesuai kebijakan. ACL digunakan untuk meningkatkan keamanan, membatasi akses, dan mengoptimalkan lalu lintas jaringan.
     </p>
 
     <img src="img/github.png" alt="Diagram jaringan" class="note-image" />
 
-    <h3 class="note-subtitle">Testing</h3>
-    <p class="note-paragraph">Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, quam.</p>
+    <h3 class="note-subtitle">Jenis-jenis ACL</h3>
     <ul class="note-list">
-      <li>etst</li>
-      <li>item kedua</li>
+      <li><strong>Standard ACL</strong> – Menyaring berdasarkan alamat IP sumber saja.</li>
+      <li><strong>Extended ACL</strong> – Menyaring berdasarkan IP sumber, IP tujuan, protokol, dan port.</li>
+      <li><strong>Named ACL</strong> – Menggunakan nama untuk pengelolaan aturan yang lebih fleksibel.</li>
     </ul>
 
+    <h3 class="note-subtitle">Manfaat ACL</h3>
+    <ul class="note-list">
+      <li>Meningkatkan keamanan jaringan dengan membatasi akses tidak sah.</li>
+      <li>Mengurangi lalu lintas yang tidak diperlukan.</li>a<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Border Gateway Protocol (BGP)</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title">Border Gateway Protocol (BGP)</h2>
+    <p class="note-paragraph">
+      BGP (Border Gateway Protocol) adalah protokol routing eksternal (<em>Exterior Gateway Protocol</em>, EGP)
+      yang digunakan untuk bertukar informasi routing antar Autonomous System (AS) di internet.
+      BGP memungkinkan jaringan besar seperti ISP, data center, dan perusahaan untuk menentukan jalur terbaik 
+      berdasarkan kebijakan (policy-based routing), bukan hanya metrik teknis seperti jarak atau kecepatan.
+    </p>
+
+    <img src="img/bgp-diagram.png" alt="Diagram BGP" class="note-image" />
+
+    <h3 class="note-subtitle">Jenis-jenis BGP</h3>
+    <ul class="note-list">
+      <li><strong>EBGP (External BGP)</strong> – Digunakan untuk pertukaran routing antar AS yang berbeda.</li>
+      <li><strong>IBGP (Internal BGP)</strong> – Digunakan untuk pertukaran routing antar router dalam AS yang sama.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik BGP</h3>
+    <ul class="note-list">
+      <li>Berbasis protokol TCP (port 179) untuk koneksi yang andal.</li>
+      <li>Mendukung kebijakan routing yang kompleks.</li>
+      <li>Menggunakan path vector untuk memilih jalur terbaik.</li>
+      <li>Dapat menghindari loop routing dengan informasi AS Path.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Manfaat BGP</h3>
+    <ul class="note-list">
+      <li>Memungkinkan kontrol penuh terhadap rute keluar dan masuk.</li>
+      <li>Mendukung multi-homing untuk redundansi koneksi internet.</li>
+      <li>Dapat melakukan filter rute untuk keamanan dan efisiensi.</li>
+      <li>Menentukan jalur berdasarkan kebijakan perusahaan/ISP.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Konfigurasi BGP (Cisco Router)</h3>
     <pre class="note-codeblock"><code>
-Skenario : block segment 2.0 dari 1.0
+Skenario: Router R1 (AS 65001) terhubung ke Router ISP (AS 65002)
+
+R1(config)# router bgp 65001
+R1(config-router)# neighbor 192.0.2.1 remote-as 65002
+R1(config-router)# network 203.0.113.0 mask 255.255.255.0
+    </code></pre>
+
+    <hr class="note-divider" />
+
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => {
+        img.classList.toggle('expanded');
+      });
+    });
+  </script>
+</body>
+</html>
+
+      <li>Mengontrol akses ke sumber daya tertentu.</li>
+      <li>Membantu mengoptimalkan performa jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">R1</h3>
+    <pre class="note-codeblock"><code>
+Skenario: block segment 2.0 dari 1.0
 
 access-list 1 deny 192.168.2.0 0.0.0.255
 access-list 1 permit any
@@ -31,26 +107,6 @@ access-list 1 permit any
 
     <hr class="note-divider" />
 
-    <img src="img/github.png" alt="Diagram jaringan 2" class="note-image" />
-
-    <pre class="note-codeblock"><code>
-    Skenario Blokir 2.2 dari segment 1.0
-    access-list 1 deny host 192.168.2.2
-    access-list 1 permit any
-
-    interface FastEthernet0/1
-    ip access-group 1 in
-
-    Atau
-
-    access-list 1 deny host 192.168.2.2
-    access-list 1 permit any
-
-    interface FastEthernet0/0
-    ip access-group 1 out
-
-    ip 192.168.200.252 255.255.255.0 192.168.200.1
-    </code></pre>
   </main>
 
   <script>

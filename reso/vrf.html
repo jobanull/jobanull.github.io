@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Virtual Routing and Forwarding (VRF)</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title">Virtual Routing and Forwarding (VRF)</h2>
+    <p class="note-paragraph">
+      VRF (<strong>Virtual Routing and Forwarding</strong>) adalah teknologi pada perangkat jaringan
+      yang memungkinkan satu router atau switch layer 3 memiliki beberapa tabel routing yang terpisah secara logis.
+      Dengan VRF, lalu lintas dari setiap tabel routing tetap terisolasi, sehingga beberapa jaringan dapat menggunakan
+      alamat IP yang sama tanpa saling mengganggu.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi dan Tujuan VRF</h3>
+    <ul class="note-list">
+      <li><strong>Isolasi lalu lintas</strong> – Memisahkan routing antar pelanggan atau departemen.</li>
+      <li><strong>Dukungan Multi-Tenant</strong> – Cocok untuk ISP atau data center yang melayani banyak klien.</li>
+      <li><strong>Keamanan</strong> – Mencegah pertukaran paket antar VRF yang berbeda.</li>
+      <li><strong>Efisiensi</strong> – Menghemat perangkat dengan memanfaatkan satu hardware untuk banyak jaringan logis.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis VRF</h3>
+    <ul class="note-list">
+      <li><strong>VRF Lite</strong> – Implementasi VRF tanpa MPLS, biasanya digunakan di enterprise.</li>
+      <li><strong>MPLS VRF</strong> – VRF yang digunakan bersama MPLS untuk membangun VPN antar lokasi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan VRF</h3>
+    <ul class="note-list">
+      <li>Memungkinkan penggunaan alamat IP overlapped di jaringan berbeda.</li>
+      <li>Meningkatkan keamanan dan segmentasi jaringan.</li>
+      <li>Mengurangi kebutuhan perangkat fisik terpisah.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Konfigurasi VRF pada Cisco</h3>
+    <pre class="note-codeblock"><code>
+# Membuat VRF untuk departemen HR
+Router(config)# ip vrf HR
+Router(config-vrf)# rd 100:1
+Router(config-vrf)# route-target export 100:1
+Router(config-vrf)# route-target import 100:1
+Router(config-vrf)# exit
+
+# Mengaitkan interface dengan VRF
+Router(config)# interface GigabitEthernet0/0
+Router(config-if)# ip vrf forwarding HR
+Router(config-if)# ip address 192.168.10.1 255.255.255.0
+
+# Routing khusus dalam VRF
+Router(config)# ip route vrf HR 0.0.0.0 0.0.0.0 192.168.10.254
+    </code></pre>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      VRF memungkinkan satu perangkat jaringan mengelola beberapa jaringan logis yang terisolasi.
+      Teknologi ini sangat bermanfaat untuk ISP, data center, dan perusahaan besar yang memerlukan segmentasi
+      dan keamanan tinggi tanpa menambah perangkat fisik.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => img.classList.toggle('expanded'));
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Routing Information Protocol (RIP & RIPv2)</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title">Routing Information Protocol (RIP & RIPv2)</h2>
+    <p class="note-paragraph">
+      RIP adalah protokol routing <strong>IGP (Interior Gateway Protocol)</strong> berbasis <em>distance vector</em> 
+      yang menggunakan <strong>hop count</strong> sebagai metrik untuk menentukan jalur terbaik.  
+      Setiap router RIP secara berkala mengirimkan tabel routing lengkap ke tetangganya setiap 30 detik.
+    </p>
+
+    <h3 class="note-subtitle">Karakteristik RIP</h3>
+    <ul class="note-list">
+      <li>Menggunakan <strong>hop count</strong> sebagai metrik (maksimal 15 hop, 16 = tidak terjangkau).</li>
+      <li>Mengirim update routing setiap 30 detik.</li>
+      <li>Menggunakan algoritma Bellman-Ford.</li>
+      <li>Protokol transport: UDP port 520.</li>
+      <li>Tidak cocok untuk jaringan besar karena keterbatasan hop count.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Perbedaan RIP vs RIPv2</h3>
+    <table border="1" cellpadding="5" cellspacing="0" class="note-table">
+      <thead>
+        <tr>
+          <th>Fitur</th>
+          <th>RIP (v1)</th>
+          <th>RIPv2</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Tipe Routing</td>
+          <td>Classful (tidak kirim subnet mask)</td>
+          <td>Classless (mendukung VLSM/CIDR)</td>
+        </tr>
+        <tr>
+          <td>Pengiriman Update</td>
+          <td>Broadcast 255.255.255.255</td>
+          <td>Multicast 224.0.0.9</td>
+        </tr>
+        <tr>
+          <td>Autentikasi</td>
+          <td>Tidak ada</td>
+          <td>Mendukung autentikasi plaintext dan MD5</td>
+        </tr>
+        <tr>
+          <td>Kompatibilitas</td>
+          <td>IPv4 saja</td>
+          <td>IPv4 saja (RIPng untuk IPv6)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="note-subtitle">Keunggulan</h3>
+    <ul class="note-list">
+      <li>Sederhana dan mudah dikonfigurasi.</li>
+      <li>Kompatibel dengan hampir semua perangkat.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul class="note-list">
+      <li>Skalabilitas rendah (maksimal 15 hop).</li>
+      <li>Konvergensi lambat.</li>
+      <li>Update berkala menambah overhead jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Konfigurasi RIP dan RIPv2 (Cisco)</h3>
+    <pre class="note-codeblock"><code>
+# RIP versi 1
+router rip
+ version 1
+ network 192.168.1.0
+ network 10.0.0.0
+
+# RIP versi 2
+router rip
+ version 2
+ network 192.168.1.0
+ network 10.0.0.0
+ no auto-summary
+    </code></pre>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      RIP dan RIPv2 adalah protokol routing yang mudah digunakan, namun memiliki keterbatasan untuk jaringan besar.  
+      RIPv2 memperbaiki kelemahan RIP v1 dengan mendukung subnet mask, VLSM, dan autentikasi.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => img.classList.toggle('expanded'));
+    });
+  </script>
+</body>
+</html>

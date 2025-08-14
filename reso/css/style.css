@@ -42,9 +42,14 @@
 
     /* Paragraf */
     .note-paragraph {
-      margin: 0.5rem 0 1rem 0;
-      font-size: 1rem;
-      color: #555;
+      margin: 0.8rem 0 1.4rem 0;
+      font-size: 1.05rem; /* sedikit lebih besar */
+      font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif; /* font modern dan bersih */
+      font-weight: 400;
+      color: #444; /* sedikit lebih gelap untuk keterbacaan */
+      line-height: 1.75; /* jarak antar baris lebih lega */
+      text-align: justify; /* rapi kiri-kanan */
+      letter-spacing: 0.2px; /* jarak antar huruf halus */
     }
 
     /* List */

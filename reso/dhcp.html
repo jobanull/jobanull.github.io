@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dynamic Host Configuration Protocol (DHCP)</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title">Dynamic Host Configuration Protocol (DHCP)</h2>
+    <p class="note-paragraph">
+      DHCP (Dynamic Host Configuration Protocol) adalah protokol jaringan yang digunakan untuk 
+      memberikan alamat IP dan informasi konfigurasi jaringan lainnya secara otomatis kepada perangkat klien.
+      Dengan DHCP, administrator tidak perlu mengatur IP secara manual pada setiap perangkat, sehingga menghemat waktu
+      dan mengurangi kesalahan konfigurasi.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama DHCP</h3>
+    <ul class="note-list">
+      <li>Memberikan alamat IP secara otomatis kepada perangkat yang terhubung ke jaringan.</li>
+      <li>Mengatur parameter jaringan seperti subnet mask, default gateway, dan DNS server.</li>
+      <li>Mempermudah manajemen jaringan terutama pada lingkungan dengan banyak perangkat.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Proses Kerja DHCP (DORA)</h3>
+    <ol class="note-list">
+      <li><strong>Discover</strong> – Klien mengirim broadcast untuk mencari server DHCP.</li>
+      <li><strong>Offer</strong> – Server DHCP menawarkan alamat IP beserta informasi konfigurasi.</li>
+      <li><strong>Request</strong> – Klien meminta alamat IP tertentu dari penawaran server.</li>
+      <li><strong>Acknowledge</strong> – Server mengonfirmasi dan memberikan alamat IP kepada klien.</li>
+    </ol>
+
+    <h3 class="note-subtitle">Jenis-jenis Alokasi DHCP</h3>
+    <ul class="note-list">
+      <li><strong>Dynamic Allocation</strong> – Server memberikan IP untuk jangka waktu tertentu (lease time).</li>
+      <li><strong>Automatic Allocation</strong> – Server memberikan IP permanen (tetap) dari pool yang tersedia.</li>
+      <li><strong>Static Allocation (Reservation)</strong> – Server memberikan IP tertentu kepada perangkat berdasarkan MAC address.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan DHCP</h3>
+    <ul class="note-list">
+      <li>Mengurangi pekerjaan konfigurasi manual.</li>
+      <li>Menghindari konflik IP.</li>
+      <li>Mudah diatur untuk jaringan berskala besar.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan DHCP</h3>
+    <ul class="note-list">
+      <li>Jika server DHCP gagal, perangkat baru tidak akan mendapatkan IP.</li>
+      <li>Kurang cocok untuk perangkat yang membutuhkan IP tetap tanpa reservasi.</li>
+      <li>Berpotensi disalahgunakan jika ada rogue DHCP server.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Konfigurasi DHCP (Cisco Router)</h3>
+    <pre class="note-codeblock"><code>
+! Mengaktifkan DHCP dan menentukan pool
+ip dhcp pool JARINGAN-LOCAL
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+ dns-server 8.8.8.8 8.8.4.4
+ lease 7
+
+! Mengecualikan IP agar tidak diberikan oleh DHCP
+ip dhcp excluded-address 192.168.10.1 192.168.10.10
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan <strong>IP reservation</strong> untuk perangkat penting seperti server dan printer.</li>
+      <li>Pastikan hanya ada satu DHCP server aktif di satu segmen jaringan untuk menghindari konflik.</li>
+      <li>Monitor lease time agar sesuai dengan kebutuhan jaringan.</li>
+      <li>Gunakan DHCP relay (IP helper) untuk melayani klien di jaringan berbeda.</li>
+    </ul>
+
+    <hr class="note-divider" />
+
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => {
+        img.classList.toggle('expanded');
+      });
+    });
+  </script>
+</body>
+</html>

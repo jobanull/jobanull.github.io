@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Virtual Router Redundancy Protocol (VRRP)</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title">Virtual Router Redundancy Protocol (VRRP)</h2>
+    <p class="note-paragraph">
+      VRRP (<strong>Virtual Router Redundancy Protocol</strong>) adalah protokol yang digunakan untuk menyediakan
+      ketersediaan gateway default secara otomatis. Dengan VRRP, beberapa router dapat bekerja sama untuk
+      menyediakan satu IP gateway virtual, sehingga jika router utama gagal, router cadangan akan mengambil alih
+      tanpa mengganggu konektivitas jaringan.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi VRRP</h3>
+    <ul class="note-list">
+      <li><strong>Redundansi</strong> – Menjamin gateway tetap aktif meskipun salah satu router mati.</li>
+      <li><strong>Failover Otomatis</strong> – Perpindahan ke router cadangan terjadi secara otomatis.</li>
+      <li><strong>Reliabilitas</strong> – Meningkatkan ketersediaan layanan jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Cara Kerja VRRP</h3>
+    <p class="note-paragraph">
+      VRRP bekerja dengan konsep satu <em>Master Router</em> dan satu atau lebih <em>Backup Router</em>.
+      Semua router dalam grup berbagi satu <strong>Virtual IP Address</strong> yang digunakan klien sebagai
+      gateway. Master Router akan mengirimkan iklan (advertisement) secara berkala. Jika iklan ini berhenti,
+      Backup Router dengan prioritas tertinggi akan menjadi Master baru.
+    </p>
+
+    <h3 class="note-subtitle">Parameter Penting</h3>
+    <ul class="note-list">
+      <li><strong>Virtual IP</strong> – IP gateway yang digunakan oleh klien.</li>
+      <li><strong>Priority</strong> – Menentukan urutan router yang akan menjadi Master.</li>
+      <li><strong>Advertisement Interval</strong> – Waktu antar pengiriman iklan status dari Master.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Konfigurasi VRRP pada Cisco</h3>
+    <pre class="note-codeblock"><code>
+# Router 1 (Master)
+interface GigabitEthernet0/0
+ ip address 192.168.1.1 255.255.255.0
+ vrrp 1 ip 192.168.1.254
+ vrrp 1 priority 110
+ vrrp 1 preempt
+
+# Router 2 (Backup)
+interface GigabitEthernet0/0
+ ip address 192.168.1.2 255.255.255.0
+ vrrp 1 ip 192.168.1.254
+ vrrp 1 priority 100
+ vrrp 1 preempt
+    </code></pre>
+
+    <h3 class="note-subtitle">Kelebihan VRRP</h3>
+    <ul class="note-list">
+      <li>Proses failover cepat dan otomatis.</li>
+      <li>Meminimalkan downtime jaringan.</li>
+      <li>Bekerja lintas vendor (open standard).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      VRRP adalah solusi efektif untuk menjaga ketersediaan gateway jaringan. Dengan konfigurasi yang tepat,
+      VRRP memastikan konektivitas pengguna tetap stabil meskipun terjadi kegagalan pada router utama.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => img.classList.toggle('expanded'));
+    });
+  </script>
+</body>
+</html>

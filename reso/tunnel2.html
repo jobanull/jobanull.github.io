@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tunnel Networking</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title">Tunnel Networking (PPTP, L2TP, SSTP, GRE, EOIP, IPIP, VXLAN)</h2>
+    <p class="note-paragraph">
+      Tunnel adalah mekanisme untuk mengenkapsulasi paket data dalam protokol lain agar dapat dikirim melalui jalur yang berbeda atau melewati jaringan publik. 
+      Fungsinya antara lain: membuat VPN, menghubungkan site-to-site, atau mengangkut protokol yang tidak didukung secara langsung.
+    </p>
+
+    <!-- PPTP -->
+    <h3 class="note-subtitle">1. PPTP (Point-to-Point Tunneling Protocol)</h3>
+    <p class="note-paragraph">
+      Protokol VPN layer 2 yang menggunakan GRE + MPPE encryption. Mudah dikonfigurasi namun tidak lagi aman untuk produksi.
+    </p>
+    <pre class="note-codeblock"><code>
+# Server PPTP
+/interface pptp-server server
+set enabled=yes default-profile=default
+
+/ppp secret
+add name=user1 password=123 service=pptp profile=default remote-address=10.0.0.2 local-address=10.0.0.1
+    </code></pre>
+
+    <!-- L2TP -->
+    <h3 class="note-subtitle">2. L2TP (Layer 2 Tunneling Protocol)</h3>
+    <p class="note-paragraph">
+      VPN layer 2 yang sering dipadukan dengan IPsec untuk keamanan. Mendukung multi-protocol transport.
+    </p>
+    <pre class="note-codeblock"><code>
+# Server L2TP + IPsec
+/interface l2tp-server server
+set enabled=yes use-ipsec=yes ipsec-secret=rahasia default-profile=default
+    </code></pre>
+
+    <!-- SSTP -->
+    <h3 class="note-subtitle">3. SSTP (Secure Socket Tunneling Protocol)</h3>
+    <p class="note-paragraph">
+      Berjalan di atas HTTPS (TCP 443) sehingga mudah melewati firewall. Aman karena menggunakan SSL/TLS.
+    </p>
+    <pre class="note-codeblock"><code>
+# Server SSTP
+/interface sstp-server server
+set enabled=yes certificate=server-cert verify-client-certificate=no
+    </code></pre>
+
+    <!-- GRE -->
+    <h3 class="note-subtitle">4. GRE (Generic Routing Encapsulation)</h3>
+    <p class="note-paragraph">
+      Tunnel layer 3 yang ringan, cocok untuk mengangkut berbagai protokol di atas IP.
+    </p>
+    <pre class="note-codeblock"><code>
+# GRE Tunnel
+/interface gre add name=gre1 remote-address=198.51.100.2 local-address=198.51.100.1
+/ip address add address=10.10.10.1/30 interface=gre1
+    </code></pre>
+
+    <!-- EOIP -->
+    <h3 class="note-subtitle">5. EOIP (Ethernet over IP)</h3>
+    <p class="note-paragraph">
+      Protokol MikroTik untuk mengenkapsulasi frame Ethernet, memungkinkan bridging antar-site.
+    </p>
+    <pre class="note-codeblock"><code>
+/interface eoip add name=eoip1 remote-address=203.0.113.2 tunnel-id=100
+/ip address add address=10.20.20.1/30 interface=eoip1
+    </code></pre>
+
+    <!-- IPIP -->
+    <h3 class="note-subtitle">6. IPIP (IP over IP)</h3>
+    <p class="note-paragraph">
+      Tunnel layer 3 sederhana hanya untuk IP traffic. Overhead rendah, tanpa enkripsi.
+    </p>
+    <pre class="note-codeblock"><code>
+/interface ipip add name=ipip1 remote-address=192.0.2.2 local-address=192.0.2.1
+/ip address add address=172.16.1.1/30 interface=ipip1
+    </code></pre>
+
+    <!-- VXLAN -->
+    <h3 class="note-subtitle">7. VXLAN (Virtual eXtensible LAN)</h3>
+    <p class="note-paragraph">
+      Tunnel untuk mengenkapsulasi frame Ethernet dalam UDP, mendukung jaringan layer 2 di atas jaringan layer 3, skala besar (ID hingga 16 juta).
+    </p>
+    <pre class="note-codeblock"><code>
+/interface vxlan add name=vxlan1 vni=100 remote-address=203.0.113.2 local-address=203.0.113.1
+/ip address add address=192.168.50.1/24 interface=vxlan1
+    </code></pre>
+
+    <!-- Perbandingan -->
+    <h3 class="note-subtitle">Perbandingan Singkat</h3>
+    <table class="note-table">
+      <tr>
+        <th>Tunnel</th><th>Layer</th><th>Enkripsi</th><th>Kegunaan</th>
+      </tr>
+      <tr><td>PPTP</td><td>L2</td><td>MPPE</td><td>VPN sederhana (tidak direkomendasikan)</td></tr>
+      <tr><td>L2TP/IPsec</td><td>L2</td><td>IPsec</td><td>VPN aman, multi-platform</td></tr>
+      <tr><td>SSTP</td><td>L3</td><td>SSL/TLS</td><td>VPN via TCP 443, lewati firewall</td></tr>
+      <tr><td>GRE</td><td>L3</td><td>-</td><td>Encapsulation multi-protocol ringan</td></tr>
+      <tr><td>EOIP</td><td>L2</td><td>-</td><td>Bridge antar-site MikroTik</td></tr>
+      <tr><td>IPIP</td><td>L3</td><td>-</td><td>Tunnel IP sederhana</td></tr>
+      <tr><td>VXLAN</td><td>L2 over L3</td><td>-</td><td>Data center overlay network</td></tr>
+    </table>
+
+    <!-- Tips -->
+    <h3 class="note-subtitle">Tips</h3>
+    <ul class="note-list">
+      <li>Pakai IPsec jika butuh keamanan pada GRE, L2TP, atau EOIP.</li>
+      <li>EOIP hanya optimal antar-MikroTik, tidak kompatibel vendor lain.</li>
+      <li>VXLAN cocok untuk virtualisasi dan cloud environment.</li>
+      <li>PPTP sebaiknya hanya untuk lab/testing.</li>
+    </ul>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Intermediate System to Intermediate System (IS-IS)</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title">Intermediate System to Intermediate System (IS-IS)</h2>
+    <p class="note-paragraph">
+      IS-IS adalah protokol routing <strong>link-state</strong> yang digunakan untuk mendistribusikan informasi routing di dalam 
+      <em>autonomous system</em>. Awalnya dikembangkan untuk jaringan OSI, namun diperluas untuk mendukung IPv4 dan IPv6 
+      (<strong>Integrated IS-IS</strong>).  
+    </p>
+
+    <h3 class="note-subtitle">Karakteristik Utama</h3>
+    <ul class="note-list">
+      <li><strong>Tipe Protokol:</strong> Link-State (mirip OSPF).</li>
+      <li><strong>Standar:</strong> ISO/IEC 10589.</li>
+      <li><strong>Metric:</strong> Cost (default = 10 per link, dapat diubah).</li>
+      <li><strong>Transport:</strong> langsung via Layer 2 (CLNS), bukan di atas IP.</li>
+      <li><strong>Hierarki:</strong> Level 1 (intra-area) dan Level 2 (inter-area).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Terminologi Penting</h3>
+    <ul class="note-list">
+      <li><strong>Intermediate System (IS):</strong> router.</li>
+      <li><strong>End System (ES):</strong> host.</li>
+      <li><strong>Area:</strong> domain logis untuk mengelompokkan router.</li>
+      <li><strong>NET (Network Entity Title):</strong> alamat ID unik router dalam format NSAP.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Struktur Hierarki</h3>
+    <ul class="note-list">
+      <li><strong>Level 1:</strong> Router hanya tahu topologi area sendiri; default route ke Level 2 untuk keluar area.</li>
+      <li><strong>Level 2:</strong> Router tahu topologi semua area dan bertindak sebagai backbone.</li>
+      <li><strong>L1/L2:</strong> Router yang menjalankan keduanya, sebagai penghubung area.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Tipe PDU (Protocol Data Unit)</h3>
+    <ul class="note-list">
+      <li><strong>IIH (IS-IS Hello):</strong> membentuk dan memelihara adjacency.</li>
+      <li><strong>LSP (Link-State PDU):</strong> membawa informasi topologi.</li>
+      <li><strong>CSNP (Complete Sequence Number PDU):</strong> ringkasan LSP pada awal sinkronisasi.</li>
+      <li><strong>PSNP (Partial Sequence Number PDU):</strong> permintaan LSP tertentu.</li>
+    </ul>
+
+    <h3 class="note-subtitle">IS-IS vs OSPF</h3>
+    <ul class="note-list">
+      <li>IS-IS bekerja langsung di Layer 2; OSPF di Layer 3 (IP).</li>
+      <li>IS-IS skalabilitas tinggi untuk ISP; OSPF lebih umum di enterprise.</li>
+      <li>Konsep area di IS-IS lebih sederhana (backbone = semua Level 2).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Konfigurasi Dasar</h3>
+    <pre class="note-codeblock"><code>
+# Cisco IOS: IS-IS IPv4
+router isis CORE
+ net 49.0001.0000.0000.0001.00
+ is-type level-2
+ metric-style wide
+!
+interface GigabitEthernet0/0
+ ip router isis CORE
+ isis circuit-type level-2
+!
+interface Loopback0
+ ip address 10.0.0.1 255.255.255.255
+ ip router isis CORE
+
+# Cisco IOS: IPv6 IS-IS
+ipv6 router isis CORE
+ net 49.0001.0000.0000.0001.00
+ is-type level-2
+ metric-style wide
+!
+interface GigabitEthernet0/0
+ ipv6 router isis CORE
+
+# Juniper (contoh singkat)
+set protocols isis level 2 wide-metrics-only
+set interfaces ge-0/0/0 unit 0 family inet address 10.0.0.1/30
+set interfaces ge-0/0/0 unit 0 family iso address 49.0001.0000.0000.0001.00
+set protocols isis interface ge-0/0/0 level 2
+    </code></pre>
+
+    <h3 class="note-subtitle">Best Practice</h3>
+    <ul class="note-list">
+      <li>Gunakan <strong>metric-style wide</strong> untuk mendukung nilai metric besar.</li>
+      <li>Pisahkan area untuk membatasi LSDB dan mempercepat konvergensi.</li>
+      <li>Aktifkan <strong>authentication</strong> (MD5 atau HMAC-SHA) di link IS-IS.</li>
+      <li>Monitoring via <code>show isis neighbors</code> dan <code>show clns interface</code>.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      IS-IS adalah protokol routing link-state yang sangat stabil dan efisien untuk skala besar, banyak digunakan
+      oleh ISP dan backbone provider. Sifatnya yang bekerja langsung di Layer 2 membuatnya fleksibel untuk
+      membawa berbagai protokol jaringan, termasuk IPv4 dan IPv6.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+  <script>
+    // placeholder interaksi untuk konsistensi
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => img.classList.toggle('expanded'));
+    });
+  </script>
+</body>
+</html>
