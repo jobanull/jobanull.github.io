@@ -28,19 +28,96 @@
       <li>Meningkatkan keamanan jaringan dengan membatasi akses tidak sah.</li>
       <li>Mengurangi lalu lintas yang tidak diperlukan.</li>
 
-    <h3 class="note-subtitle">Skenario</h3>
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+      <li>Konfigurasi supaya PC 2 tidak bisa melakukan ping ke :</li>
+      <li>192.168.100.252 & 253 dengan ACL Standard </li>
+      <li>192.168.200.252 & 253 dengan ACL Extended</li>
 
        <img src="img/acl1.png" alt="Diagram jaringan" class="note-image" />
+       <p class="note-subtitle">SW DISTRIBUTE</p>
        <pre class="note-codeblock"><code>
-! Router di AS 65001 terhubung ke ISP di AS 65002
-router bgp 65001
- neighbor 192.0.2.1 remote-as 65002
- neighbor 192.0.2.1 description LINK-TO-ISP
- network 203.0.113.0 mask 255.255.255.0
+# Membuat VLAN interface di atas bridge BRIDGE_VLAN
+/interface vlan
+add interface=BRIDGE_VLAN name=vlan100 vlan-id=100   # VLAN 100 untuk segmen jaringan 1
+add interface=BRIDGE_VLAN name=vlan200 vlan-id=200   # VLAN 200 untuk segmen jaringan 2
 
-! Mengatur preferensi jalur keluar
-route-map SET-LOCALPREF permit 10
- set local-preference 200
+# Menambahkan port fisik ke bridge
+/interface bridge port
+add bridge=BRIDGE_VLAN interface=ether24             # ether24 sebagai trunk (tagged VLAN 100 & 200)
+add bridge=BRIDGE_VLAN interface=ether1 pvid=100     # ether1 akses VLAN 100
+add bridge=BRIDGE_VLAN interface=ether2 pvid=100     # ether2 akses VLAN 100
+add bridge=BRIDGE_VLAN interface=ether3 pvid=100     # ether3 akses VLAN 100
+add bridge=BRIDGE_VLAN interface=ether4 pvid=200     # ether4 akses VLAN 200
+add bridge=BRIDGE_VLAN interface=ether5 pvid=200     # ether5 akses VLAN 200
+add bridge=BRIDGE_VLAN interface=ether6 pvid=200     # ether6 akses VLAN 200
+
+# Mapping VLAN ID dengan port yang tagged dan untagged di bridge
+/interface bridge vlan
+add bridge=BRIDGE_VLAN tagged=ether24 untagged=ether1,ether2,ether3 vlan-ids=100   # VLAN 100: trunk di ether24, untagged di ether1-3
+add bridge=BRIDGE_VLAN tagged=ether24 untagged=ether4,ether5,ether6 vlan-ids=200   # VLAN 200: trunk di ether24, untagged di ether4-6
+
+# Mengatur nama perangkat (hostname)
+/system identity
+set name=CRS.DITRIBUTE
+
+    </code></pre>
+       <p class="note-subtitle">R1</p>
+       <pre class="note-codeblock"><code>
+! Mengatur nama router
+hostname R1
+
+! IP yang tidak boleh diberikan oleh DHCP (reservasi atau exclusion)
+ip dhcp excluded-address 192.168.100.2 192.168.100.253   ! VLAN 100: IP 2-253 tidak dibagikan DHCP
+ip dhcp excluded-address 192.168.200.2 192.168.200.253   ! VLAN 200: IP 2-253 tidak dibagikan DHCP
+
+! DHCP pool untuk link antar router (LAN point-to-point)
+ip dhcp pool DHCP_LAN
+   network 192.168.1.0 255.255.255.252   ! Jaringan /30 untuk antar router
+   default-router 192.168.1.1            ! Gateway sisi R1
+
+! DHCP pool untuk VLAN 100
+ip dhcp pool DHCP_VLAN100
+   network 192.168.100.0 255.255.255.0   ! Jaringan VLAN 100 /24
+   default-router 192.168.100.1          ! Gateway VLAN 100
+
+! DHCP pool untuk VLAN 200
+ip dhcp pool DHCP_VLAN200
+   network 192.168.200.0 255.255.255.0   ! Jaringan VLAN 200 /24
+   default-router 192.168.200.1          ! Gateway VLAN 200
+
+! Interface fisik Fa0/0 digunakan sebagai trunk VLAN
+interface FastEthernet0/0
+ no ip address                           ! Tidak pakai IP langsung, hanya trunk
+ duplex half                             ! Mode half-duplex
+
+! Subinterface untuk VLAN 100
+interface FastEthernet0/0.100
+ encapsulation dot1Q 100                 ! VLAN ID 100
+ ip address 192.168.100.1 255.255.255.0  ! IP gateway VLAN 100
+
+! Subinterface untuk VLAN 200
+interface FastEthernet0/0.200
+ encapsulation dot1Q 200                 ! VLAN ID 200
+ ip address 192.168.200.1 255.255.255.0  ! IP gateway VLAN 200
+ ip access-group 100 in                  ! Filter ACL 100 untuk traffic masuk VLAN 200
+
+! Interface ke jaringan point-to-point (ISP atau router lain)
+interface FastEthernet1/0
+ ip address 192.168.1.1 255.255.255.252  ! IP sisi R1
+ ip access-group 1 out                   ! ACL 1 untuk traffic keluar
+ duplex half                             ! Mode half-duplex
+
+! ACL 1: memblokir IP tertentu dari keluar ke Fa1/0
+access-list 1 deny   192.168.100.253     ! Blok IP 192.168.100.253
+access-list 1 permit any                 ! Izinkan semua selain itu
+
+! ACL 100: memblokir ICMP dari host VLAN 200 ke host di jaringan /30
+access-list 100 deny   icmp host 192.168.200.252 host 192.168.1.2
+access-list 100 deny   icmp host 192.168.200.253 host 192.168.1.2
+access-list 100 permit ip any any        ! Izinkan semua trafik lain
+
+
     </code></pre>
 
 
