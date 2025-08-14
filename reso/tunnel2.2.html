@@ -23,8 +23,12 @@
       <li><strong>Keterbatasan:</strong> Konfigurasi lebih kompleks dibanding L2TP/PPTP; butuh sertifikat dan manajemen CA.</li>
     </ul>
 
-    <h3 class="note-subtitle">Contoh Konfigurasi OpenVPN Server (MikroTik)</h3>
-    <pre class="note-codeblock"><code>
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <!-- <img src="img/tunnel2.png" alt="Diagram jaringan" class="note-image" /> -->
+    <ul class="note-list">
+            <li>On Progress</li>
+    </ul>
+    <!-- <pre class="note-codeblock"><code>
 # Import sertifikat CA, server, dan key terlebih dahulu
 /certificate import file-name=ca.crt
 /certificate import file-name=server.crt
@@ -47,7 +51,7 @@ set enabled=yes port=1194 mode=ip netmask=24 \
 # Firewall & NAT
 /ip firewall filter add chain=input protocol=tcp port=1194 action=accept
 /ip firewall nat add chain=srcnat out-interface=ether1 action=masquerade
-    </code></pre>
+    </code></pre> -->
 
     <h3 class="note-subtitle">Tips Praktis</h3>
     <ul class="note-list">

@@ -23,51 +23,62 @@
 
     <h3 class="note-subtitle">CONTOH KASUS</h3>
     <ul class="note-list">
-        <li>EOIP</li>
+        <li>Tujuan: Menghubungkan dua router MikroTik (RB1 & RB2) menggunakan <strong>EOIP tunnel</strong> agar jaringan lokal dapat saling terhubung.</li>
+        <li>RB1 & RB2: Membuat EOIP tunnel dengan tunnel-id sama, menetapkan IP pada interface lokal dan EOIP, NAT ke internet, serta menambahkan route ke jaringan lawan.</li>
     </ul>
 
-
     <img src="img/tunnel1.png" alt="Diagram jaringan" class="note-image" />
-    
+
     <h3 class="note-subtitle">EOIP-RB1</h3>
     <pre class="note-codeblock"><code>
-/interface eoip
-add name=EOIP1 remote-address=192.168.190.101 \
-    tunnel-id=10
-/interface wireless security-profiles
-set [ find default=yes ] supplicant-identity=MikroTik
-/ip address
-add address=192.168.190.100/24 interface=ether1 network=192.168.190.0
-add address=192.168.1.1/30 interface=ether2 network=192.168.1.0
-add address=10.10.10.1/30 interface=EOIP1 network=10.10.10.0
-/ip dns
-set servers=8.8.8.8,8.8.4.4
-/ip firewall nat
-add action=masquerade chain=srcnat out-interface=ether1
-/ip route
-add distance=1 gateway=192.168.190.1
-add distance=1 dst-address=192.168.2.0/30 gateway=10.10.10.2
+    /interface eoip
+    add name=EOIP1 remote-address=192.168.190.101 tunnel-id=10
+    # Membuat EOIP tunnel ke RB2 dengan tunnel-id 10
+
+    /ip address
+    add address=192.168.190.100/24 interface=ether1
+    # IP lokal RB1 untuk akses internet
+    add address=192.168.1.1/30 interface=ether2
+    # IP untuk jaringan internal lokal RB1
+    add address=10.10.10.1/30 interface=EOIP1
+    # IP untuk EOIP tunnel
+
+    /ip firewall nat
+    add action=masquerade chain=srcnat out-interface=ether1
+    # NAT keluar ke internet
+
+    /ip route
+    add distance=1 gateway=192.168.190.1
+    # Route default via ISP
+    add distance=1 dst-address=192.168.2.0/30 gateway=10.10.10.2
+    # Route ke jaringan RB2 melalui EOIP tunnel
     </code></pre>
 
     <h3 class="note-subtitle">EOIP-RB2</h3>
     <pre class="note-codeblock"><code>
-/interface eoip
-add name=EOIP1 remote-address=192.168.190.100 \
-    tunnel-id=10
-/interface wireless security-profiles
-set [ find default=yes ] supplicant-identity=MikroTik
-/ip address
-add address=192.168.190.101/24 interface=ether1 network=192.168.190.0
-add address=192.168.2.1/30 interface=ether2 network=192.168.2.0
-add address=10.10.10.2/30 interface=EOIP1 network=10.10.10.0
-/ip dns
-set servers=8.8.8.8,8.8.4.4
-/ip firewall nat
-add action=masquerade chain=srcnat out-interface=ether1
-/ip route
-add distance=1 gateway=192.168.190.1
-add distance=1 dst-address=192.168.1.0/30 gateway=10.10.10.1
+    /interface eoip
+    add name=EOIP1 remote-address=192.168.190.100 tunnel-id=10
+    # Membuat EOIP tunnel ke RB1 dengan tunnel-id 10
+
+    /ip address
+    add address=192.168.190.101/24 interface=ether1
+    # IP lokal RB2 untuk akses internet
+    add address=192.168.2.1/30 interface=ether2
+    # IP untuk jaringan internal lokal RB2
+    add address=10.10.10.2/30 interface=EOIP1
+    # IP untuk EOIP tunnel
+
+    /ip firewall nat
+    add action=masquerade chain=srcnat out-interface=ether1
+    # NAT keluar ke internet
+
+    /ip route
+    add distance=1 gateway=192.168.190.1
+    # Route default via ISP
+    add distance=1 dst-address=192.168.1.0/30 gateway=10.10.10.1
+    # Route ke jaringan RB1 melalui EOIP tunnel
     </code></pre>
+
 
     <h3 class="note-subtitle">Tips Praktis EOIP</h3>
     <ul class="note-list">

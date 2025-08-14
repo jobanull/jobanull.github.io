@@ -24,7 +24,10 @@
     </ul>
 
     <h3 class="note-subtitle">Contoh Konfigurasi SSTP Server (MikroTik)</h3>
-    <pre class="note-codeblock"><code>
+        <ul class="note-list">
+            <li>On Progress</li>
+    </ul>
+    <!-- <pre class="note-codeblock"><code>
 # Import sertifikat SSL untuk server
 /certificate import file-name=server.crt
 /certificate import file-name=server.key
@@ -39,7 +42,7 @@ set enabled=yes certificate=server-cert require-client-certificate=no default-pr
 # Firewall & NAT
 /ip firewall filter add chain=input protocol=tcp port=443 action=accept
 /ip firewall nat add chain=srcnat out-interface=ether1 action=masquerade
-    </code></pre>
+    </code></pre> -->
 
     <h3 class="note-subtitle">Tips Praktis</h3>
     <ul class="note-list">

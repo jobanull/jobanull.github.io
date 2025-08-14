@@ -25,78 +25,123 @@
 
     <h3 class="note-subtitle">CONTOH KASUS</h3>
     <img src="img/tunnel1.png" alt="Diagram jaringan" class="note-image" />
-    
+    <ul class="note-list">
+        <li>Tujuan: Menghubungkan tiga router (RB1, RB2, RB3) pada jaringan Layer 2 yang sama menggunakan <strong>VXLAN</strong>.</li>
+        <li>VXLAN adalah tunnel Layer 2 over Layer 3 menggunakan UDP, cocok untuk memperluas broadcast domain antar lokasi.</li>
+        <li>VNI (VXLAN Network Identifier) digunakan sebagai penanda segmen Layer 2 virtual, di contoh ini menggunakan <strong>VNI 10</strong>.</li>
+    </ul>
+
     <h3 class="note-subtitle">VXLAN-RB1</h3>
-   <pre class="note-codeblock"><code>
-/interface bridge
-add name=BRIDGE_VXlAN10
-/interface vxlan
-add name=vxlan10 vni=10
-/ip pool
-add name=dhcp_pool0 ranges=192.168.1.2-192.168.1.254
-/ip dhcp-server
-add address-pool=dhcp_pool0 interface=BRIDGE_VXlAN10 name=dhcp1
-/port
-set 0 name=serial0
-/interface bridge port
-add bridge=BRIDGE_VXlAN10 interface=vxlan10
-add bridge=BRIDGE_VXlAN10 interface=ether2
-/interface vxlan vteps
-add interface=vxlan10 remote-ip=192.168.190.107
-add interface=vxlan10 remote-ip=192.168.190.108
-/ip address
-add address=192.168.190.106/24 interface=ether1 network=192.168.190.0
-add address=192.168.1.1/24 interface=BRIDGE_VXlAN10 network=192.168.1.0
-/ip dhcp-server network
-add address=192.168.1.0/24 gateway=192.168.1.1
-/ip dns
-set servers=8.8.8.8,8.8.4.4
-/ip firewall nat
-add action=masquerade chain=srcnat out-interface=ether1
-/ip route
-add distance=1 gateway=192.168.190.1
+    <pre class="note-codeblock"><code>
+    /interface bridge
+    add name=BRIDGE_VXLAN10
+    # Membuat bridge untuk menggabungkan interface tunnel dan interface LAN
+
+    /interface vxlan
+    add name=vxlan10 vni=10
+    # Membuat interface VXLAN dengan ID jaringan virtual (VNI) 10
+
+    /ip pool
+    add name=dhcp_pool0 ranges=192.168.1.2-192.168.1.254
+    # Pool IP untuk DHCP server
+
+    /ip dhcp-server
+    add address-pool=dhcp_pool0 interface=BRIDGE_VXLAN10 name=dhcp1
+    # DHCP server di bridge VXLAN
+
+    /interface bridge port
+    add bridge=BRIDGE_VXLAN10 interface=vxlan10
+    # Menghubungkan VXLAN ke bridge
+    add bridge=BRIDGE_VXLAN10 interface=ether2
+    # Menghubungkan LAN lokal ke bridge
+
+    /interface vxlan vteps
+    add interface=vxlan10 remote-ip=192.168.190.107
+    # VXLAN endpoint ke RB2
+    add interface=vxlan10 remote-ip=192.168.190.108
+    # VXLAN endpoint ke RB3
+
+    /ip address
+    add address=192.168.190.106/24 interface=ether1
+    # IP untuk koneksi antar-ROUTER (WAN side)
+    add address=192.168.1.1/24 interface=BRIDGE_VXLAN10
+    # IP gateway LAN di VXLAN
+
+    /ip dhcp-server network
+    add address=192.168.1.0/24 gateway=192.168.1.1
+    # Network DHCP
+
+    /ip dns
+    set servers=8.8.8.8,8.8.4.4
+
+    /ip firewall nat
+    add action=masquerade chain=srcnat out-interface=ether1
+    # NAT agar klien VXLAN bisa akses internet
+
+    /ip route
+    add distance=1 gateway=192.168.190.1
+    # Default route ke ISP
     </code></pre>
 
     <h3 class="note-subtitle">VXLAN-RB2</h3>
     <pre class="note-codeblock"><code>
-/interface bridge
-add name=BRIDGE_VXLAN10
-/interface vxlan
-add  name=vxlan10 vni=10
-/interface bridge port
-add bridge=BRIDGE_VXLAN10 interface=vxlan10
-add bridge=BRIDGE_VXLAN10 interface=ether2
-/interface vxlan vteps
-add interface=vxlan10 remote-ip=192.168.190.106
-/ip address
-add address=192.168.190.107/24 interface=ether1 network=192.168.190.0
-/ip dns
-set servers=8.8.8.8,8.8.4.4
-/ip firewall nat
-add action=masquerade chain=srcnat out-interface=ether1
-/ip route
-add distance=1 gateway=192.168.190.1
+    /interface bridge
+    add name=BRIDGE_VXLAN10
+
+    /interface vxlan
+    add name=vxlan10 vni=10
+
+    /interface bridge port
+    add bridge=BRIDGE_VXLAN10 interface=vxlan10
+    add bridge=BRIDGE_VXLAN10 interface=ether2
+
+    /interface vxlan vteps
+    add interface=vxlan10 remote-ip=192.168.190.106
+    # Endpoint ke RB1
+
+    /ip address
+    add address=192.168.190.107/24 interface=ether1
+    # IP WAN RB2
+
+    /ip dns
+    set servers=8.8.8.8,8.8.4.4
+
+    /ip firewall nat
+    add action=masquerade chain=srcnat out-interface=ether1
+
+    /ip route
+    add distance=1 gateway=192.168.190.1
     </code></pre>
 
     <h3 class="note-subtitle">VXLAN-RB3</h3>
     <pre class="note-codeblock"><code>
-/interface bridge
-add name=BRIDGE_VXLAN10
-/interface vxlan
-add  name=vxlan10 vni=10
-/interface bridge port
-add bridge=BRIDGE_VXLAN10 interface=vxlan10
-add bridge=BRIDGE_VXLAN10 interface=ether2
-/interface vxlan vteps
-add interface=vxlan10 remote-ip=192.168.190.106
-/ip address
-add address=192.168.190.108/24 interface=ether1 network=192.168.190.0
-/ip dns
-set servers=8.8.8.8,8.8.4.4
-/ip firewall nat
-add action=masquerade chain=srcnat out-interface=ether1
-/ip route
-add dst-address=0.0.0.0/0 gateway=192.168.190.1
+    /interface bridge
+    add name=BRIDGE_VXLAN10
+
+    /interface vxlan
+    add name=vxlan10 vni=10
+
+    /interface bridge port
+    add bridge=BRIDGE_VXLAN10 interface=vxlan10
+    add bridge=BRIDGE_VXLAN10 interface=ether2
+
+    /interface vxlan vteps
+    add interface=vxlan10 remote-ip=192.168.190.106
+    # Endpoint ke RB1
+
+    /ip address
+    add address=192.168.190.108/24 interface=ether1
+    # IP WAN RB3
+
+    /ip dns
+    set servers=8.8.8.8,8.8.4.4
+
+    /ip firewall nat
+    add action=masquerade chain=srcnat out-interface=ether1
+
+    /ip route
+    add dst-address=0.0.0.0/0 gateway=192.168.190.1
+    # Default route ke ISP
     </code></pre>
 
     <h3 class="note-subtitle">Tips Praktis</h3>

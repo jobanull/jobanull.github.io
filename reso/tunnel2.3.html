@@ -24,44 +24,69 @@
     </ul>
 
     <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <img src="img/tunnel2.png" alt="Diagram jaringan" class="note-image" />
     <ul class="note-list">
-        <li>PPTP</li>
+        <li>Menghubungkan dua router menggunakan tunnel VPN PPTP.</li>
+        <li>RB1 bertindak sebagai PPTP Server, RB2 sebagai PPTP Client.</li>
+        <li>Digunakan untuk menghubungkan network 192.168.1.0/30 dengan 192.168.2.0/30.</li>
     </ul>
 
+    <h3 class="note-subtitle">PPTP-RB1 (Server)</h3>
+    <pre class="note-codeblock"><code>
+    /ip pool
+    add name=pptp_pool ranges=10.10.10.2
+    # Pool IP untuk PPTP client, RB2 akan mendapat IP ini
 
-    <img src="img/tunnel2.png" alt="Diagram jaringan" class="note-image" />
-    
-    <h3 class="note-subtitle">PPTP-RB1</h3>
-    <pre class="note-codeblock"><code>
-/ip pool
-add name=pptp_pool ranges=10.10.10.2
-/ppp profile
-add local-address=10.10.10.1 name=pptp_profile remote-address=pptp_pool
-/interface pptp-server server
-set enabled=yes
-/ip address
-add address=192.168.190.100/24 interface=ether1 network=192.168.190.0
-add address=192.168.1.1/30 interface=ether2 network=192.168.1.0
-/ip route
-add distance=1 dst-address=192.168.2.0/30 gateway=10.10.10.2
-/ppp secret
-add name=pptp1 password=pptp1 profile=pptp_profile service=pptp
-/system identity
-set name=PPTP-R1
+    /ppp profile
+    add local-address=10.10.10.1 name=pptp_profile remote-address=pptp_pool
+    # Profil PPP: IP lokal RB1 = 10.10.10.1, remote (client) dari pptp_pool
+
+    /interface pptp-server server
+    set enabled=yes
+    # Aktifkan PPTP server (tanpa IPsec, tidak dienkripsi sekuat L2TP+IPsec)
+
+    /ip address
+    add address=192.168.190.100/24 interface=ether1
+    # IP WAN RB1
+    add address=192.168.1.1/30 interface=ether2
+    # IP LAN RB1
+
+    /ip route
+    add distance=1 dst-address=192.168.2.0/30 gateway=10.10.10.2
+    # Routing ke jaringan LAN RB2 melalui IP PPTP client
+
+    /ppp secret
+    add name=pptp1 password=pptp1 profile=pptp_profile service=pptp
+    # Username dan password untuk autentikasi PPTP client
+
+    /system identity
+    set name=PPTP-R1
     </code></pre>
-    
-    <h3 class="note-subtitle">PPTP-RB2</h3>
+
+    <h3 class="note-subtitle">PPTP-RB2 (Client)</h3>
     <pre class="note-codeblock"><code>
-/ip address
-add address=192.168.190.101/24 interface=ether1 network=192.168.190.0
-add address=192.168.2.1/30 interface=ether2 network=192.168.2.0
-/ip dhcp-server network
-add address=192.168.2.0/30 gateway=192.168.2.1
-/ip route
-add distance=1 dst-address=192.168.1.0/30 gateway=10.10.10.1
-/system identity
-set name=PPTP-R2
+    /interface pptp-client
+    add connect-to=192.168.190.100 disabled=no name=pptp-out1 user=pptp1 password=pptp1
+    # PPTP client terhubung ke IP WAN RB1 dengan kredensial yang sesuai
+
+    /ip address
+    add address=192.168.190.101/24 interface=ether1
+    # IP WAN RB2
+    add address=192.168.2.1/30 interface=ether2
+    # IP LAN RB2
+
+    /ip dhcp-server network
+    add address=192.168.2.0/30 gateway=192.168.2.1
+    # Gateway DHCP LAN RB2
+
+    /ip route
+    add distance=1 dst-address=192.168.1.0/30 gateway=10.10.10.1
+    # Routing ke jaringan RB1 melalui IP PPTP server
+
+    /system identity
+    set name=PPTP-R2
     </code></pre>
+
 
 
     <h3 class="note-subtitle">Tips Praktis</h3>
