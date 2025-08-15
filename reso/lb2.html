@@ -21,14 +21,42 @@
       <li><strong>Gunakan Saat:</strong> Multi-WAN, backbone dengan banyak jalur, link ke ISP/core yang setara.</li>
     </ul>
 
-    <pre class="note-codeblock"><code>
-# MikroTik: ECMP dengan 2 WAN statis
-/ip route
-add dst-address=0.0.0.0/0 gateway=1.1.1.1 check-gateway=ping
-add dst-address=0.0.0.0/0 gateway=2.2.2.2 check-gateway=ping
+    
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+      <!-- <li>Tujuan: Menghubungkan RB1, RB2, dan RB3 menggunakan <strong>protokol routing IS-IS</strong> untuk pertukaran routing.</li> -->
+    </ul>
 
-# RouterOS akan secara otomatis load balance per-connection (per-flow)
-# Jika menggunakan routing protocol (OSPF/EIGRP/BGP), ECMP berlaku untuk semua rute dengan cost sama
+
+    <img src="img/lb2.png" alt="Diagram jaringan" class="note-image" />
+    <p class="note-subtitle">R.ECMP</p>
+    <pre class="note-codeblock"><code>
+/ip pool
+add name=dhcp_pool0 ranges=10.10.10.2
+/ip dhcp-server
+add address-pool=dhcp_pool0 disabled=no interface=ether5 name=dhcp1
+/ip address
+add address=192.168.1.2/30 interface=ether1 network=192.168.1.0
+add address=172.16.1.2/30 interface=ether2 network=172.16.1.0
+add address=10.10.10.1/30 interface=ether5 network=10.10.10.0
+/ip dhcp-server network
+add address=10.10.10.0/30 gateway=10.10.10.1
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall mangle
+add action=mark-connection chain=input in-interface=ether1 new-connection-mark=ISP1
+add action=mark-connection chain=input in-interface=ether2 new-connection-mark=ISP2
+add action=mark-routing chain=output connection-mark=ISP1 new-routing-mark=ISP1
+add action=mark-routing chain=output connection-mark=ISP2 new-routing-mark=ISP2
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+add action=masquerade chain=srcnat out-interface=ether2
+/ip route
+add check-gateway=ping distance=1 gateway=192.168.1.1 routing-mark=ISP1
+add check-gateway=ping distance=1 gateway=172.16.1.1 routing-mark=ISP2
+add distance=1 gateway=192.168.1.1,172.16.1.1
+/system identity
+set name=R.ECMP
     </code></pre>
 
     <h3 class="note-subtitle">Tips Praktis</h3>

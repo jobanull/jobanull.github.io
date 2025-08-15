@@ -21,18 +21,36 @@
       <li><strong>Gunakan Saat:</strong> Multi-WAN dengan prioritas pengguna, aplikasi tertentu harus melewati gateway spesifik, atau trafik VoIP/VoD butuh jalur khusus.</li>
     </ul>
 
-    <pre class="note-codeblock"><code>
-# MikroTik: PBR berbasis sumber IP (2 WAN)
-/ip firewall mangle
-# Tandai koneksi dari subnet 192.168.1.0/24 untuk WAN1
-add chain=prerouting src-address=192.168.1.0/24 action=mark-routing new-routing-mark=to_wan1 passthrough=yes
-# Tandai koneksi dari subnet 192.168.2.0/24 untuk WAN2
-add chain=prerouting src-address=192.168.2.0/24 action=mark-routing new-routing-mark=to_wan2 passthrough=yes
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+      <!-- <li>Tujuan: Menghubungkan RB1, RB2, dan RB3 menggunakan <strong>protokol routing IS-IS</strong> untuk pertukaran routing.</li> -->
+    </ul>
 
-# Routing sesuai mark
+
+    <img src="img/lb2.png" alt="Diagram jaringan" class="note-image" />
+    <p class="note-subtitle">R.PBR</p>
+    <pre class="note-codeblock"><code>
+/ip address
+add address=192.168.1.2/30 interface=ether1 network=192.168.1.0
+add address=172.16.1.2/30 interface=ether2 network=172.16.1.0
+add address=192.168.10.1/30 interface=ether3 network=192.168.10.0
+add address=192.168.20.1/30 interface=ether4 network=192.168.20.0
+/ip dns
+set servers=8.8.8.8,8.8.4.4
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+add action=masquerade chain=srcnat out-interface=ether2
 /ip route
-add dst-address=0.0.0.0/0 gateway=1.1.1.1 routing-mark=to_wan1 check-gateway=ping
-add dst-address=0.0.0.0/0 gateway=2.2.2.2 routing-mark=to_wan2 check-gateway=ping
+add distance=1 gateway=192.168.1.1 routing-mark=ISP1
+add distance=1 gateway=172.16.1.1 routing-mark=ISP2
+add distance=1 gateway=192.168.1.1
+/ip route rule
+add dst-address=192.168.10.0/24 src-address=192.168.20.0/24 table=main
+add dst-address=192.168.20.0/24 src-address=192.168.10.0/24 table=main
+add src-address=192.168.10.0/24 table=ISP1
+add src-address=192.168.20.0/24 table=ISP2
+/system identity
+set name=R.PBR
     </code></pre>
 
     <h3 class="note-subtitle">Tips Praktis</h3>

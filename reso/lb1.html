@@ -22,15 +22,42 @@
       <li><strong>Gunakan Saat:</strong> Uplink ke switch/core, server-to-switch, backbone L2.</li>
     </ul>
 
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+      <!-- <li>Tujuan: Menghubungkan RB1, RB2, dan RB3 menggunakan <strong>protokol routing IS-IS</strong> untuk pertukaran routing.</li> -->
+    </ul>
+
+
+    <img src="img/lb1.png" alt="Diagram jaringan" class="note-image" />
+    
+    <p class="note-subtitle">R.Bonding1</p>
+
     <pre class="note-codeblock"><code>
-# MikroTik: membuat bond LACP (802.3ad) dari ether1 & ether2
 /interface bonding
-add mode=802.3ad name=bond1 slaves=ether1,ether2 lacp-rate=1sec mii-interval=100ms
+add name=bond1 slaves=ether1,ether2
+/ip address
+add address=10.10.10.1/30 interface=ether1 network=10.10.10.0
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0
+add address=172.16.1.1/30 interface=bond1 network=172.16.1.0
+/system identity
+set name=R.Bonding1
+    </code></pre>
+    
+    <p class="note-subtitle">R.Bonding2</p>
 
-# Assign IP/VLAN pada bond, bukan pada slave
-/ip address add address=10.10.10.2/30 interface=bond1
+    <pre class="note-codeblock"><code>
 
-# Switch sisi lawan: pastikan port-channel/LAG LACP untuk port yang sama
+/interface bonding
+add name=bond1 slaves=ether1,ether2
+/interface wireless security-profiles
+set [ find default=yes ] supplicant-identity=MikroTik
+/ip address
+add address=10.10.10.2/30 interface=ether1 network=10.10.10.0
+add address=192.168.1.2/30 interface=ether2 network=192.168.1.0
+add address=172.16.1.2/30 interface=bond1 network=172.16.1.0
+/system identity
+set name=R.Bonding2
+
     </code></pre>
 
     <h3 class="note-subtitle">Tips Praktis</h3>
