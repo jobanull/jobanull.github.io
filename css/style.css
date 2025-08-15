@@ -41,3 +41,22 @@ nav a:hover {
     margin-top: 10px;
     font-size: 20px;
 }
+
+.pdf-box {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.pdf-box iframe {
+    border: none;
+    border-radius: 5px;
+}
+
+.feature-list {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+}
+.feature-list li { margin-bottom: .25rem; }
