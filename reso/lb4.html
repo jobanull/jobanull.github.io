@@ -20,23 +20,46 @@
       <li><strong>Gunakan Saat:</strong> Multi-WAN rumahan/kantor dengan beberapa koneksi internet, ingin pembagian koneksi yang konsisten per-user atau per-session.</li>
     </ul>
 
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+      <!-- <li>Tujuan: Menghubungkan RB1, RB2, dan RB3 menggunakan <strong>protokol routing IS-IS</strong> untuk pertukaran routing.</li> -->
+    </ul>
+
+
+    <img src="img/lb1.png" alt="Diagram jaringan" class="note-image" />
+    
+    <p class="note-subtitle">R.NTH</p>
+
     <pre class="note-codeblock"><code>
-# MikroTik PCC / NTH-style 2 WAN (wan1 & wan2)
-# 1) Tandai koneksi berdasarkan src-address agar konsisten
+/ip pool
+add name=dhcp_pool0 ranges=10.10.10.2
+/ip dhcp-server
+add address-pool=dhcp_pool0 disabled=no interface=ether5 name=dhcp1
+/ip address
+add address=192.168.1.2/30 interface=ether1 network=192.168.1.0
+add address=172.16.1.2/30 interface=ether2 network=172.16.1.0
+add address=10.10.10.1/30 interface=ether5 network=10.10.10.0
+/ip dhcp-server network
+add address=10.10.10.0/30 gateway=10.10.10.1
+/ip dns
+set servers=8.8.8.8,8.8.4.4
 /ip firewall mangle
-add chain=prerouting src-address=192.168.1.0/24 \
-    per-connection-classifier=src-address:2/0 action=mark-connection new-connection-mark=conn_wan1 passthrough=yes
-add chain=prerouting src-address=192.168.1.0/24 \
-    per-connection-classifier=src-address:2/1 action=mark-connection new-connection-mark=conn_wan2 passthrough=yes
-
-# 2) Tandai paket mengikuti connection-mark
-add chain=prerouting connection-mark=conn_wan1 action=mark-routing new-routing-mark=to_wan1 passthrough=yes
-add chain=prerouting connection-mark=conn_wan2 action=mark-routing new-routing-mark=to_wan2 passthrough=yes
-
-# 3) Route policy ke masing-masing gateway
+add action=mark-connection chain=prerouting in-interface=ether5 new-connection-mark=koneksi_1 nth=2,1
+add action=mark-connection chain=prerouting in-interface=ether5 new-connection-mark=koneksi_2 nth=2,2
+add action=mark-routing chain=prerouting connection-mark=koneksi_1 in-interface=ether5 new-routing-mark=jalur_1 \
+    passthrough=no
+add action=mark-routing chain=prerouting connection-mark=koneksi_2 in-interface=ether5 new-routing-mark=jalur_2 \
+    passthrough=no
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+add action=masquerade chain=srcnat out-interface=ether2
 /ip route
-add dst-address=0.0.0.0/0 gateway=1.1.1.1 routing-mark=to_wan1 check-gateway=ping
-add dst-address=0.0.0.0/0 gateway=2.2.2.2 routing-mark=to_wan2 check-gateway=ping
+add distance=1 gateway=192.168.1.1 routing-mark=jalur_1
+add distance=1 gateway=172.16.1.1 routing-mark=jalur_2
+add distance=1 gateway=172.16.1.1,192.168.1.1
+/system identity
+set name=R.NTH
+
     </code></pre>
 
     <h3 class="note-subtitle">Tips Praktis</h3>
