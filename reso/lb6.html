@@ -21,49 +21,72 @@
     </ul>
     <h3 class="note-subtitle">CONTOH KASUS</h3>
     <ul class="note-list">
-      <!-- <li>Tujuan: Menghubungkan RB1, RB2, dan RB3 menggunakan <strong>protokol routing IS-IS</strong> untuk pertukaran routing.</li> -->
+      <li>Tujuan: Mengimplementasikan <strong>PCC (Per Connection Classifier)</strong> untuk membagi trafik LAN secara merata ke dua jalur ISP menggunakan MikroTik Router.</li>
+      <li>Topologi: Router R.PCC memiliki dua jalur keluar ke ISP melalui interface <code>ether1</code> dan <code>ether2</code>, serta menyediakan DHCP untuk jaringan LAN via <code>ether5</code>.</li>
+      <li>Catatan:
+        <ul>
+          <li>PCC menggunakan <code>per-connection-classifier=both-addresses:2/x</code> agar koneksi LAN terbagi merata ke ISP1 dan ISP2.</li>
+          <li>Mangle digunakan untuk menandai koneksi (<code>connection-mark</code>) dan routing (<code>routing-mark</code>) sesuai ISP yang dituju.</li>
+          <li>Routing default dan distance dibuat untuk memastikan jalur failover jika satu ISP down.</li>
+          <li>DHCP server memberikan IP ke client di jaringan LAN.</li>
+          <li>NAT digunakan untuk akses internet melalui kedua ISP.</li>
+          <li>DNS diset ke Google DNS (8.8.8.8 & 8.8.4.4) agar client dapat resolve nama domain.</li>
+        </ul>
+      </li>
     </ul>
+
 
 
     <img src="img/lb2.png" alt="Diagram jaringan" class="note-image" />
     <pre class="note-codeblock"><code>
-
 /ip pool
-add name=dhcp_pool0 ranges=10.10.10.2
+add name=dhcp_pool0 ranges=10.10.10.2                # Pool DHCP untuk client LAN
+
 /ip dhcp-server
-add address-pool=dhcp_pool0 disabled=no interface=ether5 name=dhcp1
+add address-pool=dhcp_pool0 disabled=no interface=ether5 name=dhcp1  # DHCP server di LAN
+
 /ip address
-add address=192.168.1.2/30 interface=ether1 network=192.168.1.0
-add address=172.16.1.2/30 interface=ether2 network=172.16.1.0
-add address=10.10.10.1/30 interface=ether5 network=10.10.10.0
+add address=192.168.1.2/30 interface=ether1 network=192.168.1.0  # IP ke ISP1
+add address=172.16.1.2/30 interface=ether2 network=172.16.1.0     # IP ke ISP2
+add address=10.10.10.1/30 interface=ether5 network=10.10.10.0     # IP LAN gateway
+
 /ip dhcp-server network
-add address=10.10.10.0/30 dns-server=8.8.8.8,8.8.4.4 gateway=10.10.10.1
+add address=10.10.10.0/30 dns-server=8.8.8.8,8.8.4.4 gateway=10.10.10.1  # DHCP LAN
+
 /ip dns
-set servers=8.8.8.8,8.8.4.4
+set servers=8.8.8.8,8.8.4.4                         # DNS Google
+
 /ip firewall mangle
-add action=accept chain=prerouting dst-address=10.10.10.0/30
-add action=accept chain=prerouting dst-address=192.168.1.0/30
-add action=accept chain=prerouting dst-address=172.16.1.0/30
+add action=accept chain=prerouting dst-address=10.10.10.0/30  # Lewati traffic LAN
+add action=accept chain=prerouting dst-address=192.168.1.0/30 # Lewati traffic ISP1 internal
+add action=accept chain=prerouting dst-address=172.16.1.0/30  # Lewati traffic ISP2 internal
+
+# Tandai koneksi ke ISP langsung dari interface ISP
 add action=mark-connection chain=prerouting in-interface=ether1 new-connection-mark=ISP1
 add action=mark-connection chain=prerouting in-interface=ether2 new-connection-mark=ISP2
-add action=mark-connection chain=prerouting in-interface=ether5 new-connection-mark=ISP1 per-connection-classifier=\
-    both-addresses:2/0
-add action=mark-connection chain=prerouting in-interface=ether5 new-connection-mark=ISP2 per-connection-classifier=\
-    both-addresses:2/1
+
+# PCC: bagi koneksi LAN ke ISP1 dan ISP2 secara merata
+add action=mark-connection chain=prerouting in-interface=ether5 new-connection-mark=ISP1 per-connection-classifier=both-addresses:2/0
+add action=mark-connection chain=prerouting in-interface=ether5 new-connection-mark=ISP2 per-connection-classifier=both-addresses:2/1
+
+# Tandai routing sesuai connection-mark
 add action=mark-routing chain=prerouting connection-mark=ISP1 in-interface=ether5 new-routing-mark=to-ISP1
 add action=mark-routing chain=prerouting connection-mark=ISP2 in-interface=ether5 new-routing-mark=to-ISP2
 add action=mark-routing chain=output connection-mark=ISP1 new-routing-mark=to-ISP1
 add action=mark-routing chain=output connection-mark=ISP2 new-routing-mark=to-ISP2
+
 /ip firewall nat
-add action=masquerade chain=srcnat out-interface=ether1
-add action=masquerade chain=srcnat out-interface=ether2
+add action=masquerade chain=srcnat out-interface=ether1  # NAT ke ISP1
+add action=masquerade chain=srcnat out-interface=ether2  # NAT ke ISP2
+
 /ip route
-add distance=2 gateway=172.16.1.1 routing-mark=to-ISP1
-add distance=2 gateway=192.168.1.1 routing-mark=to-ISP2
-add check-gateway=ping distance=1 gateway=192.168.1.1 routing-mark=ISP1
-add check-gateway=ping distance=1 gateway=172.16.1.1 routing-mark=ISP2
+add distance=2 gateway=172.16.1.1 routing-mark=to-ISP1   # Route jalur ISP1
+add distance=2 gateway=192.168.1.1 routing-mark=to-ISP2   # Route jalur ISP2
+add check-gateway=ping distance=1 gateway=192.168.1.1 routing-mark=ISP1  # Failover ISP1
+add check-gateway=ping distance=1 gateway=172.16.1.1 routing-mark=ISP2   # Failover ISP2
+
 /system identity
-set name=R.PCC
+set name=R.PCC                                           # Nama router
 
     </code></pre>
 

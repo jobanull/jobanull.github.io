@@ -24,7 +24,15 @@
 
     <h3 class="note-subtitle">CONTOH KASUS</h3>
     <ul class="note-list">
-      <!-- <li>Tujuan: Menghubungkan RB1, RB2, dan RB3 menggunakan <strong>protokol routing IS-IS</strong> untuk pertukaran routing.</li> -->
+      <li>Tujuan: Menggabungkan beberapa interface fisik menjadi satu interface logis menggunakan <strong>Bonding</strong> untuk meningkatkan <em>redundansi dan bandwidth</em>.</li>
+      <li>Catatan:
+        <ul>
+          <li>Interface <code>bond1</code> menggabungkan <code>ether1</code> dan <code>ether2</code> untuk failover/load balance.</li>
+          <li>Alamat IP diberikan ke interface fisik (ether1, ether2) dan interface bonding untuk koneksi antar-router.</li>
+          <li>Setiap router diberi identitas unik melalui <code>/system identity</code>.</li>
+          <li>Wireless security profile di R.Bonding2 menggunakan default supplicant-identity Mikrotik (jika ada Wi-Fi).</li>
+        </ul>
+      </li>
     </ul>
 
 
@@ -34,13 +42,16 @@
 
     <pre class="note-codeblock"><code>
 /interface bonding
-add name=bond1 slaves=ether1,ether2
+add name=bond1 slaves=ether1,ether2             # Gabungkan ether1 & ether2 menjadi bond1
+
 /ip address
-add address=10.10.10.1/30 interface=ether1 network=10.10.10.0
-add address=192.168.1.1/30 interface=ether2 network=192.168.1.0
-add address=172.16.1.1/30 interface=bond1 network=172.16.1.0
+add address=10.10.10.1/30 interface=ether1 network=10.10.10.0  # IP link ke R.Bonding2
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0 # IP link alternatif / backup
+add address=172.16.1.1/30 interface=bond1 network=172.16.1.0    # IP di interface bonding
+
 /system identity
-set name=R.Bonding1
+set name=R.Bonding1                               # Nama router
+
     </code></pre>
     
     <p class="note-subtitle">R.Bonding2</p>
@@ -48,15 +59,19 @@ set name=R.Bonding1
     <pre class="note-codeblock"><code>
 
 /interface bonding
-add name=bond1 slaves=ether1,ether2
+add name=bond1 slaves=ether1,ether2             # Gabungkan ether1 & ether2 menjadi bond1
+
 /interface wireless security-profiles
-set [ find default=yes ] supplicant-identity=MikroTik
+set [ find default=yes ] supplicant-identity=MikroTik   # Profil Wi-Fi default (jika ada)
+
 /ip address
-add address=10.10.10.2/30 interface=ether1 network=10.10.10.0
-add address=192.168.1.2/30 interface=ether2 network=192.168.1.0
-add address=172.16.1.2/30 interface=bond1 network=172.16.1.0
+add address=10.10.10.2/30 interface=ether1 network=10.10.10.0  # IP link ke R.Bonding1
+add address=192.168.1.2/30 interface=ether2 network=192.168.1.0 # IP link alternatif / backup
+add address=172.16.1.2/30 interface=bond1 network=172.16.1.0    # IP di interface bonding
+
 /system identity
-set name=R.Bonding2
+set name=R.Bonding2                               # Nama router
+
 
     </code></pre>
 

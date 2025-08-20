@@ -64,37 +64,41 @@
     <p class="note-subtitle">Mikrotik</p>
     <pre class="note-codeblock"><code>
 /ip pool
-add name=dhcp_pool0 ranges=192.168.1.11-192.168.1.254
+add name=dhcp_pool0 ranges=192.168.1.11-192.168.1.254   # Pool DHCP: range 192.168.1.11 - 192.168.1.254
+
 /ip dhcp-server
-add address-pool=dhcp_pool0 disabled=no interface=ether2 name=dhcp1
+add address-pool=dhcp_pool0 disabled=no interface=ether2 name=dhcp1   # DHCP server di ether2 untuk LAN
+
 /ip address
-add address=192.168.1.1/24 interface=ether2 network=192.168.1.0
+add address=192.168.1.1/24 interface=ether2 network=192.168.1.0       # IP statis LAN sebagai gateway DHCP
+
 /ip dhcp-client
-add disabled=no interface=ether1
+add disabled=no interface=ether1                                      # Interface WAN (ether1) dapat IP via DHCP ISP
+
 /ip dhcp-server network
-add address=192.168.1.0/24 gateway=192.168.1.1 
+add address=192.168.1.0/24 gateway=192.168.1.1                        # Gateway default DHCP untuk client
+
     </code></pre>
 
     <p class="note-subtitle">Cisco</p>
     <pre class="note-codeblock"><code>
-ip dhcp excluded-address 192.168.1.1 192.168.1.10
-!
-ip dhcp pool DHCP_LAN
-   network 192.168.1.0 255.255.255.0
-   default-router 192.168.1.1 
-   dns-server 8.8.8.8 
-!
-ip tcp synwait-time 5
+ip dhcp excluded-address 192.168.1.1 192.168.1.10   ! IP 1-10 tidak dibagikan oleh DHCP
 
-!
+ip dhcp pool DHCP_LAN
+   network 192.168.1.0 255.255.255.0                ! Jaringan LAN
+   default-router 192.168.1.1                       ! Gateway DHCP
+   dns-server 8.8.8.8                               ! DNS server Google
+
+ip tcp synwait-time 5                               ! (Opsional) Atur waktu tunggu TCP SYN = 5 detik
+
 interface FastEthernet0/0
- ip address dhcp
+ ip address dhcp                                    ! Interface WAN dapat IP dari ISP via DHCP
  duplex half
-!
+
 interface FastEthernet1/0
- ip address 192.168.1.1 255.255.255.0
+ ip address 192.168.1.1 255.255.255.0               ! IP gateway LAN
  duplex half
-! 
+
     </code></pre>
     
 

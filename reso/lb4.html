@@ -22,8 +22,20 @@
 
     <h3 class="note-subtitle">CONTOH KASUS</h3>
     <ul class="note-list">
-      <!-- <li>Tujuan: Menghubungkan RB1, RB2, dan RB3 menggunakan <strong>protokol routing IS-IS</strong> untuk pertukaran routing.</li> -->
+      <li>Tujuan: Mengimplementasikan <strong>NTH Packet Routing</strong> untuk membagi trafik keluar secara bergantian (round-robin per paket) ke dua jalur ISP menggunakan MikroTik Router.</li>
+      <li>Topologi: Router R.NTH memiliki dua jalur keluar ke ISP melalui interface <code>ether1</code> dan <code>ether2</code>, serta menyediakan DHCP untuk jaringan LAN via <code>ether5</code>.</li>
+      <li>Catatan:
+        <ul>
+          <li>Mangle digunakan untuk menandai koneksi dengan parameter <code>nth</code> sehingga paket dapat dialokasikan secara bergantian ke dua jalur.</li>
+          <li>Marking routing membuat jalur terpisah (<code>jalur_1</code> dan <code>jalur_2</code>) untuk mengatur forwarding paket sesuai tanda.</li>
+          <li>Routing default mencakup kedua gateway agar terjadi load sharing antar ISP.</li>
+          <li>DHCP server memberikan IP kepada client di jaringan LAN.</li>
+          <li>NAT digunakan untuk mengakses internet melalui kedua ISP.</li>
+          <li>DNS diset ke Google DNS (8.8.8.8 & 8.8.4.4) agar client dapat resolve nama domain.</li>
+        </ul>
+      </li>
     </ul>
+
 
 
     <img src="img/lb1.png" alt="Diagram jaringan" class="note-image" />
@@ -32,34 +44,44 @@
 
     <pre class="note-codeblock"><code>
 /ip pool
-add name=dhcp_pool0 ranges=10.10.10.2
-/ip dhcp-server
-add address-pool=dhcp_pool0 disabled=no interface=ether5 name=dhcp1
-/ip address
-add address=192.168.1.2/30 interface=ether1 network=192.168.1.0
-add address=172.16.1.2/30 interface=ether2 network=172.16.1.0
-add address=10.10.10.1/30 interface=ether5 network=10.10.10.0
-/ip dhcp-server network
-add address=10.10.10.0/30 gateway=10.10.10.1
-/ip dns
-set servers=8.8.8.8,8.8.4.4
-/ip firewall mangle
-add action=mark-connection chain=prerouting in-interface=ether5 new-connection-mark=koneksi_1 nth=2,1
-add action=mark-connection chain=prerouting in-interface=ether5 new-connection-mark=koneksi_2 nth=2,2
-add action=mark-routing chain=prerouting connection-mark=koneksi_1 in-interface=ether5 new-routing-mark=jalur_1 \
-    passthrough=no
-add action=mark-routing chain=prerouting connection-mark=koneksi_2 in-interface=ether5 new-routing-mark=jalur_2 \
-    passthrough=no
-/ip firewall nat
-add action=masquerade chain=srcnat out-interface=ether1
-add action=masquerade chain=srcnat out-interface=ether2
-/ip route
-add distance=1 gateway=192.168.1.1 routing-mark=jalur_1
-add distance=1 gateway=172.16.1.1 routing-mark=jalur_2
-add distance=1 gateway=172.16.1.1,192.168.1.1
-/system identity
-set name=R.NTH
+add name=dhcp_pool0 ranges=10.10.10.2                # Pool DHCP untuk client LAN
 
+/ip dhcp-server
+add address-pool=dhcp_pool0 disabled=no interface=ether5 name=dhcp1  # DHCP server di LAN
+
+/ip address
+add address=192.168.1.2/30 interface=ether1 network=192.168.1.0  # IP ke ISP1
+add address=172.16.1.2/30 interface=ether2 network=172.16.1.0     # IP ke ISP2
+add address=10.10.10.1/30 interface=ether5 network=10.10.10.0     # IP LAN gateway
+
+/ip dhcp-server network
+add address=10.10.10.0/30 gateway=10.10.10.1       # Default gateway DHCP client
+
+/ip dns
+set servers=8.8.8.8,8.8.4.4                         # DNS Google
+
+/ip firewall mangle
+add action=mark-connection chain=prerouting in-interface=ether5 new-connection-mark=koneksi_1 nth=2,1  
+# Tandai paket ke jalur_1 secara bergantian (1 dari 2)
+add action=mark-connection chain=prerouting in-interface=ether5 new-connection-mark=koneksi_2 nth=2,2  
+# Tandai paket ke jalur_2 secara bergantian (2 dari 2)
+
+add action=mark-routing chain=prerouting connection-mark=koneksi_1 in-interface=ether5 new-routing-mark=jalur_1 passthrough=no  
+# Routing jalur_1
+add action=mark-routing chain=prerouting connection-mark=koneksi_2 in-interface=ether5 new-routing-mark=jalur_2 passthrough=no  
+# Routing jalur_2
+
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1  # NAT keluar ISP1
+add action=masquerade chain=srcnat out-interface=ether2  # NAT keluar ISP2
+
+/ip route
+add distance=1 gateway=192.168.1.1 routing-mark=jalur_1   # Route jalur_1
+add distance=1 gateway=172.16.1.1 routing-mark=jalur_2    # Route jalur_2
+add distance=1 gateway=172.16.1.1,192.168.1.1             # Default ECMP: load sharing
+
+/system identity
+set name=R.NTH                                           # Nama router
     </code></pre>
 
     <h3 class="note-subtitle">Tips Praktis</h3>

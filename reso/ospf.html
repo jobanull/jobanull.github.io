@@ -70,26 +70,26 @@
 
     <h3 class="note-subtitle">CONTOH KASUS</h3>
     <ul class="note-list">
-        <li>Topologi menggunakan protokol routing <b>OSPF</b> pada tujuh router MikroTik (RB1-RB7).</li>
-        <li>RB1:
-            <ul>
-                <li>IP: <code>10.1.1.1/30</code>, <code>11.1.1.1/30</code>, <code>192.168.190.3/24</code>.</li>
-                <li>Interface <code>ether1</code> dan <code>ether2</code> diikutkan OSPF area backbone.</li>
-            </ul>
-        </li>
-        <li>RB2:
-            <ul>
-                <li>IP: <code>10.1.1.2/30</code>, <code>12.1.1.1/30</code>, <code>16.1.1.1/30</code>, <code>17.1.1.1/30</code>.</li>
-                <li>Interface <code>ether1</code>, <code>ether2</code> di backbone, <code>ether3</code>, <code>ether4</code> di area2.</li>
-            </ul>
-        </li>
-        <li>RB3: Interface di backbone dan area3, IP: <code>11.1.1.2/30</code>, <code>12.1.1.2/30</code>, <code>13.1.1.1/30</code>, <code>14.1.1.1/30</code>.</li>
-        <li>RB4: IP <code>13.1.1.2/30</code>, <code>15.1.1.1/30</code>, berada di area3.</li>
-        <li>RB5: IP <code>14.1.1.2/30</code>, <code>15.1.1.2/30</code>, <code>192.168.2.1/30</code>, area3.</li>
-        <li>RB6: IP <code>16.1.1.2/30</code>, <code>18.1.1.1/30</code>, area2.</li>
-        <li>RB7: IP <code>17.1.1.2/30</code>, <code>18.1.1.2/30</code>, <code>192.168.1.1/30</code>, area2.</li>
-        <li>Tujuan: Menghubungkan semua router dalam beberapa OSPF area untuk pertukaran routing otomatis.</li>
+      <li>Tujuan: Mengimplementasikan <strong>OSPF multi-area</strong> pada jaringan MikroTik untuk mendistribusikan routing dinamis antar-router.</li>
+      <li>Topologi: Jaringan terdiri dari 7 router (R1-R7) dengan beberapa area OSPF:
+        <ul>
+          <li>Area backbone (0.0.0.0) menghubungkan R1, R2, R3</li>
+          <li>Area2 (2.2.2.2) menghubungkan R2, R6, R7</li>
+          <li>Area3 (3.3.3.3) menghubungkan R3, R4, R5</li>
+        </ul>
+      </li>
+      <li>Catatan:
+        <ul>
+          <li>Setiap router memiliki IP unik untuk setiap interface yang terhubung ke jaringan point-to-point.</li>
+          <li>Interface ditambahkan ke OSPF sesuai area masing-masing.</li>
+          <li>Network mapping dilakukan agar OSPF mengetahui subnet yang termasuk dalam setiap area.</li>
+          <li>Router diberi identitas unik dengan <code>/system identity</code> agar mudah diidentifikasi.</li>
+          <li>R1 juga mengatur NAT dan default route ke gateway internet untuk koneksi keluar.</li>
+          <li>DNS di beberapa router diset ke Google DNS (8.8.8.8 & 8.8.4.4) agar client dapat resolve nama domain.</li>
+        </ul>
+      </li>
     </ul>
+
 
 
     <img src="img/ospf.png" alt="Diagram jaringan" class="note-image" />
@@ -99,75 +99,60 @@
 /ip address
 add address=10.1.1.1/30 interface=ether1 network=10.1.1.0
 add address=11.1.1.1/30 interface=ether2 network=11.1.1.0
-add address=192.168.190.3/24 interface=ether5 network=192.168.190.0
-# Menetapkan IP pada masing-masing interface
+add address=192.168.190.3/24 interface=ether5 network=192.168.190.0  # LAN ke ISP
 
 /ip dns
 set servers=8.8.8.8,8.8.4.4
-# Mengatur DNS server
 
 /ip firewall nat
-add action=masquerade chain=srcnat out-interface=ether5
-# NAT untuk keluar internet melalui ether5
+add action=masquerade chain=srcnat out-interface=ether5  # NAT ke internet
 
 /ip route
 add distance=1 gateway=192.168.190.1
-# Default route ke gateway internet
 
 /routing ospf interface
 add interface=ether1
 add interface=ether2
-# Menambahkan interface ke OSPF
 
 /routing ospf network
 add area=backbone network=10.1.1.0/30
 add area=backbone network=11.1.1.0/30
-# Menentukan network yang masuk OSPF area backbone
 
 /system identity
 set name=R1
-# Memberi nama router
-
     </code></pre>
     
     <p class="note-subtitle">RB2</p>
     <pre class="note-codeblock"><code>
 /routing ospf area
 add area-id=2.2.2.2 name=area2
-# Membuat area OSPF tambahan (area2)
 
 /ip address
 add address=10.1.1.2/30 interface=ether1 network=10.1.1.0
 add address=12.1.1.1/30 interface=ether2 network=12.1.1.0
 add address=16.1.1.1/30 interface=ether3 network=16.1.1.0
 add address=17.1.1.1/30 interface=ether4 network=17.1.1.0
-# IP untuk masing-masing interface
 
 /routing ospf interface
 add interface=ether1
 add interface=ether2
 add interface=ether3
 add interface=ether4
-# Semua interface ikut OSPF
 
 /routing ospf network
 add area=backbone network=10.1.1.0/30
 add area=backbone network=12.1.1.0/30
 add area=area2 network=16.1.1.0/30
 add area=area2 network=17.1.1.0/30
-# Memetakan network ke area masing-masing
 
 /system identity
 set name=R2
-
-
     </code></pre>
     
     <p class="note-subtitle">RB3</p>
     <pre class="note-codeblock"><code>
 /routing ospf area
 add area-id=3.3.3.3 name=area3
-# Membuat area OSPF area3
 
 /ip address
 add address=11.1.1.2/30 interface=ether1 network=11.1.1.0
@@ -182,14 +167,13 @@ add interface=ether3
 add interface=ether4
 
 /routing ospf network
-add area=backbone network=12.1.1.0/30
 add area=backbone network=11.1.1.0/30
+add area=backbone network=12.1.1.0/30
 add area=area3 network=13.1.1.0/30
 add area=area3 network=14.1.1.0/30
 
 /system identity
 set name=R3
-
     </code></pre>
     
     <p class="note-subtitle">RB4</p>
@@ -208,8 +192,6 @@ add area=area3 network=15.1.1.0/30
 
 /system identity
 set name=R4
-
-
     </code></pre>
     
     <p class="note-subtitle">RB5</p>
@@ -227,13 +209,12 @@ add interface=ether1
 add interface=ether2
 
 /routing ospf network
-add area=area3 network=15.1.1.0/30
 add area=area3 network=14.1.1.0/30
+add area=area3 network=15.1.1.0/30
 add area=area3 network=192.168.2.0/30
 
 /system identity
 set name=R5
-
     </code></pre>
     
     <p class="note-subtitle">RB6</p>
@@ -255,7 +236,6 @@ add area=area2 network=18.1.1.0/30
 
 /system identity
 set name=R6
-
     </code></pre>
     
     <p class="note-subtitle">RB7</p>
@@ -286,7 +266,6 @@ add area=area2 network=192.168.1.0/30
 
 /system identity
 set name=R7
-
     </code></pre>
     <h3 class="note-subtitle">Ringkasan</h3>
     <p class="note-paragraph">

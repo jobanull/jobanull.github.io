@@ -104,51 +104,77 @@
     <p class="note-subtitle">RB1</p>
     <pre class="note-codeblock"><code>
 /interface 6to4
-add !keepalive local-address=10.10.10.1 name=6to4-tunnel1 remote-address=\
-    10.10.10.2
+add !keepalive local-address=10.10.10.1 name=6to4-tunnel1 remote-address=10.10.10.2  
+# Tunnel 6to4 RB1 → RB2
+
 /ip address
-add address=10.10.10.1/30 interface=ether1 network=10.10.10.0
+add address=10.10.10.1/30 interface=ether1 network=10.10.10.0  
+# IP link IPv4 ke RB2
+
 /ipv6 address
-add address=2001:a:b:10::1 interface=ether2
+add address=2001:a:b:10::1 interface=ether2  
+# IP IPv6 LAN atau internal RB1
+
 /ipv6 route
-add distance=1 dst-address=2001:a:b:20::/64 gateway=6to4-tunnel1
+add distance=1 dst-address=2001:a:b:20::/64 gateway=6to4-tunnel1  
+# Route ke RB2/RB3 via 6to4 tunnel
+
 /system identity
-set name=RB1 
+set name=RB1
+
     </code></pre>
 
     <p class="note-subtitle">RB2</p>
     <pre class="note-codeblock"><code>
 /interface 6to4
-add !keepalive local-address=10.10.10.2 name=6to4-tunnel2 remote-address=\
-    10.10.10.1
+add !keepalive local-address=10.10.10.2 name=6to4-tunnel2 remote-address=10.10.10.1  
+# Tunnel 6to4 RB2 → RB1
+
 /ip address
-add address=10.10.10.2/30 interface=ether1 network=10.10.10.0
+add address=10.10.10.2/30 interface=ether1 network=10.10.10.0  
+# IP link IPv4 ke RB1
+
 /ipv6 address
-add address=2001:a:b:20::1 interface=ether2
+add address=2001:a:b:20::1 interface=ether2  
+# IP IPv6 LAN internal RB2
+
 /ipv6 route
-add distance=1 dst-address=2001:a:b:10::/64 gateway=6to4-tunnel2
+add distance=1 dst-address=2001:a:b:10::/64 gateway=6to4-tunnel2  
+# Route ke RB1 via 6to4 tunnel
+
 /system identity
-set name=RB2 
+set name=RB2
+
     </code></pre>
 
     <p class="note-subtitle">RB3</p>
     <pre class="note-codeblock"><code>
 /ipv6 address
-add address=2001:a:b:10::2 interface=ether1
+add address=2001:a:b:10::2 interface=ether1  
+# IP IPv6 ke RB1/RB2
+
 /ipv6 route
-add distance=1 dst-address=2001:a:b:20::/64 gateway=2001:a:b:10::1
+add distance=1 dst-address=2001:a:b:20::/64 gateway=2001:a:b:10::1  
+# Route ke jaringan RB2/RB4
+
 /system identity
-set name=RB3 
+set name=RB3
+
     </code></pre>
 
     <p class="note-subtitle">RB4</p>
     <pre class="note-codeblock"><code>
 /ipv6 address
-add address=2001:a:b:20::2 interface=ether1
+add address=2001:a:b:20::2 interface=ether1  
+# IP IPv6 ke RB2/RB3
+
 /ipv6 route
-add distance=1 dst-address=2001:a:b:10::/64 gateway=2001:a:b:20::1
+add distance=1 dst-address=2001:a:b:10::/64 gateway=2001:a:b:20::1  
+# Route ke jaringan RB1/RB3
+
 /system identity
-set name=RB4 
+set name=RB4
+
     </code></pre>
 
     <h3 class="note-subtitle">Troubleshooting Cepat</h3>

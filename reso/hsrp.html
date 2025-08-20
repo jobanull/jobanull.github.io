@@ -63,71 +63,82 @@
 
     <h3 class="note-subtitle">CONTOH KASUS</h3>
     <ul class="note-list">
-      <li>HSRP</li>
+      <li>Tujuan: Membuat <strong>redundansi gateway</strong> di jaringan LAN menggunakan <strong>HSRP</strong>.</li>
+      <li><strong>Topologi:</strong> LAN (192.168.1.0/24) → Switch → R1 & R2 → ISP (192.168.190.0/24)</li>
+      <li><strong>Catatan:</strong> 
+        <ul>
+          <li>R1 memiliki prioritas lebih tinggi (110) sehingga menjadi <em>Active Router</em>.</li>
+          <li>R2 otomatis menjadi <em>Standby Router</em>.</li>
+          <li>Jika R1 down, R2 akan mengambil alih sebagai gateway virtual <code>192.168.1.1</code>.</li>
+          <li>NAT digunakan agar LAN bisa mengakses internet melalui ISP.</li>
+        </ul>
+      </li>
     </ul>
+
 
     <img src="img/hsrp1.png" alt="Diagram jaringan" class="note-image" />
     <p class="note-subtitle">R1 (MAIN)</p>
     <pre class="note-codeblock"><code>
-ip name-server 8.8.8.8
+ip name-server 8.8.8.8                          ! DNS server Google
 ip name-server 8.8.4.4
-!
-!
+
 interface FastEthernet0/0
- ip address 192.168.190.100 255.255.255.0
- ip nat outside
+ ip address 192.168.190.100 255.255.255.0       ! IP ke ISP
+ ip nat outside                                 ! Interface sebagai NAT outside
  ip virtual-reassembly
  duplex half
-!
+
 interface FastEthernet1/0
- ip address 192.168.1.2 255.255.255.0
- ip nat inside
+ ip address 192.168.1.2 255.255.255.0           ! IP LAN (backup dari virtual IP)
+ ip nat inside                                  ! Interface sebagai NAT inside
  ip virtual-reassembly
  duplex half
- standby 1 ip 192.168.1.1
- standby 1 priority 110
- standby 1 preempt
-!
-ip route 0.0.0.0 0.0.0.0 192.168.190.1
-!
+ standby 1 ip 192.168.1.1                       ! Virtual IP untuk LAN (gateway bersama)
+ standby 1 priority 110                         ! R1 lebih tinggi → Active Router
+ standby 1 preempt                              ! Boleh reclaim jika R1 pulih
+
+ip route 0.0.0.0 0.0.0.0 192.168.190.1          ! Default route ke ISP
+
 no ip http server
 no ip http secure-server
-!
-ip nat inside source list NAT-LAN interface FastEthernet0/0 overload
-!
+
+ip nat inside source list NAT-LAN interface FastEthernet0/0 overload   ! NAT LAN → Internet
+
 ip access-list standard NAT-LAN
- permit 192.168.1.0 0.0.0.255
+ permit 192.168.1.0 0.0.0.255                  ! Ijinkan seluruh subnet LAN untuk NAT
+
     </code></pre>
 
     <p class="note-subtitle">R2 (BACKUP)</p>
     <pre class="note-codeblock"><code>
 no ip domain lookup
-ip name-server 8.8.8.8
+ip name-server 8.8.8.8                          ! DNS server Google
 ip name-server 8.8.4.4
-!
+
 interface FastEthernet0/0
- ip address 192.168.190.101 255.255.255.0
+ ip address 192.168.190.101 255.255.255.0       ! IP ke ISP (berbeda dengan R1)
  ip nat outside
  ip virtual-reassembly
  duplex half
-!
+
 interface FastEthernet1/0
- ip address 192.168.1.3 255.255.255.0
+ ip address 192.168.1.3 255.255.255.0           ! IP LAN (berbeda dengan R1 & virtual IP)
  ip nat inside
  ip virtual-reassembly
  duplex half
- standby 1 ip 192.168.1.1
- standby 1 preempt
-!
-ip route 0.0.0.0 0.0.0.0 192.168.190.1
-!
+ standby 1 ip 192.168.1.1                       ! Virtual IP sama dengan R1 (gateway LAN)
+ standby 1 preempt                              ! Akan takeover bila R1 down
+
+ip route 0.0.0.0 0.0.0.0 192.168.190.1          ! Default route ke ISP
+
 no ip http server
 no ip http secure-server
-!
+
 ip nat inside source list NAT-LAN interface FastEthernet0/0 overload
-!
+
 ip access-list standard NAT-LAN
- permit 192.168.1.0 0.0.0.255
+ permit 192.168.1.0 0.0.0.255                  ! Subnet LAN untuk NAT
+
     </code></pre>
 
     <h3 class="note-subtitle">Tips Praktis</h3>

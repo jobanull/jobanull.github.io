@@ -24,39 +24,59 @@
     
     <h3 class="note-subtitle">CONTOH KASUS</h3>
     <ul class="note-list">
-      <!-- <li>Tujuan: Menghubungkan RB1, RB2, dan RB3 menggunakan <strong>protokol routing IS-IS</strong> untuk pertukaran routing.</li> -->
+      <li>Tujuan: Mengimplementasikan <strong>ECMP (Equal-Cost Multi-Path)</strong> untuk membagi trafik keluar ke dua ISP sekaligus menggunakan MikroTik Router.</li>
+      <li>Topologi: Router R.ECMP memiliki dua jalur keluar ke ISP berbeda melalui interface <code>ether1</code> dan <code>ether2</code>, serta menyediakan DHCP untuk jaringan LAN via <code>ether5</code>.</li>
+      <li>Catatan:
+        <ul>
+          <li>Marking connection & routing digunakan agar paket keluar melalui ISP yang sesuai.</li>
+          <li>Routing default dibuat dengan dua gateway agar terjadi <em>load balancing</em> secara ECMP.</li>
+          <li>DHCP server memberikan IP kepada client di jaringan LAN.</li>
+          <li>DNS diset ke Google DNS (8.8.8.8 & 8.8.4.4) agar client dapat resolve nama domain.</li>
+          <li>NAT digunakan untuk mengakses internet melalui kedua ISP.</li>
+        </ul>
+      </li>
     </ul>
+
 
 
     <img src="img/lb2.png" alt="Diagram jaringan" class="note-image" />
     <p class="note-subtitle">R.ECMP</p>
     <pre class="note-codeblock"><code>
 /ip pool
-add name=dhcp_pool0 ranges=10.10.10.2
+add name=dhcp_pool0 ranges=10.10.10.2                # Pool DHCP untuk client LAN
+
 /ip dhcp-server
-add address-pool=dhcp_pool0 disabled=no interface=ether5 name=dhcp1
+add address-pool=dhcp_pool0 disabled=no interface=ether5 name=dhcp1  # DHCP server di LAN
+
 /ip address
-add address=192.168.1.2/30 interface=ether1 network=192.168.1.0
-add address=172.16.1.2/30 interface=ether2 network=172.16.1.0
-add address=10.10.10.1/30 interface=ether5 network=10.10.10.0
+add address=192.168.1.2/30 interface=ether1 network=192.168.1.0  # IP ke ISP1
+add address=172.16.1.2/30 interface=ether2 network=172.16.1.0     # IP ke ISP2
+add address=10.10.10.1/30 interface=ether5 network=10.10.10.0     # IP LAN gateway
+
 /ip dhcp-server network
-add address=10.10.10.0/30 gateway=10.10.10.1
+add address=10.10.10.0/30 gateway=10.10.10.1       # Default gateway DHCP client
+
 /ip dns
-set servers=8.8.8.8,8.8.4.4
+set servers=8.8.8.8,8.8.4.4                         # DNS Google
+
 /ip firewall mangle
-add action=mark-connection chain=input in-interface=ether1 new-connection-mark=ISP1
-add action=mark-connection chain=input in-interface=ether2 new-connection-mark=ISP2
-add action=mark-routing chain=output connection-mark=ISP1 new-routing-mark=ISP1
-add action=mark-routing chain=output connection-mark=ISP2 new-routing-mark=ISP2
+add action=mark-connection chain=input in-interface=ether1 new-connection-mark=ISP1  # Tandai koneksi masuk ISP1
+add action=mark-connection chain=input in-interface=ether2 new-connection-mark=ISP2  # Tandai koneksi masuk ISP2
+add action=mark-routing chain=output connection-mark=ISP1 new-routing-mark=ISP1       # Routing berdasarkan tanda ISP1
+add action=mark-routing chain=output connection-mark=ISP2 new-routing-mark=ISP2       # Routing berdasarkan tanda ISP2
+
 /ip firewall nat
-add action=masquerade chain=srcnat out-interface=ether1
-add action=masquerade chain=srcnat out-interface=ether2
+add action=masquerade chain=srcnat out-interface=ether1  # NAT ke ISP1
+add action=masquerade chain=srcnat out-interface=ether2  # NAT ke ISP2
+
 /ip route
-add check-gateway=ping distance=1 gateway=192.168.1.1 routing-mark=ISP1
-add check-gateway=ping distance=1 gateway=172.16.1.1 routing-mark=ISP2
-add distance=1 gateway=192.168.1.1,172.16.1.1
+add check-gateway=ping distance=1 gateway=192.168.1.1 routing-mark=ISP1  # Default route ISP1
+add check-gateway=ping distance=1 gateway=172.16.1.1 routing-mark=ISP2   # Default route ISP2
+add distance=1 gateway=192.168.1.1,172.16.1.1                        # ECMP: kedua gateway untuk load balancing
+
 /system identity
-set name=R.ECMP
+set name=R.ECMP                                           # Nama router
+
     </code></pre>
 
     <h3 class="note-subtitle">Tips Praktis</h3>
