@@ -48,25 +48,31 @@
     <h3 class="note-subtitle">R.VRF</h3>
     <pre class="note-codeblock"><code>
 /ip address
-add address=192.168.1.1/24 interface=ether2 network=192.168.1.0
-add address=192.168.1.1/24 interface=ether3 network=192.168.1.0
+add address=192.168.1.1/24 interface=ether2 network=192.168.1.0     # IP LAN1 (ether2)
+add address=192.168.1.1/24 interface=ether3 network=192.168.1.0     # IP LAN2 (ether3)
+
 /ip dhcp-client
-add disabled=no interface=ether1
+add disabled=no interface=ether1                                    # DHCP client untuk WAN (ether1)
+
 /ip firewall mangle
 add action=mark-connection chain=prerouting in-interface=ether3 \
-new-connection-mark=con-vrf passthrough=yes
+    new-connection-mark=con-vrf passthrough=yes                     # Tandai koneksi dari ether3
 add action=mark-routing chain=prerouting connection-mark=con-vrf \
-in-interface=ether1 new-routing-mark=vrf1 passthrough=yes
-add action=mark-routing chain=output connection-mark=con-vrf disabled=yes \
-new-routing-mark=vrf1 passthrough=yes
+    in-interface=ether1 new-routing-mark=vrf1 passthrough=yes       # Tandai routing untuk traffic ether3 → WAN
+add action=mark-routing chain=output connection-mark=con-vrf \
+    disabled=yes new-routing-mark=vrf1 passthrough=yes              # (Opsional) mark routing untuk traffic output
+
 /ip firewall nat
-add action=masquerade chain=srcnat out-interface=ether1
+add action=masquerade chain=srcnat out-interface=ether1             # NAT untuk keluar lewat WAN
+
 /ip route
-add distance=1 gateway=192.168.209.1@main routing-mark=vrf1
+add distance=1 gateway=192.168.209.1@main routing-mark=vrf1         # Default route VRF1 lewat gateway WAN
+
 /ip route vrf
-add interfaces=ether3 routing-mark=vrf1
+add interfaces=ether3 routing-mark=vrf1                             # Buat VRF khusus untuk interface ether3
+
 /system identity
-set name=R.VRF
+set name=R.VRF                                                      # Nama router
     </code></pre>
 
     <h3 class="note-subtitle">Ringkasan</h3>

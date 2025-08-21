@@ -72,7 +72,22 @@
     </ul>
     <h3 class="note-subtitle">CONTOH KASUS</h3>
     <ul class="note-list">
-        <li>Topologi menggunakan protokol routing <b>OSPF</b> pada tujuh router MikroTik (RB1-RB7).</li>
+        <li>Tujuan: Mengimplementasikan <strong>RIPv2</strong> pada jaringan MikroTik untuk mendistribusikan routing dinamis 
+            antar-router secara otomatis.</li>
+        <li>Topologi:
+            <ul>
+                <li>Terdapat 5 router (RB1–RB5) yang saling terhubung dengan jaringan point-to-point (/30).</li>
+                <li>Setiap router memiliki jaringan LAN yang berbeda, yang akan didistribusikan menggunakan RIPv2.</li>
+                <li>Router RB1 sebagai pintu gerbang utama menuju jaringan 192.168.190.0/24.</li>
+            </ul>
+        </li>
+        <li>Catatan:
+            <ul>
+                <li>Menggunakan <strong>RIPv2</strong> dengan mode <code>receive=v2</code> di setiap interface.</li>
+                <li>Setiap router mengiklankan network masing-masing agar dapat saling terhubung.</li>
+                <li>Dengan RIPv2, setiap perubahan routing akan otomatis terdistribusi ke seluruh router.</li>
+            </ul>
+        </li>
     </ul>
 
 
@@ -80,34 +95,41 @@
     <h3 class="note-subtitle">RB1</h3>
     <pre class="note-codeblock"><code>
 /ip address
-add address=192.168.190.110/24 interface=ether1 network=192.168.190.0
-add address=192.168.1.1/30 interface=ether3 network=192.168.1.0
-add address=192.168.10.1/30 interface=ether2 network=192.168.10.0
+add address=192.168.190.110/24 interface=ether1 network=192.168.190.0   # IP ke LAN/ISP
+add address=192.168.1.1/30 interface=ether3 network=192.168.1.0         # Link ke RB2
+add address=192.168.10.1/30 interface=ether2 network=192.168.10.0       # Link ke RB2
+
 /ip dhcp-server network
-add address=192.168.1.0/30 gateway=192.168.1.1
+add address=192.168.1.0/30 gateway=192.168.1.1                          # DHCP scope untuk segmen ether3
+
 /routing rip interface
-add interface=ether2 receive=v2
+add interface=ether2 receive=v2                                         # Aktifkan RIPv2 di ether2
+
 /routing rip network
-add network=192.168.1.0/30
-add network=192.168.10.0/30
+add network=192.168.1.0/30                                              # Masukkan network ke RIP
+add network=192.168.10.0/30                                             # Masukkan network ke RIP
+
 /system identity
-set name=RIPv2-R1
+set name=RIPv2-R1                                                       # Nama router
     </code></pre>
 
     <h3 class="note-subtitle">RB2</h3>
     <pre class="note-codeblock"><code>
-//ip address
-add address=192.168.10.2/30 interface=ether1 network=192.168.10.0
-add address=192.168.20.1/30 interface=ether2 network=192.168.20.0
-add address=192.168.30.1/30 interface=ether3 network=192.168.30.0
+/ip address
+add address=192.168.10.2/30 interface=ether1 network=192.168.10.0       # Link ke RB1
+add address=192.168.20.1/30 interface=ether2 network=192.168.20.0       # Link ke RB3
+add address=192.168.30.1/30 interface=ether3 network=192.168.30.0       # Link ke RB4
+
 /routing rip interface
-add interface=ether1 receive=v2
-add interface=ether2 receive=v2
-add interface=ether3 receive=v2
+add interface=ether1 receive=v2                                         # RIP di ether1
+add interface=ether2 receive=v2                                         # RIP di ether2
+add interface=ether3 receive=v2                                         # RIP di ether3
+
 /routing rip network
 add network=192.168.10.0/30
 add network=192.168.20.0/30
 add network=192.168.30.0/30
+
 /system identity
 set name=RIPv2-R2
     </code></pre>
@@ -115,14 +137,17 @@ set name=RIPv2-R2
     <h3 class="note-subtitle">RB3</h3>
     <pre class="note-codeblock"><code>
 /ip address
-add address=192.168.20.2/30 interface=ether1 network=192.168.20.0
-add address=192.168.40.1/30 interface=ether2 network=192.168.40.0
+add address=192.168.20.2/30 interface=ether1 network=192.168.20.0       # Link ke RB2
+add address=192.168.40.1/30 interface=ether2 network=192.168.40.0       # Link ke RB4
+
 /routing rip interface
 add interface=ether1 receive=v2
 add interface=ether2 receive=v2
+
 /routing rip network
 add network=192.168.20.0/30
 add network=192.168.40.0/30
+
 /system identity
 set name=RIPv2-R3
     </code></pre>
@@ -130,17 +155,20 @@ set name=RIPv2-R3
     <h3 class="note-subtitle">RB4</h3>
     <pre class="note-codeblock"><code>
 /ip address
-add address=192.168.40.2/30 interface=ether1 network=192.168.40.0
-add address=192.168.30.2/30 interface=ether2 network=192.168.30.0
-add address=192.168.50.1/30 interface=ether3 network=192.168.50.0
+add address=192.168.40.2/30 interface=ether1 network=192.168.40.0       # Link ke RB3
+add address=192.168.30.2/30 interface=ether2 network=192.168.30.0       # Link ke RB2
+add address=192.168.50.1/30 interface=ether3 network=192.168.50.0       # Link ke RB5
+
 /routing rip interface
 add interface=ether1 receive=v2
 add interface=ether2 receive=v2
 add interface=ether3 receive=v2
+
 /routing rip network
-add network=192.168.20.0/30
+add network=192.168.30.0/30                                            
 add network=192.168.50.0/30
 add network=192.168.40.0/30
+
 /system identity
 set name=RIPv2-R4
     </code></pre>
@@ -148,13 +176,16 @@ set name=RIPv2-R4
     <h3 class="note-subtitle">RB5</h3>
     <pre class="note-codeblock"><code>
 /ip address
-add address=192.168.50.2/30 interface=ether1 network=192.168.50.0
-add address=192.168.2.1/30 interface=ether2 network=192.168.2.0
+add address=192.168.50.2/30 interface=ether1 network=192.168.50.0       # Link ke RB4
+add address=192.168.2.1/30 interface=ether2 network=192.168.2.0         # LAN RB5
+
 /routing rip interface
 add interface=ether1 receive=v2
+
 /routing rip network
 add network=192.168.50.0/30
 add network=192.168.2.0/30
+
 /system identity
 set name=RIPv2-R5
     </code></pre>

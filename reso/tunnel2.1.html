@@ -33,71 +33,61 @@
 
     <h3 class="note-subtitle">L2TP-RB1 (Server)</h3>
     <pre class="note-codeblock"><code>
-    /ip pool
-    add name=l2tp_pool ranges=10.10.10.3
-    # Pool IP untuk klien L2TP, RB2 akan mendapat IP ini
+/ip pool
+add name=l2tp_pool ranges=10.10.10.3                         # Pool IP untuk klien L2TP (RB2 akan mendapat IP ini)
 
-    /ppp profile
-    add local-address=10.10.10.1 name=l2tp_profile remote-address=l2tp_pool
-    # Profil PPP: RB1 akan memakai IP 10.10.10.1, klien mendapat dari l2tp_pool
+/ppp profile
+add local-address=10.10.10.1 name=l2tp_profile \
+    remote-address=l2tp_pool                                 # Profil PPP: RB1 = 10.10.10.1, klien ambil dari pool
 
-    /interface l2tp-server server
-    set default-profile=default enabled=yes ipsec-secret=rahasia use-ipsec=yes
-    # Aktifkan L2TP server dengan IPsec dan shared secret "rahasia"
+/interface l2tp-server server
+set default-profile=default enabled=yes ipsec-secret=rahasia \
+    use-ipsec=yes                                            # Aktifkan L2TP server + IPsec secret "rahasia"
 
-    /ip address
-    add address=192.168.190.104/24 interface=ether1
-    # IP WAN RB1
-    add address=192.168.1.1/30 interface=ether2
-    # IP LAN RB1
+/ip address
+add address=192.168.190.104/24 interface=ether1              # IP WAN RB1
+add address=192.168.1.1/30 interface=ether2                  # IP LAN RB1
 
-    /ip route
-    add distance=1 dst-address=192.168.2.0/30 gateway=10.10.10.3
-    # Routing ke jaringan RB2 melalui IP L2TP klien
+/ip route
+add distance=1 dst-address=192.168.2.0/30 gateway=10.10.10.3 # Routing ke LAN RB2 via IP L2TP klien
 
-    /ppp secret
-    add name=l2tp1 password=l2tp1 profile=l2tp_profile service=l2tp
-    # Username & password untuk autentikasi L2TP klien
+/ppp secret
+add name=l2tp1 password=l2tp1 profile=l2tp_profile \
+    service=l2tp                                             # User & password autentikasi L2TP klien
 
-    /system identity
-    set name=L2TP-R1
+/system identity
+set name=L2TP-R1                                             # Nama router
+
     </code></pre>
 
     <h3 class="note-subtitle">L2TP-RB2 (Client)</h3>
     <pre class="note-codeblock"><code>
-    /interface l2tp-client
-    add connect-to=192.168.190.104 disabled=no ipsec-secret=rahasia name=l2tp-out1 \
-        password=l2tp1 use-ipsec=yes user=l2tp1
-    # L2TP client terhubung ke IP WAN RB1, gunakan IPsec secret & kredensial
+/interface l2tp-client
+add connect-to=192.168.190.104 disabled=no ipsec-secret=rahasia \
+    name=l2tp-out1 password=l2tp1 use-ipsec=yes user=l2tp1   # L2TP client ke IP WAN RB1 (pakai IPsec + user/pass)
 
-    /ip pool
-    add name=dhcp_pool0 ranges=192.168.2.2
-    # Pool DHCP untuk jaringan lokal RB2
+/ip pool
+add name=dhcp_pool0 ranges=192.168.2.2                       # Pool DHCP untuk LAN RB2
 
-    /ip dhcp-server
-    add address-pool=dhcp_pool0 disabled=no interface=ether2 name=dhcp1
-    # DHCP server untuk LAN RB2
+/ip dhcp-server
+add address-pool=dhcp_pool0 disabled=no interface=ether2 \
+    name=dhcp1                                               # DHCP Server untuk LAN RB2
 
-    /ip address
-    add address=192.168.190.105/24 interface=ether1
-    # IP WAN RB2
-    add address=192.168.2.1/30 interface=ether2
-    # IP LAN RB2
+/ip address
+add address=192.168.190.105/24 interface=ether1              # IP WAN RB2
+add address=192.168.2.1/30 interface=ether2                  # IP LAN RB2
 
-    /ip dhcp-client
-    add disabled=no interface=ether1
-    # Opsional: DHCP di WAN
+/ip dhcp-client
+add disabled=no interface=ether1                             # Opsional: DHCP di WAN
 
-    /ip dhcp-server network
-    add address=192.168.2.0/30 gateway=192.168.2.1
-    # Gateway DHCP di RB2
+/ip dhcp-server network
+add address=192.168.2.0/30 gateway=192.168.2.1               # DHCP network, gateway = 192.168.2.1
 
-    /ip route
-    add distance=1 dst-address=192.168.1.0/30 gateway=10.10.10.1
-    # Routing ke jaringan RB1 melalui IP L2TP server
+/ip route
+add distance=1 dst-address=192.168.1.0/30 gateway=10.10.10.1 # Routing ke LAN RB1 via IP L2TP server
 
-    /system identity
-    set name=L2TP-R2
+/system identity
+set name=L2TP-R2                                             # Nama router
     </code></pre>
 
 

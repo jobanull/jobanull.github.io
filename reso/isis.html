@@ -85,84 +85,61 @@
     <p class="note-subtitle">RB1</p>
     <pre class="note-codeblock"><code>
 /routing isis instance
-add afi=ip areas=49.0001 disabled=no l1.originate-default=always \
-    l2.originate-default=always name=isis-instance-1 system-id=0000.0000.0001
-# Membuat instance IS-IS dengan System-ID 0000.0000.0001
-# afi=ip → IPv4 digunakan
-# areas=49.0001 → nomor area IS-IS
-# l1.originate-default & l2.originate-default → router mengiklankan default route
-# disabled=no → mengaktifkan instance
+add afi=ip areas=49.0001 disabled=no l1.originate-default=always l2.originate-default=always name=isis-instance-1 system-id=0000.0000.0001   # Membuat instance IS-IS dengan System-ID 0000.0000.0001 (Area 49.0001), advertise default route di L1 & L2
 
 /ip address
-add address=192.168.1.1/30 interface=ether5 network=192.168.1.0
-add address=10.10.1.1/30 interface=ether2 network=10.10.1.0
-add address=10.10.2.1/30 interface=ether4 network=10.10.2.0
-# Menetapkan IP address untuk masing-masing interface
+add address=192.168.1.1/30 interface=ether5 network=192.168.1.0   # IP link RB1 ↔ RB2
+add address=10.10.1.1/30 interface=ether2 network=10.10.1.0       # IP link RB1 ↔ RB2 (jalur lain)
+add address=10.10.2.1/30 interface=ether4 network=10.10.2.0       # IP link RB1 ↔ RB3
 
 /ip dhcp-client
-add interface=ether1
-# Mengaktifkan DHCP client di ether1 (misal untuk akses internet)
+add interface=ether1                                               # DHCP client untuk interface WAN (akses internet)
 
 /ip firewall nat
-add action=masquerade chain=srcnat out-interface=ether1
-# NAT keluar melalui ether1 ke internet
+add action=masquerade chain=srcnat out-interface=ether1            # NAT keluar via ether1 ke internet
 
 /routing isis interface-template
-add instance=isis-instance-1 interfaces=ether1 levels=l2
-# Menetapkan ether1 sebagai Level-2 IS-IS (eksternal)
+add instance=isis-instance-1 interfaces=ether1 levels=l2           # ether1 (WAN) jadi Level-2 IS-IS (eksternal domain)
 
 /routing isis interface-template
-add instance=isis-instance-1 interfaces=ether5,ether2,ether4 levels=l1
-# Menetapkan interface internal sebagai Level-1 IS-IS
+add instance=isis-instance-1 interfaces=ether5,ether2,ether4 levels=l1   # Interface internal (LAN) jadi Level-1 IS-IS
 
 /system identity
-set name=RB1
-# Memberi nama router
-
+set name=RB1                                                       # Set nama router = RB1
     </code></pre>
     
     <p class="note-subtitle">RB2</p>
     <pre class="note-codeblock"><code>
 /routing isis instance
-add afi=ip areas=49.0001 name=isis-instance-1 system-id=0000.0000.0002
-# Membuat instance IS-IS dengan System-ID 0000.0000.0002
+add afi=ip areas=49.0001 name=isis-instance-1 system-id=0000.0000.0002   # Membuat instance IS-IS dengan System-ID 0000.0000.0002 (Area 49.0001)
 
 /ip address
-add address=192.168.2.1/30 interface=ether5 network=192.168.2.0
-add address=10.10.1.2/30 interface=ether2 network=10.10.1.0
-add address=10.10.3.1/30 interface=ether3 network=10.10.3.0
-# Menetapkan IP address untuk masing-masing interface
+add address=192.168.2.1/30 interface=ether5 network=192.168.2.0          # IP link RB2 ↔ RB3
+add address=10.10.1.2/30 interface=ether2 network=10.10.1.0              # IP link RB2 ↔ RB1
+add address=10.10.3.1/30 interface=ether3 network=10.10.3.0              # IP link RB2 ↔ RB3
 
 /routing isis interface-template
-add instance=isis-instance-1 interfaces=ether2,ether3,ether5 levels=l1
-# Semua interface Level-1 IS-IS (internal)
+add instance=isis-instance-1 interfaces=ether2,ether3,ether5 levels=l1   # Semua interface internal jadi Level-1 IS-IS
 
 /system identity
-set name=RB2
-# Memberi nama router
-
+set name=RB2                                                             # Set nama router = RB2
     </code></pre>
     
     <p class="note-subtitle">RB3</p>
     <pre class="note-codeblock"><code>
 /routing isis instance
-add afi=ip areas=49.0001 name=isis-instance-1 system-id=0000.0000.0003
-# Membuat instance IS-IS dengan System-ID 0000.0000.0003
+add afi=ip areas=49.0001 name=isis-instance-1 system-id=0000.0000.0003   # Membuat instance IS-IS dengan System-ID 0000.0000.0003 (Area 49.0001)
 
 /ip address
-add address=192.168.3.1/30 interface=ether5 network=192.168.3.0
-add address=10.10.2.2/30 interface=ether4 network=10.10.2.0
-add address=10.10.3.2/30 interface=ether3 network=10.10.3.0
-# Menetapkan IP address untuk masing-masing interface
+add address=192.168.3.1/30 interface=ether5 network=192.168.3.0          # IP link RB3 ↔ RB1
+add address=10.10.2.2/30 interface=ether4 network=10.10.2.0              # IP link RB3 ↔ RB1
+add address=10.10.3.2/30 interface=ether3 network=10.10.3.0              # IP link RB3 ↔ RB2
 
 /routing isis interface-template
-add instance=isis-instance-1 interfaces=ether5,ether3,ether4 levels=l1
-# Semua interface Level-1 IS-IS (internal)
+add instance=isis-instance-1 interfaces=ether5,ether3,ether4 levels=l1   # Semua interface internal jadi Level-1 IS-IS
 
 /system identity
-set name=RB3
-# Memberi nama router
-
+set name=RB3                                                             # Set nama router = RB3
     </code></pre>
 
     <h3 class="note-subtitle">Best Practice</h3>

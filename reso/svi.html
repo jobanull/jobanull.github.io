@@ -97,53 +97,53 @@
     <p class="note-subtitle">RB1</p>
     <pre class="note-codeblock"><code>
 /ip address
-add address=10.1.1.1/30 interface=ether1 network=10.1.1.0       # IP ke RB2 (link point-to-point)
-add address=11.1.1.1/30 interface=ether2 network=11.1.1.0       # IP ke RB3 (link point-to-point)
-add address=192.168.190.3/24 interface=ether5 network=192.168.190.0   # LAN ke ISP / akses internet
+add address=10.1.1.1/30 interface=ether1 network=10.1.1.0
+add address=11.1.1.1/30 interface=ether2 network=11.1.1.0
+add address=192.168.190.3/24 interface=ether5 network=192.168.190.0  # LAN ke ISP
 
 /ip dns
-set servers=8.8.8.8,8.8.4.4                                     # DNS publik Google
+set servers=8.8.8.8,8.8.4.4
 
 /ip firewall nat
-add action=masquerade chain=srcnat out-interface=ether5         # NAT trafik LAN ke internet via ISP
+add action=masquerade chain=srcnat out-interface=ether5  # NAT ke internet
 
 /ip route
-add distance=1 gateway=192.168.190.1                            # Default route ke ISP (gateway)
+add distance=1 gateway=192.168.190.1
 
 /routing ospf interface
-add interface=ether1                                            # Aktifkan OSPF di link ke RB2
-add interface=ether2                                            # Aktifkan OSPF di link ke RB3
+add interface=ether1
+add interface=ether2
 
 /routing ospf network
-add area=backbone network=10.1.1.0/30                           # OSPF backbone: link RB1 ↔ RB2
-add area=backbone network=11.1.1.0/30                           # OSPF backbone: link RB1 ↔ RB3
+add area=backbone network=10.1.1.0/30
+add area=backbone network=11.1.1.0/30
 
 /system identity
-set name=R1                                                     # Nama router = R1
+set name=R1
     </code></pre>
     
     <p class="note-subtitle">RB2</p>
     <pre class="note-codeblock"><code>
 /routing ospf area
-add area-id=2.2.2.2 name=area2                                  # Buat area OSPF baru (Area 2)
+add area-id=2.2.2.2 name=area2
 
 /ip address
-add address=10.1.1.2/30 interface=ether1 network=10.1.1.0       # IP ke RB1
-add address=12.1.1.1/30 interface=ether2 network=12.1.1.0       # IP ke RB3
-add address=16.1.1.1/30 interface=ether3 network=16.1.1.0       # IP ke RB6
-add address=17.1.1.1/30 interface=ether4 network=17.1.1.0       # IP ke RB7
+add address=10.1.1.2/30 interface=ether1 network=10.1.1.0
+add address=12.1.1.1/30 interface=ether2 network=12.1.1.0
+add address=16.1.1.1/30 interface=ether3 network=16.1.1.0
+add address=17.1.1.1/30 interface=ether4 network=17.1.1.0
 
 /routing ospf interface
-add interface=ether1                                            # OSPF link ke RB1
-add interface=ether2                                            # OSPF link ke RB3
-add interface=ether3                                            # OSPF link ke RB6
-add interface=ether4                                            # OSPF link ke RB7
+add interface=ether1
+add interface=ether2
+add interface=ether3
+add interface=ether4
 
 /routing ospf network
-add area=backbone network=10.1.1.0/30                           # Backbone: RB1 ↔ RB2
-add area=backbone network=12.1.1.0/30                           # Backbone: RB2 ↔ RB3
-add area=area2 network=16.1.1.0/30                              # Area 2: RB2 ↔ RB6
-add area=area2 network=17.1.1.0/30                              # Area 2: RB2 ↔ RB7
+add area=backbone network=10.1.1.0/30
+add area=backbone network=12.1.1.0/30
+add area=area2 network=16.1.1.0/30
+add area=area2 network=17.1.1.0/30
 
 /system identity
 set name=R2
@@ -152,25 +152,25 @@ set name=R2
     <p class="note-subtitle">RB3</p>
     <pre class="note-codeblock"><code>
 /routing ospf area
-add area-id=3.3.3.3 name=area3                                  # Buat area OSPF baru (Area 3)
+add area-id=3.3.3.3 name=area3
 
 /ip address
-add address=11.1.1.2/30 interface=ether1 network=11.1.1.0       # IP ke RB1
-add address=12.1.1.2/30 interface=ether2 network=12.1.1.0       # IP ke RB2
-add address=13.1.1.1/30 interface=ether3 network=13.1.1.0       # IP ke RB4
-add address=14.1.1.1/30 interface=ether4 network=14.1.1.0       # IP ke RB5
+add address=11.1.1.2/30 interface=ether1 network=11.1.1.0
+add address=12.1.1.2/30 interface=ether2 network=12.1.1.0
+add address=13.1.1.1/30 interface=ether3 network=13.1.1.0
+add address=14.1.1.1/30 interface=ether4 network=14.1.1.0
 
 /routing ospf interface
-add interface=ether1                                            # OSPF link ke RB1
-add interface=ether2                                            # OSPF link ke RB2
-add interface=ether3                                            # OSPF link ke RB4
-add interface=ether4                                            # OSPF link ke RB5
+add interface=ether1
+add interface=ether2
+add interface=ether3
+add interface=ether4
 
 /routing ospf network
-add area=backbone network=11.1.1.0/30                           # Backbone: RB1 ↔ RB3
-add area=backbone network=12.1.1.0/30                           # Backbone: RB2 ↔ RB3
-add area=area3 network=13.1.1.0/30                              # Area 3: RB3 ↔ RB4
-add area=area3 network=14.1.1.0/30                              # Area 3: RB3 ↔ RB5
+add area=backbone network=11.1.1.0/30
+add area=backbone network=12.1.1.0/30
+add area=area3 network=13.1.1.0/30
+add area=area3 network=14.1.1.0/30
 
 /system identity
 set name=R3
@@ -179,16 +179,16 @@ set name=R3
     <p class="note-subtitle">RB4</p>
     <pre class="note-codeblock"><code>
 /ip address
-add address=13.1.1.2/30 interface=ether1 network=13.1.1.0       # IP ke RB3
-add address=15.1.1.1/30 interface=ether2 network=15.1.1.0       # IP ke RB5
+add address=13.1.1.2/30 interface=ether1 network=13.1.1.0
+add address=15.1.1.1/30 interface=ether2 network=15.1.1.0
 
 /routing ospf interface
-add interface=ether1                                            # OSPF link ke RB3
-add interface=ether2                                            # OSPF link ke RB5
+add interface=ether1
+add interface=ether2
 
 /routing ospf network
-add area=area3 network=13.1.1.0/30                              # Area 3: RB3 ↔ RB4
-add area=area3 network=15.1.1.0/30                              # Area 3: RB4 ↔ RB5
+add area=area3 network=13.1.1.0/30
+add area=area3 network=15.1.1.0/30
 
 /system identity
 set name=R4
@@ -197,21 +197,21 @@ set name=R4
     <p class="note-subtitle">RB5</p>
     <pre class="note-codeblock"><code>
 /routing ospf area
-add area-id=3.3.3.3 name=area3                                  # Area 3 OSPF
+add area-id=3.3.3.3 name=area3
 
 /ip address
-add address=14.1.1.2/30 interface=ether1 network=14.1.1.0       # IP ke RB3
-add address=15.1.1.2/30 interface=ether2 network=15.1.1.0       # IP ke RB4
-add address=192.168.2.1/30 interface=ether3 network=192.168.2.0 # LAN internal (client)
+add address=14.1.1.2/30 interface=ether1 network=14.1.1.0
+add address=15.1.1.2/30 interface=ether2 network=15.1.1.0
+add address=192.168.2.1/30 interface=ether3 network=192.168.2.0
 
 /routing ospf interface
-add interface=ether1                                            # OSPF link ke RB3
-add interface=ether2                                            # OSPF link ke RB4
+add interface=ether1
+add interface=ether2
 
 /routing ospf network
-add area=area3 network=14.1.1.0/30                              # Area 3: RB3 ↔ RB5
-add area=area3 network=15.1.1.0/30                              # Area 3: RB4 ↔ RB5
-add area=area3 network=192.168.2.0/30                           # Area 3: LAN RB5
+add area=area3 network=14.1.1.0/30
+add area=area3 network=15.1.1.0/30
+add area=area3 network=192.168.2.0/30
 
 /system identity
 set name=R5
@@ -220,19 +220,19 @@ set name=R5
     <p class="note-subtitle">RB6</p>
     <pre class="note-codeblock"><code>
 /routing ospf area
-add area-id=2.2.2.2 name=area2                                  # Area 2 OSPF
+add area-id=2.2.2.2 name=area2
 
 /ip address
-add address=16.1.1.2/30 interface=ether1 network=16.1.1.0       # IP ke RB2
-add address=18.1.1.1/30 interface=ether2 network=18.1.1.0       # IP ke RB7
+add address=16.1.1.2/30 interface=ether1 network=16.1.1.0
+add address=18.1.1.1/30 interface=ether2 network=18.1.1.0
 
 /routing ospf interface
-add interface=ether1                                            # OSPF link ke RB2
-add interface=ether2                                            # OSPF link ke RB7
+add interface=ether1
+add interface=ether2
 
 /routing ospf network
-add area=area2 network=16.1.1.0/30                              # Area 2: RB2 ↔ RB6
-add area=area2 network=18.1.1.0/30                              # Area 2: RB6 ↔ RB7
+add area=area2 network=16.1.1.0/30
+add area=area2 network=18.1.1.0/30
 
 /system identity
 set name=R6
@@ -241,28 +241,28 @@ set name=R6
     <p class="note-subtitle">RB7</p>
     <pre class="note-codeblock"><code>
 /routing ospf area
-add area-id=2.2.2.2 name=area2                                  # Area 2 OSPF
+add area-id=2.2.2.2 name=area2
 
 /ip address
-add address=17.1.1.2/30 interface=ether1 network=17.1.1.0       # IP ke RB2
-add address=18.1.1.2/30 interface=ether2 network=18.1.1.0       # IP ke RB6
-add address=192.168.1.1/30 interface=ether3 network=192.168.1.0 # LAN internal (client)
+add address=17.1.1.2/30 interface=ether1 network=17.1.1.0
+add address=18.1.1.2/30 interface=ether2 network=18.1.1.0
+add address=192.168.1.1/30 interface=ether3 network=192.168.1.0
 
 /ip dns
-set servers=8.8.8.8,8.8.4.4                                     # DNS publik Google
+set servers=8.8.8.8,8.8.4.4
 
 /ip firewall nat
-add action=masquerade chain=srcnat disabled=yes out-interface=ether1  # NAT via ether1 (opsional)
-add action=masquerade chain=srcnat disabled=yes out-interface=ether2  # NAT via ether2 (opsional)
+add action=masquerade chain=srcnat disabled=yes out-interface=ether1
+add action=masquerade chain=srcnat disabled=yes out-interface=ether2
 
 /routing ospf interface
-add interface=ether1                                            # OSPF link ke RB2
-add interface=ether2                                            # OSPF link ke RB6
+add interface=ether1
+add interface=ether2
 
 /routing ospf network
-add area=area2 network=17.1.1.0/30                              # Area 2: RB2 ↔ RB7
-add area=area2 network=18.1.1.0/30                              # Area 2: RB6 ↔ RB7
-add area=area2 network=192.168.1.0/30                           # Area 2: LAN RB7
+add area=area2 network=17.1.1.0/30
+add area=area2 network=18.1.1.0/30
+add area=area2 network=192.168.1.0/30
 
 /system identity
 set name=R7

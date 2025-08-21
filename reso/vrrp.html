@@ -41,7 +41,22 @@
 
     <h3 class="note-subtitle">CONTOH KASUS</h3>
     <ul class="note-list">
-        <li>Topologi menggunakan protokol routing <b>OSPF</b> pada tujuh router MikroTik (RB1-RB7).</li>
+        <li>Tujuan: Mengimplementasikan <strong>VRF (Virtual Routing and Forwarding)</strong> di MikroTik untuk memisahkan tabel routing 
+            berdasarkan traffic yang masuk melalui interface tertentu.</li>
+        <li>Topologi: 
+            <ul>
+                <li>Router R.VRF terhubung ke internet melalui <code>ether1</code>.</li>
+                <li>Interface <code>ether2</code> dan <code>ether3</code> berada pada LAN yang sama <code>192.168.1.0/24</code>.</li>
+                <li>Traffic dari <code>ether3</code> diarahkan menggunakan VRF dengan <code>routing-mark=vrf1</code>.</li>
+            </ul>
+        </li>
+        <li>Catatan:
+            <ul>
+                <li>Menggunakan <strong>mangle rule</strong> untuk menandai koneksi dan routing.</li>
+                <li>VRF digunakan agar trafik di <code>ether3</code> bisa diarahkan melalui tabel routing terpisah.</li>
+                <li>Default NAT diterapkan di <code>ether1</code> untuk akses internet.</li>
+            </ul>
+        </li>
     </ul>
 
 
@@ -50,39 +65,57 @@
     <h3 class="note-subtitle">R.VRRP1</h3>
     <pre class="note-codeblock"><code>
 /interface vrrp
-add interface=ether2 name=vrrp1 priority=254 vrid=49
+add interface=ether2 name=vrrp1 priority=254 vrid=49          # VRRP di ether2, VRID = 49, priority tinggi (Master)
+
 /ip pool
-add name=dhcp_pool1 ranges=192.168.2.1-192.168.2.253
+add name=dhcp_pool1 ranges=192.168.2.1-192.168.2.253          # Pool DHCP untuk LAN
+
 /ip dhcp-server
 add address-pool=dhcp_pool1 disabled=no interface=ether2 name=dhcp1
+
 /ip address
-add address=192.168.2.1/24 interface=ether2 network=192.168.2.0
-add address=192.168.2.254 interface=vrrp1 network=192.168.2.10
+add address=192.168.2.1/24 interface=ether2 network=192.168.2.0    # IP fisik router VRRP1
+add address=192.168.2.254 interface=vrrp1 network=192.168.2.0      # Virtual IP (shared oleh VRRP)
+
 /ip dhcp-client
-add disabled=no interface=ether1
+add disabled=no interface=ether1                                   # DHCP client untuk WAN
+
 /ip dhcp-server network
-add address=192.168.2.0/24 gateway=192.168.2.254
+add address=192.168.2.0/24 gateway=192.168.2.254                   # Gateway DHCP = Virtual IP (192.168.2.254)
+
 /ip firewall nat
-add action=masquerade chain=srcnat out-interface=ether1
+add action=masquerade chain=srcnat out-interface=ether1            # NAT keluar ke WAN
+
+/system identity
+set name=R.VRRP1
     </code></pre>
 
     <h3 class="note-subtitle">R.VRRP2</h3>
     <pre class="note-codeblock"><code>
 /interface vrrp
-add interface=ether2 name=vrrp1 vrid=49
+add interface=ether2 name=vrrp1 vrid=49                     # VRRP di ether2, VRID sama (49)
+
 /ip pool
-add name=dhcp_pool2 ranges=192.168.2.1-192.168.2.253
+add name=dhcp_pool2 ranges=192.168.2.1-192.168.2.253        # Pool DHCP untuk LAN
+
 /ip dhcp-server
 add address-pool=dhcp_pool2 disabled=no interface=ether2 name=dhcp1
+
 /ip address
-add address=192.168.2.2/24 interface=ether2 network=192.168.2.0
-add address=192.168.2.254 interface=vrrp1 network=192.168.2.10
+add address=192.168.2.2/24 interface=ether2 network=192.168.2.0    # IP fisik router VRRP2
+add address=192.168.2.254 interface=vrrp1 network=192.168.2.0      # Virtual IP sama (192.168.2.254)
+
 /ip dhcp-client
-add disabled=no interface=ether1
+add disabled=no interface=ether1                                 # DHCP client untuk WAN
+
 /ip dhcp-server network
-add address=192.168.2.0/24 gateway=192.168.2.254
+add address=192.168.2.0/24 gateway=192.168.2.254                 # Gateway DHCP tetap Virtual IP
+
 /ip firewall nat
-add action=masquerade chain=srcnat out-interface=ether1
+add action=masquerade chain=srcnat out-interface=ether1          # NAT keluar ke WAN
+
+/system identity
+set name=R.VRRP2
     </code></pre>
 
     <h3 class="note-subtitle">Kelebihan VRRP</h3>

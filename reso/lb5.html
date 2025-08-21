@@ -31,26 +31,31 @@
     <p class="note-subtitle">R.PBR</p>
     <pre class="note-codeblock"><code>
 /ip address
-add address=192.168.1.2/30 interface=ether1 network=192.168.1.0
-add address=172.16.1.2/30 interface=ether2 network=172.16.1.0
-add address=192.168.10.1/30 interface=ether3 network=192.168.10.0
-add address=192.168.20.1/30 interface=ether4 network=192.168.20.0
+add address=192.168.1.2/30 interface=ether1 network=192.168.1.0     # IP ke ISP1
+add address=172.16.1.2/30 interface=ether2 network=172.16.1.0       # IP ke ISP2
+add address=192.168.10.1/30 interface=ether3 network=192.168.10.0   # LAN1 (Client1)
+add address=192.168.20.1/30 interface=ether4 network=192.168.20.0   # LAN2 (Client2)
+
 /ip dns
-set servers=8.8.8.8,8.8.4.4
+set servers=8.8.8.8,8.8.4.4                                         # DNS Google
+
 /ip firewall nat
-add action=masquerade chain=srcnat out-interface=ether1
-add action=masquerade chain=srcnat out-interface=ether2
+add action=masquerade chain=srcnat out-interface=ether1              # NAT keluar via ISP1
+add action=masquerade chain=srcnat out-interface=ether2              # NAT keluar via ISP2
+
 /ip route
-add distance=1 gateway=192.168.1.1 routing-mark=ISP1
-add distance=1 gateway=172.16.1.1 routing-mark=ISP2
-add distance=1 gateway=192.168.1.1
+add distance=1 gateway=192.168.1.1 routing-mark=ISP1                # Default route untuk traffic yang ditandai ISP1
+add distance=1 gateway=172.16.1.1 routing-mark=ISP2                 # Default route untuk traffic yang ditandai ISP2
+add distance=1 gateway=192.168.1.1                                  # Default route umum ke ISP1 (backup)
+
 /ip route rule
-add dst-address=192.168.10.0/24 src-address=192.168.20.0/24 table=main
-add dst-address=192.168.20.0/24 src-address=192.168.10.0/24 table=main
-add src-address=192.168.10.0/24 table=ISP1
-add src-address=192.168.20.0/24 table=ISP2
+add dst-address=192.168.10.0/24 src-address=192.168.20.0/24 table=main   # Akses antar LAN (LAN2 ke LAN1) tetap lewat main table
+add dst-address=192.168.20.0/24 src-address=192.168.10.0/24 table=main   # Akses antar LAN (LAN1 ke LAN2) tetap lewat main table
+add src-address=192.168.10.0/24 table=ISP1                               # LAN1 diarahkan ke ISP1
+add src-address=192.168.20.0/24 table=ISP2                               # LAN2 diarahkan ke ISP2
+
 /system identity
-set name=R.PBR
+set name=R.PBR                                                           # Set nama router = R.PBR
     </code></pre>
 
     <h3 class="note-subtitle">Tips Praktis</h3>

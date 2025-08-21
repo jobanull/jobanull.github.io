@@ -24,36 +24,54 @@
     
     <h3 class="note-subtitle">CONTOH KASUS</h3>
     <ul class="note-list">
-        <li>Buat PCQ</li>
+      <li>Tujuan: Mengimplementasikan <strong>PCQ (Per Connection Queue)</strong> untuk membagi bandwidth secara adil antar-client di jaringan LAN.</li>
+      <li>Topologi: Router R.PCQ menyediakan jaringan LAN via bridge <code>LAN</code> (ether2 & ether3), dan akses internet melalui ether1.</li>
+      <li>Catatan:
+        <ul>
+          <li>DHCP server memberikan IP dari range 192.168.1.2-192.168.1.6 untuk client di LAN.</li>
+          <li>PCQ digunakan untuk upload dan download dengan limit 254kb per koneksi dan max-limit 1M/1M untuk total client.</li>
+          <li>Bridge <code>LAN</code> menggabungkan interface ether2 dan ether3 untuk jaringan LAN.</li>
+          <li>NAT digunakan agar client LAN dapat mengakses internet melalui ether1.</li>
+          <li>Router diberi identitas unik dengan <code>/system identity</code> agar mudah dikenali.</li>
+        </ul>
+      </li>
     </ul>
-
 
     <img src="img/qos.png" alt="Diagram jaringan" class="note-image" />
     <h3 class="note-subtitle">R.PCQ</h3>
     <pre class="note-codeblock"><code>
 /ip pool
-add name=dhcp_pool0 ranges=192.168.1.2-192.168.1.6
+add name=dhcp_pool0 ranges=192.168.1.2-192.168.1.6                     # Pool DHCP: range IP client 192.168.1.2-192.168.1.6
+
 /ip dhcp-server
-add address-pool=dhcp_pool0 disabled=no interface=LAN name=dhcp1
+add address-pool=dhcp_pool0 disabled=no interface=LAN name=dhcp1        # DHCP Server aktif di interface LAN
+
 /queue type
-add kind=pcq name=pcq-download pcq-rate=254k
-add kind=pcq name=pcq-upload pcq-rate=254k
+add kind=pcq name=pcq-download pcq-rate=254k                           # PCQ download, limit per client 254 kbps
+add kind=pcq name=pcq-upload pcq-rate=254k                             # PCQ upload, limit per client 254 kbps
+
 /queue simple
-add max-limit=1M/1M name=PCQ_Client queue=pcq-upload/pcq-upload target=\
-    192.168.1.0/29
+add max-limit=1M/1M name=PCQ_Client queue=pcq-upload/pcq-download \
+    target=192.168.1.0/29                                               # Queue utama 1Mbps/1Mbps, dibagi rata dengan PCQ
+
 /interface bridge port
-add bridge=LAN interface=ether2
-add bridge=LAN interface=ether3
+add bridge=LAN interface=ether2                                        # Tambah ether2 ke bridge LAN
+add bridge=LAN interface=ether3                                        # Tambah ether3 ke bridge LAN
+
 /ip address
-add address=192.168.1.1/29 interface=LAN network=192.168.1.0
+add address=192.168.1.1/29 interface=LAN network=192.168.1.0           # IP gateway LAN (192.168.1.1)
+
 /ip dhcp-client
-add disabled=no interface=ether1
+add disabled=no interface=ether1                                       # Interface WAN (ether1) dapat IP dari ISP
+
 /ip dhcp-server network
-add address=192.168.1.0/29 gateway=192.168.1.1
+add address=192.168.1.0/29 gateway=192.168.1.1                         # Network DHCP: gateway client 192.168.1.1
+
 /ip firewall nat
-add action=masquerade chain=srcnat out-interface=ether1
+add action=masquerade chain=srcnat out-interface=ether1                # NAT agar client LAN bisa akses internet via ether1
+
 /system identity
-set name=R.PCQ
+set name=R.PCQ                                                         # Nama router = R.PCQ
     </code></pre>
 
     <h3 class="note-subtitle">Tips Praktis</h3>

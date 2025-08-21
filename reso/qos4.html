@@ -24,46 +24,71 @@
 
     <h3 class="note-subtitle">CONTOH KASUS</h3>
     <ul class="note-list">
-        <li>Buat Queue Tree</li>
+      <li>Tujuan: Mengimplementasikan <strong>Queue Tree (QT)</strong> untuk membagi bandwidth upload antar-client berdasarkan packet-mark.</li>
+      <li>Topologi: Router <code>R.QT</code> memiliki 2 jaringan LAN di ether2 dan ether3, dengan akses internet via ether1.</li>
+      <li>Catatan:
+        <ul>
+          <li>DHCP server memberikan IP untuk masing-masing LAN:
+            <ul>
+              <li>192.168.1.2 untuk client1 (via ether2).</li>
+              <li>192.168.2.2 untuk client2 (via ether3).</li>
+            </ul>
+          </li>
+          <li>Firewall mangle digunakan untuk <em>mark connection</em> dan <em>mark packet</em> per client.</li>
+          <li>Queue tree dibuat dengan parent <code>queue-parent-upload</code> (max-limit 1M).</li>
+          <li>Masing-masing client mendapat limit upload maksimal 254k.</li>
+          <li>NAT diterapkan agar client LAN dapat mengakses internet melalui ether1.</li>
+          <li>Router diberi identitas unik dengan <code>/system identity</code> = R.QT.</li>
+        </ul>
+      </li>
     </ul>
+
 
 
     <img src="img/qos.png" alt="Diagram jaringan" class="note-image" />
     <h3 class="note-subtitle">R.QT</h3>
     <pre class="note-codeblock"><code>
 /ip pool
-add name=dhcp_pool0 ranges=192.168.1.2
-add name=dhcp_pool1 ranges=192.168.2.2
+add name=dhcp_pool0 ranges=192.168.1.2                                # Pool DHCP client 1 (192.168.1.2)
+add name=dhcp_pool1 ranges=192.168.2.2                                # Pool DHCP client 2 (192.168.2.2)
+
 /ip dhcp-server
-add address-pool=dhcp_pool0 disabled=no interface=ether2 name=dhcp1
-add address-pool=dhcp_pool1 disabled=no interface=ether3 name=dhcp2
+add address-pool=dhcp_pool0 disabled=no interface=ether2 name=dhcp1    # DHCP server untuk client1 di ether2
+add address-pool=dhcp_pool1 disabled=no interface=ether3 name=dhcp2    # DHCP server untuk client2 di ether3
+
 /queue tree
-add max-limit=1M name=queue-parent-upload parent=ether1
-add max-limit=254k name=queue1-upload packet-mark=packet-client1 parent=\
-    queue-parent-upload
-add max-limit=254k name=queue2-upload packet-mark=packet-client2 parent=\
-    queue-parent-upload
+add max-limit=1M name=queue-parent-upload parent=ether1                # Parent queue upload total 1 Mbps di ether1
+add max-limit=254k name=queue1-upload packet-mark=packet-client1 \
+    parent=queue-parent-upload                                         # Queue anak untuk client1 upload max 254 kbps
+add max-limit=254k name=queue2-upload packet-mark=packet-client2 \
+    parent=queue-parent-upload                                         # Queue anak untuk client2 upload max 254 kbps
+
 /ip address
-add address=192.168.1.1/30 interface=ether2 network=192.168.1.0
-add address=192.168.2.1/30 interface=ether3 network=192.168.2.0
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0        # IP gateway client1 (ether2)
+add address=192.168.2.1/30 interface=ether3 network=192.168.2.0        # IP gateway client2 (ether3)
+
 /ip dhcp-client
-add disabled=no interface=ether1
+add disabled=no interface=ether1                                       # Interface WAN (ether1) dapat IP dari ISP
+
 /ip dhcp-server network
-add address=192.168.1.0/30 gateway=192.168.1.1
-add address=192.168.2.0/30 gateway=192.168.2.1
+add address=192.168.1.0/30 gateway=192.168.1.1                         # Network DHCP client1: gateway 192.168.1.1
+add address=192.168.2.0/30 gateway=192.168.2.1                         # Network DHCP client2: gateway 192.168.2.1
+
 /ip firewall mangle
-add action=mark-connection chain=prerouting new-connection-mark=\
-    conn-client1 passthrough=yes src-address=192.168.1.2
-add action=mark-connection chain=prerouting new-connection-mark=\
-    conn-client2 passthrough=yes src-address=192.168.2.2
+add action=mark-connection chain=prerouting new-connection-mark=conn-client1 \
+    passthrough=yes src-address=192.168.1.2                            # Tandai koneksi client1 berdasarkan IP
+add action=mark-connection chain=prerouting new-connection-mark=conn-client2 \
+    passthrough=yes src-address=192.168.2.2                            # Tandai koneksi client2 berdasarkan IP
 add action=mark-packet chain=prerouting connection-mark=conn-client1 \
-    new-packet-mark=packet-client1 passthrough=no
+    new-packet-mark=packet-client1 passthrough=no                      # Tandai paket client1
 add action=mark-packet chain=prerouting connection-mark=conn-client2 \
-    new-packet-mark=packet-client2 passthrough=no
+    new-packet-mark=packet-client2 passthrough=no                      # Tandai paket client2
+
 /ip firewall nat
-add action=masquerade chain=srcnat out-interface=ether1
+add action=masquerade chain=srcnat out-interface=ether1                # NAT agar client bisa akses internet via ether1
+
 /system identity
-set name=R.QT
+set name=R.QT                                                          # Nama router = R.QT
     </code></pre>
 
     <h3 class="note-subtitle">Tips Praktis</h3>

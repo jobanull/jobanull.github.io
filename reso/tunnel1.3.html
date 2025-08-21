@@ -22,69 +22,62 @@
     </ul>
 
     <h3 class="note-subtitle">CONTOH KASUS</h3>
-    <ul class="note-list">
-        <li>Tujuan: Menghubungkan dua router MikroTik (RB1 & RB2) menggunakan <strong>IPIP Tunnel</strong>.</li>
-        <li>IPIP adalah tunnel Layer 3 berbasis IP-in-IP, cocok untuk menghubungkan jaringan antar lokasi dengan routing statis atau dinamis.</li>
+     <ul class="note-list">
+        <li>Menghubungkan dua router menggunakan IPIP.</li>
+        <li>RB1 sebagai IPIP Server, RB2 sebagai IPIP Client.</li>
+        <li>Digunakan untuk menghubungkan network 192.168.1.0/30 dengan 192.168.2.0/30.</li>
     </ul>
 
     <img src="img/tunnel1.png" alt="Diagram jaringan" class="note-image" />
 
     <h3 class="note-subtitle">IPIP-RB1</h3>
     <pre class="note-codeblock"><code>
-    /interface ipip
-    add local-address=192.168.190.102 name=ipip-tunnel1 remote-address=192.168.190.103
-    # Membuat IPIP tunnel dari RB1 (192.168.190.102) menuju RB2 (192.168.190.103)
+/interface ipip
+add local-address=192.168.190.102 name=ipip-tunnel1 remote-address=192.168.190.103   # IPIP tunnel RB1 → RB2 (Publik RB1=192.168.190.102, RB2=192.168.190.103)
 
-    /ip address
-    add address=192.168.190.102/24 interface=ether1
-    # IP interface internet RB1
-    add address=192.168.1.1/30 interface=ether2
-    # IP jaringan lokal RB1
-    add address=10.10.10.1/30 interface=ipip-tunnel1
-    # IP untuk interface tunnel IPIP
+/ip address
+add address=192.168.190.102/24 interface=ether1 network=192.168.190.0                # IP Publik RB1 (ISP side)
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0                      # IP LAN RB1
+add address=10.10.10.1/30 interface=ipip-tunnel1 network=10.10.10.0                  # IP tunnel IPIP
 
-    /ip dns
-    set servers=8.8.8.8,8.8.4.4
-    # DNS server Google
+/ip dns
+set servers=8.8.8.8,8.8.4.4                                                          # DNS Google
 
-    /ip firewall nat
-    add action=masquerade chain=srcnat out-interface=ether1
-    # NAT agar trafik internet dari LAN RB1 bisa keluar lewat ether1
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1                              # NAT keluar ke internet via ether1
 
-    /ip route
-    add distance=1 gateway=192.168.190.1
-    # Default route ke ISP
-    add distance=1 dst-address=192.168.2.0/30 gateway=10.10.10.2
-    # Route ke jaringan RB2 lewat IPIP tunnel
+/ip route
+add distance=1 gateway=192.168.190.1                                                 # Default route ke ISP
+add distance=1 dst-address=192.168.2.0/30 gateway=10.10.10.2                         # Route ke LAN RB2 via IPIP tunnel
+
+/system identity
+set name=IPIP-RB1                                                                    # Nama router RB1
+
     </code></pre>
 
     <h3 class="note-subtitle">IPIP-RB2</h3>
     <pre class="note-codeblock"><code>
-    /interface ipip
-    add local-address=192.168.190.103 name=ipip-tunnel1 remote-address=192.168.190.102
-    # Membuat IPIP tunnel dari RB2 (192.168.190.103) menuju RB1 (192.168.190.102)
+/interface ipip
+add local-address=192.168.190.103 name=ipip-tunnel1 remote-address=192.168.190.102   # IPIP tunnel RB2 → RB1 (Publik RB2=192.168.190.103, RB1=192.168.190.102)
 
-    /ip address
-    add address=192.168.190.103/24 interface=ether1
-    # IP interface internet RB2
-    add address=192.168.2.1/30 interface=ether2
-    # IP jaringan lokal RB2
-    add address=10.10.10.2/30 interface=ipip-tunnel1
-    # IP untuk interface tunnel IPIP
+/ip address
+add address=192.168.190.103/24 interface=ether1 network=192.168.190.0                # IP Publik RB2 (ISP side)
+add address=192.168.2.1/30 interface=ether2 network=192.168.2.0                      # IP LAN RB2
+add address=10.10.10.2/30 interface=ipip-tunnel1 network=10.10.10.0                  # IP tunnel IPIP
 
-    /ip dns
-    set servers=8.8.8.8,8.8.4.4
-    # DNS server Google
+/ip dns
+set servers=8.8.8.8,8.8.4.4                                                          # DNS Google
 
-    /ip firewall nat
-    add action=masquerade chain=srcnat out-interface=ether1
-    # NAT agar trafik internet dari LAN RB2 bisa keluar lewat ether1
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1                              # NAT keluar ke internet via ether1
 
-    /ip route
-    add distance=1 gateway=192.168.190.1
-    # Default route ke ISP
-    add distance=1 dst-address=192.168.1.0/30 gateway=10.10.10.1
-    # Route ke jaringan RB1 lewat IPIP tunnel
+/ip route
+add distance=1 gateway=192.168.190.1                                                 # Default route ke ISP
+add distance=1 dst-address=192.168.1.0/30 gateway=10.10.10.1                         # Route ke LAN RB1 via IPIP tunnel
+
+/system identity
+set name=IPIP-RB2                                                                    # Nama router RB2
+
     </code></pre>
 
 
