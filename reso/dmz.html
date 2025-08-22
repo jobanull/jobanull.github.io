@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Demilitarized Zone (DMZ)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Demilitarized Zone (DMZ)</h2>
+    <p class="note-paragraph">
+      DMZ (Demilitarized Zone) adalah sebuah area jaringan yang ditempatkan di antara jaringan internal (LAN) 
+      dan jaringan eksternal (internet). DMZ berfungsi sebagai <em>buffer zone</em> untuk memisahkan layanan publik 
+      seperti web server, mail server, atau DNS server agar dapat diakses dari luar tanpa membuka langsung akses 
+      ke jaringan internal perusahaan.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama DMZ</h3>
+    <ul class="note-list">
+      <li><strong>Isolasi Keamanan</strong> – Memisahkan server publik dari jaringan internal.</li>
+      <li><strong>Kontrol Akses</strong> – Hanya port/layer tertentu yang boleh diakses dari luar.</li>
+      <li><strong>Mitigasi Serangan</strong> – Jika server DMZ diserang, LAN tetap terlindungi.</li>
+      <li><strong>Penyediaan Layanan Publik</strong> – Web, email, atau DNS server tetap dapat diakses dari internet.</li>
+      <li><strong>Monitoring</strong> – Lalu lintas ke/dari DMZ dapat dipantau menggunakan IDS/IPS atau firewall.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Cara Kerja DMZ</h3>
+    <p class="note-paragraph">
+      Konsep DMZ biasanya menggunakan <strong>dua firewall</strong> atau <strong>satu firewall dengan tiga interface</strong> 
+      (WAN, LAN, DMZ). Lalu lintas dari internet diarahkan ke DMZ, dan komunikasi dari DMZ ke LAN sangat dibatasi 
+      untuk mencegah kompromi jaringan internal.
+    </p>
+
+    <h3 class="note-subtitle">Kelebihan DMZ</h3>
+    <ul class="note-list">
+      <li>Meningkatkan keamanan dengan memisahkan server publik dari jaringan internal.</li>
+      <li>Memberikan fleksibilitas dalam memberikan layanan publik tanpa mengorbankan keamanan LAN.</li>
+      <li>Dapat digunakan untuk monitoring lalu lintas berbahaya (honeypot, IDS/IPS).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan DMZ</h3>
+    <ul class="note-list">
+      <li>Memerlukan perangkat firewall/router dengan konfigurasi lebih kompleks.</li>
+      <li>Membutuhkan biaya tambahan untuk infrastruktur dan pemeliharaan.</li>
+      <li>Jika salah konfigurasi, justru bisa membuka celah keamanan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+      <li>Tujuan: Mengonfigurasi <strong>DMZ</strong> pada MikroTik dan Cisco agar web server publik 
+      dapat diakses dari internet tanpa membuka akses ke jaringan internal.</li>
+      <li>MikroTik: Membuat interface khusus DMZ, memberikan IP DMZ, menambahkan NAT/Firewall rule agar 
+      akses dari internet diarahkan ke web server DMZ.</li>
+      <li>Cisco: Menggunakan firewall dengan tiga zona (Inside, Outside, DMZ) untuk memisahkan jalur lalu lintas.</li>
+    </ul>
+
+    <img src="img/dmz1.png" alt="Diagram jaringan DMZ" class="note-image" />
+
+    <p class="note-subtitle">Mikrotik</p>
+    <pre class="note-codeblock"><code>
+/ip address
+add address=192.168.10.1/24 interface=ether2 comment="LAN"
+add address=172.16.10.1/24 interface=ether3 comment="DMZ"
+add address=10.10.10.2/30 interface=ether1 comment="WAN"
+
+/ip firewall nat
+add chain=dstnat protocol=tcp dst-port=80 \
+    action=dst-nat to-addresses=172.16.10.10 to-ports=80 \
+    comment="Redirect HTTP traffic to Web Server in DMZ"
+
+/ip firewall filter
+add chain=forward src-address=172.16.10.0/24 dst-address=192.168.10.0/24 \
+    action=drop comment="Block DMZ to LAN"
+    </code></pre>
+
+    <p class="note-subtitle">Cisco ASA</p>
+    <pre class="note-codeblock"><code>
+interface GigabitEthernet0/0
+ nameif outside
+ security-level 0
+ ip address 10.10.10.1 255.255.255.252
+
+interface GigabitEthernet0/1
+ nameif inside
+ security-level 100
+ ip address 192.168.10.1 255.255.255.0
+
+interface GigabitEthernet0/2
+ nameif dmz
+ security-level 50
+ ip address 172.16.10.1 255.255.255.0
+
+! NAT agar server DMZ dapat diakses publik
+object network WEB-SERVER
+ host 172.16.10.10
+ nat (dmz,outside) static 203.0.113.10
+
+! ACL: hanya izinkan HTTP/HTTPS ke DMZ
+access-list OUTSIDE_IN permit tcp any host 203.0.113.10 eq 80
+access-list OUTSIDE_IN permit tcp any host 203.0.113.10 eq 443
+access-group OUTSIDE_IN in interface outside
+    </code></pre>
+    
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan firewall dengan tiga zone (Inside, Outside, DMZ) untuk kontrol akses granular.</li>
+      <li>Hanya buka port yang benar-benar diperlukan di DMZ.</li>
+      <li>Selalu lakukan patching rutin pada server di DMZ karena terekspos internet.</li>
+      <li>Implementasikan IDS/IPS untuk memonitor lalu lintas mencurigakan.</li>
+    </ul>
+
+    <hr class="note-divider" />
+
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => {
+        img.classList.toggle('expanded');
+      });
+    });
+  </script>
+</body>
+</html>

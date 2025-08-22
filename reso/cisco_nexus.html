@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cisco Nexus Switch</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco Nexus Switch</h2>
+    <p class="note-paragraph">
+      Cisco Nexus adalah seri switch data center kelas enterprise yang dirancang untuk kinerja tinggi,
+      skalabilitas, dan fitur jaringan modern. Switch ini banyak digunakan pada lingkungan cloud, virtualisasi,
+      dan pusat data berskala besar. Nexus mendukung fitur-fitur canggih seperti VXLAN, segmentasi jaringan,
+      dan automasi dengan NX-OS maupun ACI (Application Centric Infrastructure).
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama Cisco Nexus</h3>
+    <ul class="note-list">
+      <li>Menyediakan switching berkecepatan tinggi (10/25/40/100/400G) untuk pusat data.</li>
+      <li>Mendukung <strong>virtualisasi jaringan</strong> dengan VXLAN EVPN.</li>
+      <li>Integrasi dengan Cisco ACI untuk automasi berbasis policy.</li>
+      <li>Memberikan <strong>high availability</strong> dengan vPC (Virtual Port Channel).</li>
+      <li>Memfasilitasi segmentasi jaringan untuk keamanan tenant.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Fitur Utama Cisco Nexus</h3>
+    <ol class="note-list">
+      <li><strong>NX-OS</strong> – sistem operasi modular yang digunakan pada Nexus switch.</li>
+      <li><strong>vPC (Virtual Port Channel)</strong> – memungkinkan dua switch berfungsi sebagai satu logical switch.</li>
+      <li><strong>VXLAN EVPN</strong> – mendukung overlay jaringan untuk multi-tenant data center.</li>
+      <li><strong>Fabric Extender (FEX)</strong> – memperluas port switch dengan arsitektur fabric.</li>
+      <li><strong>QoS & Security</strong> – mendukung segmentasi, ACL, dan policy berbasis aplikasi.</li>
+    </ol>
+
+    <h3 class="note-subtitle">Kelebihan Cisco Nexus</h3>
+    <ul class="note-list">
+      <li>Kinerja tinggi dengan latensi rendah.</li>
+      <li>Mendukung teknologi data center modern (VXLAN, EVPN, ACI).</li>
+      <li>Skalabilitas besar untuk lingkungan cloud dan virtualisasi.</li>
+      <li>Dukungan penuh untuk automasi (NX-API, Ansible, Python).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan Cisco Nexus</h3>
+    <ul class="note-list">
+      <li>Biaya perangkat relatif tinggi.</li>
+      <li>Membutuhkan keahlian khusus dalam konfigurasi NX-OS dan ACI.</li>
+      <li>Beberapa fitur premium memerlukan lisensi tambahan.</li>
+    </ul>
+
+    <img src="img/nexus1.png" alt="Diagram Cisco Nexus" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konfigurasi Dasar Cisco Nexus</p>
+    <pre class="note-codeblock"><code>
+! Mengaktifkan fitur yang dibutuhkan
+feature interface-vlan
+feature vpc
+feature lacp
+
+! Konfigurasi VLAN
+vlan 10
+ name PROD
+vlan 20
+ name DEV
+
+! Konfigurasi interface VLAN
+interface vlan 10
+ ip address 192.168.10.1/24
+
+interface vlan 20
+ ip address 192.168.20.1/24
+
+! Konfigurasi vPC domain
+vpc domain 1
+ peer-keepalive destination 192.168.100.2 source 192.168.100.1
+ role priority 1
+
+! Konfigurasi Port-Channel dengan vPC
+interface Ethernet1/1
+ channel-group 10 mode active
+
+interface port-channel10
+ switchport mode trunk
+ vpc 10
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan <strong>vPC</strong> untuk redundancy dan load balancing antar switch.</li>
+      <li>Manfaatkan <strong>VXLAN EVPN</strong> untuk mendukung jaringan multi-tenant.</li>
+      <li>Integrasikan dengan Cisco ACI jika membutuhkan automasi berbasis policy.</li>
+      <li>Selalu update NX-OS untuk patch keamanan dan fitur terbaru.</li>
+    </ul>
+
+    <hr class="note-divider" />
+
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => {
+        img.classList.toggle('expanded');
+      });
+    });
+  </script>
+</body>
+</html>

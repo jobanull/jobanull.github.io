@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Juniper Networks</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Juniper Networks</h2>
+    <p class="note-paragraph">
+      Juniper Networks adalah perusahaan teknologi yang berfokus pada pengembangan produk jaringan
+      seperti router, switch, firewall, dan solusi keamanan. Produk Juniper banyak digunakan pada
+      penyedia layanan internet (ISP), perusahaan besar, dan data center karena performa tinggi,
+      skalabilitas, serta sistem operasi jaringan andal yang mereka miliki, yaitu <strong>Junos OS</strong>.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama Produk Juniper</h3>
+    <ul class="note-list">
+      <li><strong>Router Seri MX</strong> – digunakan untuk core, edge, dan layanan IP/MPLS.</li>
+      <li><strong>Switch Seri EX & QFX</strong> – digunakan untuk enterprise LAN dan data center.</li>
+      <li><strong>Firewall SRX</strong> – solusi keamanan jaringan dengan fitur NGFW dan IPS.</li>
+      <li><strong>Mist AI</strong> – solusi berbasis kecerdasan buatan untuk manajemen jaringan nirkabel.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Juniper</h3>
+    <ol class="note-list">
+      <li><strong>Junos OS</strong> – sistem operasi tunggal yang konsisten di semua perangkat Juniper.</li>
+      <li><strong>Reliabilitas Tinggi</strong> – cocok untuk backbone ISP dan jaringan skala besar.</li>
+      <li><strong>Automasi</strong> – mendukung NETCONF, REST API, dan Python untuk manajemen otomatis.</li>
+      <li><strong>Keamanan</strong> – integrasi firewall, enkripsi, dan threat intelligence.</li>
+    </ol>
+
+    <h3 class="note-subtitle">Kelebihan Juniper</h3>
+    <ul class="note-list">
+      <li>Kinerja tinggi dan stabil di jaringan berskala besar.</li>
+      <li>Junos OS memiliki CLI yang konsisten dan mudah dipelajari.</li>
+      <li>Dukungan kuat untuk protokol service provider seperti BGP, MPLS, IS-IS.</li>
+      <li>Mendukung automasi modern untuk DevOps dan NetOps.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan Juniper</h3>
+    <ul class="note-list">
+      <li>Harga perangkat relatif mahal.</li>
+      <li>Komunitas pengguna lebih kecil dibanding Cisco.</li>
+      <li>Memerlukan keahlian khusus pada Junos OS untuk implementasi awal.</li>
+    </ul>
+
+    <img src="img/juniper1.png" alt="Produk Juniper Networks" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konfigurasi Dasar di Junos OS</p>
+    <pre class="note-codeblock"><code>
+# Konfigurasi hostname dan interface
+set system host-name Router-Juniper
+set interfaces ge-0/0/0 unit 0 family inet address 192.168.1.1/24
+
+# Konfigurasi default route
+set routing-options static route 0.0.0.0/0 next-hop 192.168.1.254
+
+# Konfigurasi BGP sederhana
+set protocols bgp group ISP type external
+set protocols bgp group ISP peer-as 65001
+set protocols bgp group ISP neighbor 192.0.2.1
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Biasakan menggunakan <strong>commit confirmed</strong> untuk mencegah salah konfigurasi.</li>
+      <li>Manfaatkan fitur <strong>rollback</strong> untuk mengembalikan konfigurasi sebelumnya.</li>
+      <li>Gunakan Junos Automation (Ansible, Python, NETCONF) untuk efisiensi operasional.</li>
+      <li>Selalu update Junos OS untuk keamanan dan kestabilan.</li>
+    </ul>
+
+    <hr class="note-divider" />
+
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => {
+        img.classList.toggle('expanded');
+      });
+    });
+  </script>
+</body>
+</html>

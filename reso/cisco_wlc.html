@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cisco WLC (Wireless LAN Controller)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco WLC (Wireless LAN Controller)</h2>
+    <p class="note-paragraph">
+      Cisco WLC adalah perangkat jaringan yang berfungsi untuk mengelola, mengontrol, dan memantau Access Point (AP) 
+      secara terpusat dalam sebuah jaringan Wi-Fi. Dengan WLC, semua konfigurasi seperti SSID, VLAN, keamanan, dan QoS 
+      dapat diatur dari satu titik, sehingga memudahkan manajemen jaringan nirkabel berskala kecil hingga besar.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama Cisco WLC</h3>
+    <ul class="note-list">
+      <li><strong>Centralized Management</strong> – konfigurasi seluruh AP dari satu tempat.</li>
+      <li><strong>Access Point Control</strong> – mendukung Lightweight AP (LWAP) yang dikendalikan penuh oleh WLC.</li>
+      <li><strong>Seamless Roaming</strong> – memungkinkan perangkat berpindah antar-AP tanpa terputus koneksi.</li>
+      <li><strong>Keamanan</strong> – mendukung autentikasi (802.1X, WPA2/WPA3) serta integrasi dengan Cisco ISE.</li>
+      <li><strong>Monitoring & Troubleshooting</strong> – menyediakan dashboard untuk client, interferensi, dan kinerja Wi-Fi.</li>
+      <li><strong>Scalability</strong> – dapat mengelola dari beberapa AP hingga ribuan AP.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Komponen Utama Cisco WLC</h3>
+    <ol class="note-list">
+      <li><strong>Controller Software</strong> – pusat logika manajemen untuk semua AP.</li>
+      <li><strong>Management Interface</strong> – antarmuka untuk konfigurasi melalui GUI atau CLI.</li>
+      <li><strong>Data Plane</strong> – jalur untuk mengatur lalu lintas data dari client ke jaringan.</li>
+      <li><strong>Monitoring & Security Module</strong> – modul untuk analisis performa dan perlindungan jaringan.</li>
+    </ol>
+
+    <h3 class="note-subtitle">Kelebihan Cisco WLC</h3>
+    <ul class="note-list">
+      <li>Memudahkan manajemen AP dalam jumlah besar.</li>
+      <li>Meningkatkan keamanan jaringan nirkabel.</li>
+      <li>Mendukung mobilitas pengguna dengan roaming yang lancar.</li>
+      <li>Monitoring real-time untuk troubleshooting cepat.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan Cisco WLC</h3>
+    <ul class="note-list">
+      <li>Memerlukan investasi biaya yang tinggi.</li>
+      <li>Bergantung pada WLC sebagai single point of failure (kecuali pakai HA/SSO).</li>
+      <li>Membutuhkan SDM dengan skill khusus untuk konfigurasi dan manajemen.</li>
+    </ul>
+
+    <img src="img/wlc1.png" alt="Topologi Cisco WLC" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konfigurasi Dasar Cisco WLC (CLI)</p>
+    <pre class="note-codeblock"><code>
+# Masuk ke WLC
+(Cisco Controller) > config time ntp server 192.168.1.1 enable
+
+# Konfigurasi SSID
+(Cisco Controller) > wlan create 1 WiFi-Office WiFi-Office
+(Cisco Controller) > wlan security wpa akm psk set-key ascii 0 password123 1
+(Cisco Controller) > wlan enable 1
+
+# Assign interface ke WLAN
+(Cisco Controller) > wlan interface 1 management
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan WLC redundancy (HA/SSO) untuk memastikan ketersediaan tinggi.</li>
+      <li>Integrasikan dengan Cisco ISE untuk kontrol akses yang lebih kuat.</li>
+      <li>Rencanakan kapasitas AP sesuai jumlah user dan kebutuhan bandwidth.</li>
+      <li>Lakukan pemantauan performa Wi-Fi secara berkala melalui dashboard WLC.</li>
+    </ul>
+
+    <hr class="note-divider" />
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => {
+        img.classList.toggle('expanded');
+      });
+    });
+  </script>
+</body>
+</html>

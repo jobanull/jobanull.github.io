@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cisco ISE (Identity Services Engine)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco ISE (Identity Services Engine)</h2>
+    <p class="note-paragraph">
+      Cisco ISE adalah solusi keamanan jaringan yang berfungsi sebagai pusat otentikasi, otorisasi,
+      dan akuntansi (AAA) untuk perangkat yang terhubung ke jaringan. ISE memungkinkan administrator
+      mengontrol siapa yang boleh mengakses jaringan, perangkat apa yang digunakan, serta tingkat akses
+      yang diberikan, sehingga meningkatkan keamanan dan kepatuhan kebijakan perusahaan.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama Cisco ISE</h3>
+    <ul class="note-list">
+      <li>Melakukan <strong>otentikasi</strong> pengguna dan perangkat sebelum mengakses jaringan.</li>
+      <li>Menerapkan <strong>otorisasi</strong> berbasis kebijakan (policy-based access control).</li>
+      <li>Menyediakan <strong>akuntansi</strong> untuk mencatat aktivitas akses jaringan.</li>
+      <li>Integrasi dengan <strong>profiling</strong> perangkat IoT, BYOD, dan endpoint lain.</li>
+      <li>Integrasi dengan solusi keamanan lain seperti Cisco TrustSec, Firepower, dan Umbrella.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Komponen Utama Cisco ISE</h3>
+    <ol class="note-list">
+      <li><strong>Policy Service Node (PSN)</strong> – menangani permintaan otentikasi dan otorisasi.</li>
+      <li><strong>Administration Node</strong> – pusat manajemen dan konfigurasi kebijakan.</li>
+      <li><strong>Monitoring & Troubleshooting Node (MnT)</strong> – menyimpan log dan laporan aktivitas.</li>
+      <li><strong>Profiling Service</strong> – mengidentifikasi dan mengklasifikasikan perangkat di jaringan.</li>
+    </ol>
+
+    <h3 class="note-subtitle">Kelebihan Cisco ISE</h3>
+    <ul class="note-list">
+      <li>Meningkatkan keamanan jaringan dengan kontrol akses berbasis identitas.</li>
+      <li>Mendukung <strong>802.1X</strong> untuk autentikasi jaringan tingkat lanjut.</li>
+      <li>Dapat diintegrasikan dengan Active Directory dan LDAP.</li>
+      <li>Memberikan visibilitas penuh terhadap perangkat dan pengguna di jaringan.</li>
+      <li>Memperkuat kepatuhan terhadap standar keamanan (compliance).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan Cisco ISE</h3>
+    <ul class="note-list">
+      <li>Kompleksitas implementasi cukup tinggi.</li>
+      <li>Memerlukan lisensi tambahan untuk fitur tertentu (misalnya profiling, posture).</li>
+      <li>Biaya investasi relatif mahal.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Alasan Kenapa Harus Pakai Cisco ISE</h3>
+    <ul class="note-list">
+      <li><strong>Keamanan lebih tinggi</strong> – hanya user dan perangkat sah yang bisa masuk jaringan.</li>
+      <li><strong>Kontrol akses fleksibel</strong> – bisa dibatasi berdasarkan identitas, role, atau perangkat.</li>
+      <li><strong>Visibilitas penuh</strong> – admin tahu siapa dan apa yang terhubung, termasuk status perangkat.</li>
+      <li><strong>Integrasi luas</strong> – dapat dihubungkan dengan AD/LDAP, firewall, NAC, dan perangkat Cisco lainnya.</li>
+      <li><strong>Efisiensi operasional</strong> – kebijakan dikelola terpusat, mempermudah manajemen skala besar.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <p class="note-paragraph"><strong>Tanpa Cisco ISE</strong> – semua orang yang tahu password Wi-Fi bisa langsung masuk jaringan, tamu bisa akses resource internal, admin sulit memantau siapa saja yang terhubung, dan rawan serangan dari perangkat tidak aman.</p>
+    <p class="note-paragraph"><strong>Dengan Cisco ISE</strong> – setiap user harus login sesuai identitas (misalnya akun kampus/perusahaan), tamu diarahkan ke portal guest Wi-Fi, perangkat dicek antivirus & update sebelum diizinkan, admin bisa melihat dashboard lengkap serta mengisolasi perangkat mencurigakan hanya dengan klik.</p>
+    <ul class="note-list">
+      <li><strong>Kampus</strong>: Mahasiswa hanya akses e-learning, dosen ke server akademik, tamu hanya internet.</li>
+      <li><strong>Perusahaan</strong>: Staff HRD hanya akses aplikasi HR, IT punya akses penuh, tamu diarahkan ke internet saja.</li>
+    </ul>
+
+    <img src="img/ise1.png" alt="Diagram Cisco ISE" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konfigurasi Radius pada Cisco ISE</p>
+    <pre class="note-codeblock"><code>
+# Konfigurasi pada Cisco Switch untuk integrasi dengan ISE
+
+radius server ISE
+ address ipv4 192.168.10.10 auth-port 1812 acct-port 1813
+ key cisco123
+
+ip radius source-interface GigabitEthernet0/1
+
+# Aktifkan AAA
+aaa new-model
+aaa authentication dot1x default group radius
+aaa authorization network default group radius
+aaa accounting update periodic 5
+aaa accounting dot1x default start-stop group radius
+
+# Konfigurasi 802.1X di interface
+interface GigabitEthernet0/2
+ switchport mode access
+ authentication port-control auto
+ mab
+ dot1x pae authenticator
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan integrasi dengan Active Directory untuk mempermudah manajemen user.</li>
+      <li>Aktifkan profiling agar perangkat non-user (printer, IP phone, IoT) tetap terkelola.</li>
+      <li>Terapkan segmentasi dengan Cisco TrustSec untuk keamanan lebih granular.</li>
+      <li>Lakukan monitoring pada MnT node untuk audit keamanan jaringan.</li>
+    </ul>
+
+    <hr class="note-divider" />
+
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => {
+        img.classList.toggle('expanded');
+      });
+    });
+  </script>
+</body>
+</html>
