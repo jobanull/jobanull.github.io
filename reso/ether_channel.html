@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>EtherChannel (Link Aggregation)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">EtherChannel (Link Aggregation)</h2>
+    <p class="note-paragraph">
+      <strong>EtherChannel</strong> adalah teknologi yang digunakan untuk menggabungkan beberapa link fisik 
+      menjadi satu link logis dengan tujuan meningkatkan bandwidth, menyediakan redundansi, dan load balancing. 
+      EtherChannel banyak digunakan pada switch Cisco dan perangkat jaringan lainnya untuk efisiensi dan ketahanan koneksi.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama EtherChannel</h3>
+    <ul class="note-list">
+      <li><strong>Peningkatan Bandwidth</strong> – Menggabungkan beberapa link menjadi satu jalur logis.</li>
+      <li><strong>Load Balancing</strong> – Distribusi lalu lintas antar-link fisik.</li>
+      <li><strong>Redundansi</strong> – Jika salah satu link gagal, trafik otomatis dialihkan ke link lain.</li>
+      <li><strong>Manajemen Lebih Mudah</strong> – Beberapa link dikonfigurasi sebagai satu interface logis (Port-Channel).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis EtherChannel</h3>
+    <ul class="note-list">
+      <li><strong>Static (On)</strong> – Konfigurasi manual tanpa protokol negosiasi.</li>
+      <li><strong>PAgP (Port Aggregation Protocol)</strong> – Protokol proprietary Cisco.</li>
+      <li><strong>LACP (Link Aggregation Control Protocol)</strong> – Standar IEEE 802.3ad, interoperable dengan vendor lain.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan EtherChannel</h3>
+    <ul class="note-list">
+      <li>Meningkatkan throughput dengan menggabungkan beberapa link.</li>
+      <li>Menyediakan fault-tolerance dan failover otomatis.</li>
+      <li>Mengurangi kebutuhan spanning-tree memblokir port, karena link digabung.</li>
+      <li>Menyederhanakan administrasi jaringan (satu port-channel menggantikan banyak interface).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan EtherChannel</h3>
+    <ul class="note-list">
+      <li>Memerlukan perangkat dengan dukungan EtherChannel/LACP.</li>
+      <li>Link fisik harus memiliki kecepatan dan konfigurasi yang sama.</li>
+      <li>Salah konfigurasi dapat menyebabkan loop jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+      <li>Tujuan: Mengonfigurasi <strong>EtherChannel</strong> pada Cisco Switch untuk meningkatkan bandwidth 
+      antar switch core dan distribusi.</li>
+      <li>Cisco: Menggabungkan beberapa port FastEthernet/GigabitEthernet menjadi satu port-channel dengan LACP atau PAgP.</li>
+    </ul>
+
+    <img src="img/etherchannel1.png" alt="Diagram jaringan EtherChannel" class="note-image" />
+
+    <p class="note-subtitle">Cisco (LACP)</p>
+    <pre class="note-codeblock"><code>
+interface range gigabitEthernet 0/1 - 2
+ channel-group 1 mode active   ! mode active = LACP
+ switchport mode trunk
+!
+interface port-channel 1
+ switchport mode trunk
+    </code></pre>
+
+    <p class="note-subtitle">Cisco (PAgP)</p>
+    <pre class="note-codeblock"><code>
+interface range fastEthernet 0/3 - 4
+ channel-group 2 mode desirable   ! mode desirable = PAgP
+ switchport mode access
+!
+interface port-channel 2
+ switchport mode access
+ switchport access vlan 20
+    </code></pre>
+
+    <p class="note-subtitle">Cisco (Static)</p>
+    <pre class="note-codeblock"><code>
+interface range gigabitEthernet 0/5 - 6
+ channel-group 3 mode on   ! tanpa protokol, langsung static
+ switchport mode trunk
+!
+interface port-channel 3
+ switchport mode trunk
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Pastikan konfigurasi di kedua sisi EtherChannel sama (speed, duplex, VLAN, mode).</li>
+      <li>Gunakan <strong>LACP</strong> untuk interoperabilitas antar vendor.</li>
+      <li>Gunakan perintah <code>show etherchannel summary</code> untuk troubleshooting.</li>
+      <li>Hindari mencampur port dengan jenis/kecepatan berbeda dalam satu channel-group.</li>
+    </ul>
+
+    <hr class="note-divider" />
+
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => {
+        img.classList.toggle('expanded');
+      });
+    });
+  </script>
+</body>
+</html>
