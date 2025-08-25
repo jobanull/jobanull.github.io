@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <title>Cisco Mobility Express</title>
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+    <main class="note-main">
+        <h2 class="note-title text-center">Cisco Mobility Express</h2>
+        <p class="note-paragraph">
+            <strong>Cisco Mobility Express</strong> adalah solusi jaringan nirkabel yang dirancang khusus untuk bisnis kecil dan menengah. Berbeda dengan arsitektur nirkabel tradisional yang memerlukan pengendali nirkabel (wireless controller) terpisah, Mobility Express mengintegrasikan fungsi pengendali langsung ke dalam salah satu titik akses (Access Point/AP) Cisco. Hal ini menyederhanakan penyebaran dan manajemen jaringan nirkabel, menjadikannya pilihan yang ideal untuk lingkungan yang tidak memiliki tim IT khusus.
+        </p>
+
+        <h3 class="note-subtitle">Fungsi Utama Cisco Mobility Express</h3>
+        <ul class="note-list">
+            <li><strong>Pengendali Terintegrasi</strong> – Salah satu AP berperan sebagai "master" yang mengelola hingga 100 AP lain dan 2000 klien.</li>
+            <li><strong>Konfigurasi yang Disederhanakan</strong> – Pengaturan dapat dilakukan melalui antarmuka pengguna grafis (GUI) yang intuitif atau aplikasi seluler.</li>
+            <li><strong>Manajemen Terpusat</strong> – Administrator dapat mengelola semua AP dan klien dari satu dasbor tunggal.</li>
+            <li><strong>Redundansi</strong> – Jika AP "master" gagal, AP lain secara otomatis mengambil alih peran pengendali.</li>
+        </ul>
+
+        <h3 class="note-subtitle">Komponen dan Cara Kerja</h3>
+        <ul class="note-list">
+            <li><strong>Master AP</strong> – AP pertama yang dikonfigurasi berfungsi sebagai pengendali jaringan.</li>
+            <li><strong>Subordinat AP</strong> – AP lain dalam jaringan yang terhubung dan dikelola oleh Master AP.</li>
+            <li><strong>GUI Web</strong> – Antarmuka berbasis browser untuk konfigurasi, pemantauan, dan pemecahan masalah.</li>
+            <li><strong>Cisco Wireless Mobile App</strong> – Aplikasi seluler untuk konfigurasi dasar dan pemantauan dari smartphone.</li>
+        </ul>
+
+        <h3 class="note-subtitle">Kelebihan Cisco Mobility Express</h3>
+        <ul class="note-list">
+            <li>Menghemat biaya karena tidak memerlukan perangkat pengendali nirkabel terpisah.</li>
+            <li>Penyebaran yang cepat dan mudah, cocok untuk bisnis kecil.</li>
+            <li>Manajemen yang disederhanakan melalui antarmuka web dan aplikasi seluler.</li>
+            <li>Menyediakan fitur keamanan dan kinerja yang solid, seperti autentikasi WPA2/WPA3 dan roaming antar AP.</li>
+        </ul>
+
+        <h3 class="note-subtitle">Kekurangan Cisco Mobility Express</h3>
+        <ul class="note-list">
+            <li>Skalabilitas terbatas (maksimum 100 AP).</li>
+            <li>Fitur yang lebih sedikit dibandingkan dengan solusi pengendali nirkabel enterprise (misalnya, tidak mendukung fitur AVC atau ISE).</li>
+            <li>Kinerja dan fungsionalitas bergantung pada model AP yang digunakan.</li>
+            <li>Dapat mengalami penurunan performa jika AP master menjalankan banyak fungsi secara bersamaan.</li>
+        </ul>
+
+        <h3 class="note-subtitle">CONTOH KASUS</h3>
+        <ul class="note-list">
+            <li>Tujuan: Menyediakan jaringan Wi-Fi yang aman dan handal di kantor cabang kecil menggunakan **Cisco Mobility Express**.</li>
+            <li>Cisco Mobility Express: Menggunakan satu AP sebagai pengendali dan menambahkan beberapa AP lain yang dikelola secara otomatis, menyediakan cakupan Wi-Fi di seluruh area kantor tanpa perlu infrastruktur yang rumit.</li>
+        </ul>
+
+        <img src="img/cisco-mobility-express-diagram.png" alt="Diagram Jaringan Cisco Mobility Express" class="note-image" />
+
+        <p class="note-subtitle">Contoh Konfigurasi Dasar (Web GUI)</p>
+        <pre class="note-codeblock"><code>
+// Catatan: Konfigurasi utama dilakukan melalui GUI, bukan CLI.
+// Ini adalah konsep langkah-langkahnya.
+
+// 1. **Setup Awal:**
+//    Hubungkan AP ke power dan switch.
+//    Akses alamat IP default AP (misal: 192.168.1.1 atau 192.168.0.1).
+//    Jalankan wizard konfigurasi awal.
+
+// 2. **Wizard Konfigurasi:**
+//    Pilih "Mobility Express"
+//    Atur nama SSID, password, dan jenis keamanan.
+//    Konfigurasi pengaturan IP jaringan (statis atau DHCP).
+//    Tunggu hingga AP lain bergabung secara otomatis.
+
+// 3. **Penambahan AP Lain:**
+//    Hubungkan AP baru ke jaringan.
+//    AP baru secara otomatis akan menemukan dan bergabung dengan Master AP.
+        </code></pre>
+        
+        <h3 class="note-subtitle">Tips Praktis</h3>
+        <ul class="note-list">
+            <li>Pastikan semua AP memiliki versi firmware yang sama untuk menghindari masalah kompatibilitas.</li>
+            <li>Gunakan aplikasi Cisco Wireless Mobile App untuk konfigurasi yang lebih cepat dan mudah.</li>
+            <li>Periksa status AP dan klien secara berkala dari dasbor web untuk memantau kinerja.</li>
+            <li>Jika Anda membutuhkan skalabilitas atau fitur yang lebih canggih di masa depan, pertimbangkan untuk beralih ke solusi WLC (Wireless LAN Controller) enterprise.</li>
+        </ul>
+
+        <hr class="note-divider" />
+
+    </main>
+
+    <script>
+        document.querySelectorAll('.note-image').forEach(img => {
+            img.addEventListener('click', () => {
+                img.classList.toggle('expanded');
+            });
+        });
+    </script>
+</body>
+</html>

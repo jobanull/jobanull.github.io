@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <title>Cisco UCS (Unified Computing System)</title>
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+    <main class="note-main">
+        <h2 class="note-title text-center">Cisco UCS (Unified Computing System)</h2>
+        <p class="note-paragraph">
+            <strong>Cisco Unified Computing System (UCS)</strong> adalah arsitektur pusat data terintegrasi yang menggabungkan komputasi, jaringan, penyimpanan, dan virtualisasi menjadi satu sistem yang kohesif. Berbeda dari server tradisional, UCS mengelola semua komponen fisik dan virtual sebagai satu entitas terpadu, yang dikontrol melalui perangkat lunak. Tujuannya adalah untuk menyederhanakan manajemen, meningkatkan efisiensi, dan mempercepat deployment aplikasi di lingkungan pusat data modern.
+        </p>
+
+        <h3 class="note-subtitle">Fungsi Utama Cisco UCS</h3>
+        <ul class="note-list">
+            <li><strong>Manajemen Terpadu</strong> – Mengelola server, jaringan, dan penyimpanan dari satu konsol (UCS Manager).</li>
+            <li><strong>Otomatisasi Berbasis Kebijakan</strong> – Menggunakan profil layanan (service profiles) untuk mengotomatisasi konfigurasi perangkat keras.</li>
+            <li><strong>Skalabilitas Fleksibel</strong> – Menambahkan server baru secara cepat tanpa konfigurasi manual.</li>
+            <li><strong>Penyederhanaan Jaringan</strong> – Mengurangi jumlah kabel dan adaptor jaringan, menyederhanakan topologi jaringan.</li>
+        </ul>
+
+        <h3 class="note-subtitle">Komponen Kunci Cisco UCS</h3>
+        <ul class="note-list">
+            <li><strong>UCS Manager</strong> – Perangkat lunak yang mengelola seluruh sistem UCS, baik blade maupun rack server.</li>
+            <li><strong>Fabric Interconnects</strong> – Modul sentral yang menghubungkan server dan mengonsolidasi konektivitas jaringan dan penyimpanan.</li>
+            <li><strong>UCS Blade Servers (B-Series)</strong> – Server modular dan ringkas yang diletakkan di dalam sasis.</li>
+            <li><strong>UCS Rack Servers (C-Series)</strong> – Server standar yang dirancang untuk instalasi di rak.</li>
+        </ul>
+
+        <h3 class="note-subtitle">Kelebihan Cisco UCS</h3>
+        <ul class="note-list">
+            <li>Menghemat waktu dan biaya operasional dengan manajemen yang disederhanakan.</li>
+            <li>Mengurangi kompleksitas kabel dan perangkat jaringan di pusat data.</li>
+            <li>Memungkinkan provisi server baru dalam hitungan menit.</li>
+            <li>Meningkatkan konsistensi dan kepatuhan dengan konfigurasi berbasis profil.</li>
+        </ul>
+
+        <h3 class="note-subtitle">Kekurangan Cisco UCS</h3>
+        <ul class="note-list">
+            <li>Investasi awal yang tinggi, terutama untuk klaster Fabric Interconnects.</li>
+            <li>Memerlukan pelatihan khusus untuk konfigurasi dan manajemen.</li>
+            <li>Kompleksitas awal dalam memahami konsep Service Profiles dan kebijakan lainnya.</li>
+            <li>Ketergantungan pada ekosistem Cisco untuk fungsi penuh.</li>
+        </ul>
+
+        <h3 class="note-subtitle">CONTOH KASUS</h3>
+        <ul class="note-list">
+            <li>Tujuan: Menyebarkan server baru untuk lingkungan virtualisasi di pusat data.</li>
+            <li>Cisco UCS: Menggunakan "Service Profile" yang telah dibuat sebelumnya, administrator cukup menugaskannya ke server blade yang kosong. UCS Manager secara otomatis mengonfigurasi semua pengaturan (identitas, BIOS, firmware, jaringan, dll.), memungkinkan deployment cepat tanpa intervensi manual.</li>
+        </ul>
+
+        <img src="img/cisco-ucs-diagram.png" alt="Diagram Cisco UCS" class="note-image" />
+
+        <p class="note-subtitle">Contoh Konsep Konfigurasi (GUI-Based)</p>
+        <pre class="note-codeblock"><code>
+// Catatan: UCS dikelola melalui antarmuka web UCS Manager.
+// Berikut adalah contoh alur kerja dasar.
+
+// 1. **Buat Profil Layanan (Service Profile):**
+//    Tentukan kebijakan server, seperti identitas WWN dan MAC Address.
+//    Tentukan kebijakan boot order, firmware, dan konfigurasi jaringan.
+
+// 2. **Hubungkan Profil ke Server:**
+//    Terapkan Service Profile ke server blade fisik yang tersedia.
+//    UCS Manager akan secara otomatis mengkonfigurasi server
+//    sesuai dengan kebijakan yang telah ditentukan.
+
+// 3. **Migrasi Profil:**
+//    Pindahkan Service Profile dari satu server fisik ke server fisik lain.
+//    Server baru akan mengambil identitas dan konfigurasi server sebelumnya
+//    tanpa perlu konfigurasi ulang.
+        </code></pre>
+
+        <h3 class="note-subtitle">Tips Praktis</h3>
+        <ul class="note-list">
+            <li>Manfaatkan **Service Profiles** secara maksimal untuk standarisasi dan percepatan deployment.</li>
+            <li>Gunakan Cisco Intersight untuk manajemen UCS berbasis cloud yang lebih modern.</li>
+            <li>Rencanakan dengan baik skema identitas (WWN, MAC, UUID) Anda untuk menghindari konflik.</li>
+            <li>Pelajari konsep **Stateless Computing** yang merupakan inti dari arsitektur UCS.</li>
+        </ul>
+
+        <hr class="note-divider" />
+
+    </main>
+
+    <script>
+        document.querySelectorAll('.note-image').forEach(img => {
+            img.addEventListener('click', () => {
+                img.classList.toggle('expanded');
+            });
+        });
+    </script>
+</body>
+</html>

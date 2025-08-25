@@ -1,99 +1,98 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <title>Cisco ACI (Application Centric Infrastructure)</title>
-  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8" />
+    <title>Cisco Catalyst Series</title>
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="note-container">
 
-  <main class="note-main">
-    <h2 class="note-title text-center">Cisco ACI (Application Centric Infrastructure)</h2>
-    <p class="note-paragraph">
-      Cisco ACI adalah arsitektur jaringan berbasis <em>policy-driven</em> yang dikembangkan untuk pusat data modern.
-      ACI mengintegrasikan perangkat keras, perangkat lunak, dan kebijakan jaringan agar dapat dikelola secara
-      terpusat melalui <strong>APIC (Application Policy Infrastructure Controller)</strong>. Dengan pendekatan ini,
-      administrator dapat mengelola aplikasi, keamanan, dan trafik jaringan dengan lebih cepat, konsisten, dan skalabel.
-    </p>
+    <main class="note-main">
+        <h2 class="note-title text-center">Cisco Catalyst Series</h2>
+        <p class="note-paragraph">
+            <strong>Cisco Catalyst Series</strong> adalah lini produk switch jaringan yang dirancang untuk lingkungan perusahaan dan pusat data. Dikenal karena keandalan, skalabilitas, dan fitur-fitur canggihnya, switch Catalyst menyediakan konektivitas yang kuat, keamanan terintegrasi, dan otomatisasi jaringan. Produk ini merupakan tulang punggung dari banyak infrastruktur jaringan modern.
+        </p>
 
-    <h3 class="note-subtitle">Fungsi Utama Cisco ACI</h3>
-    <ul class="note-list">
-      <li>Menyediakan <strong>automasi jaringan</strong> berbasis kebijakan (policy-based automation).</li>
-      <li>Memisahkan <strong>aplikasi</strong> dari kompleksitas infrastruktur jaringan.</li>
-      <li>Mendukung <strong>multi-tenant</strong> dengan keamanan dan isolasi yang kuat.</li>
-      <li>Integrasi dengan sistem orkestrasi dan cloud seperti VMware, OpenStack, dan Kubernetes.</li>
-    </ul>
+        <h3 class="note-subtitle">Fungsi Utama Cisco Catalyst</h3>
+        <ul class="note-list">
+            <li><strong>Switching dan Routing</strong> – Mengarahkan lalu lintas data dalam jaringan lokal (LAN) dan antar-jaringan.</li>
+            <li><strong>Keamanan Jaringan</strong> – Mendukung fitur keamanan seperti autentikasi port (802.1X) dan daftar kontrol akses (ACL).</li>
+            <li><strong>Quality of Service (QoS)</strong> – Memprioritaskan lalu lintas data penting seperti suara dan video.</li>
+            <li><strong>Redundansi dan Ketersediaan Tinggi</strong> – Mendukung teknologi seperti VSS (Virtual Switching System) dan HSRP (Hot Standby Router Protocol).</li>
+        </ul>
 
-    <h3 class="note-subtitle">Komponen Utama Cisco ACI</h3>
-    <ol class="note-list">
-      <li><strong>APIC (Application Policy Infrastructure Controller)</strong> – pusat kontrol dan manajemen kebijakan.</li>
-      <li><strong>Leaf Switch</strong> – switch yang terhubung langsung ke server/aplikasi.</li>
-      <li><strong>Spine Switch</strong> – backbone yang menghubungkan seluruh leaf switch.</li>
-      <li><strong>Policy Model</strong> – aturan yang mendefinisikan bagaimana aplikasi berkomunikasi.</li>
-    </ol>
+        <h3 class="note-subtitle">Jenis-jenis Cisco Catalyst</h3>
+        <ul class="note-list">
+            <li><strong>Cisco Catalyst 2960 Series</strong> – Switch Layer 2 yang populer untuk jaringan akses.</li>
+            <li><strong>Cisco Catalyst 3850 Series</strong> – Switch multigigabit dengan fitur Layer 3, ideal untuk jaringan terkonvergensi.</li>
+            <li><strong>Cisco Catalyst 9000 Series</strong> – Lini produk terbaru yang dirancang untuk era digital, mendukung Cisco DNA Center dan keamanan berbasis AI.</li>
+        </ul>
 
-    <h3 class="note-subtitle">Kelebihan Cisco ACI</h3>
-    <ul class="note-list">
-      <li>Manajemen jaringan terpusat melalui APIC.</li>
-      <li>Mempercepat deployment aplikasi dengan template kebijakan.</li>
-      <li>Memiliki skalabilitas tinggi untuk kebutuhan data center besar.</li>
-      <li>Meningkatkan keamanan melalui isolasi tenant dan microsegmentation.</li>
-    </ul>
+        <h3 class="note-subtitle">Kelebihan Cisco Catalyst</h3>
+        <ul class="note-list">
+            <li>Kinerja dan keandalan tinggi untuk lingkungan yang menuntut.</li>
+            <li>Skalabilitas yang baik, memungkinkan pertumbuhan jaringan.</li>
+            <li>Fitur keamanan terintegrasi untuk perlindungan menyeluruh.</li>
+            <li>Manajemen yang disederhanakan melalui Cisco DNA Center dan otomatisasi.</li>
+        </ul>
 
-    <h3 class="note-subtitle">Kekurangan Cisco ACI</h3>
-    <ul class="note-list">
-      <li>Biaya implementasi relatif tinggi.</li>
-      <li>Membutuhkan pembelajaran khusus karena arsitektur berbeda dengan jaringan tradisional.</li>
-      <li>Ketergantungan pada ekosistem Cisco (vendor lock-in).</li>
-    </ul>
+        <h3 class="note-subtitle">Kekurangan Cisco Catalyst</h3>
+        <ul class="note-list">
+            <li>Harga yang relatif mahal dibandingkan produk sejenis dari vendor lain.</li>
+            <li>Konfigurasi awal yang kompleks, memerlukan pengetahuan teknis mendalam.</li>
+            <li>Beberapa fitur lanjutan memerlukan lisensi perangkat lunak tambahan.</li>
+            <li>Konsumsi daya yang tinggi pada beberapa model high-end.</li>
+        </ul>
 
-    <h3 class="note-subtitle">CONTOH KASUS</h3>
-    <ul class="note-list">
-      <li>Tujuan: Membangun <strong>data center</strong> berbasis Cisco ACI dengan multi-tenant environment.</li>
-      <li>Tenant A: Aplikasi keuangan dengan isolasi penuh dari tenant lain.</li>
-      <li>Tenant B: Aplikasi e-commerce dengan kebutuhan skala dinamis.</li>
-      <li>Tenant C: Lingkungan development yang diatur dengan kebijakan lebih fleksibel.</li>
-    </ul>
+        <h3 class="note-subtitle">CONTOH KASUS</h3>
+        <ul class="note-list">
+            <li>Tujuan: Mengonfigurasi <strong>Cisco Catalyst</strong> untuk menyediakan konektivitas bagi pengguna dan server dalam sebuah gedung.</li>
+            <li>Cisco Catalyst: Menghubungkan semua perangkat ke jaringan, mengelola VLAN untuk memisahkan departemen, dan menerapkan ACL untuk kontrol akses.</li>
+        </ul>
 
-    <img src="img/aci1.png" alt="Diagram Cisco ACI" class="note-image" />
+        <img src="img/cisco-catalyst-diagram.png" alt="Diagram jaringan Cisco Catalyst" class="note-image" />
 
-    <p class="note-subtitle">Contoh Konfigurasi Tenant & EPG (via APIC CLI)</p>
-    <pre class="note-codeblock"><code>
-# Membuat Tenant baru
-apic1(config)# tenant Finance_Tenant
+        <p class="note-subtitle">Contoh Konfigurasi VLAN (CLI)</p>
+        <pre class="note-codeblock"><code>
+configure terminal
+!
+vlan 10
+ name Sales
+vlan 20
+ name Marketing
+!
+interface gigabitethernet 0/1
+ switchport mode access
+ switchport access vlan 10
+!
+interface gigabitethernet 0/2
+ switchport mode access
+ switchport access vlan 20
+!
+interface gigabitethernet 0/24
+ description Link to Core Switch
+ switchport mode trunk
+        </code></pre>
+        
+        <h3 class="note-subtitle">Tips Praktis</h3>
+        <ul class="note-list">
+            <li>Gunakan <strong>VLAN</strong> untuk memisahkan jaringan menjadi segmen-segmen logis yang lebih kecil.</li>
+            <li>Selalu gunakan <strong>mode trunk</strong> pada port yang menghubungkan switch satu sama lain.</li>
+            <li>Gunakan <code>show vlan brief</code> untuk memverifikasi konfigurasi VLAN.</li>
+            <li>Pastikan firmware switch selalu diperbarui untuk mendapatkan fitur dan perbaikan keamanan terbaru.</li>
+        </ul>
 
-# Membuat Application Profile
-apic1(config-tenant)# app-profile Finance_App
+        <hr class="note-divider" />
 
-# Membuat Endpoint Group (EPG)
-apic1(config-app-profile)# epg Web_Server
+    </main>
 
-# Menghubungkan EPG ke Bridge Domain
-apic1(config-epg)# bridge-domain Finance_BD
-
-# Mengatur kontrak antar EPG
-apic1(config-epg)# contract Allow_HTTP
-    </code></pre>
-
-    <h3 class="note-subtitle">Tips Praktis</h3>
-    <ul class="note-list">
-      <li>Gunakan <strong>tenant</strong> untuk memisahkan aplikasi atau departemen agar lebih aman.</li>
-      <li>Dokumentasikan kebijakan (policy) agar mudah dikelola dan diaudit.</li>
-      <li>Integrasikan ACI dengan orkestrator (misalnya VMware vCenter atau Kubernetes) untuk automasi penuh.</li>
-      <li>Monitor performa aplikasi, bukan hanya infrastruktur.</li>
-    </ul>
-
-    <hr class="note-divider" />
-
-  </main>
-
-  <script>
-    document.querySelectorAll('.note-image').forEach(img => {
-      img.addEventListener('click', () => {
-        img.classList.toggle('expanded');
-      });
-    });
-  </script>
+    <script>
+        document.querySelectorAll('.note-image').forEach(img => {
+            img.addEventListener('click', () => {
+                img.classList.toggle('expanded');
+            });
+        });
+    </script>
 </body>
 </html>

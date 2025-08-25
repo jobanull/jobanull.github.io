@@ -1,93 +1,94 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <title>Cisco CIMC (Cisco Integrated Management Controller)</title>
-  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8" />
+    <title>Cisco CUCM (Cisco Unified Communications Manager)</title>
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="note-container">
 
-  <main class="note-main">
-    <h2 class="note-title text-center">Cisco CIMC (Cisco Integrated Management Controller)</h2>
-    <p class="note-paragraph">
-      Cisco CIMC adalah antarmuka manajemen berbasis web dan command-line yang terintegrasi pada server Cisco UCS C-Series.
-      Dengan CIMC, administrator dapat melakukan pemantauan, konfigurasi, dan pengelolaan server secara remote tanpa perlu
-      akses fisik langsung. CIMC berfungsi seperti KVM over IP, sehingga mendukung troubleshooting dan manajemen server
-      dari jarak jauh.
-    </p>
+    <main class="note-main">
+        <h2 class="note-title text-center">Cisco CUCM (Cisco Unified Communications Manager)</h2>
+        <p class="note-paragraph">
+            <strong>Cisco Unified Communications Manager (CUCM)</strong> adalah jantung dari solusi IP Telephony dan komunikasi terpadu Cisco. CUCM menyediakan kontrol panggilan, pensinyalan, dan kemampuan konektivitas untuk berbagai perangkat, seperti telepon IP, softphone, dan perangkat kolaborasi video. CUCM memungkinkan perusahaan untuk mengintegrasikan suara, video, data, dan mobilitas ke dalam satu platform yang efisien dan mudah dikelola.
+        </p>
 
-    <h3 class="note-subtitle">Fungsi Utama Cisco CIMC</h3>
-    <ul class="note-list">
-      <li>Mengakses server secara remote melalui web GUI atau CLI.</li>
-      <li>Mengontrol power server (power on, shutdown, reset) dari jarak jauh.</li>
-      <li>Monitoring kesehatan hardware: CPU, RAM, disk, suhu, dan kipas.</li>
-      <li>Mendukung konfigurasi BIOS dan firmware update tanpa hadir langsung di lokasi.</li>
-      <li>Memberikan akses virtual media untuk instalasi sistem operasi.</li>
-    </ul>
+        <h3 class="note-subtitle">Fungsi Utama Cisco CUCM</h3>
+        <ul class="note-list">
+            <li><strong>Kontrol Panggilan</strong> – Mengatur dan mengelola semua panggilan telepon dalam jaringan.</li>
+            <li><strong>Integrasi Telepon IP</strong> – Menyediakan pendaftaran dan manajemen untuk telepon IP, gateway, dan perangkat lainnya.</li>
+            <li><strong>Fitur Kolaborasi Lanjutan</strong> – Mendukung fitur seperti pesan suara, konferensi, dan kehadiran (presence).</li>
+            <li><strong>Keamanan dan Redundansi</strong> – Menyediakan fitur keamanan untuk panggilan dan mendukung redundansi untuk ketersediaan tinggi.</li>
+        </ul>
 
-    <h3 class="note-subtitle">Komponen Utama Cisco CIMC</h3>
-    <ol class="note-list">
-      <li><strong>Web GUI</strong> – antarmuka berbasis web untuk konfigurasi dan monitoring.</li>
-      <li><strong>Command-Line Interface (CLI)</strong> – akses melalui SSH untuk kontrol tingkat lanjut.</li>
-      <li><strong>Virtual KVM</strong> – memungkinkan kendali penuh server seolah-olah berada di depan perangkat.</li>
-      <li><strong>Sensor Hardware</strong> – pemantauan status kesehatan komponen server.</li>
-    </ol>
+        <h3 class="note-subtitle">Jenis-jenis Implementasi CUCM</h3>
+        <ul class="note-list">
+            <li><strong>CUCM On-Premises</strong> – Diinstal di server fisik atau virtual di lokasi perusahaan.</li>
+            <li><strong>CUCM Cloud</strong> – Ditawarkan sebagai layanan (SaaS) melalui Cisco Webex Calling, memberikan fleksibilitas dan skalabilitas.</li>
+            <li><strong>CUCM Hybrid</strong> – Kombinasi on-premises dan cloud, memungkinkan integrasi fitur dari kedua lingkungan.</li>
+        </ul>
 
-    <h3 class="note-subtitle">Kelebihan Cisco CIMC</h3>
-    <ul class="note-list">
-      <li>Mendukung remote management tanpa perlu perangkat tambahan.</li>
-      <li>Meningkatkan efisiensi troubleshooting server.</li>
-      <li>Memudahkan instalasi sistem operasi melalui virtual media.</li>
-      <li>Mengurangi kebutuhan akses fisik ke data center.</li>
-    </ul>
+        <h3 class="note-subtitle">Kelebihan Cisco CUCM</h3>
+        <ul class="note-list">
+            <li>Menyederhanakan infrastruktur dengan mengintegrasikan berbagai jenis komunikasi.</li>
+            <li>Meningkatkan produktivitas dengan fitur-fitur kolaborasi canggih.</li>
+            <li>Skalabilitas yang kuat, mampu mendukung dari kantor kecil hingga perusahaan global.</li>
+            <li>Keandalan dan ketersediaan tinggi dengan mekanisme failover dan redundansi.</li>
+        </ul>
 
-    <h3 class="note-subtitle">Kekurangan Cisco CIMC</h3>
-    <ul class="note-list">
-      <li>Fitur terbatas dibanding UCS Manager pada skala rack/cluster.</li>
-      <li>Membutuhkan jaringan manajemen yang andal untuk akses remote.</li>
-      <li>Beberapa fitur lanjutan membutuhkan lisensi tambahan.</li>
-    </ul>
+        <h3 class="note-subtitle">Kekurangan Cisco CUCM</h3>
+        <ul class="note-list">
+            <li>Biaya implementasi dan pemeliharaan yang relatif tinggi untuk solusi on-premises.</li>
+            <li>Memerlukan pengetahuan teknis yang mendalam untuk konfigurasi dan pemecahan masalah.</li>
+            <li>Kompleksitas yang tinggi pada jaringan besar.</li>
+            <li>Ketergantungan pada ekosistem Cisco untuk fungsionalitas penuh.</li>
+        </ul>
 
-    <img src="img/cimc1.png" alt="Tampilan Cisco CIMC" class="note-image" />
+        <h3 class="note-subtitle">CONTOH KASUS</h3>
+        <ul class="note-list">
+            <li>Tujuan: Menggantikan sistem telepon analog lama dengan sistem IP Telephony modern menggunakan <strong>Cisco CUCM</strong>.</li>
+            <li>Cisco CUCM: Mengatur dan mendaftarkan telepon IP baru, mengelola nomor ekstensi, dan menyediakan fitur pesan suara untuk setiap karyawan.</li>
+        </ul>
 
-    <p class="note-subtitle">Contoh Akses CIMC via CLI (SSH)</p>
-    <pre class="note-codeblock"><code>
-# Akses ke CIMC melalui SSH
-ssh admin@192.168.1.100
+        <img src="img/cisco-cucm-diagram.png" alt="Diagram Jaringan Cisco CUCM" class="note-image" />
 
-# Melihat status kesehatan server
-scope chassis
-show detail
+        <p class="note-subtitle">Contoh Konfigurasi Telepon IP (CLI)</p>
+        <pre class="note-codeblock"><code>
+// Catatan: Konfigurasi CUCM sebagian besar dilakukan melalui GUI.
+// Contoh berikut adalah konsep dasar dari CLI di perangkat yang terhubung
+// seperti gateway untuk registrasi telepon.
 
-# Mengontrol power server
-scope server 1
-power status
-power cycle
+voice register pool  1
+  id mac-address  1122.3344.5566
+  type  7965
+  number  1
+    voice-port  2
+    dialplan-pattern  1  2xxx
+  codec  g711ulaw
+  username  cisco  password  cisco
+  !
+  tftp-server  20.0.0.1
+        </code></pre>
+        
+        <h3 class="note-subtitle">Tips Praktis</h3>
+        <ul class="note-list">
+            <li>Rencanakan alokasi nomor ekstensi dan fitur dengan cermat sebelum implementasi.</li>
+            <li>Gunakan fitur "Auto-Registration" untuk mempercepat proses pendaftaran telepon dalam jumlah besar.</li>
+            <li>Manfaatkan fitur "Cisco Unified Reporting" untuk memantau kinerja sistem.</li>
+            <li>Pertimbangkan CUCM di cloud (Webex Calling) jika Anda membutuhkan fleksibilitas dan pemeliharaan yang lebih mudah.</li>
+        </ul>
 
-# Mengupdate firmware (contoh)
-scope firmware
-update remote tftp://192.168.1.200/firmware.bin
-    </code></pre>
+        <hr class="note-divider" />
 
-    <h3 class="note-subtitle">Tips Praktis</h3>
-    <ul class="note-list">
-      <li>Selalu gunakan jaringan manajemen terpisah untuk CIMC agar lebih aman.</li>
-      <li>Update firmware CIMC secara berkala untuk mendapatkan fitur dan patch terbaru.</li>
-      <li>Gunakan fitur virtual media untuk instalasi OS tanpa harus hadir di lokasi.</li>
-      <li>Batasi akses hanya untuk administrator dengan otentikasi kuat.</li>
-    </ul>
+    </main>
 
-    <hr class="note-divider" />
-
-  </main>
-
-  <script>
-    document.querySelectorAll('.note-image').forEach(img => {
-      img.addEventListener('click', () => {
-        img.classList.toggle('expanded');
-      });
-    });
-  </script>
+    <script>
+        document.querySelectorAll('.note-image').forEach(img => {
+            img.addEventListener('click', () => {
+                img.classList.toggle('expanded');
+            });
+        });
+    </script>
 </body>
 </html>

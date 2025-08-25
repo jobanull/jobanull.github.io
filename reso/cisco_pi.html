@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <title>Cisco Prime Infrastructure</title>
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+    <main class="note-main">
+        <h2 class="note-title text-center">Cisco Prime Infrastructure</h2>
+        <p class="note-paragraph">
+            <strong>Cisco Prime Infrastructure</strong> adalah platform manajemen jaringan terintegrasi yang dirancang untuk menyederhanakan pengelolaan jaringan kabel dan nirkabel. Platform ini menyediakan satu antarmuka tunggal untuk mengotomatiskan, memantau, dan memecahkan masalah perangkat jaringan, termasuk router, switch, dan access point. Tujuannya adalah untuk memberikan visibilitas penuh dan kontrol terpusat atas infrastruktur jaringan, meningkatkan efisiensi operasional, dan mempercepat penyelesaian masalah. <em>(Catatan: Cisco telah mengumumkan akhir masa pakai dan dukungan untuk Prime Infrastructure, dengan fokus pada solusi manajemen jaringan modern seperti Cisco DNA Center.)</em>
+        </p>
+
+        <h3 class="note-subtitle">Fungsi Utama Cisco Prime Infrastructure</h3>
+        <ul class="note-list">
+            <li><strong>Manajemen Perangkat Terpusat</strong> – Mengelola konfigurasi, pembaruan firmware, dan inventaris semua perangkat jaringan.</li>
+            <li><strong>Pemantauan Jaringan</strong> – Memantau kinerja perangkat dan koneksi secara real-time.</li>
+            <li><strong>Manajemen Siklus Hidup</strong> – Otomatisasi proses deployment, inventaris, dan audit.</li>
+            <li><strong>Pemecahan Masalah (Troubleshooting)</strong> – Menyediakan alat diagnostik untuk mengidentifikasi dan menyelesaikan masalah jaringan dengan cepat.</li>
+        </ul>
+
+        <h3 class="note-subtitle">Area Jaringan yang Dikelola</h3>
+        <ul class="note-list">
+            <li><strong>Jaringan Kabel</strong> – Mengelola switch (misalnya Catalyst) dan router (misalnya ISR).</li>
+            <li><strong>Jaringan Nirkabel</strong> – Mengelola Wireless LAN Controller (WLC) dan Access Point (AP).</li>
+            <li><strong>Jaringan Cabang</strong> – Memberikan visibilitas dan kontrol untuk perangkat di lokasi terpencil.</li>
+        </ul>
+
+        <h3 class="note-subtitle">Kelebihan Cisco Prime Infrastructure</h3>
+        <ul class="note-list">
+            <li>Menyediakan dasbor terpadu untuk jaringan kabel dan nirkabel.</li>
+            <li>Meningkatkan efisiensi dengan otomatisasi tugas-tugas operasional.</li>
+            <li>Mempercepat waktu penyelesaian masalah dengan visibilitas end-to-end.</li>
+            <li>Memungkinkan perencanaan kapasitas dan manajemen aset yang lebih baik.</li>
+        </ul>
+
+        <h3 class="note-subtitle">Kekurangan Cisco Prime Infrastructure</h3>
+        <ul class="note-list">
+            <li>Kompleksitas instalasi dan konfigurasi awal.</li>
+            <li>Skalabilitas terbatas dibandingkan solusi modern seperti DNA Center.</li>
+            <li>Performa dapat menurun pada jaringan yang sangat besar.</li>
+            <li>Dukungan resmi telah dihentikan oleh Cisco, membuatnya kurang relevan untuk instalasi baru.</li>
+        </ul>
+
+        <h3 class="note-subtitle">CONTOH KASUS</h3>
+        <ul class="note-list">
+            <li>Tujuan: Mengelola dan memantau switch dan access point di sebuah kampus universitas.</li>
+            <li>Cisco Prime Infrastructure: Digunakan untuk mengelola ribuan perangkat dari satu konsol, melacak inventaris, mengotomatisasi pembaruan firmware, dan memecahkan masalah koneksi Wi-Fi bagi mahasiswa.</li>
+        </ul>
+
+        <img src="img/cisco-prime-infrastructure-diagram.png" alt="Diagram Cisco Prime Infrastructure" class="note-image" />
+
+        <p class="note-subtitle">Contoh Konsep Penggunaan (GUI-Based)</p>
+        <pre class="note-codeblock"><code>
+// Catatan: Prime Infrastructure dikelola sepenuhnya melalui GUI web.
+// Berikut adalah contoh alur kerja dasar.
+
+// 1. **Discovery:**
+//    Masukkan alamat IP/rentang subnet perangkat jaringan.
+//    Prime Infrastructure secara otomatis menemukan dan menambahkan perangkat.
+
+// 2. **Deployment:**
+//    Buat template konfigurasi (misalnya, untuk VLAN atau SSID).
+//    Terapkan template ke beberapa perangkat secara bersamaan.
+
+// 3. **Monitoring:**
+//    Buka dashboard utama untuk melihat status perangkat, kesehatan jaringan,
+//    dan laporan kinerja historis.
+        </code></pre>
+
+        <h3 class="note-subtitle">Tips Praktis</h3>
+        <ul class="note-list">
+            <li>Pastikan database dan server memiliki spesifikasi yang memadai untuk ukuran jaringan Anda.</li>
+            <li>Manfaatkan fitur "Compliance" untuk memastikan perangkat memenuhi standar keamanan.</li>
+            <li>Gunakan fitur "Troubleshooting" seperti `Client 360` untuk melihat detail koneksi klien nirkabel.</li>
+            <li>Jika Anda memulai proyek baru, pertimbangkan solusi modern pengganti seperti **Cisco DNA Center**.</li>
+        </ul>
+
+        <hr class="note-divider" />
+
+    </main>
+
+    <script>
+        document.querySelectorAll('.note-image').forEach(img => {
+            img.addEventListener('click', () => {
+                img.classList.toggle('expanded');
+            });
+        });
+    </script>
+</body>
+</html>

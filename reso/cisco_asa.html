@@ -1,99 +1,99 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <title>Cisco ACI (Application Centric Infrastructure)</title>
-  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8" />
+    <title>Cisco ASA (Adaptive Security Appliance)</title>
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="note-container">
 
-  <main class="note-main">
-    <h2 class="note-title text-center">Cisco ACI (Application Centric Infrastructure)</h2>
-    <p class="note-paragraph">
-      Cisco ACI adalah arsitektur jaringan berbasis <em>policy-driven</em> yang dikembangkan untuk pusat data modern.
-      ACI mengintegrasikan perangkat keras, perangkat lunak, dan kebijakan jaringan agar dapat dikelola secara
-      terpusat melalui <strong>APIC (Application Policy Infrastructure Controller)</strong>. Dengan pendekatan ini,
-      administrator dapat mengelola aplikasi, keamanan, dan trafik jaringan dengan lebih cepat, konsisten, dan skalabel.
-    </p>
+    <main class="note-main">
+        <h2 class="note-title text-center">Cisco ASA (Adaptive Security Appliance)</h2>
+        <p class="note-paragraph">
+            <strong>Cisco ASA</strong> adalah perangkat keamanan multifungsi yang mengintegrasikan firewall, VPN, dan pencegahan intrusi ke dalam satu platform. Perangkat ini dirancang untuk melindungi jaringan dari berbagai ancaman siber dengan mengontrol lalu lintas data, menyediakan akses jarak jauh yang aman, dan memblokir aktivitas mencurigakan. Cisco ASA sering digunakan di lingkungan perusahaan untuk keamanan perimeter.
+        </p>
 
-    <h3 class="note-subtitle">Fungsi Utama Cisco ACI</h3>
-    <ul class="note-list">
-      <li>Menyediakan <strong>automasi jaringan</strong> berbasis kebijakan (policy-based automation).</li>
-      <li>Memisahkan <strong>aplikasi</strong> dari kompleksitas infrastruktur jaringan.</li>
-      <li>Mendukung <strong>multi-tenant</strong> dengan keamanan dan isolasi yang kuat.</li>
-      <li>Integrasi dengan sistem orkestrasi dan cloud seperti VMware, OpenStack, dan Kubernetes.</li>
-    </ul>
+        <h3 class="note-subtitle">Fungsi Utama Cisco ASA</h3>
+        <ul class="note-list">
+            <li><strong>Firewall Stateful</strong> – Memeriksa lalu lintas berdasarkan sesi dan status koneksi untuk pengambilan keputusan yang cerdas.</li>
+            <li><strong>VPN (Virtual Private Network)</strong> – Mengamankan komunikasi jarak jauh melalui tunneling yang dienkripsi.</li>
+            <li><strong>Pencegahan Intrusi (IPS/IDS)</strong> – Mengidentifikasi dan memblokir serangan seperti malware dan DoS.</li>
+            <li><strong>Manajemen Akses</strong> – Mengatur akses ke sumber daya jaringan berdasarkan peran atau kebijakan.</li>
+        </ul>
 
-    <h3 class="note-subtitle">Komponen Utama Cisco ACI</h3>
-    <ol class="note-list">
-      <li><strong>APIC (Application Policy Infrastructure Controller)</strong> – pusat kontrol dan manajemen kebijakan.</li>
-      <li><strong>Leaf Switch</strong> – switch yang terhubung langsung ke server/aplikasi.</li>
-      <li><strong>Spine Switch</strong> – backbone yang menghubungkan seluruh leaf switch.</li>
-      <li><strong>Policy Model</strong> – aturan yang mendefinisikan bagaimana aplikasi berkomunikasi.</li>
-    </ol>
+        <h3 class="note-subtitle">Jenis-jenis ASA</h3>
+        <ul class="note-list">
+            <li><strong>Cisco ASA 5500 Series</strong> – Perangkat keras fisik untuk berbagai skala kebutuhan.</li>
+            <li><strong>Cisco ASA 5500-X Series</strong> – Generasi penerus dengan kinerja yang lebih baik dan layanan keamanan terintegrasi.</li>
+            <li><strong>Cisco ASA Virtual (ASAv)</strong> – Versi virtual untuk lingkungan cloud dan virtualisasi (seperti VMware, KVM).</li>
+        </ul>
 
-    <h3 class="note-subtitle">Kelebihan Cisco ACI</h3>
-    <ul class="note-list">
-      <li>Manajemen jaringan terpusat melalui APIC.</li>
-      <li>Mempercepat deployment aplikasi dengan template kebijakan.</li>
-      <li>Memiliki skalabilitas tinggi untuk kebutuhan data center besar.</li>
-      <li>Meningkatkan keamanan melalui isolasi tenant dan microsegmentation.</li>
-    </ul>
+        <h3 class="note-subtitle">Kelebihan Cisco ASA</h3>
+        <ul class="note-list">
+            <li>Menyediakan keamanan yang komprehensif dan terpusat dalam satu perangkat.</li>
+            <li>Skalabilitas tinggi untuk berbagai ukuran jaringan, dari UKM hingga enterprise.</li>
+            <li>Mendukung berbagai teknologi VPN (IPsec, SSL) untuk akses aman.</li>
+            <li>Integrasi yang erat dengan produk Cisco lainnya untuk ekosistem keamanan yang lengkap.</li>
+        </ul>
 
-    <h3 class="note-subtitle">Kekurangan Cisco ACI</h3>
-    <ul class="note-list">
-      <li>Biaya implementasi relatif tinggi.</li>
-      <li>Membutuhkan pembelajaran khusus karena arsitektur berbeda dengan jaringan tradisional.</li>
-      <li>Ketergantungan pada ekosistem Cisco (vendor lock-in).</li>
-    </ul>
+        <h3 class="note-subtitle">Kekurangan Cisco ASA</h3>
+        <ul class="note-list">
+            <li>Konfigurasi dan manajemen yang kompleks, memerlukan keahlian khusus.</li>
+            <li>Harga yang relatif mahal, terutama untuk model enterprise.</li>
+            <li>Beberapa fitur lanjutan memerlukan lisensi tambahan.</li>
+            <li>Tergantung pada pembaruan definisi untuk efektifitas pencegahan ancaman terbaru.</li>
+        </ul>
 
-    <h3 class="note-subtitle">CONTOH KASUS</h3>
-    <ul class="note-list">
-      <li>Tujuan: Membangun <strong>data center</strong> berbasis Cisco ACI dengan multi-tenant environment.</li>
-      <li>Tenant A: Aplikasi keuangan dengan isolasi penuh dari tenant lain.</li>
-      <li>Tenant B: Aplikasi e-commerce dengan kebutuhan skala dinamis.</li>
-      <li>Tenant C: Lingkungan development yang diatur dengan kebijakan lebih fleksibel.</li>
-    </ul>
+        <h3 class="note-subtitle">CONTOH KASUS</h3>
+        <ul class="note-list">
+            <li>Tujuan: Mengonfigurasi <strong>Cisco ASA</strong> sebagai firewall untuk membatasi akses dari internet ke server internal.</li>
+            <li>Cisco ASA: Memblokir semua lalu lintas masuk (inbound) kecuali untuk port tertentu yang diperlukan, seperti port 80 (HTTP) dan 443 (HTTPS) untuk server web.</li>
+        </ul>
 
-    <img src="img/aci1.png" alt="Diagram Cisco ACI" class="note-image" />
+        <img src="img/cisco-asa-diagram.png" alt="Diagram jaringan Cisco ASA" class="note-image" />
 
-    <p class="note-subtitle">Contoh Konfigurasi Tenant & EPG (via APIC CLI)</p>
-    <pre class="note-codeblock"><code>
-# Membuat Tenant baru
-apic1(config)# tenant Finance_Tenant
+        <p class="note-subtitle">Contoh Konfigurasi Dasar (CLI)</p>
+        <pre class="note-codeblock"><code>
+configure terminal
+!
+interface gigabitethernet 0/0
+ nameif outside
+ security-level 0
+ ip address 203.0.113.1 255.255.255.0
+ no shutdown
+!
+interface gigabitethernet 0/1
+ nameif inside
+ security-level 100
+ ip address 10.0.1.1 255.255.255.0
+ no shutdown
+!
+access-list WEB_ACCESS extended permit tcp any host 10.0.1.10 eq www
+access-list WEB_ACCESS extended permit tcp any host 10.0.1.10 eq https
+access-group WEB_ACCESS in interface outside
+!
+route outside 0.0.0.0 0.0.0.0 203.0.113.254 1
+        </code></pre>
+        
+        <h3 class="note-subtitle">Tips Praktis</h3>
+        <ul class="note-list">
+            <li>Selalu gunakan <strong>level keamanan (security-level)</strong> untuk membedakan zona jaringan.</li>
+            <li>Gunakan <strong>object-group</strong> untuk menyederhanakan konfigurasi ACL yang kompleks.</li>
+            <li>Periksa log dan statistik koneksi dengan perintah <code>show conn</code> atau <code>show access-list</code>.</li>
+            <li>Lakukan backup konfigurasi secara rutin untuk menghindari kehilangan data.</li>
+        </ul>
 
-# Membuat Application Profile
-apic1(config-tenant)# app-profile Finance_App
+        <hr class="note-divider" />
 
-# Membuat Endpoint Group (EPG)
-apic1(config-app-profile)# epg Web_Server
+    </main>
 
-# Menghubungkan EPG ke Bridge Domain
-apic1(config-epg)# bridge-domain Finance_BD
-
-# Mengatur kontrak antar EPG
-apic1(config-epg)# contract Allow_HTTP
-    </code></pre>
-
-    <h3 class="note-subtitle">Tips Praktis</h3>
-    <ul class="note-list">
-      <li>Gunakan <strong>tenant</strong> untuk memisahkan aplikasi atau departemen agar lebih aman.</li>
-      <li>Dokumentasikan kebijakan (policy) agar mudah dikelola dan diaudit.</li>
-      <li>Integrasikan ACI dengan orkestrator (misalnya VMware vCenter atau Kubernetes) untuk automasi penuh.</li>
-      <li>Monitor performa aplikasi, bukan hanya infrastruktur.</li>
-    </ul>
-
-    <hr class="note-divider" />
-
-  </main>
-
-  <script>
-    document.querySelectorAll('.note-image').forEach(img => {
-      img.addEventListener('click', () => {
-        img.classList.toggle('expanded');
-      });
-    });
-  </script>
+    <script>
+        document.querySelectorAll('.note-image').forEach(img => {
+            img.addEventListener('click', () => {
+                img.classList.toggle('expanded');
+            });
+        });
+    </script>
 </body>
 </html>

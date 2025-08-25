@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <title>Cisco Firepower</title>
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+    <main class="note-main">
+        <h2 class="note-title text-center">Cisco Firepower</h2>
+        <p class="note-paragraph">
+            <strong>Cisco Firepower</strong> adalah lini produk firewall generasi berikutnya (Next-Generation Firewall/NGFW) yang dirancang untuk memberikan perlindungan komprehensif terhadap ancaman siber yang canggih. Tidak seperti firewall tradisional, Firepower tidak hanya memblokir lalu lintas berdasarkan port dan alamat IP, tetapi juga mengintegrasikan sistem pencegahan intrusi (IPS) dan deteksi ancaman tingkat lanjut. Tujuannya adalah untuk memberikan visibilitas penuh dan kontrol atas lalu lintas jaringan untuk mencegah, mendeteksi, dan merespons ancaman secara efektif.
+        </p>
+
+        <h3 class="note-subtitle">Fungsi Utama Cisco Firepower</h3>
+        <ul class="note-list">
+            <li><strong>Firewall Generasi Berikutnya (NGFW)</strong> – Menyediakan kontrol akses berdasarkan aplikasi, pengguna, dan konten.</li>
+            <li><strong>Sistem Pencegahan Intrusi (IPS)</strong> – Mengidentifikasi dan memblokir serangan yang dikenal dan serangan zero-day.</li>
+            <li><strong>Perlindungan Malware Lanjutan (AMP)</strong> – Mengidentifikasi, mengisolasi, dan menganalisis malware pada level file.</li>
+            <li><strong>Visibilitas dan Kontrol Aplikasi</strong> – Memungkinkan administrator untuk melihat dan mengontrol aplikasi yang digunakan di jaringan, bahkan yang menggunakan port standar.</li>
+        </ul>
+
+        <h3 class="note-subtitle">Komponen dan Produk Cisco Firepower</h3>
+        <ul class="note-list">
+            <li><strong>Firepower Threat Defense (FTD)</strong> – Perangkat lunak tunggal yang menggabungkan fungsi firewall dan pencegahan intrusi.</li>
+            <li><strong>Firepower Management Center (FMC)</strong> – Platform manajemen terpusat untuk mengelola satu atau lebih perangkat Firepower, menerapkan kebijakan, dan melihat laporan.</li>
+            <li><strong>Cisco Secure Firewall (sebelumnya Firepower)</strong> – Nama baru untuk lini produk ini, termasuk model fisik (misalnya, Seri 2100, 4100, 9300) dan virtual (misalnya, Secure Firewall Virtual).</li>
+        </ul>
+
+        <h3 class="note-subtitle">Kelebihan Cisco Firepower</h3>
+        <ul class="note-list">
+            <li>Memberikan perlindungan ancaman yang unggul dan proaktif.</li>
+            <li>Menyederhanakan manajemen keamanan dengan platform terpusat (FMC).</li>
+            <li>Menyediakan visibilitas mendalam ke dalam lalu lintas jaringan dan aplikasi.</li>
+            <li>Integrasi yang erat dengan ekosistem keamanan Cisco lainnya untuk respons ancaman yang lebih cepat.</li>
+        </ul>
+
+        <h3 class="note-subtitle">Kekurangan Cisco Firepower</h3>
+        <ul class="note-list">
+            <li>Kompleksitas yang tinggi dalam konfigurasi awal dan operasional.</li>
+            <li>Memerlukan lisensi tambahan untuk fitur-fitur lanjutan seperti AMP dan IPS.</li>
+            <li>Performa dapat menurun saat semua fitur keamanan diaktifkan.</li>
+            <li>Harga yang tinggi, terutama untuk lingkungan perusahaan.</li>
+        </ul>
+
+        <h3 class="note-subtitle">CONTOH KASUS</h3>
+        <ul class="note-list">
+            <li>Tujuan: Mencegah serangan malware dan eksploitasi di jaringan perusahaan menggunakan **Cisco Firepower**.</li>
+            <li>Cisco Firepower: Menggunakan aturan IPS untuk memblokir tanda tangan serangan yang diketahui dan AMP untuk mendeteksi serta mengkarantina file yang mencurigakan sebelum dapat membahayakan sistem.</li>
+        </ul>
+
+        <img src="img/cisco-firepower-diagram.png" alt="Diagram Jaringan Cisco Firepower" class="note-image" />
+
+        <p class="note-subtitle">Contoh Konsep Kebijakan (CLI dan GUI)</p>
+        <pre class="note-codeblock"><code>
+// Catatan: Konfigurasi Firepower lebih sering dilakukan melalui GUI (FMC).
+// Contoh berikut adalah konsep dasar dari CLI FTD.
+
+// Konfigurasi Antarmuka
+configure terminal
+interface gigabitethernet0/0
+ nameif outside
+ security-level 0
+ ip address 203.0.113.1 255.255.255.0
+ no shutdown
+
+interface gigabitethernet0/1
+ nameif inside
+ security-level 100
+ ip address 10.0.1.1 255.255.255.0
+ no shutdown
+
+// Kebijakan Akses di FMC (GUI)
+// Buat "Access Control Policy" baru
+// Tambahkan aturan:
+//   Action: Block
+//   Source Zone: any
+//   Destination Zone: outside
+//   Application: facebook
+//   User: any
+//   URL Category: Social Networking
+//   URL: any
+//   Time Range: any
+//   Logging: Enabled
+//   IPS Policy: Default Intrusion Policy
+//   File Policy: Block Malware
+        </code></pre>
+
+        <h3 class="note-subtitle">Tips Praktis</h3>
+        <ul class="note-list">
+            <li>Gunakan **Firepower Management Center (FMC)** untuk manajemen yang efisien dan terpusat.</li>
+            <li>Mulai dengan kebijakan IPS dan deteksi malware yang paling dasar, lalu sesuaikan untuk lingkungan Anda.</li>
+            <li>Lakukan pembaruan rutin pada definisi ancaman (threat intelligence) untuk perlindungan yang optimal.</li>
+            <li>Pantau dashboard dan laporan di FMC secara berkala untuk mendapatkan wawasan tentang aktivitas berbahaya.</li>
+        </ul>
+
+        <hr class="note-divider" />
+
+    </main>
+
+    <script>
+        document.querySelectorAll('.note-image').forEach(img => {
+            img.addEventListener('click', () => {
+                img.classList.toggle('expanded');
+            });
+        });
+    </script>
+</body>
+</html>

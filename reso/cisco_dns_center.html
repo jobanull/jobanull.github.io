@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <title>Cisco DNA Center</title>
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+    <main class="note-main">
+        <h2 class="note-title text-center">Cisco DNA Center</h2>
+        <p class="note-paragraph">
+            <strong>Cisco DNA Center (Digital Network Architecture Center)</strong> adalah platform manajemen dan orkestrasi jaringan terpusat yang didasarkan pada arsitektur Cisco DNA. Platform ini menyederhanakan operasional jaringan dengan pendekatan berbasis software-defined, memungkinkan perusahaan untuk mengelola, mengotomatisasi, dan mengamankan jaringan mereka dari satu dasbor tunggal. DNA Center mengubah cara jaringan dikelola, dari konfigurasi manual menjadi manajemen yang didorong oleh kebijakan.
+        </p>
+
+        <h3 class="note-subtitle">Fungsi Utama Cisco DNA Center</h3>
+        <ul class="note-list">
+            <li><strong>Otomatisasi Jaringan</strong> – Menyederhanakan provisi perangkat, penerapan kebijakan, dan pembaruan perangkat lunak secara otomatis.</li>
+            <li><strong>Analitik dan Wawasan</strong> – Menyediakan visibilitas real-time ke kinerja jaringan, perangkat, dan pengguna.</li>
+            <li><strong>Keamanan Berbasis Kebijakan</strong> – Mengotomatiskan penerapan kebijakan keamanan di seluruh jaringan, memisahkan lalu lintas berdasarkan grup pengguna dan aplikasi.</li>
+            <li><strong>Integrasi Penuh</strong> – Berintegrasi dengan produk Cisco lainnya, seperti switch Catalyst, access point, dan solusi keamanan.</li>
+        </ul>
+
+        <h3 class="note-subtitle">Komponen Kunci Cisco DNA Center</h3>
+        <ul class="note-list">
+            <li><strong>Desain Jaringan</strong> – Alat untuk merancang topologi jaringan logis dan virtual.</li>
+            <li><strong>Provisi Jaringan</strong> – Otomatisasi konfigurasi dan deployment perangkat baru.</li>
+            <li><strong>Kebijakan Jaringan</strong> – Mengelola kebijakan akses dan keamanan dengan pendekatan berbasis intent.</li>
+            <li><strong>Assurance</strong> – Memantau kinerja jaringan dan memberikan rekomendasi perbaikan.</li>
+        </ul>
+
+        <h3 class="note-subtitle">Kelebihan Cisco DNA Center</h3>
+        <ul class="note-list">
+            <li>Menyederhanakan operasional jaringan, mengurangi waktu dan biaya manajemen.</li>
+            <li>Meningkatkan visibilitas dan kontrol atas seluruh infrastruktur jaringan.</li>
+            <li>Mengurangi risiko kesalahan manusia melalui otomatisasi.</li>
+            <li>Meningkatkan postur keamanan dengan segmentasi jaringan otomatis.</li>
+        </ul>
+
+        <h3 class="note-subtitle">Kekurangan Cisco DNA Center</h3>
+        <ul class="note-list">
+            <li>Memerlukan investasi awal yang besar, termasuk perangkat keras dan lisensi.</li>
+            <li>Kompleksitas yang tinggi dalam implementasi awal dan memerlukan tim yang terlatih.</li>
+            <li>Ketergantungan pada perangkat keras Cisco yang kompatibel.</li>
+            <li>Kurva pembelajaran yang curam bagi administrator yang terbiasa dengan CLI tradisional.</li>
+        </ul>
+
+        <h3 class="note-subtitle">CONTOH KASUS</h3>
+        <ul class="note-list">
+            <li>Tujuan: Mengotomatiskan deployment switch baru di beberapa cabang menggunakan <strong>Cisco DNA Center</strong>.</li>
+            <li>Cisco DNA Center: Menggunakan fitur "Zero Touch Provisioning" untuk secara otomatis mengonfigurasi switch baru saat terhubung ke jaringan, tanpa intervensi manual di lokasi.</li>
+        </ul>
+
+        <img src="img/cisco-dna-center-diagram.png" alt="Diagram Cisco DNA Center" class="note-image" />
+
+        <p class="note-subtitle">Contoh Konsep Konfigurasi (GUI-Based)</p>
+        <pre class="note-codeblock"><code>
+// Catatan: DNA Center berinteraksi dengan perangkat melalui API, bukan CLI.
+// Konfigurasi dilakukan melalui antarmuka web.
+
+// Workflow Provisi Otomatis:
+// 1. Tambahkan perangkat ke DNA Center (discovery).
+// 2. Buat "Site" (lokasi) di DNA Center untuk perangkat.
+// 3. Terapkan "Templates" (template konfigurasi) yang telah dibuat sebelumnya.
+// 4. Perangkat secara otomatis mengambil konfigurasi yang sesuai.
+        </code></pre>
+        
+        <h3 class="note-subtitle">Tips Praktis</h3>
+        <ul class="note-list">
+            <li>Mulai dengan proyek kecil untuk membiasakan diri dengan platform sebelum deployment skala besar.</li>
+            <li>Manfaatkan fitur "Assurance" untuk proactive monitoring dan troubleshooting.</li>
+            <li>Pastikan perangkat yang ada di jaringan Anda kompatibel dengan DNA Center.</li>
+            <li>Pelajari konsep "intent-based networking" untuk memanfaatkan DNA Center secara maksimal.</li>
+        </ul>
+
+        <hr class="note-divider" />
+
+    </main>
+
+    <script>
+        document.querySelectorAll('.note-image').forEach(img => {
+            img.addEventListener('click', () => {
+                img.classList.toggle('expanded');
+            });
+        });
+    </script>
+</body>
+</html>
