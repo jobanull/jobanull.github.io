@@ -48,14 +48,6 @@
     <img src="img/qos.png" alt="Diagram jaringan" class="note-image" />
     <h3 class="note-subtitle">R.QT</h3>
     <pre class="note-codeblock"><code>
-/ip pool
-add name=dhcp_pool0 ranges=192.168.1.2                                # Pool DHCP client 1 (192.168.1.2)
-add name=dhcp_pool1 ranges=192.168.2.2                                # Pool DHCP client 2 (192.168.2.2)
-
-/ip dhcp-server
-add address-pool=dhcp_pool0 disabled=no interface=ether2 name=dhcp1    # DHCP server untuk client1 di ether2
-add address-pool=dhcp_pool1 disabled=no interface=ether3 name=dhcp2    # DHCP server untuk client2 di ether3
-
 /queue tree
 add max-limit=1M name=queue-parent-upload parent=ether1                # Parent queue upload total 1 Mbps di ether1
 add max-limit=254k name=queue1-upload packet-mark=packet-client1 \
@@ -69,10 +61,6 @@ add address=192.168.2.1/30 interface=ether3 network=192.168.2.0        # IP gate
 
 /ip dhcp-client
 add disabled=no interface=ether1                                       # Interface WAN (ether1) dapat IP dari ISP
-
-/ip dhcp-server network
-add address=192.168.1.0/30 gateway=192.168.1.1                         # Network DHCP client1: gateway 192.168.1.1
-add address=192.168.2.0/30 gateway=192.168.2.1                         # Network DHCP client2: gateway 192.168.2.1
 
 /ip firewall mangle
 add action=mark-connection chain=prerouting new-connection-mark=conn-client1 \

@@ -40,12 +40,6 @@
     <img src="img/qos.png" alt="Diagram jaringan" class="note-image" />
     <h3 class="note-subtitle">R.PCQ</h3>
     <pre class="note-codeblock"><code>
-/ip pool
-add name=dhcp_pool0 ranges=192.168.1.2-192.168.1.6                     # Pool DHCP: range IP client 192.168.1.2-192.168.1.6
-
-/ip dhcp-server
-add address-pool=dhcp_pool0 disabled=no interface=LAN name=dhcp1        # DHCP Server aktif di interface LAN
-
 /queue type
 add kind=pcq name=pcq-download pcq-rate=254k                           # PCQ download, limit per client 254 kbps
 add kind=pcq name=pcq-upload pcq-rate=254k                             # PCQ upload, limit per client 254 kbps
@@ -63,9 +57,6 @@ add address=192.168.1.1/29 interface=LAN network=192.168.1.0           # IP gate
 
 /ip dhcp-client
 add disabled=no interface=ether1                                       # Interface WAN (ether1) dapat IP dari ISP
-
-/ip dhcp-server network
-add address=192.168.1.0/29 gateway=192.168.1.1                         # Network DHCP: gateway client 192.168.1.1
 
 /ip firewall nat
 add action=masquerade chain=srcnat out-interface=ether1                # NAT agar client LAN bisa akses internet via ether1

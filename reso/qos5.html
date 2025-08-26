@@ -22,14 +22,38 @@
       <li><strong>Gunakan Saat:</strong> Membatasi bandwidth user tertentu, subnet kantor, atau interface WAN agar tidak melebihi kapasitas link.</li>
     </ul>
 
-    <pre class="note-codeblock"><code>
-# MikroTik: Contoh Simple Queue
-/queue simple
-add name="User1" target=192.168.1.10/32 max-limit=5M/5M
-add name="User2" target=192.168.1.11/32 max-limit=3M/3M
-add name="Subnet_Kantor" target=192.168.1.0/24 max-limit=20M/20M
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li>Membatasi bandwidth client dengan <em>Simple Queue</em>.</li>
+        <li>Subnet <code>192.168.1.0/30</code> dibatasi total 1 Mbps (parent queue).</li>
+        <li>Client <code>192.168.1.2</code> hanya dapat 254 kbps (child queue).</li>
+        <li>Client <code>192.168.2.2</code> punya limit sendiri 1 Mbps.</li>
+        <li>Semua client keluar internet melalui NAT di ether1.</li>
+    </ul>
 
-# max-limit -> upload/download maksimal per target
+
+    <img src="img/qos.png" alt="Diagram jaringan" class="note-image" />
+    <h3 class="note-subtitle">R.SQ</h3>
+    <pre class="note-codeblock"><code>
+/queue simple
+add max-limit=1M/1M name=queue-parent target=192.168.1.0/30           # Parent queue untuk subnet 192.168.1.0/30 dengan total limit 1 Mbps up/down
+add max-limit=254k/254k name=child-queue1 parent=queue-parent target=\
+    192.168.1.2/32                                                     # Queue anak untuk client dengan IP 192.168.1.2, limit 254 kbps up/down
+add max-limit=1M/1M name=queue-ether3 target=192.168.2.2/32           # Queue untuk client dengan IP 192.168.2.2, limit 1 Mbps up/down
+
+/ip address
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0       # IP gateway client1 (subnet 192.168.1.0/30) di ether2
+add address=192.168.2.1/30 interface=ether3 network=192.168.2.0       # IP gateway client2 (subnet 192.168.2.0/30) di ether3
+
+/ip dhcp-client
+add disabled=no interface=ether1                                      # Interface WAN (ether1) mendapat IP otomatis dari ISP via DHCP
+
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1               # NAT agar client bisa akses internet keluar via ether1
+
+/system identity
+set name=R.SQ                                                         # Nama router = R.SQ
+
     </code></pre>
 
     <h3 class="note-subtitle">Tips Praktis</h3>
