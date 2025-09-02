@@ -1,0 +1,1730 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cisco Products</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+    background: #f9f9f9;
+    padding-top: 70px; /* sesuaikan tinggi navbar */
+    }
+    .note-container {
+      max-width: 1000px;   /* batas lebar konten */
+      margin: 0 auto;     /* supaya konten ke tengah */
+      padding: 30px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 40px;
+    }
+    .note-title {
+      color: #0070c9;
+      margin-bottom: 20px;
+    }
+    .note-image {
+      max-width: 100%;
+      cursor: pointer;
+      margin: 20px 0;
+      border-radius: 5px;
+    }
+    .expanded {
+      width: 100%;
+      height: auto;
+    }
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+
+    /* === Animasi dropdown === */
+    .dropdown-menu {
+      display: block;
+      opacity: 0;
+      transform: translateY(10px);
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    .dropdown-menu.show {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+    }
+  </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">Cisco Products</a>
+        <div class="ms-auto">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="#cisco-aci">Cisco ACI</a></li>
+            <li class="nav-item"><a class="nav-link" href="#cisco-asa">Cisco ASA</a></li>
+            <li class="nav-item"><a class="nav-link" href="#cisco-catalyst">Cisco Catalyst Series</a></li>
+            <!-- Dropdown dengan animasi -->
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                Produk Lain
+            </a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#cisco-contact-center">Cisco Contact Center</a></li>
+                <li><a class="dropdown-item" href="#cisco-cimc">Cisco CIMC</a></li>
+                <li><a class="dropdown-item" href="#cisco-cucm">Cisco CUMC</a></li>
+                <li><a class="dropdown-item" href="#cisco-dna-center">Cisco DNS Center</a></li>
+                <li><a class="dropdown-item" href="#cisco-duo">Cisco DUO Security</a></li>
+                <li><a class="dropdown-item" href="#cisco-firepower">Cisco Firepower</a></li>
+                <li><a class="dropdown-item" href="#cisco-hyperflex">Cisco Hyperflex</a></li>
+                <li><a class="dropdown-item" href="#cisco-intersight">Cisco Intersight</a></li>
+                <li><a class="dropdown-item" href="#cisco-ise">Cisco Ise</a></li>
+                <li><a class="dropdown-item" href="#cisco-jabber">Cisco Jabber</a></li>
+                <li><a class="dropdown-item" href="#cisco-mobility-express">Cisco Mobility Express</a></li>
+                <li><a class="dropdown-item" href="#cisco-mds">Cisco Multilayer Director Switch</a></li>
+                <li><a class="dropdown-item" href="#cisco-nexus">Cisco Nexus Switch</a></li>
+                <li><a class="dropdown-item" href="#cisco-prime-infrastructure">Cisco Prime Infrastructure</a></li>
+                <li><a class="dropdown-item" href="#cisco-ucs">Cisco UCS (Unified Computing System)</a></li>
+                <li><a class="dropdown-item" href="#cisco-umbrella">Cisco Umbrella</a></li>
+                <li><a class="dropdown-item" href="#cisco-webex">Cisco Webex</a></li>
+                <li><a class="dropdown-item" href="#cisco-wlc">Cisco WLC (Wireless LAN Controller)</a></li>
+            </ul>
+            </li>
+        </ul>
+        </div>
+    </div>
+    </nav>
+
+<!-- Cisco ACI -->
+<section id="cisco-aci" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco ACI (Application Centric Infrastructure)</h2>
+    <p class="note-paragraph">
+      <strong>Cisco ACI</strong> adalah arsitektur jaringan berbasis <em>policy-driven</em> yang dikembangkan untuk pusat data modern. 
+      ACI mengintegrasikan perangkat keras, perangkat lunak, dan kebijakan jaringan agar dapat dikelola secara terpusat melalui 
+      <strong>APIC (Application Policy Infrastructure Controller)</strong>. Dengan pendekatan ini, administrator dapat mengelola aplikasi, 
+      keamanan, dan trafik jaringan dengan lebih cepat, konsisten, dan skalabel.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menyediakan <strong>automasi jaringan</strong> berbasis kebijakan (policy-based automation).</li>
+      <li>Memisahkan <strong>aplikasi</strong> dari kompleksitas infrastruktur jaringan.</li>
+      <li>Mendukung <strong>multi-tenant</strong> dengan keamanan dan isolasi yang kuat.</li>
+      <li>Integrasi dengan sistem orkestrasi & cloud (VMware, OpenStack, Kubernetes).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Komponen Utama</h3>
+    <ul>
+      <li><strong>APIC (Application Policy Infrastructure Controller)</strong> – pusat kontrol dan manajemen kebijakan.</li>
+      <li><strong>Leaf Switch</strong> – switch yang terhubung langsung ke server/aplikasi.</li>
+      <li><strong>Spine Switch</strong> – backbone yang menghubungkan seluruh leaf switch.</li>
+      <li><strong>Policy Model</strong> – aturan komunikasi antar aplikasi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Manajemen jaringan terpusat melalui APIC.</li>
+      <li>Mempercepat deployment aplikasi dengan template kebijakan.</li>
+      <li>Skalabilitas tinggi untuk kebutuhan data center besar.</li>
+      <li>Meningkatkan keamanan dengan isolasi tenant & microsegmentation.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Biaya implementasi relatif tinggi.</li>
+      <li>Membutuhkan pembelajaran khusus (berbeda dari jaringan tradisional).</li>
+      <li>Ketergantungan pada ekosistem Cisco (vendor lock-in).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Tenant A: Aplikasi keuangan dengan isolasi penuh.</li>
+      <li>Tenant B: Aplikasi e-commerce dengan kebutuhan skala dinamis.</li>
+      <li>Tenant C: Lingkungan development dengan kebijakan fleksibel.</li>
+    </ul>
+
+    <img src="img/aci1.png" alt="Diagram Cisco ACI" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konfigurasi Tenant & EPG (CLI)</p>
+    <pre><code>
+# Membuat Tenant baru
+apic1(config)# tenant Finance_Tenant
+
+# Membuat Application Profile
+apic1(config-tenant)# app-profile Finance_App
+
+# Membuat Endpoint Group (EPG)
+apic1(config-app-profile)# epg Web_Server
+
+# Menghubungkan EPG ke Bridge Domain
+apic1(config-epg)# bridge-domain Finance_BD
+
+# Mengatur kontrak antar EPG
+apic1(config-epg)# contract Allow_HTTP
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan <strong>tenant</strong> untuk memisahkan aplikasi atau departemen.</li>
+      <li>Dokumentasikan kebijakan (policy) untuk mempermudah audit & pengelolaan.</li>
+      <li>Integrasikan ACI dengan orkestrator (VMware vCenter, Kubernetes) untuk automasi penuh.</li>
+      <li>Monitor performa aplikasi, bukan hanya infrastruktur.</li>
+    </ul>
+  </main>
+</section>
+
+
+  <!-- Cisco ASA -->
+  <section id="cisco-asa" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco ASA (Adaptive Security Appliance)</h2>
+    <p class="note-paragraph">
+      <strong>Cisco ASA</strong> adalah perangkat keamanan multifungsi yang mengintegrasikan firewall, VPN, dan pencegahan intrusi ke dalam satu platform. Perangkat ini dirancang untuk melindungi jaringan dari berbagai ancaman siber dengan mengontrol lalu lintas data, menyediakan akses jarak jauh yang aman, dan memblokir aktivitas mencurigakan. Cisco ASA sering digunakan di lingkungan perusahaan untuk keamanan perimeter.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li><strong>Firewall Stateful</strong> – Memeriksa lalu lintas berdasarkan sesi dan status koneksi.</li>
+      <li><strong>VPN (Virtual Private Network)</strong> – Mengamankan komunikasi jarak jauh dengan tunneling terenkripsi.</li>
+      <li><strong>Pencegahan Intrusi (IPS/IDS)</strong> – Mengidentifikasi & memblokir serangan.</li>
+      <li><strong>Manajemen Akses</strong> – Mengatur akses ke sumber daya berdasarkan kebijakan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis-jenis</h3>
+    <ul>
+      <li><strong>ASA 5500 Series</strong> – Perangkat keras fisik untuk berbagai kebutuhan.</li>
+      <li><strong>ASA 5500-X Series</strong> – Generasi penerus dengan performa & layanan keamanan lebih baik.</li>
+      <li><strong>ASA Virtual (ASAv)</strong> – Versi virtual untuk cloud & virtualisasi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Keamanan komprehensif dalam satu perangkat.</li>
+      <li>Skalabilitas tinggi, cocok untuk UKM hingga enterprise.</li>
+      <li>Dukungan VPN (IPsec, SSL) untuk akses aman.</li>
+      <li>Integrasi erat dengan produk Cisco lainnya.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Konfigurasi & manajemen kompleks, perlu skill khusus.</li>
+      <li>Harga relatif mahal untuk enterprise.</li>
+      <li>Fitur lanjutan butuh lisensi tambahan.</li>
+      <li>Tergantung pembaruan definisi ancaman terbaru.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Firewall ASA membatasi akses dari internet ke server internal, hanya membuka port 80 (HTTP) & 443 (HTTPS).</li>
+    </ul>
+
+    <img src="img/cisco-asa-diagram.png" alt="Diagram Cisco ASA" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konfigurasi Dasar (CLI)</p>
+    <pre><code>
+configure terminal
+!
+interface gigabitethernet 0/0
+ nameif outside
+ security-level 0
+ ip address 203.0.113.1 255.255.255.0
+ no shutdown
+!
+interface gigabitethernet 0/1
+ nameif inside
+ security-level 100
+ ip address 10.0.1.1 255.255.255.0
+ no shutdown
+!
+access-list WEB_ACCESS extended permit tcp any host 10.0.1.10 eq www
+access-list WEB_ACCESS extended permit tcp any host 10.0.1.10 eq https
+access-group WEB_ACCESS in interface outside
+!
+route outside 0.0.0.0 0.0.0.0 203.0.113.254 1
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan <strong>security-level</strong> untuk membedakan zona jaringan.</li>
+      <li>Manfaatkan <strong>object-group</strong> agar ACL lebih sederhana.</li>
+      <li>Monitor dengan <code>show conn</code> & <code>show access-list</code>.</li>
+      <li>Lakukan backup konfigurasi secara rutin.</li>
+    </ul>
+  </main>
+</section>
+
+
+  <!-- Cisco Catalyst -->
+<section id="cisco-catalyst" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco Catalyst Series</h2>
+    <p class="note-paragraph">
+      <strong>Cisco Catalyst Series</strong> adalah lini produk switch jaringan yang dirancang untuk lingkungan perusahaan dan pusat data. Dikenal karena keandalan, skalabilitas, dan fitur-fitur canggihnya, switch Catalyst menyediakan konektivitas yang kuat, keamanan terintegrasi, dan otomatisasi jaringan. Produk ini merupakan tulang punggung dari banyak infrastruktur jaringan modern.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li><strong>Switching dan Routing</strong> – Mengarahkan lalu lintas data dalam jaringan lokal (LAN) dan antar-jaringan.</li>
+      <li><strong>Keamanan Jaringan</strong> – Mendukung autentikasi port (802.1X) dan ACL.</li>
+      <li><strong>Quality of Service (QoS)</strong> – Memprioritaskan lalu lintas penting seperti suara & video.</li>
+      <li><strong>Redundansi Tinggi</strong> – Mendukung VSS (Virtual Switching System) dan HSRP (Hot Standby Router Protocol).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis-jenis</h3>
+    <ul>
+      <li><strong>Catalyst 2960 Series</strong> – Switch Layer 2 untuk jaringan akses.</li>
+      <li><strong>Catalyst 3850 Series</strong> – Switch multigigabit dengan fitur Layer 3.</li>
+      <li><strong>Catalyst 9000 Series</strong> – Generasi terbaru dengan dukungan Cisco DNA Center & keamanan berbasis AI.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Kinerja dan keandalan tinggi.</li>
+      <li>Skalabilitas untuk pertumbuhan jaringan.</li>
+      <li>Fitur keamanan terintegrasi.</li>
+      <li>Manajemen & otomatisasi melalui Cisco DNA Center.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Harga relatif mahal dibandingkan vendor lain.</li>
+      <li>Konfigurasi awal kompleks, butuh skill teknis.</li>
+      <li>Fitur lanjutan butuh lisensi tambahan.</li>
+      <li>Konsumsi daya tinggi pada model high-end.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Menghubungkan perangkat pengguna & server, membuat VLAN per departemen, dan menerapkan ACL untuk kontrol akses.</li>
+    </ul>
+
+    <img src="img/cisco-catalyst-diagram.png" alt="Diagram Cisco Catalyst" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konfigurasi VLAN (CLI)</p>
+    <pre><code>
+configure terminal
+!
+vlan 10
+ name Sales
+vlan 20
+ name Marketing
+!
+interface gigabitethernet 0/1
+ switchport mode access
+ switchport access vlan 10
+!
+interface gigabitethernet 0/2
+ switchport mode access
+ switchport access vlan 20
+!
+interface gigabitethernet 0/24
+ description Link to Core Switch
+ switchport mode trunk
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan <strong>VLAN</strong> untuk memisahkan jaringan menjadi segmen logis.</li>
+      <li>Selalu gunakan <strong>mode trunk</strong> pada port antar-switch.</li>
+      <li>Cek dengan <code>show vlan brief</code> untuk verifikasi VLAN.</li>
+      <li>Update firmware switch secara rutin untuk fitur & keamanan terbaru.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="cisco-contact-center" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco Contact Center</h2>
+    <p class="note-paragraph">
+      <strong>Cisco Contact Center</strong> adalah solusi terintegrasi untuk mengelola interaksi pelanggan melalui berbagai saluran komunikasi (telepon, email, chat, media sosial). Platform ini membantu perusahaan memberikan layanan pelanggan yang konsisten, meningkatkan efisiensi operasional, serta kepuasan pelanggan.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li><strong>Manajemen Multisaluran</strong> – Integrasi interaksi suara, chat, email dalam satu antarmuka.</li>
+      <li><strong>Intelligent Call Routing</strong> – Mengarahkan panggilan ke agen sesuai keahlian/ketersediaan.</li>
+      <li><strong>Laporan & Analitik</strong> – Memberikan insight kinerja agen & pusat panggilan.</li>
+      <li><strong>Automasi & IVR</strong> – Memungkinkan layanan mandiri pelanggan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis-jenis</h3>
+    <ul>
+      <li><strong>Unified Contact Center Enterprise (UCCE)</strong> – Untuk perusahaan besar, volume panggilan tinggi.</li>
+      <li><strong>Unified Contact Center Express (UCCX)</strong> – Untuk perusahaan menengah, lebih ringkas & mudah dikelola.</li>
+      <li><strong>Webex Contact Center</strong> – Berbasis cloud, fleksibel & terintegrasi dengan Webex.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Meningkatkan produktivitas agen dengan informasi pelanggan instan.</li>
+      <li>Mengurangi waktu tunggu & meningkatkan kepuasan pelanggan.</li>
+      <li>Visibilitas penuh ke kinerja pusat panggilan.</li>
+      <li>Fleksibel untuk berbagai skala bisnis.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Implementasi & konfigurasi kompleks, sering butuh ahli.</li>
+      <li>Biaya awal tinggi untuk UCCE/UCCX on-premise.</li>
+      <li>Butuh pelatihan intensif untuk agen & admin.</li>
+      <li>Integrasi dengan aplikasi pihak ketiga bisa rumit.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Mengimplementasikan <strong>Cisco Contact Center</strong> agar panggilan otomatis diarahkan ke agen dengan spesialisasi sesuai kebutuhan pelanggan.</li>
+    </ul>
+
+    <img src="img/cisco-contact-center-diagram.png" alt="Diagram Cisco Contact Center" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konsep Flow Panggilan</p>
+    <pre><code>
+START
+  RECEIVE_CALL
+    PROMPT: "Selamat datang. Tekan 1 untuk Sales, 2 untuk Dukungan Teknis."
+      IF INPUT = 1
+        ROUTE_TO_SKILL: "Sales"
+          WAIT_IN_QUEUE
+            DISTRIBUTE_TO_AGENT
+      IF INPUT = 2
+        ROUTE_TO_SKILL: "Technical_Support"
+          WAIT_IN_QUEUE
+            DISTRIBUTE_TO_AGENT
+    IF NO INPUT
+      PROMPT_AGAIN
+      IF STILL_NO_INPUT
+        END_CALL
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Rancang <strong>call flow</strong> dengan baik untuk pengalaman pelanggan yang optimal.</li>
+      <li>Latih agen secara rutin menggunakan sistem & protokol layanan.</li>
+      <li>Gunakan laporan & analitik untuk meningkatkan performa.</li>
+      <li>Pertimbangkan solusi cloud (Webex Contact Center) untuk fleksibilitas.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="cisco-cimc" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco CIMC (Cisco Integrated Management Controller)</h2>
+    <p class="note-paragraph">
+      <strong>Cisco CIMC</strong> adalah antarmuka manajemen berbasis web dan CLI yang terintegrasi pada server Cisco UCS C-Series.
+      Dengan CIMC, administrator dapat memantau, mengonfigurasi, dan mengelola server secara remote tanpa akses fisik langsung.
+      CIMC bekerja seperti KVM over IP, mendukung troubleshooting dan manajemen jarak jauh.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Akses server remote via web GUI atau CLI.</li>
+      <li>Mengontrol power server (on, shutdown, reset).</li>
+      <li>Monitoring hardware: CPU, RAM, disk, suhu, kipas.</li>
+      <li>Konfigurasi BIOS & update firmware dari jarak jauh.</li>
+      <li>Akses virtual media untuk instalasi OS.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Komponen Utama</h3>
+    <ol>
+      <li><strong>Web GUI</strong> – antarmuka berbasis web untuk konfigurasi & monitoring.</li>
+      <li><strong>CLI (SSH)</strong> – kontrol tingkat lanjut.</li>
+      <li><strong>Virtual KVM</strong> – kendali penuh seolah berada di depan server.</li>
+      <li><strong>Sensor Hardware</strong> – pemantauan kesehatan server.</li>
+    </ol>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Remote management tanpa perangkat tambahan.</li>
+      <li>Efisiensi troubleshooting server meningkat.</li>
+      <li>Mudah instalasi OS lewat virtual media.</li>
+      <li>Mengurangi kebutuhan akses fisik ke data center.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Fitur terbatas dibanding UCS Manager pada skala rack/cluster.</li>
+      <li>Butuh jaringan manajemen yang andal untuk remote.</li>
+      <li>Beberapa fitur lanjutan perlu lisensi tambahan.</li>
+    </ul>
+
+    <img src="img/cimc1.png" alt="Tampilan Cisco CIMC" class="note-image" />
+
+    <p class="note-subtitle">Contoh Akses CIMC via CLI (SSH)</p>
+    <pre><code>
+# Akses ke CIMC melalui SSH
+ssh admin@192.168.1.100
+
+# Melihat status kesehatan server
+scope chassis
+show detail
+
+# Mengontrol power server
+scope server 1
+power status
+power cycle
+
+# Mengupdate firmware (contoh)
+scope firmware
+update remote tftp://192.168.1.200/firmware.bin
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan jaringan manajemen terpisah untuk CIMC agar aman.</li>
+      <li>Update firmware CIMC secara rutin.</li>
+      <li>Manfaatkan virtual media untuk instalasi OS remote.</li>
+      <li>Batasi akses hanya untuk admin dengan autentikasi kuat.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="cisco-cucm" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco CUCM (Cisco Unified Communications Manager)</h2>
+    <p class="note-paragraph">
+      <strong>Cisco Unified Communications Manager (CUCM)</strong> adalah jantung dari solusi IP Telephony dan komunikasi terpadu Cisco. 
+      CUCM menyediakan kontrol panggilan, pensinyalan, dan kemampuan konektivitas untuk berbagai perangkat, seperti telepon IP, softphone, dan perangkat kolaborasi video. 
+      CUCM memungkinkan perusahaan untuk mengintegrasikan suara, video, data, dan mobilitas ke dalam satu platform yang efisien dan mudah dikelola.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama Cisco CUCM</h3>
+    <ul>
+      <li><strong>Kontrol Panggilan</strong> – Mengatur dan mengelola semua panggilan telepon dalam jaringan.</li>
+      <li><strong>Integrasi Telepon IP</strong> – Menyediakan pendaftaran dan manajemen untuk telepon IP, gateway, dan perangkat lainnya.</li>
+      <li><strong>Fitur Kolaborasi Lanjutan</strong> – Mendukung fitur seperti pesan suara, konferensi, dan kehadiran (presence).</li>
+      <li><strong>Keamanan dan Redundansi</strong> – Menyediakan fitur keamanan untuk panggilan dan mendukung redundansi untuk ketersediaan tinggi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis-jenis Implementasi CUCM</h3>
+    <ul>
+      <li><strong>CUCM On-Premises</strong> – Diinstal di server fisik atau virtual di lokasi perusahaan.</li>
+      <li><strong>CUCM Cloud</strong> – Ditawarkan sebagai layanan (SaaS) melalui Cisco Webex Calling.</li>
+      <li><strong>CUCM Hybrid</strong> – Kombinasi on-premises dan cloud, memungkinkan integrasi fitur dari kedua lingkungan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Menyederhanakan infrastruktur dengan mengintegrasikan berbagai jenis komunikasi.</li>
+      <li>Meningkatkan produktivitas dengan fitur-fitur kolaborasi canggih.</li>
+      <li>Skalabilitas yang kuat, mendukung dari kantor kecil hingga perusahaan global.</li>
+      <li>Keandalan dan ketersediaan tinggi dengan failover dan redundansi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Biaya implementasi dan pemeliharaan relatif tinggi (on-premises).</li>
+      <li>Memerlukan pengetahuan teknis yang mendalam.</li>
+      <li>Kompleksitas tinggi pada jaringan besar.</li>
+      <li>Ketergantungan pada ekosistem Cisco.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Tujuan: Menggantikan sistem telepon analog lama dengan IP Telephony modern menggunakan <strong>Cisco CUCM</strong>.</li>
+      <li>CUCM: Mengatur dan mendaftarkan telepon IP baru, mengelola nomor ekstensi, serta menyediakan fitur pesan suara.</li>
+    </ul>
+
+    <img src="img/cisco-cucm-diagram.png" alt="Diagram Jaringan Cisco CUCM" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konfigurasi Telepon IP (CLI)</p>
+    <pre><code>
+// Catatan: Sebagian besar konfigurasi CUCM dilakukan melalui GUI.
+// Contoh CLI berikut untuk gateway yang terhubung:
+
+voice register pool  1
+  id mac-address 1122.3344.5566
+  type 7965
+  number 1
+    voice-port 2
+    dialplan-pattern 1 2xxx
+  codec g711ulaw
+  username cisco password cisco
+  tftp-server 20.0.0.1
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Rencanakan alokasi nomor ekstensi dengan baik sebelum implementasi.</li>
+      <li>Gunakan fitur <strong>Auto-Registration</strong> untuk mempercepat pendaftaran telepon massal.</li>
+      <li>Manfaatkan <strong>Cisco Unified Reporting</strong> untuk memantau kinerja sistem.</li>
+      <li>Pertimbangkan CUCM Cloud (Webex Calling) jika membutuhkan fleksibilitas tinggi.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="cisco-dna-center" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco DNA Center</h2>
+    <p class="note-paragraph">
+      <strong>Cisco DNA Center (Digital Network Architecture Center)</strong> adalah platform manajemen dan orkestrasi jaringan terpusat yang didasarkan pada arsitektur Cisco DNA. 
+      Platform ini menyederhanakan operasional jaringan dengan pendekatan berbasis software-defined, memungkinkan perusahaan untuk mengelola, mengotomatisasi, 
+      dan mengamankan jaringan mereka dari satu dasbor tunggal. DNA Center mengubah cara jaringan dikelola, dari konfigurasi manual menjadi manajemen yang didorong oleh kebijakan.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama Cisco DNA Center</h3>
+    <ul>
+      <li><strong>Otomatisasi Jaringan</strong> – Menyederhanakan provisi perangkat, penerapan kebijakan, dan pembaruan perangkat lunak secara otomatis.</li>
+      <li><strong>Analitik dan Wawasan</strong> – Menyediakan visibilitas real-time ke kinerja jaringan, perangkat, dan pengguna.</li>
+      <li><strong>Keamanan Berbasis Kebijakan</strong> – Mengotomatiskan penerapan kebijakan keamanan di seluruh jaringan, memisahkan lalu lintas berdasarkan grup pengguna dan aplikasi.</li>
+      <li><strong>Integrasi Penuh</strong> – Berintegrasi dengan produk Cisco lainnya, seperti switch Catalyst, access point, dan solusi keamanan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Komponen Kunci Cisco DNA Center</h3>
+    <ul>
+      <li><strong>Desain Jaringan</strong> – Alat untuk merancang topologi jaringan logis dan virtual.</li>
+      <li><strong>Provisi Jaringan</strong> – Otomatisasi konfigurasi dan deployment perangkat baru.</li>
+      <li><strong>Kebijakan Jaringan</strong> – Mengelola kebijakan akses dan keamanan dengan pendekatan berbasis intent.</li>
+      <li><strong>Assurance</strong> – Memantau kinerja jaringan dan memberikan rekomendasi perbaikan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan Cisco DNA Center</h3>
+    <ul>
+      <li>Menyederhanakan operasional jaringan, mengurangi waktu dan biaya manajemen.</li>
+      <li>Meningkatkan visibilitas dan kontrol atas seluruh infrastruktur jaringan.</li>
+      <li>Mengurangi risiko kesalahan manusia melalui otomatisasi.</li>
+      <li>Meningkatkan postur keamanan dengan segmentasi jaringan otomatis.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan Cisco DNA Center</h3>
+    <ul>
+      <li>Memerlukan investasi awal yang besar, termasuk perangkat keras dan lisensi.</li>
+      <li>Kompleksitas yang tinggi dalam implementasi awal dan memerlukan tim yang terlatih.</li>
+      <li>Ketergantungan pada perangkat keras Cisco yang kompatibel.</li>
+      <li>Kurva pembelajaran yang curam bagi administrator yang terbiasa dengan CLI tradisional.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Tujuan: Mengotomatiskan deployment switch baru di beberapa cabang menggunakan <strong>Cisco DNA Center</strong>.</li>
+      <li>Cisco DNA Center: Menggunakan fitur <em>"Zero Touch Provisioning"</em> untuk secara otomatis mengonfigurasi switch baru saat terhubung ke jaringan, tanpa intervensi manual di lokasi.</li>
+    </ul>
+
+    <img src="img/cisco-dna-center-diagram.png" alt="Diagram Cisco DNA Center" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konsep Konfigurasi (GUI-Based)</p>
+    <pre><code>
+// Catatan: DNA Center berinteraksi dengan perangkat melalui API, bukan CLI.
+// Konfigurasi dilakukan melalui antarmuka web.
+
+// Workflow Provisi Otomatis:
+// 1. Tambahkan perangkat ke DNA Center (discovery).
+// 2. Buat "Site" (lokasi) di DNA Center untuk perangkat.
+// 3. Terapkan "Templates" (template konfigurasi) yang telah dibuat sebelumnya.
+// 4. Perangkat secara otomatis mengambil konfigurasi yang sesuai.
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Mulai dengan proyek kecil untuk membiasakan diri dengan platform sebelum deployment skala besar.</li>
+      <li>Manfaatkan fitur <em>"Assurance"</em> untuk proactive monitoring dan troubleshooting.</li>
+      <li>Pastikan perangkat yang ada di jaringan Anda kompatibel dengan DNA Center.</li>
+      <li>Pelajari konsep <em>"intent-based networking"</em> untuk memanfaatkan DNA Center secara maksimal.</li>
+    </ul>
+  </main>
+</section>
+<section id="cisco-duo" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco Duo Security</h2>
+    <p class="note-paragraph">
+      <strong>Cisco Duo Security</strong> adalah platform keamanan yang berfokus pada <em>Zero Trust</em> dan autentikasi multifaktor (MFA). 
+      Tujuannya adalah untuk memverifikasi identitas pengguna dan kesehatan perangkat mereka sebelum memberikan akses ke aplikasi dan data perusahaan. 
+      Duo Security melindungi dari serangan phishing dan kredensial yang dicuri dengan memastikan bahwa hanya pengguna yang terautentikasi dan perangkat 
+      yang tepercaya yang dapat terhubung ke sumber daya jaringan.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama Cisco Duo Security</h3>
+    <ul>
+      <li><strong>Autentikasi Multifaktor (MFA)</strong> – Membutuhkan lebih dari satu metode verifikasi untuk membuktikan identitas pengguna, seperti password dan push notifikasi ke ponsel.</li>
+      <li><strong>Verifikasi Perangkat (Device Trust)</strong> – Memeriksa kesehatan perangkat yang mengakses jaringan (misalnya, apakah perangkat sudah diperbarui, memiliki enkripsi, atau tidak memiliki malware).</li>
+      <li><strong>Akses Tanpa Agen (Agentless Access)</strong> – Memberikan perlindungan ke aplikasi cloud dan on-premises tanpa perlu menginstal software khusus di setiap perangkat.</li>
+      <li><strong>Visibilitas dan Analitik</strong> – Menyediakan visibilitas terperinci tentang perangkat dan aktivitas pengguna, membantu mengidentifikasi potensi ancaman.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis Metode Autentikasi Duo</h3>
+    <ul>
+      <li><strong>Duo Push</strong> – Notifikasi yang dikirim ke aplikasi Duo di ponsel untuk verifikasi satu ketukan. Ini adalah metode yang paling mudah dan disarankan.</li>
+      <li><strong>One-Time Password (OTP)</strong> – Kode sandi yang dibuat oleh aplikasi atau token hardware Duo.</li>
+      <li><strong>Telepon dan SMS</strong> – Panggilan telepon atau kode SMS yang dikirim ke nomor yang terdaftar.</li>
+      <li><strong>Biometrik</strong> – Menggunakan sidik jari atau pengenalan wajah yang sudah ada di perangkat.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan Cisco Duo Security</h3>
+    <ul>
+      <li>Sangat mudah digunakan, meningkatkan adopsi MFA di kalangan pengguna.</li>
+      <li>Mengurangi risiko kredensial yang dicuri secara signifikan.</li>
+      <li>Fleksibel dan dapat diintegrasikan dengan berbagai aplikasi dan platform, baik cloud maupun on-premises.</li>
+      <li>Menyediakan visibilitas yang kuat ke dalam postur keamanan perangkat.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan Cisco Duo Security</h3>
+    <ul>
+      <li>Harga dapat menjadi mahal seiring dengan bertambahnya jumlah pengguna.</li>
+      <li>Pengguna memerlukan perangkat seluler untuk menggunakan metode MFA yang paling aman (Duo Push).</li>
+      <li>Beberapa metode autentikasi (seperti SMS) masih rentan terhadap serangan SIM swapping.</li>
+      <li>Membutuhkan koneksi internet untuk metode MFA berbasis cloud (Duo Push).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Tujuan: Mengamankan akses remote ke server perusahaan menggunakan <strong>Cisco Duo Security</strong>.</li>
+      <li>Cisco Duo: Setelah pengguna memasukkan username dan password mereka, mereka akan menerima notifikasi "Push" di ponsel mereka. 
+        Akses hanya diberikan setelah mereka menyetujui notifikasi tersebut.</li>
+    </ul>
+
+    <img src="img/cisco-duo-diagram.png" alt="Diagram Alur Cisco Duo Security" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konsep Integrasi (Konfigurasi di Server VPN)</p>
+    <pre><code>
+// Catatan: Konfigurasi Duo dilakukan melalui GUI.
+// Contoh berikut adalah konsep integrasi RADIUS untuk VPN.
+
+// 1. Konfigurasi Server Duo Authentication Proxy
+radius_client:
+  host=203.0.113.1
+  radius_secret=mysupersecretkey
+
+radius_server_auto:
+  ikey=DIXXXXXXXXXXXXXXXXXX
+  skey=DIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  api_host=api-hostname.duosecurity.com
+
+// 2. Konfigurasi Client VPN (misal: Cisco ASA)
+aaa-server DUO protocol radius
+ aaa-server DUO host 10.0.1.10
+  key mysupersecretkey
+
+tunnel-group MYVPN webvpn-attributes
+  authentication-server-group DUO
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Dorong pengguna untuk menggunakan metode <strong>Duo Push</strong> karena paling aman dan mudah.</li>
+      <li>Manfaatkan fitur <strong>Device Trust</strong> untuk memastikan perangkat yang mengakses jaringan memenuhi standar keamanan minimum.</li>
+      <li>Lakukan pelatihan rutin kepada pengguna tentang cara mengenali dan menghindari serangan phishing.</li>
+      <li>Gunakan Duo untuk melindungi semua akses sensitif, termasuk server, VPN, dan aplikasi cloud.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="cisco-firepower" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco Firepower</h2>
+    <p class="note-paragraph">
+      <strong>Cisco Firepower</strong> adalah firewall generasi berikutnya (Next-Generation Firewall/NGFW) 
+      yang memberikan perlindungan komprehensif terhadap ancaman siber modern. Firepower tidak hanya memblokir 
+      lalu lintas berdasarkan port dan alamat IP, tetapi juga mengintegrasikan sistem pencegahan intrusi (IPS) 
+      dan perlindungan malware tingkat lanjut untuk visibilitas dan kontrol penuh atas jaringan.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li><strong>NGFW</strong> – Kontrol akses berbasis aplikasi, pengguna, dan konten.</li>
+      <li><strong>IPS</strong> – Mendeteksi dan memblokir serangan termasuk zero-day.</li>
+      <li><strong>AMP</strong> – Perlindungan malware dengan analisis file.</li>
+      <li><strong>Visibilitas Aplikasi</strong> – Monitoring & kontrol aplikasi walau memakai port standar.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Komponen Utama</h3>
+    <ol>
+      <li><strong>Firepower Threat Defense (FTD)</strong> – Software tunggal untuk firewall & IPS.</li>
+      <li><strong>Firepower Management Center (FMC)</strong> – Manajemen terpusat untuk kebijakan & laporan.</li>
+      <li><strong>Cisco Secure Firewall</strong> – Nama baru Firepower (fisik & virtual).</li>
+    </ol>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Proteksi ancaman proaktif dan mendalam.</li>
+      <li>Manajemen terpusat melalui FMC.</li>
+      <li>Visibilitas lalu lintas dan aplikasi lebih detail.</li>
+      <li>Integrasi dengan ekosistem keamanan Cisco.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Konfigurasi relatif kompleks.</li>
+      <li>Butuh lisensi tambahan untuk fitur lanjutan (IPS, AMP).</li>
+      <li>Performa bisa menurun saat semua fitur aktif.</li>
+      <li>Harga relatif tinggi untuk enterprise.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <p>
+      <strong>Tujuan:</strong> Mencegah malware & eksploitasi di jaringan perusahaan.<br/>
+      <strong>Solusi:</strong> Firepower dengan IPS untuk memblokir serangan yang dikenal 
+      dan AMP untuk mendeteksi serta mengkarantina file mencurigakan.
+    </p>
+
+    <img src="img/cisco-firepower-diagram.png" alt="Diagram Cisco Firepower" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konfigurasi (CLI & GUI)</p>
+    <pre><code>
+# Konfigurasi dasar antarmuka (CLI FTD)
+configure terminal
+interface gigabitethernet0/0
+ nameif outside
+ security-level 0
+ ip address 203.0.113.1 255.255.255.0
+ no shutdown
+
+interface gigabitethernet0/1
+ nameif inside
+ security-level 100
+ ip address 10.0.1.1 255.255.255.0
+ no shutdown
+
+# Contoh kebijakan di FMC (GUI)
+Access Control Policy:
+  Action: Block
+  Source Zone: any
+  Destination Zone: outside
+  Application: facebook
+  User: any
+  URL Category: Social Networking
+  IPS Policy: Default Intrusion Policy
+  File Policy: Block Malware
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan FMC untuk manajemen terpusat.</li>
+      <li>Mulai dengan IPS & AMP dasar, lalu kembangkan.</li>
+      <li>Update rutin threat intelligence & definisi malware.</li>
+      <li>Aktif pantau dashboard & laporan di FMC.</li>
+    </ul>
+  </main>
+</section>
+
+
+<section id="cisco-hyperflex" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco HyperFlex</h2>
+    <p class="note-paragraph">
+      <strong>Cisco HyperFlex</strong> adalah solusi infrastruktur terkonvergensi (Hyperconverged Infrastructure/HCI) yang menggabungkan komputasi, penyimpanan, dan jaringan ke dalam satu platform tunggal yang dikelola secara terpusat. Solusi ini dibangun di atas Cisco UCS (Unified Computing System) dan Platform Data HyperFlex (HX Data Platform) untuk menyederhanakan operasional pusat data, meningkatkan kinerja aplikasi, dan memberikan fleksibilitas "pay-as-you-grow". 
+      <em>(Catatan: Cisco telah mengumumkan bahwa HyperFlex adalah produk yang dihentikan dan digantikan oleh solusi lain.)</em>
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li><strong>Konsolidasi Infrastruktur</strong> – Menggabungkan server, penyimpanan, dan jaringan ke dalam satu kluster.</li>
+      <li><strong>Penyimpanan Berkinerja Tinggi</strong> – Menggunakan arsitektur file sistem terdistribusi untuk optimasi data real-time.</li>
+      <li><strong>Skalabilitas Fleksibel</strong> – Tambah sumber daya komputasi/penyimpanan sesuai kebutuhan.</li>
+      <li><strong>Manajemen Terpusat</strong> – Dapat diintegrasikan dengan Cisco Intersight (cloud-based).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Komponen Utama</h3>
+    <ol>
+      <li><strong>Cisco UCS Servers (HX-Series)</strong> – menyediakan sumber daya komputasi.</li>
+      <li><strong>HyperFlex Data Platform (HXDP)</strong> – perangkat lunak untuk penyimpanan terdistribusi.</li>
+      <li><strong>Cisco Intersight</strong> – platform manajemen cloud untuk lifecycle management.</li>
+      <li><strong>Hypervisor</strong> – mendukung VMware vSphere & Microsoft Hyper-V.</li>
+    </ol>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Menyederhanakan IT & manajemen data center.</li>
+      <li>Menghemat ruang dan konsumsi daya.</li>
+      <li>Peningkatan performa aplikasi dengan arsitektur penyimpanan optimal.</li>
+      <li>Model skalabilitas efisien dan fleksibel.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Biaya awal tinggi untuk minimum cluster.</li>
+      <li>Kurva pembelajaran tinggi bagi tim IT tradisional.</li>
+      <li>Tergantung ekosistem Cisco untuk fungsi penuh.</li>
+      <li>Beberapa fitur butuh lisensi tambahan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li><strong>Tujuan:</strong> Deploy infrastruktur Virtual Desktop Infrastructure (VDI) dengan kinerja & skalabilitas tinggi.</li>
+      <li><strong>Solusi HyperFlex:</strong> Efisien untuk VDI dengan instant clone & kinerja konsisten.</li>
+    </ul>
+
+    <img src="img/cisco-hyperflex-diagram.png" alt="Diagram Cisco HyperFlex" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konsep Konfigurasi (GUI-Based)</p>
+    <pre><code>
+# Deployment Kluster:
+- Gunakan HyperFlex Installer VM untuk inisialisasi.
+- Masukkan kredensial & detail jaringan.
+- Installer otomatis provisioning cluster.
+
+# Manajemen via Intersight:
+- Akses dashboard Cisco Intersight.
+- Klaim cluster HyperFlex ke akun Intersight.
+- Kelola, monitor & update firmware dari pusat.
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pilih kluster fleksibel (all-flash / hybrid) sesuai workload.</li>
+      <li>Gunakan kompresi & deduplikasi data untuk efisiensi storage.</li>
+      <li>Kelola lewat Cisco Intersight untuk manajemen otomatis.</li>
+      <li>Lakukan pembaruan firmware secara rutin.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="cisco-intersight" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco Intersight</h2>
+    <p class="note-paragraph">
+      <strong>Cisco Intersight</strong> adalah platform manajemen infrastruktur berbasis cloud
+      yang dirancang untuk menyederhanakan dan mengotomatisasi manajemen server, sistem
+      penyimpanan, dan infrastruktur terkonvergensi. Dengan Intersight, administrator dapat
+      mengelola perangkat Cisco UCS, HyperFlex, dan infrastruktur data center lainnya dari
+      satu dasbor tunggal, di mana saja. Platform ini memanfaatkan analitik berbasis AI untuk
+      memberikan wawasan lebih dalam, visibilitas, dan orkestrasi yang cerdas.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li><strong>Manajemen Siklus Hidup</strong> – deployment, update firmware, operasional perangkat.</li>
+      <li><strong>Otomatisasi & Orkestrasi</strong> – menyederhanakan tugas kompleks dengan kebijakan profil.</li>
+      <li><strong>Analitik & Wawasan Prediktif</strong> – AI/ML untuk prediksi masalah & rekomendasi.</li>
+      <li><strong>Manajemen Cloud</strong> – akses & kontrol infrastruktur dari mana saja secara aman.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Komponen Kunci</h3>
+    <ol>
+      <li><strong>Intersight Assist</strong> – kelola perangkat non-UCS (HyperFlex) dari cloud.</li>
+      <li><strong>Intersight Workload Optimizer</strong> – insight performa aplikasi & optimasi resource.</li>
+      <li><strong>Intersight Orchestrator</strong> – orkestrasi alur kerja IT kompleks.</li>
+      <li><strong>Intersight Virtualization Service</strong> – kelola VMware & virtual environment.</li>
+    </ol>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Sederhana & mengurangi kompleksitas operasional IT.</li>
+      <li>Otomatisasi hemat waktu & kurangi human error.</li>
+      <li>Visibilitas & kontrol penuh atas data center.</li>
+      <li>Analitik prediktif membuat tim lebih proaktif.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Butuh koneksi internet stabil untuk cloud management.</li>
+      <li>Biaya berlangganan meningkat sesuai skala perangkat.</li>
+      <li>Perlu pemahaman mendalam UCS & HyperFlex.</li>
+      <li>Risiko keamanan data cloud (meski ada proteksi kuat).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li><strong>Tujuan:</strong> menyederhanakan update firmware multi data center.</li>
+      <li><strong>Solusi:</strong> profil kebijakan firmware otomatis, konsistensi di seluruh server.</li>
+    </ul>
+
+    <img src="img/cisco-intersight-diagram.png" alt="Diagram Cisco Intersight" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konsep Penggunaan</p>
+    <pre><code>
+// 1. Klaim perangkat UCS/HyperFlex di Intersight.
+// 2. Buat kebijakan "Service Profile" (boot, RAID, jaringan).
+// 3. Deploy profil ke server kosong → otomatis dikonfigurasi siap pakai.
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan Orchestrator untuk otomatisasi deployment.</li>
+      <li>Aktifkan Workload Optimizer untuk rekomendasi performa.</li>
+      <li>Pastikan perangkat selalu terkoneksi ke cloud Intersight.</li>
+      <li>Manfaatkan Compliance untuk audit & standar perusahaan.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="cisco-ise" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco ISE (Identity Services Engine)</h2>
+    <p class="note-paragraph">
+      Cisco ISE adalah solusi keamanan jaringan yang berfungsi sebagai pusat otentikasi, otorisasi,
+      dan akuntansi (AAA) untuk perangkat yang terhubung ke jaringan. ISE memungkinkan administrator
+      mengontrol siapa yang boleh mengakses jaringan, perangkat apa yang digunakan, serta tingkat akses
+      yang diberikan, sehingga meningkatkan keamanan dan kepatuhan kebijakan perusahaan.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama Cisco ISE</h3>
+    <ul class="note-list">
+      <li>Melakukan <strong>otentikasi</strong> pengguna dan perangkat sebelum mengakses jaringan.</li>
+      <li>Menerapkan <strong>otorisasi</strong> berbasis kebijakan (policy-based access control).</li>
+      <li>Menyediakan <strong>akuntansi</strong> untuk mencatat aktivitas akses jaringan.</li>
+      <li>Integrasi dengan <strong>profiling</strong> perangkat IoT, BYOD, dan endpoint lain.</li>
+      <li>Integrasi dengan solusi keamanan lain seperti Cisco TrustSec, Firepower, dan Umbrella.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Komponen Utama Cisco ISE</h3>
+    <ol class="note-list">
+      <li><strong>Policy Service Node (PSN)</strong> – menangani permintaan otentikasi dan otorisasi.</li>
+      <li><strong>Administration Node</strong> – pusat manajemen dan konfigurasi kebijakan.</li>
+      <li><strong>Monitoring & Troubleshooting Node (MnT)</strong> – menyimpan log dan laporan aktivitas.</li>
+      <li><strong>Profiling Service</strong> – mengidentifikasi dan mengklasifikasikan perangkat di jaringan.</li>
+    </ol>
+
+    <h3 class="note-subtitle">Kelebihan Cisco ISE</h3>
+    <ul class="note-list">
+      <li>Meningkatkan keamanan jaringan dengan kontrol akses berbasis identitas.</li>
+      <li>Mendukung <strong>802.1X</strong> untuk autentikasi jaringan tingkat lanjut.</li>
+      <li>Dapat diintegrasikan dengan Active Directory dan LDAP.</li>
+      <li>Memberikan visibilitas penuh terhadap perangkat dan pengguna di jaringan.</li>
+      <li>Memperkuat kepatuhan terhadap standar keamanan (compliance).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan Cisco ISE</h3>
+    <ul class="note-list">
+      <li>Kompleksitas implementasi cukup tinggi.</li>
+      <li>Memerlukan lisensi tambahan untuk fitur tertentu (misalnya profiling, posture).</li>
+      <li>Biaya investasi relatif mahal.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Alasan Kenapa Harus Pakai Cisco ISE</h3>
+    <ul class="note-list">
+      <li><strong>Keamanan lebih tinggi</strong> – hanya user dan perangkat sah yang bisa masuk jaringan.</li>
+      <li><strong>Kontrol akses fleksibel</strong> – bisa dibatasi berdasarkan identitas, role, atau perangkat.</li>
+      <li><strong>Visibilitas penuh</strong> – admin tahu siapa dan apa yang terhubung, termasuk status perangkat.</li>
+      <li><strong>Integrasi luas</strong> – dapat dihubungkan dengan AD/LDAP, firewall, NAC, dan perangkat Cisco lainnya.</li>
+      <li><strong>Efisiensi operasional</strong> – kebijakan dikelola terpusat, mempermudah manajemen skala besar.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <p class="note-paragraph"><strong>Tanpa Cisco ISE</strong> – semua orang yang tahu password Wi-Fi bisa langsung masuk jaringan, tamu bisa akses resource internal, admin sulit memantau siapa saja yang terhubung, dan rawan serangan dari perangkat tidak aman.</p>
+    <p class="note-paragraph"><strong>Dengan Cisco ISE</strong> – setiap user harus login sesuai identitas (misalnya akun kampus/perusahaan), tamu diarahkan ke portal guest Wi-Fi, perangkat dicek antivirus & update sebelum diizinkan, admin bisa melihat dashboard lengkap serta mengisolasi perangkat mencurigakan hanya dengan klik.</p>
+    <ul class="note-list">
+      <li><strong>Kampus</strong>: Mahasiswa hanya akses e-learning, dosen ke server akademik, tamu hanya internet.</li>
+      <li><strong>Perusahaan</strong>: Staff HRD hanya akses aplikasi HR, IT punya akses penuh, tamu diarahkan ke internet saja.</li>
+    </ul>
+
+    <img src="img/ise1.png" alt="Diagram Cisco ISE" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konfigurasi Radius pada Cisco ISE</p>
+    <pre class="note-codeblock"><code>
+# Konfigurasi pada Cisco Switch untuk integrasi dengan ISE
+
+radius server ISE
+ address ipv4 192.168.10.10 auth-port 1812 acct-port 1813
+ key cisco123
+
+ip radius source-interface GigabitEthernet0/1
+
+# Aktifkan AAA
+aaa new-model
+aaa authentication dot1x default group radius
+aaa authorization network default group radius
+aaa accounting update periodic 5
+aaa accounting dot1x default start-stop group radius
+
+# Konfigurasi 802.1X di interface
+interface GigabitEthernet0/2
+ switchport mode access
+ authentication port-control auto
+ mab
+ dot1x pae authenticator
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan integrasi dengan Active Directory untuk mempermudah manajemen user.</li>
+      <li>Aktifkan profiling agar perangkat non-user (printer, IP phone, IoT) tetap terkelola.</li>
+      <li>Terapkan segmentasi dengan Cisco TrustSec untuk keamanan lebih granular.</li>
+      <li>Lakukan monitoring pada MnT node untuk audit keamanan jaringan.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="cisco-jabber" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco Jabber</h2>
+    <p class="note-paragraph">
+      <strong>Cisco Jabber</strong> adalah aplikasi kolaborasi terpadu yang menggabungkan berbagai fungsi komunikasi ke dalam satu platform yang terintegrasi. Dengan Jabber, pengguna dapat melakukan panggilan suara dan video, mengirim pesan instan, memeriksa status kehadiran (presence), dan berbagi layar dari perangkat apa pun, termasuk desktop, laptop, dan perangkat seluler. Jabber dirancang untuk meningkatkan produktivitas tim dengan menyederhanakan cara mereka berkomunikasi dan berkolaborasi.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama Cisco Jabber</h3>
+    <ul class="note-list">
+      <li><strong>Pesan Instan (IM)</strong> – Mengirim pesan teks secara real-time ke rekan kerja.</li>
+      <li><strong>Status Kehadiran (Presence)</strong> – Menampilkan status ketersediaan pengguna (misalnya, tersedia, sibuk, sedang dalam panggilan, atau tidak di kantor).</li>
+      <li><strong>Panggilan Suara dan Video</strong> – Melakukan dan menerima panggilan telepon atau video dari aplikasi, bukan hanya dari telepon fisik.</li>
+      <li><strong>Berbagi Layar (Screen Sharing)</strong> – Berbagi layar desktop dengan rekan kerja selama panggilan atau konferensi.</li>
+      <li><strong>Integrasi dengan Kalender</strong> – Menunjukkan status kehadiran berdasarkan acara yang ada di kalender.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Platform yang Didukung Jabber</h3>
+    <ul class="note-list">
+      <li><strong>Desktop</strong> – Windows dan macOS.</li>
+      <li><strong>Perangkat Seluler</strong> – iOS dan Android.</li>
+      <li><strong>Integrasi Lanjutan</strong> – Terhubung dengan Microsoft Outlook, Webex Meetings, dan aplikasi bisnis lainnya.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan Cisco Jabber</h3>
+    <ul class="note-list">
+      <li>Menyediakan solusi komunikasi yang lengkap dalam satu aplikasi.</li>
+      <li>Meningkatkan mobilitas kerja karena dapat digunakan di mana saja.</li>
+      <li>Mengurangi biaya komunikasi dengan menggunakan IP Telephony.</li>
+      <li>Memiliki fitur keamanan yang kuat untuk melindungi komunikasi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan Cisco Jabber</h3>
+    <ul class="note-list">
+      <li>Memerlukan infrastruktur backend (seperti Cisco CUCM) yang kompleks untuk fungsionalitas penuh.</li>
+      <li>Pengaturan awal dapat menjadi rumit bagi pengguna non-teknis.</li>
+      <li>Konsumsi sumber daya sistem (CPU dan RAM) yang relatif tinggi.</li>
+      <li>Terkadang mengalami masalah koneksi atau kualitas panggilan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul class="note-list">
+      <li><strong>Tujuan:</strong> Meningkatkan kolaborasi tim remote dengan menyediakan platform komunikasi terpadu <strong>Cisco Jabber</strong>.</li>
+      <li><strong>Cisco Jabber:</strong> Anggota tim dapat melihat status kehadiran satu sama lain, mengirim pesan instan untuk pertanyaan cepat, dan beralih ke panggilan video jika diperlukan, semua dari satu aplikasi.</li>
+    </ul>
+
+    <img src="img/cisco-jabber-diagram.png" alt="Diagram Jaringan Cisco Jabber" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konsep Penggunaan</p>
+    <pre class="note-codeblock"><code>
+// Workflow Penggunaan Harian
+// 1. Login: Buka aplikasi Jabber dan login dengan kredensial perusahaan.
+// 2. Cek Kehadiran: Lihat status rekan kerja di daftar kontak.
+// 3. Kirim Pesan: Klik pada kontak dan ketik pesan di jendela chat.
+// 4. Panggil: Klik ikon telepon untuk memulai panggilan suara.
+// 5. Berbagi: Selama panggilan, klik tombol "Share Screen" untuk mempresentasikan dokumen.
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Integrasikan Jabber dengan sistem kalender untuk akurasi status kehadiran yang lebih baik.</li>
+      <li>Gunakan headset berkualitas tinggi untuk mendapatkan kualitas suara terbaik.</li>
+      <li>Berikan pelatihan kepada pengguna untuk memanfaatkan semua fitur kolaborasi.</li>
+      <li>Pertimbangkan solusi cloud seperti Webex App yang menawarkan fungsionalitas serupa dengan pengalaman yang lebih modern.</li>
+    </ul>
+  </main>
+</section>
+
+
+<section id="cisco-mobility-express" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco Mobility Express</h2>
+    <p class="note-paragraph">
+      <strong>Cisco Mobility Express</strong> adalah solusi jaringan nirkabel yang dirancang khusus untuk bisnis kecil dan menengah. Berbeda dengan arsitektur nirkabel tradisional yang memerlukan pengendali nirkabel (wireless controller) terpisah, Mobility Express mengintegrasikan fungsi pengendali langsung ke dalam salah satu titik akses (Access Point/AP) Cisco. Hal ini menyederhanakan penyebaran dan manajemen jaringan nirkabel, menjadikannya pilihan yang ideal untuk lingkungan yang tidak memiliki tim IT khusus.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama Cisco Mobility Express</h3>
+    <ul class="note-list">
+      <li><strong>Pengendali Terintegrasi</strong> – Salah satu AP berperan sebagai "master" yang mengelola hingga 100 AP lain dan 2000 klien.</li>
+      <li><strong>Konfigurasi yang Disederhanakan</strong> – Pengaturan dapat dilakukan melalui antarmuka pengguna grafis (GUI) yang intuitif atau aplikasi seluler.</li>
+      <li><strong>Manajemen Terpusat</strong> – Administrator dapat mengelola semua AP dan klien dari satu dasbor tunggal.</li>
+      <li><strong>Redundansi</strong> – Jika AP "master" gagal, AP lain secara otomatis mengambil alih peran pengendali.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Komponen dan Cara Kerja</h3>
+    <ul class="note-list">
+      <li><strong>Master AP</strong> – AP pertama yang dikonfigurasi berfungsi sebagai pengendali jaringan.</li>
+      <li><strong>Subordinat AP</strong> – AP lain dalam jaringan yang terhubung dan dikelola oleh Master AP.</li>
+      <li><strong>GUI Web</strong> – Antarmuka berbasis browser untuk konfigurasi, pemantauan, dan pemecahan masalah.</li>
+      <li><strong>Cisco Wireless Mobile App</strong> – Aplikasi seluler untuk konfigurasi dasar dan pemantauan dari smartphone.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan Cisco Mobility Express</h3>
+    <ul class="note-list">
+      <li>Menghemat biaya karena tidak memerlukan perangkat pengendali nirkabel terpisah.</li>
+      <li>Penyebaran yang cepat dan mudah, cocok untuk bisnis kecil.</li>
+      <li>Manajemen yang disederhanakan melalui antarmuka web dan aplikasi seluler.</li>
+      <li>Menyediakan fitur keamanan dan kinerja yang solid, seperti autentikasi WPA2/WPA3 dan roaming antar AP.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan Cisco Mobility Express</h3>
+    <ul class="note-list">
+      <li>Skalabilitas terbatas (maksimum 100 AP).</li>
+      <li>Fitur yang lebih sedikit dibandingkan dengan solusi pengendali nirkabel enterprise (misalnya, tidak mendukung fitur AVC atau ISE).</li>
+      <li>Kinerja dan fungsionalitas bergantung pada model AP yang digunakan.</li>
+      <li>Dapat mengalami penurunan performa jika AP master menjalankan banyak fungsi secara bersamaan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul class="note-list">
+      <li><strong>Tujuan:</strong> Menyediakan jaringan Wi-Fi yang aman dan handal di kantor cabang kecil menggunakan <strong>Cisco Mobility Express</strong>.</li>
+      <li><strong>Cisco Mobility Express:</strong> Menggunakan satu AP sebagai pengendali dan menambahkan beberapa AP lain yang dikelola secara otomatis, menyediakan cakupan Wi-Fi di seluruh area kantor tanpa perlu infrastruktur yang rumit.</li>
+    </ul>
+
+    <img src="img/cisco-mobility-express-diagram.png" alt="Diagram Jaringan Cisco Mobility Express" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konfigurasi Dasar (Web GUI)</p>
+    <pre class="note-codeblock"><code>
+// Catatan: Konfigurasi utama dilakukan melalui GUI, bukan CLI.
+// Ini adalah konsep langkah-langkahnya.
+
+// 1. Setup Awal:
+//    Hubungkan AP ke power dan switch.
+//    Akses alamat IP default AP (misal: 192.168.1.1 atau 192.168.0.1).
+//    Jalankan wizard konfigurasi awal.
+
+// 2. Wizard Konfigurasi:
+//    Pilih "Mobility Express"
+//    Atur nama SSID, password, dan jenis keamanan.
+//    Konfigurasi pengaturan IP jaringan (statis atau DHCP).
+//    Tunggu hingga AP lain bergabung secara otomatis.
+
+// 3. Penambahan AP Lain:
+//    Hubungkan AP baru ke jaringan.
+//    AP baru secara otomatis akan menemukan dan bergabung dengan Master AP.
+    </code></pre>
+    
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Pastikan semua AP memiliki versi firmware yang sama untuk menghindari masalah kompatibilitas.</li>
+      <li>Gunakan aplikasi Cisco Wireless Mobile App untuk konfigurasi yang lebih cepat dan mudah.</li>
+      <li>Periksa status AP dan klien secara berkala dari dasbor web untuk memantau kinerja.</li>
+      <li>Jika Anda membutuhkan skalabilitas atau fitur yang lebih canggih di masa depan, pertimbangkan untuk beralih ke solusi WLC (Wireless LAN Controller) enterprise.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="cisco-mds" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco MDS (Multilayer Director Switch)</h2>
+    <p class="note-paragraph">
+      <strong>Cisco MDS (Multilayer Director Switch)</strong> adalah lini produk saklar Fiber Channel (FC) berkinerja tinggi
+      yang dirancang khusus untuk membangun jaringan Area Penyimpanan (Storage Area Network/SAN) di lingkungan pusat data.
+      MDS berperan sebagai tulang punggung (backbone) untuk konektivitas antara server dan perangkat penyimpanan, memastikan
+      transfer data yang cepat, andal, dan aman. Tidak seperti switch jaringan tradisional, MDS fokus pada lalu lintas
+      penyimpanan, menyediakan ketersediaan tinggi, skalabilitas, dan fitur-fitur keamanan yang dibutuhkan oleh aplikasi kritikal.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama Cisco MDS</h3>
+    <ul>
+      <li><strong>Konektivitas SAN</strong> – koneksi berkecepatan tinggi antar server & storage dengan Fiber Channel.</li>
+      <li><strong>Ketersediaan Tinggi</strong> – desain redundan (power supply, modul, kipas) mencegah downtime.</li>
+      <li><strong>Keamanan Lanjutan</strong> – zoning & ACL untuk kontrol akses & perlindungan data.</li>
+      <li><strong>Manajemen Terpusat</strong> – dikelola via Cisco Data Center Network Manager (DCNM).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis-jenis Cisco MDS</h3>
+    <ul>
+      <li><strong>Director-Class Switches</strong> – switch sasis besar untuk inti SAN (mis. MDS 9700 Series).</li>
+      <li><strong>Fabric Switches</strong> – switch ringkas untuk akses/agregasi SAN (mis. MDS 9100 & 9300 Series).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Kinerja & keandalan tinggi untuk data center kritikal.</li>
+      <li>Skalabilitas mendukung pertumbuhan SAN di masa depan.</li>
+      <li>Fitur keamanan canggih untuk data penting.</li>
+      <li>Integrasi dengan solusi Cisco lain & virtualisasi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Biaya sangat tinggi, kurang cocok untuk skala kecil.</li>
+      <li>Konfigurasi & pemeliharaan rumit, perlu skill khusus.</li>
+      <li>Konsumsi daya & pendinginan tinggi.</li>
+      <li>Bergantung pada infrastruktur Fiber Channel.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li><strong>Tujuan:</strong> membangun SAN berperforma tinggi untuk virtualisasi server besar.</li>
+      <li><strong>Solusi:</strong> MDS menghubungkan cluster server virtual ke storage array dengan throughput optimal.</li>
+    </ul>
+
+    <img src="img/cisco-mds-diagram.png" alt="Diagram Jaringan Cisco MDS" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konfigurasi Zoning (CLI)</p>
+    <pre><code>
+// Definisikan anggota zona
+zone name MyZone vsan 10
+ member wwn 20:00:00:0e:12:34:56:78  ! Server HBA WWN
+ member wwn 21:00:00:0c:87:65:43:21  ! Storage Controller WWN
+
+// Definisikan Zone Set
+zoneset name MyZoneSet vsan 10
+ member MyZone
+
+// Aktifkan Zone Set
+zoneset activate name MyZoneSet vsan 10
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan <strong>Zoning</strong> untuk segmentasi & keamanan SAN.</li>
+      <li>Selalu siapkan redundansi power, modul, & koneksi.</li>
+      <li>Manfaatkan <strong>Cisco DCNM</strong> untuk manajemen visual.</li>
+      <li>Update firmware rutin untuk fitur & patch keamanan terbaru.</li>
+    </ul>
+  </main>
+</section>
+
+
+<!-- Cisco Nexus Switch -->
+<section id="cisco-nexus" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco Nexus Switch</h2>
+    <p class="note-paragraph">
+      <strong>Cisco Nexus</strong> adalah seri switch data center kelas enterprise yang dirancang untuk kinerja tinggi,
+      skalabilitas, dan fitur jaringan modern. Switch ini banyak digunakan pada lingkungan cloud, virtualisasi,
+      dan pusat data berskala besar. Nexus mendukung fitur-fitur canggih seperti VXLAN, segmentasi jaringan,
+      dan automasi dengan NX-OS maupun ACI (Application Centric Infrastructure).
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama Cisco Nexus</h3>
+    <ul class="note-list">
+      <li>Menyediakan switching berkecepatan tinggi (10/25/40/100/400G) untuk pusat data.</li>
+      <li>Mendukung <strong>virtualisasi jaringan</strong> dengan VXLAN EVPN.</li>
+      <li>Integrasi dengan Cisco ACI untuk automasi berbasis policy.</li>
+      <li>Memberikan <strong>high availability</strong> dengan vPC (Virtual Port Channel).</li>
+      <li>Memfasilitasi segmentasi jaringan untuk keamanan tenant.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Fitur Utama Cisco Nexus</h3>
+    <ol class="note-list">
+      <li><strong>NX-OS</strong> – sistem operasi modular yang digunakan pada Nexus switch.</li>
+      <li><strong>vPC (Virtual Port Channel)</strong> – memungkinkan dua switch berfungsi sebagai satu logical switch.</li>
+      <li><strong>VXLAN EVPN</strong> – mendukung overlay jaringan untuk multi-tenant data center.</li>
+      <li><strong>Fabric Extender (FEX)</strong> – memperluas port switch dengan arsitektur fabric.</li>
+      <li><strong>QoS & Security</strong> – mendukung segmentasi, ACL, dan policy berbasis aplikasi.</li>
+    </ol>
+
+    <h3 class="note-subtitle">Kelebihan Cisco Nexus</h3>
+    <ul class="note-list">
+      <li>Kinerja tinggi dengan latensi rendah.</li>
+      <li>Mendukung teknologi data center modern (VXLAN, EVPN, ACI).</li>
+      <li>Skalabilitas besar untuk lingkungan cloud dan virtualisasi.</li>
+      <li>Dukungan penuh untuk automasi (NX-API, Ansible, Python).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan Cisco Nexus</h3>
+    <ul class="note-list">
+      <li>Biaya perangkat relatif tinggi.</li>
+      <li>Membutuhkan keahlian khusus dalam konfigurasi NX-OS dan ACI.</li>
+      <li>Beberapa fitur premium memerlukan lisensi tambahan.</li>
+    </ul>
+
+    <img src="img/nexus1.png" alt="Diagram Cisco Nexus" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konfigurasi Dasar Cisco Nexus</p>
+    <pre class="note-codeblock"><code>
+! Mengaktifkan fitur yang dibutuhkan
+feature interface-vlan
+feature vpc
+feature lacp
+
+! Konfigurasi VLAN
+vlan 10
+ name PROD
+vlan 20
+ name DEV
+
+! Konfigurasi interface VLAN
+interface vlan 10
+ ip address 192.168.10.1/24
+
+interface vlan 20
+ ip address 192.168.20.1/24
+
+! Konfigurasi vPC domain
+vpc domain 1
+ peer-keepalive destination 192.168.100.2 source 192.168.100.1
+ role priority 1
+
+! Konfigurasi Port-Channel dengan vPC
+interface Ethernet1/1
+ channel-group 10 mode active
+
+interface port-channel10
+ switchport mode trunk
+ vpc 10
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan <strong>vPC</strong> untuk redundancy dan load balancing antar switch.</li>
+      <li>Manfaatkan <strong>VXLAN EVPN</strong> untuk mendukung jaringan multi-tenant.</li>
+      <li>Integrasikan dengan Cisco ACI jika membutuhkan automasi berbasis policy.</li>
+      <li>Selalu update NX-OS untuk patch keamanan dan fitur terbaru.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="cisco-prime-infrastructure" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco Prime Infrastructure</h2>
+    <p class="note-paragraph">
+      <strong>Cisco Prime Infrastructure</strong> adalah platform manajemen jaringan terintegrasi yang dirancang
+      untuk menyederhanakan pengelolaan jaringan kabel dan nirkabel. Platform ini menyediakan satu antarmuka
+      tunggal untuk mengotomatiskan, memantau, dan memecahkan masalah perangkat jaringan, termasuk router,
+      switch, dan access point. Tujuannya adalah untuk memberikan visibilitas penuh dan kontrol terpusat atas
+      infrastruktur jaringan, meningkatkan efisiensi operasional, dan mempercepat penyelesaian masalah.
+      <em>(Catatan: Cisco telah mengumumkan akhir masa pakai dan dukungan untuk Prime Infrastructure, dengan fokus
+      pada solusi manajemen modern seperti Cisco DNA Center.)</em>
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li><strong>Manajemen Perangkat Terpusat</strong> – konfigurasi, firmware update, dan inventaris perangkat.</li>
+      <li><strong>Pemantauan Jaringan</strong> – kinerja perangkat & koneksi secara real-time.</li>
+      <li><strong>Manajemen Siklus Hidup</strong> – otomasi deployment, inventaris, audit.</li>
+      <li><strong>Troubleshooting</strong> – alat diagnostik untuk identifikasi & penyelesaian masalah cepat.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Area Jaringan yang Dikelola</h3>
+    <ul>
+      <li><strong>Jaringan Kabel</strong> – switch (Catalyst) & router (ISR).</li>
+      <li><strong>Jaringan Nirkabel</strong> – Wireless LAN Controller (WLC) & Access Point (AP).</li>
+      <li><strong>Jaringan Cabang</strong> – visibilitas & kontrol perangkat di lokasi terpencil.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Dasbor terpadu untuk jaringan kabel & nirkabel.</li>
+      <li>Efisiensi meningkat lewat otomatisasi tugas operasional.</li>
+      <li>Waktu penyelesaian masalah lebih cepat dengan visibilitas end-to-end.</li>
+      <li>Perencanaan kapasitas & manajemen aset lebih baik.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Instalasi & konfigurasi awal cukup kompleks.</li>
+      <li>Skalabilitas terbatas dibanding Cisco DNA Center.</li>
+      <li>Performa menurun di jaringan skala sangat besar.</li>
+      <li>Dukungan resmi Cisco sudah dihentikan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li><strong>Tujuan:</strong> mengelola & memantau switch dan AP di kampus universitas.</li>
+      <li><strong>Solusi:</strong> Prime Infrastructure digunakan untuk ribuan perangkat dari satu konsol,
+          mengotomatisasi firmware update, serta troubleshooting koneksi Wi-Fi mahasiswa.</li>
+    </ul>
+
+    <img src="img/cisco-prime-infrastructure-diagram.png" alt="Diagram Cisco Prime Infrastructure" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konsep Penggunaan (GUI-Based)</p>
+    <pre><code>
+// 1. Discovery
+//    Masukkan IP/range subnet perangkat.
+//    Prime Infrastructure otomatis menemukan & menambah perangkat.
+
+// 2. Deployment
+//    Buat template konfigurasi (mis. VLAN, SSID).
+//    Terapkan ke banyak perangkat sekaligus.
+
+// 3. Monitoring
+//    Gunakan dashboard untuk status perangkat, kesehatan jaringan,
+//    & laporan kinerja historis.
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pastikan server & database sesuai kebutuhan jaringan.</li>
+      <li>Gunakan fitur <strong>Compliance</strong> untuk standar keamanan.</li>
+      <li>Manfaatkan fitur troubleshooting seperti <code>Client 360</code> untuk koneksi Wi-Fi.</li>
+      <li>Untuk proyek baru, pertimbangkan migrasi ke <strong>Cisco DNA Center</strong>.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="cisco-ucs" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco UCS (Unified Computing System)</h2>
+    <p class="note-paragraph">
+      <strong>Cisco Unified Computing System (UCS)</strong> adalah arsitektur pusat data terintegrasi
+      yang menggabungkan komputasi, jaringan, penyimpanan, dan virtualisasi menjadi satu sistem yang kohesif.
+      Berbeda dari server tradisional, UCS mengelola semua komponen fisik dan virtual sebagai satu entitas terpadu,
+      yang dikontrol melalui perangkat lunak. Tujuannya adalah untuk menyederhanakan manajemen, meningkatkan efisiensi,
+      dan mempercepat deployment aplikasi di lingkungan pusat data modern.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li><strong>Manajemen Terpadu</strong> – kelola server, jaringan, & penyimpanan dari satu konsol (UCS Manager).</li>
+      <li><strong>Otomatisasi Berbasis Kebijakan</strong> – gunakan Service Profiles untuk otomatisasi hardware.</li>
+      <li><strong>Skalabilitas Fleksibel</strong> – tambah server baru cepat tanpa konfigurasi manual.</li>
+      <li><strong>Penyederhanaan Jaringan</strong> – kurangi jumlah kabel/adaptor & sederhanakan topologi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Komponen Kunci</h3>
+    <ul>
+      <li><strong>UCS Manager</strong> – software manajemen UCS (blade & rack).</li>
+      <li><strong>Fabric Interconnects</strong> – modul pusat konektivitas jaringan & storage.</li>
+      <li><strong>UCS Blade Servers (B-Series)</strong> – server modular di dalam chassis.</li>
+      <li><strong>UCS Rack Servers (C-Series)</strong> – server standar untuk rak.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Hemat waktu & biaya operasional dengan manajemen terpusat.</li>
+      <li>Mengurangi kompleksitas kabel & perangkat jaringan.</li>
+      <li>Provisi server baru dalam hitungan menit.</li>
+      <li>Konsistensi & kepatuhan melalui konfigurasi berbasis profil.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Investasi awal tinggi, khususnya untuk Fabric Interconnects.</li>
+      <li>Butuh pelatihan khusus untuk konfigurasi & manajemen.</li>
+      <li>Awalnya cukup kompleks memahami Service Profiles & kebijakan.</li>
+      <li>Ketergantungan pada ekosistem Cisco untuk fitur penuh.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li><strong>Tujuan:</strong> deploy server baru untuk virtualisasi di data center.</li>
+      <li><strong>Solusi:</strong> gunakan Service Profile yang sudah dibuat, assign ke blade kosong → otomatis terkonfigurasi (identitas, BIOS, firmware, jaringan, dll.) tanpa konfigurasi manual.</li>
+    </ul>
+
+    <img src="img/cisco-ucs-diagram.png" alt="Diagram Cisco UCS" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konsep Konfigurasi (GUI-Based)</p>
+    <pre><code>
+// 1. Buat Service Profile
+//    Tentukan kebijakan server (WWN, MAC, boot order, firmware, jaringan).
+
+// 2. Hubungkan Profil ke Server
+//    Assign ke blade server → otomatis dikonfigurasi sesuai profil.
+
+// 3. Migrasi Profil
+//    Pindahkan Service Profile ke server lain.
+//    Server baru mewarisi identitas & konfigurasi server lama.
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan <strong>Service Profiles</strong> untuk standarisasi & deployment cepat.</li>
+      <li>Integrasikan dengan <strong>Cisco Intersight</strong> untuk manajemen berbasis cloud.</li>
+      <li>Rencanakan skema identitas (WWN, MAC, UUID) dengan baik untuk hindari konflik.</li>
+      <li>Pahami konsep <strong>Stateless Computing</strong> sebagai inti UCS.</li>
+    </ul>
+  </main>
+</section>
+
+
+<section id="cisco-umbrella" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco Umbrella</h2>
+    <p class="note-paragraph">
+      <strong>Cisco Umbrella</strong> adalah platform keamanan berbasis cloud yang menyediakan lapisan pertahanan pertama terhadap ancaman siber. 
+      Bekerja pada tingkat DNS (Domain Name System), Umbrella menghentikan serangan bahkan sebelum koneksi berbahaya dibuat. 
+      Dengan menganalisis miliaran permintaan DNS setiap hari, Umbrella dapat mengidentifikasi dan memblokir akses ke situs web berbahaya, 
+      server perintah-dan-kontrol (C2), dan infrastruktur phishing, baik di dalam jaringan perusahaan maupun saat pengguna berada di luar kantor.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li><strong>Keamanan Tingkat DNS</strong> – Mengidentifikasi dan memblokir permintaan berbahaya sebelum koneksi IP dibuat.</li>
+      <li><strong>Perlindungan Saat Pengguna Mobile</strong> – Melindungi perangkat pengguna di mana pun mereka berada, bahkan di luar jaringan perusahaan.</li>
+      <li><strong>Visibilitas dan Intelijen Ancaman</strong> – Menyediakan laporan terperinci tentang lalu lintas DNS dan ancaman yang diblokir.</li>
+      <li><strong>Keamanan Aplikasi Cloud</strong> – Menawarkan perlindungan terhadap aplikasi cloud yang tidak sah atau berisiko (Shadow IT).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Cara Kerja</h3>
+    <ul>
+      <li><strong>Pencegahan</strong> – Saat pengguna mencoba mengakses sebuah situs, permintaan DNS mereka diarahkan ke Cisco Umbrella.</li>
+      <li><strong>Deteksi</strong> – Umbrella membandingkan permintaan dengan basis data intelijen ancaman globalnya.</li>
+      <li><strong>Blokir atau Izinkan</strong> – Jika situs berbahaya, Umbrella akan memblokir permintaan tersebut. Jika situs aman, Umbrella mengizinkan permintaan untuk berlanjut.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Sangat mudah diimplementasikan tanpa perlu perangkat keras tambahan.</li>
+      <li>Menyediakan perlindungan yang efektif untuk perangkat di luar jaringan.</li>
+      <li>Memiliki dasbor manajemen yang intuitif dan terpusat.</li>
+      <li>Menghilangkan kebutuhan akan VPN untuk keamanan dasar.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Tidak dapat memeriksa konten terenkripsi (lalu lintas HTTPS) secara default tanpa sertifikat SSL.</li>
+      <li>Bukan pengganti firewall, hanya menyediakan lapisan pertahanan pertama.</li>
+      <li>Beberapa fitur tambahan mungkin memerlukan biaya lisensi.</li>
+      <li>Kurang efektif terhadap ancaman yang tidak menggunakan DNS (misalnya, malware yang menggunakan alamat IP langsung).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li><strong>Tujuan:</strong> Mencegah karyawan mengakses situs phishing atau malware yang disebarkan melalui email.</li>
+      <li><strong>Solusi:</strong> Setelah seorang karyawan mengklik tautan berbahaya, Umbrella memblokir permintaan DNS ke situs tersebut sebelum halaman web dimuat, sehingga mencegah infeksi.</li>
+    </ul>
+
+    <img src="img/cisco-umbrella-diagram.png" alt="Diagram Cisco Umbrella" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konsep Konfigurasi</p>
+    <pre><code>
+// Catatan: Konfigurasi Umbrella sebagian besar dilakukan melalui dasbor web.
+// Berikut adalah contoh alur kerja.
+
+// 1. Deployment Jaringan:
+//    Ubah server DNS di DHCP server atau router ke alamat DNS Umbrella.
+//    Atau, instal agent roaming di laptop pengguna.
+
+// 2. Atur Kebijakan:
+//    Login ke dasbor Umbrella.
+//    Buat "Policy" baru.
+//    Pilih kategori ancaman yang akan diblokir (misalnya, phishing, malware).
+
+// 3. Laporan dan Analisis:
+//    Lihat dashboard untuk melihat statistik lalu lintas,
+//    ancaman yang diblokir, dan aktivitas pengguna.
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Instal <strong>agent roaming</strong> pada laptop untuk melindungi pengguna di luar kantor.</li>
+      <li>Manfaatkan <strong>integrasi API</strong> Umbrella dengan solusi SIEM atau SOAR untuk otomatisasi keamanan.</li>
+      <li>Gunakan fitur <strong>Intelligent Proxy</strong> untuk lalu lintas HTTP/S yang mencurigakan.</li>
+      <li>Lakukan audit kebijakan secara berkala untuk memastikan perlindungan yang relevan.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="cisco-webex" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco Webex</h2>
+    <p class="note-paragraph">
+      <strong>Cisco Webex</strong> adalah platform kolaborasi terpadu berbasis cloud yang menyediakan berbagai alat komunikasi dan kerja tim, 
+      termasuk video conferencing, meeting online, pesan instan, dan panggilan telepon. 
+      Webex dirancang untuk memfasilitasi komunikasi dan kolaborasi yang lancar bagi tim yang bekerja dari lokasi mana pun. 
+      Platform ini mengintegrasikan semua fungsi ke dalam satu aplikasi, memungkinkan pengguna untuk terhubung dan bekerja sama secara real-time.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li><strong>Webex Meetings</strong> – Platform video conferencing yang andal untuk pertemuan online, webinar, dan acara virtual dengan fitur-fitur seperti berbagi layar, rekaman, dan polling.</li>
+      <li><strong>Webex App (sebelumnya Webex Teams)</strong> – Aplikasi terpusat untuk pesan instan, panggilan, dan berbagi file. Menyediakan "ruang" (space) khusus untuk proyek tim.</li>
+      <li><strong>Webex Calling</strong> – Solusi IP Telephony berbasis cloud yang menggantikan sistem telepon kantor tradisional dengan layanan panggilan yang fleksibel.</li>
+      <li><strong>Webex Devices</strong> – Rangkaian perangkat keras pintar (misalnya, kamera, speaker, dan layar sentuh) yang dirancang khusus untuk ruang konferensi dan kolaborasi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li><strong>Fleksibilitas Berbasis Cloud</strong> – Memungkinkan pengguna untuk terhubung dari mana saja dan perangkat apa pun (PC, smartphone, tablet).</li>
+      <li><strong>Kolaborasi Terpadu</strong> – Menyatukan semua alat komunikasi dalam satu aplikasi, mengurangi perpindahan antar platform.</li>
+      <li><strong>Keamanan Kuat</strong> – Menggunakan enkripsi end-to-end untuk memastikan kerahasiaan komunikasi.</li>
+      <li><strong>Skalabilitas</strong> – Mampu mengakomodasi berbagai kebutuhan, dari pertemuan kecil hingga acara besar dengan ribuan peserta.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li><strong>Konsumsi Bandwidth</strong> – Kualitas video dan suara yang tinggi dapat memerlukan bandwidth internet yang besar.</li>
+      <li><strong>Kompleksitas Fitur</strong> – Jumlah fitur yang melimpah mungkin membingungkan pengguna baru.</li>
+      <li><strong>Biaya Langganan</strong> – Fitur premium dan lisensi untuk pengguna yang banyak dapat memakan biaya yang signifikan.</li>
+      <li><strong>Persyaratan Perangkat</strong> – Perangkat lama mungkin mengalami masalah performa saat menjalankan aplikasi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li><strong>Tujuan:</strong> Mengadakan pertemuan tim virtual mingguan yang efisien dengan anggota yang tersebar di berbagai lokasi.</li>
+      <li><strong>Solusi:</strong> Tim menggunakan Webex Meetings untuk video conference, berbagi layar presentasi, dan menggunakan fitur chat untuk pertanyaan. Setelah pertemuan, anggota dapat melanjutkan diskusi di ruang Webex App yang terkait dengan proyek tersebut.</li>
+    </ul>
+
+    <img src="img/cisco-webex-diagram.png" alt="Diagram Cisco Webex" class="note-image" />
+
+    <p class="note-subtitle">Contoh Penggunaan Webex App (GUI-Based)</p>
+    <pre><code>
+// Catatan: Interaksi Webex dilakukan melalui antarmuka pengguna grafis (GUI)
+// Berikut adalah alur kerja yang disederhanakan.
+
+// 1. Mulai Ruang Tim (Space):
+//    Buka aplikasi Webex.
+//    Klik tombol "+" untuk membuat "space" baru dan undang anggota tim.
+
+// 2. Berbagi dan Berkolaborasi:
+//    Di dalam space, kirim pesan, unggah file, dan mulai panggilan video instan.
+
+// 3. Bergabung dengan Meeting:
+//    Klik tautan pertemuan di kalender atau aplikasi.
+//    Pilih untuk bergabung dengan audio dan video, dan Anda siap.
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan <strong>Webex App</strong> untuk komunikasi sehari-hari dan <strong>Webex Meetings</strong> untuk pertemuan terencana.</li>
+      <li>Optimalkan kualitas video Anda dengan memastikan pencahayaan yang baik dan latar belakang yang rapi.</li>
+      <li>Manfaatkan fitur <strong>noise removal</strong> dan <strong>transkripsi</strong> untuk pengalaman meeting yang lebih baik.</li>
+      <li>Pertimbangkan <strong>Webex Devices</strong> untuk ruang konferensi agar kolaborasi lebih mulus dan profesional.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="cisco-wlc" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco WLC (Wireless LAN Controller)</h2>
+    <p class="note-paragraph">
+      <strong>Cisco WLC</strong> adalah perangkat jaringan yang berfungsi untuk mengelola, mengontrol, dan memantau Access Point (AP) 
+      secara terpusat dalam sebuah jaringan Wi-Fi. Dengan WLC, semua konfigurasi seperti SSID, VLAN, keamanan, dan QoS 
+      dapat diatur dari satu titik, sehingga memudahkan manajemen jaringan nirkabel berskala kecil hingga besar.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li><strong>Centralized Management</strong> – konfigurasi seluruh AP dari satu tempat.</li>
+      <li><strong>Access Point Control</strong> – mendukung Lightweight AP (LWAP) yang dikendalikan penuh oleh WLC.</li>
+      <li><strong>Seamless Roaming</strong> – memungkinkan perangkat berpindah antar-AP tanpa terputus koneksi.</li>
+      <li><strong>Keamanan</strong> – mendukung autentikasi (802.1X, WPA2/WPA3) serta integrasi dengan Cisco ISE.</li>
+      <li><strong>Monitoring & Troubleshooting</strong> – menyediakan dashboard untuk client, interferensi, dan kinerja Wi-Fi.</li>
+      <li><strong>Scalability</strong> – dapat mengelola dari beberapa AP hingga ribuan AP.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Komponen Utama</h3>
+    <ol>
+      <li><strong>Controller Software</strong> – pusat logika manajemen untuk semua AP.</li>
+      <li><strong>Management Interface</strong> – antarmuka untuk konfigurasi melalui GUI atau CLI.</li>
+      <li><strong>Data Plane</strong> – jalur untuk mengatur lalu lintas data dari client ke jaringan.</li>
+      <li><strong>Monitoring & Security Module</strong> – modul untuk analisis performa dan perlindungan jaringan.</li>
+    </ol>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Memudahkan manajemen AP dalam jumlah besar.</li>
+      <li>Meningkatkan keamanan jaringan nirkabel.</li>
+      <li>Mendukung mobilitas pengguna dengan roaming yang lancar.</li>
+      <li>Monitoring real-time untuk troubleshooting cepat.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Memerlukan investasi biaya yang tinggi.</li>
+      <li>Bergantung pada WLC sebagai single point of failure (kecuali pakai HA/SSO).</li>
+      <li>Membutuhkan SDM dengan skill khusus untuk konfigurasi dan manajemen.</li>
+    </ul>
+
+    <img src="img/wlc1.png" alt="Topologi Cisco WLC" class="note-image" />
+
+    <p class="note-subtitle">Contoh Konfigurasi Dasar (CLI)</p>
+    <pre><code>
+# Masuk ke WLC
+(Cisco Controller) > config time ntp server 192.168.1.1 enable
+
+# Konfigurasi SSID
+(Cisco Controller) > wlan create 1 WiFi-Office WiFi-Office
+(Cisco Controller) > wlan security wpa akm psk set-key ascii 0 password123 1
+(Cisco Controller) > wlan enable 1
+
+# Assign interface ke WLAN
+(Cisco Controller) > wlan interface 1 management
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan WLC redundancy (HA/SSO) untuk memastikan ketersediaan tinggi.</li>
+      <li>Integrasikan dengan Cisco ISE untuk kontrol akses yang lebih kuat.</li>
+      <li>Rencanakan kapasitas AP sesuai jumlah user dan kebutuhan bandwidth.</li>
+      <li>Lakukan pemantauan performa Wi-Fi secara berkala melalui dashboard WLC.</li>
+    </ul>
+  </main>
+</section>
+
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => {
+        img.classList.toggle('expanded');
+      });
+    });
+  </script>
+</body>
+</html>
