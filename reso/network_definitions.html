@@ -159,7 +159,9 @@
         <ul class="dropdown-menu">
         <li><a class="dropdown-item" href="#backbone">Backbone</a></li>
         <li><a class="dropdown-item" href="#backhaul">Backhaul</a></li>
-        <li><a class="dropdown-item" href="#staging-room">Staging Room / Peer Room / MMR (Main Distribution Frame)</a></li>
+        <li><a class="dropdown-item" href="#staging-room">Staging Room</a></li>
+        <li><a class="dropdown-item" href="#peer-room">Peer Room</a></li>
+        <li><a class="dropdown-item" href="#mmr-room">MMR (Main Distribution Frame)</a></li>
         <li><a class="dropdown-item" href="#ix">IX (Internet Exchange)</a></li>
         <li><a class="dropdown-item" href="#iix">IIX (Indonesia Internet Exchange)</a></li>
         <li><a class="dropdown-item" href="#open-ixp">Open IXP (Open Internet Exchange Point)</a></li>
@@ -194,8 +196,8 @@
         <li><a class="dropdown-item" href="#ip-traffic">IP Traffic</a></li>
         <li><a class="dropdown-item" href="#ethernet-traffic">Ethernet Traffic</a></li>
         <li><a class="dropdown-item" href="#mpls-traffic">MPLS Traffic (Multiprotocol Label Switching)</a></li>
-        <li><a class="dropdown-item" href="#vxlan-overlay">VXLAN / Overlay Traffic</a></li>
-        <li><a class="dropdown-item" href="#voice-video">Voice & Video Traffic</a></li>
+        <li><a class="dropdown-item" href="#vxlan-overlay-traffic">VXLAN / Overlay Traffic</a></li>
+        <li><a class="dropdown-item" href="#voice-video-traffic">Voice & Video Traffic</a></li>
         <li><a class="dropdown-item" href="#storage-traffic">Storage Traffic (iSCSI, FCoE, NFS)</a></li>
         <li><a class="dropdown-item" href="#management-traffic">Management Traffic</a></li>
         <li><a class="dropdown-item" href="#control-plane">Control Plane Traffic</a></li>
@@ -1722,6 +1724,1687 @@
     </ul>
   </main>
 </section>
+
+<section id="backbone" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Backbone Network</h2>
+    <p class="note-paragraph">
+      <strong>Backbone</strong> adalah jaringan inti (core network) yang menjadi jalur utama 
+      untuk menghubungkan berbagai segmen atau subnet dalam infrastruktur jaringan. 
+      Backbone menyediakan kapasitas bandwidth tinggi agar lalu lintas data antar jaringan 
+      dapat ditransmisikan dengan cepat, stabil, dan efisien.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menghubungkan berbagai jaringan lokal (LAN) dan jaringan area luas (WAN).</li>
+      <li>Menjadi jalur utama pertukaran data antar server, data center, dan kantor cabang.</li>
+      <li>Menyediakan kecepatan tinggi untuk mendukung trafik dalam jumlah besar.</li>
+      <li>Menjadi fondasi bagi layanan internet, komunikasi, dan cloud computing.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Backbone</h3>
+    <ul>
+      <li>Menggunakan media dengan bandwidth besar (fiber optic, DWDM, microwave link).</li>
+      <li>Biasanya menggunakan protokol routing tingkat lanjut (OSPF, IS-IS, BGP, MPLS).</li>
+      <li>Dirancang dengan redundansi tinggi untuk menjamin ketersediaan layanan.</li>
+      <li>Mendukung skalabilitas untuk pertumbuhan trafik di masa depan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Kecepatan sangat tinggi (multi-Gbps hingga Tbps).</li>
+      <li>Menjamin komunikasi antar segmen jaringan tetap stabil.</li>
+      <li>Mendukung berbagai layanan modern (VoIP, video streaming, cloud service).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Biaya pembangunan dan pemeliharaan sangat tinggi.</li>
+      <li>Jika backbone terganggu, banyak layanan jaringan bisa ikut terdampak.</li>
+      <li>Membutuhkan infrastruktur dan peralatan khusus.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>ISP menggunakan backbone fiber optic untuk menghubungkan kota-kota besar.</li>
+      <li>Perusahaan multinasional membangun backbone WAN untuk menghubungkan kantor pusat dan cabang global.</li>
+      <li>Data center menggunakan backbone internal berbasis 100 Gbps Ethernet untuk menghubungkan server farm.</li>
+    </ul>
+
+    <img src="img/backbone.png" alt="Ilustrasi Backbone Network" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pilih media backbone sesuai kebutuhan (fiber optic untuk kapasitas besar, microwave untuk area sulit).</li>
+      <li>Gunakan arsitektur redundant (ring, mesh) untuk meningkatkan reliability.</li>
+      <li>Lakukan monitoring performa backbone dengan NMS (Network Management System).</li>
+      <li>Siapkan kapasitas ekstra untuk mengantisipasi pertumbuhan trafik.</li>
+    </ul>
+  </main>
+</section>
+
+
+<section id="backhaul" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Backhaul Network</h2>
+    <p class="note-paragraph">
+      <strong>Backhaul</strong> adalah bagian dari infrastruktur jaringan yang menghubungkan 
+      jaringan akses (misalnya menara seluler, access point, atau kantor cabang) 
+      ke jaringan inti (<em>core network/backbone</em>). 
+      Backhaul berperan sebagai jembatan antara pengguna akhir dengan backbone 
+      agar data dapat diteruskan ke internet atau pusat data.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menghubungkan jaringan akses (last mile) ke backbone.</li>
+      <li>Mentransmisikan data pengguna ke jaringan pusat (ISP atau data center).</li>
+      <li>Mendukung layanan broadband, telekomunikasi, dan seluler (3G/4G/5G).</li>
+      <li>Menjadi jalur penghubung antara node distribusi dengan core network.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis Backhaul</h3>
+    <ul>
+      <li><strong>Wired Backhaul</strong> – menggunakan fiber optic, kabel tembaga, atau Ethernet.</li>
+      <li><strong>Wireless Backhaul</strong> – menggunakan microwave, satelit, atau gelombang millimeter (mmWave).</li>
+      <li><strong>Hybrid Backhaul</strong> – kombinasi antara wired dan wireless untuk fleksibilitas.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Mendukung kapasitas tinggi dengan latency rendah (terutama fiber backhaul).</li>
+      <li>Fleksibel – dapat disesuaikan dengan kondisi geografis (wireless untuk area terpencil).</li>
+      <li>Penting untuk mendukung pertumbuhan trafik mobile dan broadband.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Investasi infrastruktur bisa sangat mahal (terutama fiber backhaul).</li>
+      <li>Keterbatasan bandwidth pada jalur wireless jika trafik sangat tinggi.</li>
+      <li>Jika backhaul bermasalah, kualitas layanan end-user akan sangat terdampak.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Operator seluler menggunakan microwave backhaul untuk menghubungkan BTS di area terpencil.</li>
+      <li>Penyedia internet (ISP) memakai fiber backhaul dari kantor cabang ke core network.</li>
+      <li>Jaringan 5G membutuhkan kapasitas backhaul sangat besar untuk mendukung latency rendah.</li>
+    </ul>
+
+    <img src="img/backhaul.png" alt="Ilustrasi Backhaul Network" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan fiber optic untuk backhaul utama jika memungkinkan, karena kapasitas besar dan latency rendah.</li>
+      <li>Pertimbangkan wireless backhaul (microwave/satelit) untuk area sulit dijangkau fiber.</li>
+      <li>Monitor kapasitas backhaul secara berkala agar tidak menjadi bottleneck.</li>
+      <li>Bangun jalur redundant untuk meningkatkan keandalan koneksi.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="staging-room" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Staging Room</h2>
+    <p class="note-paragraph">
+      <strong>Staging Room</strong> adalah ruang atau area khusus yang digunakan untuk melakukan 
+      persiapan, konfigurasi, dan pengujian perangkat IT (seperti server, switch, router, firewall, atau end-device) 
+      sebelum perangkat tersebut dipasang di lokasi produksi (data center, kantor cabang, atau site pelanggan). 
+      Konsep ini membantu memastikan bahwa semua perangkat sudah siap digunakan dan mengurangi risiko kegagalan di lapangan.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Melakukan <strong>pre-configuration</strong> perangkat jaringan atau server sebelum deployment.</li>
+      <li>Menguji kompatibilitas perangkat keras dan perangkat lunak.</li>
+      <li>Menyimulasikan kondisi jaringan untuk validasi performa.</li>
+      <li>Menyediakan tempat untuk quality assurance (QA) dan troubleshooting awal.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Mengurangi downtime saat instalasi di lokasi produksi.</li>
+      <li>Memastikan perangkat siap digunakan sesuai kebutuhan proyek.</li>
+      <li>Mempercepat proses deployment di lapangan.</li>
+      <li>Membantu dokumentasi konfigurasi dan standar instalasi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Membutuhkan ruang fisik tambahan dengan fasilitas listrik dan pendingin.</li>
+      <li>Biaya operasional untuk memelihara staging room.</li>
+      <li>Tidak selalu bisa meniru kondisi nyata 100% seperti di lapangan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Tim IT menyiapkan router dan switch dengan konfigurasi awal di staging room sebelum dikirim ke kantor cabang.</li>
+      <li>Server baru diuji dengan aplikasi kritikal di staging room untuk memastikan performa.</li>
+      <li>Vendor melakukan staging perangkat security appliance untuk validasi keamanan sebelum go-live.</li>
+    </ul>
+
+    <img src="img/staging-room.png" alt="Ilustrasi Staging Room" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Lengkapi staging room dengan rack, power supply, dan konektivitas jaringan memadai.</li>
+      <li>Sediakan dokumentasi standar untuk konfigurasi perangkat.</li>
+      <li>Lakukan uji beban (load test) jika memungkinkan untuk mensimulasikan kondisi nyata.</li>
+      <li>Gunakan staging room juga sebagai tempat training teknisi sebelum deployment.</li>
+    </ul>
+  </main>
+</section>
+<section id="peer-room" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Peer Room</h2>
+    <p class="note-paragraph">
+      <strong>Peer Room</strong> adalah ruang khusus dalam infrastruktur jaringan yang digunakan sebagai 
+      tempat pertemuan atau interkoneksi antar penyedia layanan (ISP, operator, atau penyedia konten). 
+      Di ruangan ini, berbagai jaringan melakukan peering untuk bertukar trafik secara langsung 
+      guna meningkatkan performa, efisiensi, dan menurunkan biaya routing melalui transit pihak ketiga.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menjadi lokasi fisik interkoneksi antar penyedia layanan (ISP/IXP).</li>
+      <li>Menyediakan fasilitas <strong>peering</strong> untuk pertukaran trafik langsung.</li>
+      <li>Mendukung efisiensi jalur komunikasi antar jaringan.</li>
+      <li>Memastikan kualitas layanan lebih baik dengan latency rendah.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Mengurangi biaya bandwidth dengan peering langsung antar operator.</li>
+      <li>Meningkatkan kualitas koneksi (latency lebih rendah dan throughput lebih stabil).</li>
+      <li>Skalabilitas tinggi untuk mendukung banyak partner peering.</li>
+      <li>Memperkuat ekosistem internet lokal melalui interkoneksi langsung.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Membutuhkan investasi infrastruktur (ruangan, rack, pendingin, dan listrik).</li>
+      <li>Harus ada kesepakatan teknis dan bisnis antar penyedia jaringan.</li>
+      <li>Risiko kepadatan trafik jika tidak dikelola dengan baik.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Dua ISP lokal melakukan peering di peer room untuk mempercepat akses pengguna.</li>
+      <li>Penyedia konten global (CDN) menempatkan perangkatnya di peer room untuk efisiensi trafik.</li>
+      <li>Beberapa operator telekomunikasi saling terhubung melalui peer room dalam fasilitas IXP (Internet Exchange Point).</li>
+    </ul>
+
+    <img src="img/peer-room.png" alt="Ilustrasi Peer Room" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pastikan fasilitas kelistrikan dan pendingin mencukupi untuk perangkat multi-operator.</li>
+      <li>Gunakan standar keamanan fisik dan akses terbatas hanya untuk teknisi terotorisasi.</li>
+      <li>Dokumentasikan semua perjanjian peering (SLA & MoU) dengan jelas.</li>
+      <li>Monitor trafik peering secara real-time untuk menghindari bottleneck.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="mmr-room" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">MMR (Meet-Me Room)</h2>
+    <p class="note-paragraph">
+      <strong>MMR (Meet-Me Room)</strong> adalah ruang interkoneksi dalam fasilitas data center atau gedung telekomunikasi 
+      yang digunakan untuk menghubungkan berbagai penyedia layanan (ISP, operator, carrier, atau penyedia konten) 
+      secara langsung. MMR biasanya berada di dalam <em>carrier hotel</em> atau data center besar dan berfungsi 
+      sebagai titik temu fisik untuk pertukaran trafik, tanpa harus keluar ke jaringan publik.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menyediakan lokasi interkoneksi antar penyedia jaringan dan layanan.</li>
+      <li>Mendukung <strong>peering</strong> dan pertukaran trafik langsung (direct interconnection).</li>
+      <li>Mengurangi biaya bandwidth dengan meminimalkan penggunaan transit pihak ketiga.</li>
+      <li>Mempercepat komunikasi dengan latency rendah antar jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Meningkatkan performa dengan jalur komunikasi lebih singkat.</li>
+      <li>Fleksibilitas tinggi karena mendukung multi-operator dalam satu lokasi.</li>
+      <li>Mengurangi biaya operasional jaringan.</li>
+      <li>Mendukung skalabilitas ekosistem internet lokal maupun global.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Memerlukan biaya sewa ruang, rack, dan interkoneksi di data center.</li>
+      <li>Resiko keamanan fisik jika akses tidak dikontrol dengan baik.</li>
+      <li>Kepadatan perangkat bisa menimbulkan manajemen kabel yang kompleks.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Dua ISP melakukan interkoneksi langsung di MMR sebuah data center untuk mengurangi latency.</li>
+      <li>Penyedia CDN global menempatkan perangkat di MMR agar lebih dekat dengan pelanggan lokal.</li>
+      <li>Operator telekomunikasi saling bertemu di MMR dalam gedung carrier hotel internasional.</li>
+    </ul>
+
+    <img src="img/mmr.png" alt="Ilustrasi Meet-Me Room (MMR)" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan manajemen kabel yang rapi (structured cabling) untuk menghindari masalah teknis.</li>
+      <li>Batasi akses fisik ke MMR hanya untuk teknisi atau engineer resmi.</li>
+      <li>Pastikan dokumentasi interkoneksi selalu diperbarui.</li>
+      <li>Monitor kapasitas port interkoneksi untuk menghindari bottleneck.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="ix" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">IX (Internet Exchange)</h2>
+    <p class="note-paragraph">
+      <strong>IX (Internet Exchange)</strong> adalah titik pertukaran internet di mana berbagai penyedia layanan 
+      (ISP, operator telekomunikasi, penyedia konten, dan enterprise) saling bertukar trafik secara langsung. 
+      IX biasanya dikelola oleh organisasi netral atau asosiasi dan berfungsi untuk meningkatkan efisiensi, 
+      menurunkan biaya bandwidth, serta mempercepat konektivitas antar jaringan.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menyediakan <strong>peering</strong> antar ISP dan operator untuk pertukaran trafik.</li>
+      <li>Meningkatkan performa jaringan dengan jalur langsung tanpa transit internasional.</li>
+      <li>Mendukung ekosistem internet lokal agar lebih mandiri.</li>
+      <li>Menurunkan biaya operasional jaringan dengan mengurangi penggunaan upstream provider.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Latency lebih rendah karena jalur trafik lebih pendek.</li>
+      <li>Meningkatkan kecepatan akses layanan lokal (CDN, cloud, aplikasi).</li>
+      <li>Skalabilitas tinggi untuk mendukung banyak anggota peering.</li>
+      <li>Efisiensi biaya interkoneksi antar operator.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Membutuhkan investasi infrastruktur (MMR, peer room, rack, perangkat jaringan).</li>
+      <li>Ketergantungan pada pengelola IX untuk kualitas dan keamanan.</li>
+      <li>Resiko bottleneck jika kapasitas IX tidak dikelola dengan baik.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>IX lokal di Indonesia (IIX) yang menghubungkan berbagai ISP nasional.</li>
+      <li>Penyedia konten global (seperti Google, Meta, Akamai) bergabung dengan IX untuk mempercepat distribusi konten.</li>
+      <li>Operator telekomunikasi saling bertukar trafik melalui IX untuk efisiensi biaya.</li>
+    </ul>
+
+    <img src="img/ix.png" alt="Ilustrasi Internet Exchange (IX)" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pilih IX yang memiliki banyak anggota untuk meningkatkan efisiensi trafik.</li>
+      <li>Monitor kapasitas port peering secara berkala agar tidak overload.</li>
+      <li>Gunakan BGP communities untuk mengelola kebijakan routing di IX.</li>
+      <li>Pastikan SLA dengan IX provider jelas untuk keamanan dan performa.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="iix" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">IIX (Indonesia Internet Exchange)</h2>
+    <p class="note-paragraph">
+      <strong>IIX (Indonesia Internet Exchange)</strong> adalah titik pertukaran internet nasional di Indonesia 
+      yang berfungsi untuk menghubungkan berbagai penyedia layanan internet (ISP), operator telekomunikasi, 
+      serta penyedia konten dalam negeri agar dapat bertukar trafik secara langsung tanpa harus keluar negeri. 
+      IIX dikelola oleh <strong>APJII (Asosiasi Penyelenggara Jasa Internet Indonesia)</strong> sejak 1997 
+      untuk mendukung kemandirian dan efisiensi internet Indonesia.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menyediakan fasilitas <strong>peering nasional</strong> antar ISP di Indonesia.</li>
+      <li>Mempercepat akses internet antar pengguna lokal dengan jalur langsung.</li>
+      <li>Mengurangi biaya penggunaan bandwidth internasional.</li>
+      <li>Menjadi backbone utama untuk distribusi trafik domestik.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Latency lebih rendah untuk komunikasi antar pengguna Indonesia.</li>
+      <li>Efisiensi biaya karena tidak perlu transit keluar negeri untuk trafik lokal.</li>
+      <li>Mendukung pertumbuhan ekosistem digital nasional (e-commerce, OTT, cloud lokal).</li>
+      <li>Skalabilitas tinggi dengan banyak anggota ISP, operator, dan penyedia konten.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Kualitas koneksi tergantung pada kapasitas masing-masing ISP di IIX.</li>
+      <li>Resiko overload jika traffic domestik meningkat tajam tanpa upgrade infrastruktur.</li>
+      <li>Masih ada ketergantungan pada interkoneksi regional/internasional untuk trafik global.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Dua ISP nasional bertukar trafik langsung di IIX sehingga pelanggan lebih cepat mengakses layanan lokal.</li>
+      <li>Penyedia konten video lokal menggunakan IIX untuk distribusi streaming ke seluruh Indonesia.</li>
+      <li>Startup Indonesia menggunakan IIX agar aplikasinya lebih cepat diakses oleh pengguna dalam negeri.</li>
+    </ul>
+
+    <img src="img/iix.png" alt="Ilustrasi Indonesia Internet Exchange (IIX)" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pastikan ISP atau perusahaan Anda sudah menjadi anggota APJII untuk bisa terkoneksi ke IIX.</li>
+      <li>Monitor penggunaan bandwidth di IIX agar tidak terjadi bottleneck.</li>
+      <li>Optimalkan BGP routing policy untuk memisahkan trafik lokal (IIX) dan internasional.</li>
+      <li>Manfaatkan IIX untuk caching konten lokal agar performa lebih maksimal.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="open-ixp" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Open IXP (Open Internet Exchange Point)</h2>
+    <p class="note-paragraph">
+      <strong>Open IXP (Open Internet Exchange Point)</strong> adalah titik pertukaran internet 
+      yang bersifat terbuka bagi berbagai pihak (ISP, operator, penyedia konten, enterprise, hingga organisasi publik) 
+      untuk melakukan interkoneksi dan peering tanpa batasan kepemilikan tertentu. 
+      Berbeda dengan IX yang dikelola secara eksklusif, <em>Open IXP</em> biasanya dikelola secara netral, 
+      transparan, dan non-profit sehingga lebih mudah diakses oleh banyak anggota.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Memfasilitasi <strong>peering terbuka</strong> antar ISP, operator, dan konten provider.</li>
+      <li>Mengurangi biaya bandwidth dengan pertukaran trafik langsung.</li>
+      <li>Meningkatkan efisiensi routing trafik lokal dan regional.</li>
+      <li>Mempercepat akses layanan digital dengan latency rendah.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Akses terbuka untuk banyak pihak, tidak terbatas pada satu kelompok atau organisasi.</li>
+      <li>Biaya operasional lebih rendah karena dikelola secara kolektif.</li>
+      <li>Mendorong pertumbuhan ekosistem internet lokal dengan transparansi tinggi.</li>
+      <li>Mudah bergabung karena regulasi keanggotaan biasanya lebih fleksibel.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Kualitas layanan tergantung pada tata kelola organisasi Open IXP.</li>
+      <li>Risiko kepadatan trafik jika tidak ada manajemen kapasitas yang baik.</li>
+      <li>Bisa muncul isu keamanan jika standar akses dan monitoring tidak diterapkan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Beberapa ISP kecil bergabung dalam Open IXP untuk menekan biaya koneksi internasional.</li>
+      <li>Penyedia konten lokal menggunakan Open IXP untuk mempercepat distribusi aplikasi ke pengguna.</li>
+      <li>Pemerintah daerah mendukung Open IXP untuk memperkuat infrastruktur internet lokal.</li>
+    </ul>
+
+    <img src="img/open-ixp.png" alt="Ilustrasi Open IXP" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pilih Open IXP dengan banyak anggota untuk memaksimalkan manfaat peering.</li>
+      <li>Gunakan BGP policy untuk mengatur jalur trafik lebih efisien.</li>
+      <li>Monitor kapasitas link secara berkala untuk menghindari bottleneck.</li>
+      <li>Perhatikan SLA dan keamanan jaringan meskipun sifatnya terbuka.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="on-premise" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">On-Premise</h2>
+    <p class="note-paragraph">
+      <strong>On-Premise</strong> adalah model penempatan infrastruktur IT di lokasi fisik perusahaan sendiri, 
+      seperti server, storage, jaringan, dan perangkat pendukung lainnya. 
+      Berbeda dengan cloud, semua perangkat dan data berada di bawah kontrol penuh perusahaan, 
+      sehingga keamanan, konfigurasi, dan kebijakan operasional sepenuhnya berada di tangan internal.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menyediakan server dan storage lokal untuk aplikasi internal perusahaan.</li>
+      <li>Mendukung keamanan data dengan kontrol fisik dan akses terbatas.</li>
+      <li>Menjadi basis untuk layanan internal, ERP, database, dan aplikasi kritikal lainnya.</li>
+      <li>Menyediakan fleksibilitas konfigurasi sesuai kebutuhan organisasi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Kontrol penuh atas perangkat, data, dan konfigurasi jaringan.</li>
+      <li>Keamanan data lebih terjaga karena tidak tergantung pihak ketiga.</li>
+      <li>Memungkinkan kustomisasi infrastruktur sesuai kebutuhan spesifik perusahaan.</li>
+      <li>Tidak tergantung koneksi internet untuk akses internal.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Biaya awal dan pemeliharaan tinggi (server, listrik, pendingin, teknisi).</li>
+      <li>Skalabilitas terbatas dibanding cloud, membutuhkan penambahan perangkat fisik untuk kapasitas lebih.</li>
+      <li>Resiko downtime jika tidak ada redundancy atau monitoring yang baik.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Perusahaan menempatkan database ERP on-premise untuk menjaga kerahasiaan data.</li>
+      <li>Instansi pemerintah menggunakan on-premise untuk sistem e-government sensitif.</li>
+      <li>Bank mengelola core banking system on-premise agar kontrol penuh atas transaksi.</li>
+    </ul>
+
+    <img src="img/on-premise.png" alt="Ilustrasi On-Premise" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Siapkan pendingin, UPS, dan monitoring sistem untuk menjaga ketersediaan layanan.</li>
+      <li>Pastikan backup rutin untuk mencegah kehilangan data.</li>
+      <li>Gunakan segmentasi jaringan dan firewall untuk meningkatkan keamanan internal.</li>
+      <li>Rencanakan kapasitas dan upgrade hardware agar mudah scaling di masa depan.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="packet" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Packet</h2>
+    <p class="note-paragraph">
+      <strong>Packet</strong> adalah unit data terkecil yang dikirimkan melalui jaringan komputer. 
+      Setiap paket berisi <em>header</em> (informasi alamat sumber, alamat tujuan, protokol, dsb.) 
+      dan <em>payload</em> (data sebenarnya). Pengiriman data dalam bentuk paket memungkinkan 
+      jaringan untuk melakukan routing, pengendalian kesalahan, dan optimasi lalu lintas.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Membawa data dari sumber ke tujuan melalui jaringan komputer.</li>
+      <li>Mendukung routing dan switching agar data sampai secara efisien.</li>
+      <li>Memungkinkan deteksi dan koreksi kesalahan selama transmisi.</li>
+      <li>Memfasilitasi multiplexing, sehingga satu jalur dapat digunakan oleh banyak komunikasi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Paket</h3>
+    <ul>
+      <li><strong>Header:</strong> Informasi kontrol seperti alamat IP, port, protokol.</li>
+      <li><strong>Payload:</strong> Data sebenarnya yang dikirim.</li>
+      <li><strong>Ukuran:</strong> Bisa bervariasi, biasanya dalam bytes hingga beberapa kilobytes.</li>
+      <li><strong>Sequence:</strong> Paket dapat dikirim secara terpisah dan disusun kembali di tujuan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Memungkinkan efisiensi jaringan karena paket bisa dialihkan jika jalur sibuk.</li>
+      <li>Mendukung retransmisi jika terjadi kehilangan paket.</li>
+      <li>Fleksibel untuk berbagai protokol dan jenis data.</li>
+      <li>Memudahkan monitoring dan analisis trafik jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Paket bisa hilang, terlambat, atau urutannya berubah saat jaringan sibuk.</li>
+      <li>Overhead dari header mempengaruhi efisiensi transmisi data.</li>
+      <li>Perlu protokol tambahan untuk menjamin integritas dan urutan data.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Pengiriman file besar melalui TCP/IP dibagi menjadi banyak paket untuk dikirim secara berurutan.</li>
+      <li>Streaming video menggunakan paket UDP untuk mengirim data secara real-time.</li>
+      <li>Paket ICMP digunakan oleh perintah ping untuk memeriksa konektivitas jaringan.</li>
+    </ul>
+
+    <img src="img/packet.png" alt="Ilustrasi Packet" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan monitoring paket untuk menganalisis performa jaringan (packet sniffing, Wireshark).</li>
+      <li>Perhatikan MTU agar paket tidak terfragmentasi berlebihan.</li>
+      <li>Optimalkan protokol sesuai kebutuhan (TCP untuk reliabilitas, UDP untuk real-time).</li>
+      <li>Pastikan routing dan firewall memproses paket dengan efisien untuk menghindari bottleneck.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="byte" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Byte</h2>
+    <p class="note-paragraph">
+      <strong>Byte</strong> adalah satuan dasar untuk mengukur data dalam komputer dan jaringan. 
+      Satu byte terdiri dari 8 bit dan digunakan untuk merepresentasikan karakter, angka, atau instruksi. 
+      Dalam konteks jaringan, byte menjadi dasar penghitungan ukuran data yang dikirim atau diterima.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Mengukur kapasitas data atau ukuran file dalam memori dan penyimpanan.</li>
+      <li>Menjadi unit dasar untuk menghitung kecepatan transfer data (bps, Bps).</li>
+      <li>Mendukung protokol jaringan dalam menentukan ukuran paket dan payload.</li>
+      <li>Mempermudah konversi antara bit dan unit data yang lebih besar (KB, MB, GB, TB).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Byte</h3>
+    <ul>
+      <li>1 byte = 8 bit.</li>
+      <li>Digunakan untuk merepresentasikan satu karakter (misalnya huruf atau angka) dalam komputer.</li>
+      <li>Unit penghitungan dasar untuk ukuran file, paket data, dan kapasitas memori.</li>
+      <li>Dapat dikombinasikan menjadi kilobyte (KB), megabyte (MB), gigabyte (GB), terabyte (TB).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Satuan standar yang mudah digunakan dan dipahami dalam sistem komputer dan jaringan.</li>
+      <li>Memudahkan perhitungan kapasitas penyimpanan dan transfer data.</li>
+      <li>Mendukung penghitungan throughput jaringan dan kecepatan transfer data.</li>
+      <li>Dapat digunakan sebagai dasar untuk optimasi dan monitoring jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Byte sendiri tidak mencerminkan kecepatan transmisi, hanya ukuran data.</li>
+      <li>Perlu konversi jika ingin menilai performa jaringan secara real-time (bit per second).</li>
+      <li>Penggunaan byte kecil untuk pengukuran jaringan bisa tidak praktis jika trafik besar.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Mengukur ukuran file 5 MB yang dikirim melalui jaringan.</li>
+      <li>Monitoring bandwidth menggunakan byte atau kilobyte untuk mengetahui konsumsi data.</li>
+      <li>Penentuan payload dalam paket TCP/IP berdasarkan ukuran byte.</li>
+    </ul>
+
+    <img src="img/byte.png" alt="Ilustrasi Byte" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan byte untuk menghitung kapasitas file dan ukuran transfer data.</li>
+      <li>Perhatikan perbedaan antara B (byte) dan b (bit) saat menghitung kecepatan jaringan.</li>
+      <li>Konversi byte ke unit yang lebih besar (KB, MB) untuk memudahkan analisis trafik.</li>
+      <li>Gunakan byte sebagai dasar untuk perhitungan throughput dan kapasitas link.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="cir" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">CIR (Committed Information Rate)</h2>
+    <p class="note-paragraph">
+      <strong>CIR (Committed Information Rate)</strong> adalah kecepatan minimum yang dijamin 
+      oleh penyedia layanan jaringan (ISP, MPLS provider, atau carrier) untuk transmisi data 
+      dalam suatu koneksi. CIR merupakan bagian dari SLA (Service Level Agreement) yang memastikan 
+      pengguna mendapatkan bandwidth tertentu, meskipun kapasitas link maksimum bisa lebih tinggi.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menentukan kecepatan minimum yang dijamin untuk transmisi data.</li>
+      <li>Membantu ISP mengalokasikan bandwidth secara efisien pada jaringan.</li>
+      <li>Menyediakan dasar untuk penghitungan SLA antara provider dan pelanggan.</li>
+      <li>Menjamin kualitas layanan untuk aplikasi kritikal yang membutuhkan kecepatan stabil.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik CIR</h3>
+    <ul>
+      <li>Biasanya diukur dalam kbps, Mbps, atau Gbps.</li>
+      <li>Bisa lebih rendah dari bandwidth maksimum yang tersedia (Peak Information Rate).</li>
+      <li>Mendukung traffic policing untuk menjaga agar penggunaan tidak melebihi kapasitas yang dijanjikan.</li>
+      <li>Dapat dikombinasikan dengan BURST (Excess Information Rate) untuk fleksibilitas penggunaan sementara.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Memberikan kepastian kecepatan minimum bagi pelanggan.</li>
+      <li>Membantu perencanaan kapasitas jaringan oleh provider.</li>
+      <li>Mendukung QoS (Quality of Service) untuk aplikasi real-time seperti VoIP dan video conferencing.</li>
+      <li>Meningkatkan kepercayaan pelanggan terhadap layanan jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Bandwidth di atas CIR tidak dijamin, sehingga bisa terjadi fluktuasi.</li>
+      <li>Jika trafik melebihi CIR, paket bisa diturunkan prioritasnya atau dibuang.</li>
+      <li>Membutuhkan pemantauan jaringan yang baik agar SLA dapat terpenuhi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Pelanggan MPLS mendapatkan CIR 50 Mbps, meskipun kapasitas link fisik 100 Mbps.</li>
+      <li>VoIP dan video conference dijamin kualitasnya karena bandwidth minimum sesuai CIR.</li>
+      <li>Traffic burst di luar CIR tetap diizinkan tetapi tidak dijamin stabilitasnya.</li>
+    </ul>
+
+    <img src="img/cir.png" alt="Ilustrasi CIR (Committed Information Rate)" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pastikan SLA mencantumkan CIR untuk koneksi kritikal.</li>
+      <li>Monitor penggunaan bandwidth agar tidak melebihi kapasitas dan mempengaruhi CIR.</li>
+      <li>Gunakan kombinasi CIR dan BURST untuk fleksibilitas maksimal tanpa mengorbankan QoS.</li>
+      <li>Evaluasi kebutuhan bandwidth secara berkala agar CIR tetap relevan dengan trafik aktual.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="mir" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">MIR (Maximum Information Rate)</h2>
+    <p class="note-paragraph">
+      <strong>MIR (Maximum Information Rate)</strong> adalah kecepatan maksimum yang diizinkan 
+      untuk transmisi data pada suatu koneksi jaringan. MIR menentukan batas atas bandwidth 
+      yang dapat digunakan pelanggan, biasanya dalam konteks SLA (Service Level Agreement) 
+      bersama CIR (Committed Information Rate). Dengan MIR, penyedia layanan bisa mengontrol 
+      penggunaan link dan mencegah kelebihan trafik.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menentukan batas maksimum kecepatan data yang dapat digunakan pelanggan.</li>
+      <li>Membantu provider mengatur kapasitas jaringan dan mencegah overload link.</li>
+      <li>Memberikan fleksibilitas sementara bagi trafik yang melebihi CIR.</li>
+      <li>Mendukung QoS dengan mengkombinasikan CIR dan MIR agar performa layanan tetap stabil.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik MIR</h3>
+    <ul>
+      <li>Diukur dalam kbps, Mbps, atau Gbps.</li>
+      <li>Bisa lebih tinggi dari CIR, sehingga mendukung traffic burst sementara.</li>
+      <li>Sering digunakan bersama mekanisme policing atau shaping untuk mengatur trafik.</li>
+      <li>Hanya berlaku sebagai batas maksimum, bukan jaminan kecepatan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Mendukung penggunaan link secara fleksibel di atas CIR untuk trafik burst.</li>
+      <li>Mencegah kelebihan penggunaan bandwidth yang bisa mengganggu pelanggan lain.</li>
+      <li>Memudahkan penyedia layanan mengatur kapasitas jaringan.</li>
+      <li>Meningkatkan efisiensi jaringan dengan mengontrol peak traffic.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>MIR tidak menjamin kecepatan maksimum selalu tersedia.</li>
+      <li>Jika trafik melebihi MIR, paket bisa dibuang atau diturunkan prioritasnya.</li>
+      <li>Memerlukan monitoring yang tepat agar kontrol bandwidth efektif.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Koneksi MPLS dengan CIR 50 Mbps dan MIR 100 Mbps, memungkinkan trafik burst sementara.</li>
+      <li>Pengguna VoIP dijamin CIR 50 Mbps, sedangkan transfer file besar bisa menggunakan bandwidth hingga MIR 100 Mbps jika tersedia.</li>
+      <li>Traffic burst di luar MIR dibatasi untuk mencegah gangguan layanan lain.</li>
+    </ul>
+
+    <img src="img/mir.png" alt="Ilustrasi MIR (Maximum Information Rate)" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan kombinasi CIR dan MIR untuk mengatur QoS dengan efisien.</li>
+      <li>Monitor trafik burst agar tidak mengganggu jaringan utama.</li>
+      <li>Terapkan traffic shaping untuk mengontrol penggunaan bandwidth sesuai MIR.</li>
+      <li>Evaluasi kapasitas link secara berkala agar MIR tetap relevan dengan kebutuhan aktual.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="buffer" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Buffer</h2>
+    <p class="note-paragraph">
+      <strong>Buffer</strong> adalah area penyimpanan sementara di perangkat jaringan, seperti router atau switch, 
+      yang digunakan untuk menahan paket data sebelum diteruskan ke tujuan. Buffer membantu mengatasi 
+      perbedaan kecepatan antara perangkat pengirim dan penerima serta mencegah kehilangan paket saat trafik tinggi.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menahan sementara paket data yang datang agar dapat diproses secara berurutan.</li>
+      <li>Mencegah packet loss saat terjadi trafik tinggi atau congestion.</li>
+      <li>Mendukung mekanisme Quality of Service (QoS) dengan pengaturan prioritas.</li>
+      <li>Menjembatani perbedaan kecepatan antara pengirim dan penerima data.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Buffer</h3>
+    <ul>
+      <li>Ukuran buffer bervariasi tergantung perangkat dan konfigurasi.</li>
+      <li>Dapat berupa memory RAM atau memori khusus di switch/router.</li>
+      <li>Memproses paket secara FIFO (First In First Out) atau prioritas tertentu.</li>
+      <li>Berperan dalam traffic shaping dan congestion management.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Mengurangi risiko packet loss saat trafik padat.</li>
+      <li>Meningkatkan kualitas layanan dengan mengelola antrian paket.</li>
+      <li>Mendukung QoS untuk aplikasi kritikal seperti VoIP atau streaming video.</li>
+      <li>Memungkinkan perangkat jaringan menangani burst traffic sementara.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Buffer yang terlalu kecil tetap dapat menyebabkan packet drop.</li>
+      <li>Buffer yang terlalu besar dapat menimbulkan latency tambahan (bufferbloat).</li>
+      <li>Memerlukan monitoring agar penggunaan buffer tidak mengganggu performa jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Router menahan paket saat trafik masuk melebihi kapasitas port output untuk mencegah kehilangan data.</li>
+      <li>Switch dengan QoS prioritas menempatkan paket VoIP di buffer khusus agar tetap stabil saat jaringan padat.</li>
+      <li>Streaming video menyesuaikan kecepatan pengiriman dengan buffer di perangkat untuk menghindari putus-putus.</li>
+    </ul>
+
+    <img src="img/buffer.png" alt="Ilustrasi Buffer" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Atur ukuran buffer sesuai kapasitas perangkat dan trafik jaringan.</li>
+      <li>Gunakan QoS untuk memprioritaskan trafik penting di buffer.</li>
+      <li>Monitor latency dan packet drop untuk menilai kinerja buffer.</li>
+      <li>Hindari buffer terlalu besar agar tidak terjadi bufferbloat.</li>
+    </ul>
+  </main>
+</section>
+<section id="ip" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">IP (Internet Protocol)</h2>
+    <p class="note-paragraph">
+      <strong>IP (Internet Protocol)</strong> adalah protokol utama di jaringan komputer yang bertanggung jawab 
+      untuk pengalamatan dan pengiriman paket data dari sumber ke tujuan. IP memungkinkan perangkat di jaringan 
+      untuk saling berkomunikasi melalui alamat unik, yang disebut <em>IP address</em>, dan menjadi dasar 
+      bagi protokol lainnya seperti TCP dan UDP.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menyediakan alamat unik untuk setiap perangkat di jaringan (IP address).</li>
+      <li>Mengatur pengiriman paket data dari sumber ke tujuan (routing).</li>
+      <li>Mendukung fragmentasi paket agar dapat melewati berbagai tipe jaringan.</li>
+      <li>Menjadi fondasi bagi protokol transport layer seperti TCP dan UDP.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik IP</h3>
+    <ul>
+      <li>IP versi 4 (IPv4) menggunakan alamat 32-bit, sedangkan IPv6 menggunakan 128-bit.</li>
+      <li>IP bersifat connectionless, artinya paket dikirim tanpa menjamin urutan atau keandalan.</li>
+      <li>Setiap paket IP memiliki header berisi informasi alamat, TTL, protokol, dan kontrol lainnya.</li>
+      <li>Dapat bekerja pada berbagai jenis jaringan fisik dan virtual.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Standar universal untuk komunikasi data antar perangkat.</li>
+      <li>Mendukung routing dinamis dan statis di jaringan skala kecil hingga besar.</li>
+      <li>Kompatibel dengan berbagai protokol transport dan aplikasi.</li>
+      <li>Mendukung fragmentasi paket untuk jaringan dengan MTU berbeda.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Tidak menjamin keandalan pengiriman (harus didukung TCP jika perlu reliabilitas).</li>
+      <li>IPv4 terbatas pada jumlah alamat yang tersedia.</li>
+      <li>Tanpa mekanisme keamanan bawaan; membutuhkan protokol tambahan (IPSec, firewall).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Pengiriman paket data dari komputer A ke server B menggunakan IPv4 atau IPv6.</li>
+      <li>Routing internet dari ISP ke pelanggan melalui IP address unik.</li>
+      <li>Penerapan subnetting untuk membagi jaringan menjadi segmen yang lebih kecil.</li>
+    </ul>
+
+    <img src="img/ip.png" alt="Ilustrasi IP (Internet Protocol)" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan subnetting untuk mengelola alamat IP secara efisien.</li>
+      <li>Pastikan IP address unik untuk setiap perangkat agar tidak terjadi konflik.</li>
+      <li>Gunakan IP versi terbaru (IPv6) untuk mengatasi keterbatasan IPv4.</li>
+      <li>Implementasikan keamanan tambahan seperti ACL atau IPSec untuk melindungi paket IP.</li>
+    </ul>
+  </main>
+</section>
+
+
+<section id="atm" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">ATM (Asynchronous Transfer Mode)</h2>
+    <p class="note-paragraph">
+      <strong>ATM (Asynchronous Transfer Mode)</strong> adalah teknologi jaringan yang menggunakan 
+      pengiriman data dalam bentuk <em>cell</em> berukuran tetap 53 byte. ATM dirancang untuk mendukung 
+      berbagai jenis trafik seperti suara, video, dan data dalam satu jaringan dengan kualitas layanan (QoS) yang terjamin.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Mengirim data dalam bentuk cell berukuran tetap untuk mempermudah switching dan multiplexing.</li>
+      <li>Mendukung integrasi suara, video, dan data dalam satu jaringan.</li>
+      <li>Memberikan jaminan QoS seperti delay rendah, jitter minim, dan bandwidth tertentu.</li>
+      <li>Mengoptimalkan pemanfaatan bandwidth pada jaringan backbone dan WAN.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik ATM</h3>
+    <ul>
+      <li>Cell berukuran tetap 53 byte (5 byte header + 48 byte payload).</li>
+      <li>Connection-oriented, memerlukan setup sebelum data dikirim.</li>
+      <li>Dukungan QoS untuk berbagai tipe trafik (CBR, VBR, ABR, UBR).</li>
+      <li>Dapat digunakan pada jaringan LAN, WAN, dan backbone.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Mendukung multiple trafik (voice, video, data) dalam satu jaringan.</li>
+      <li>Kualitas layanan terjamin melalui QoS.</li>
+      <li>Cell berukuran tetap mempermudah switching cepat di jaringan backbone.</li>
+      <li>Skalabilitas tinggi untuk jaringan besar dan heterogen.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Kompleksitas konfigurasi dan manajemen lebih tinggi dibanding teknologi packet switching standar.</li>
+      <li>Overhead tinggi karena cell berukuran kecil (53 byte, header 5 byte).</li>
+      <li>Kurang efisien untuk trafik data burst besar dibandingkan Ethernet atau IP/MPLS.</li>
+      <li>Perangkat ATM relatif mahal dan jarang digunakan di jaringan modern.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Jaringan backbone operator telekomunikasi menggunakan ATM untuk integrasi suara dan data.</li>
+      <li>Jaringan korporat yang membutuhkan QoS tinggi untuk video conference dan VoIP.</li>
+      <li>Penerapan ATM di WAN untuk menghubungkan beberapa kantor cabang dengan traffic berbeda.</li>
+    </ul>
+
+    <img src="img/atm.png" alt="Ilustrasi ATM (Asynchronous Transfer Mode)" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan ATM untuk jaringan yang membutuhkan QoS tinggi dan integrasi berbagai trafik.</li>
+      <li>Pastikan kapasitas link cukup untuk mendukung cell switching secara efisien.</li>
+      <li>Perhatikan konfigurasi QoS agar prioritas trafik kritikal tetap terjaga.</li>
+      <li>Pertimbangkan teknologi modern (IP/MPLS) jika ATM terlalu kompleks atau mahal.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="fc-traffic" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">FC (Fibre Channel) Traffic</h2>
+    <p class="note-paragraph">
+      <strong>FC (Fibre Channel) Traffic</strong> adalah jenis lalu lintas jaringan yang menggunakan 
+      protokol Fibre Channel untuk komunikasi data berkecepatan tinggi, terutama di lingkungan 
+      penyimpanan (Storage Area Network / SAN). FC dirancang untuk transfer data blok antara server dan storage 
+      dengan latensi rendah dan reliabilitas tinggi.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Transfer data blok antara server dan storage secara cepat dan andal.</li>
+      <li>Mendukung SAN untuk kebutuhan enterprise dengan performa tinggi.</li>
+      <li>Menyediakan jalur dedicated dengan latency rendah untuk aplikasi kritikal.</li>
+      <li>Mendukung protokol SCSI over Fibre Channel untuk akses storage.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik FC Traffic</h3>
+    <ul>
+      <li>Kecepatan tinggi: 1, 2, 4, 8, 16, 32, bahkan 64 Gbps.</li>
+      <li>Reliabel dan connection-oriented, memastikan data sampai tanpa kehilangan.</li>
+      <li>Umumnya menggunakan topologi point-to-point, arbitrated loop, atau switched fabric.</li>
+      <li>Dirancang khusus untuk trafik storage, bukan data jaringan umum.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Kecepatan transfer tinggi untuk kebutuhan storage enterprise.</li>
+      <li>Latency rendah sehingga cocok untuk database dan aplikasi kritikal.</li>
+      <li>Jaminan reliabilitas dengan error detection dan recovery bawaan.</li>
+      <li>Dedicated bandwidth mengurangi risiko gangguan dari trafik lain.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Biaya infrastruktur tinggi (HBA, switch, kabel fibre optic).</li>
+      <li>Kurang fleksibel dibanding Ethernet untuk kebutuhan general-purpose networking.</li>
+      <li>Topologi dan manajemen lebih kompleks, memerlukan keahlian khusus.</li>
+      <li>Tidak ideal untuk trafik data umum atau internet.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Server database perusahaan mengakses storage SAN melalui FC untuk performa maksimal.</li>
+      <li>Data backup rutin ke disk array menggunakan FC traffic untuk kecepatan tinggi.</li>
+      <li>Virtualisasi server memanfaatkan FC untuk storage shared tanpa mengganggu jaringan LAN.</li>
+    </ul>
+
+    <img src="img/fc-traffic.png" alt="Ilustrasi FC (Fibre Channel) Traffic" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pastikan infrastruktur FC (HBA, switch, kabel) sesuai standar dan performa yang dibutuhkan.</li>
+      <li>Gunakan topologi switched fabric untuk skala besar dan redundansi tinggi.</li>
+      <li>Monitor latensi dan throughput untuk menghindari bottleneck pada storage network.</li>
+      <li>Gunakan zoning dan security SAN untuk membatasi akses traffic FC yang sensitif.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="control-traffic" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Control Traffic</h2>
+    <p class="note-paragraph">
+      <strong>Control Traffic</strong> adalah jenis lalu lintas jaringan yang digunakan untuk mengelola, 
+      memonitor, dan mengatur perangkat jaringan serta protokol komunikasi. 
+      Tidak mengangkut data pengguna, tetapi informasi yang mengontrol jalannya jaringan, seperti routing, signaling, dan manajemen link.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menyampaikan informasi routing antara perangkat jaringan (misalnya OSPF, BGP updates).</li>
+      <li>Mendukung protokol manajemen jaringan seperti SNMP, ICMP, dan LLDP.</li>
+      <li>Menjaga stabilitas dan ketersediaan jaringan dengan signaling dan kontrol link.</li>
+      <li>Menyediakan mekanisme monitoring dan diagnosa jaringan secara real-time.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Control Traffic</h3>
+    <ul>
+      <li>Biasanya bersifat kecil dan sporadis dibandingkan data traffic.</li>
+      <li>Connectionless atau connection-oriented tergantung protokol (misal ICMP vs. TCP).</li>
+      <li>Memiliki prioritas tinggi agar jaringan tetap stabil dan responsif.</li>
+      <li>Tidak membawa data aplikasi pengguna, tetapi instruksi dan status jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Menjaga kestabilan dan ketersediaan jaringan.</li>
+      <li>Mendukung routing dinamis dan manajemen trafik real-time.</li>
+      <li>Memudahkan troubleshooting dan monitoring jaringan.</li>
+      <li>Memastikan protokol jaringan dapat beroperasi dengan baik.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Meskipun kecil, kontrol traffic berlebih bisa menyebabkan overhead di jaringan padat.</li>
+      <li>Jika terganggu, bisa menimbulkan gangguan routing atau manajemen link.</li>
+      <li>Memerlukan pengaturan QoS agar selalu prioritas, terutama di jaringan backbone.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Router OSPF saling bertukar LSA untuk menentukan jalur terbaik.</li>
+      <li>Switch menggunakan LLDP untuk mendeteksi perangkat tetangga.</li>
+      <li>Perangkat memonitor status link melalui SNMP dan ICMP ping secara berkala.</li>
+    </ul>
+
+    <img src="img/control-traffic.png" alt="Ilustrasi Control Traffic" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Prioritaskan control traffic di jaringan kritikal menggunakan QoS.</li>
+      <li>Monitor control traffic untuk memastikan routing dan signaling berjalan lancar.</li>
+      <li>Gunakan segmentasi atau VLAN untuk memisahkan control traffic dari data traffic intensif.</li>
+      <li>Pastikan protokol kontrol selalu di-update agar kompatibel dengan perangkat jaringan terbaru.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="ip-traffic" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">IP Traffic</h2>
+    <p class="note-paragraph">
+      <strong>IP Traffic</strong> adalah jenis lalu lintas jaringan yang membawa data pengguna 
+      melalui protokol Internet Protocol (IP). Ini mencakup semua komunikasi yang dikemas dalam 
+      paket IP, baik berupa web browsing, email, file transfer, streaming, maupun aplikasi lainnya.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Mengangkut data aplikasi pengguna dari sumber ke tujuan melalui jaringan IP.</li>
+      <li>Mendukung berbagai protokol transport seperti TCP, UDP, dan ICMP.</li>
+      <li>Memungkinkan routing dinamis dan statis untuk efisiensi pengiriman paket.</li>
+      <li>Menyediakan dasar untuk Internet dan jaringan private (LAN/WAN).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik IP Traffic</h3>
+    <ul>
+      <li>Berasal dari berbagai aplikasi dan protokol berbasis IP.</li>
+      <li>Dapat berupa traffic reliabel (TCP) atau cepat/tidak reliabel (UDP).</li>
+      <li>Paket IP berisi header dengan informasi alamat sumber, tujuan, TTL, dan protokol.</li>
+      <li>Dapat melewati berbagai media fisik (Ethernet, Wi-Fi, MPLS, dsb.).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Standar universal untuk komunikasi data antar perangkat di jaringan modern.</li>
+      <li>Fleksibel dan kompatibel dengan berbagai jenis aplikasi.</li>
+      <li>Mendukung routing, fragmentation, dan QoS untuk performa optimal.</li>
+      <li>Mudah dimonitor menggunakan alat analisis jaringan berbasis IP.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Reliabilitas tergantung protokol transport, TCP untuk jaminan, UDP untuk kecepatan.</li>
+      <li>Tanpa mekanisme keamanan bawaan; perlu firewall atau IPSec untuk proteksi.</li>
+      <li>IP traffic bisa padat sehingga memerlukan manajemen bandwidth agar tidak terjadi congestion.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Browsing web menggunakan HTTP/HTTPS yang dikemas dalam paket IP.</li>
+      <li>Streaming video melalui YouTube atau Netflix menggunakan UDP/TCP over IP.</li>
+      <li>File transfer antar server dalam jaringan LAN/WAN dengan protokol TCP/IP.</li>
+    </ul>
+
+    <img src="img/ip-traffic.png" alt="Ilustrasi IP Traffic" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan monitoring berbasis IP untuk menganalisis performa jaringan.</li>
+      <li>Prioritaskan traffic kritikal menggunakan QoS agar latency minimal.</li>
+      <li>Pastikan alamat IP unik untuk setiap perangkat agar tidak terjadi konflik.</li>
+      <li>Gunakan firewall dan IPSec untuk menjaga keamanan IP traffic di jaringan publik atau private.</li>
+    </ul>
+  </main>
+</section>
+<section id="ethernet-traffic" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Ethernet Traffic</h2>
+    <p class="note-paragraph">
+      <strong>Ethernet Traffic</strong> adalah jenis lalu lintas jaringan yang dikirim melalui 
+      protokol Ethernet, protokol standar untuk LAN. Ethernet mengatur bagaimana data dikemas 
+      dalam frame, ditransmisikan, dan diterima oleh perangkat dalam jaringan lokal.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Mengangkut data antar perangkat dalam jaringan LAN.</li>
+      <li>Mendukung pengiriman frame dengan alamat MAC sebagai identitas perangkat.</li>
+      <li>Menyediakan mekanisme deteksi kesalahan sederhana melalui CRC.</li>
+      <li>Mendukung berbagai kecepatan seperti 10/100/1000 Mbps dan 10/25/40/100 Gbps.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Ethernet Traffic</h3>
+    <ul>
+      <li>Data dikirim dalam bentuk <strong>frame</strong> dengan header, payload, dan trailer.</li>
+      <li>Menggunakan alamat MAC untuk identifikasi sumber dan tujuan.</li>
+      <li>Biasanya connectionless dan bekerja di layer 2 (data link layer) OSI.</li>
+      <li>Dapat bekerja di topologi star, bus, atau ring tergantung perangkat.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Standar de facto untuk jaringan LAN modern.</li>
+      <li>Fleksibel dan mudah diimplementasikan dengan switch dan NIC standar.</li>
+      <li>Memiliki mekanisme deteksi error (CRC) untuk keandalan dasar.</li>
+      <li>Dukungan kecepatan tinggi hingga ratusan Gbps di jaringan backbone.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Tidak menjamin QoS secara bawaan; memerlukan VLAN atau QoS tambahan.</li>
+      <li>Collision bisa terjadi di jaringan hub lama (CSMA/CD), walaupun jarang di switch modern.</li>
+      <li>Frame Ethernet terbatas ukurannya (maks 1518 bytes untuk frame standar).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Pengiriman data antar komputer di kantor melalui switch Ethernet.</li>
+      <li>Streaming video dalam LAN menggunakan frame Ethernet standar.</li>
+      <li>Pengiriman paket VoIP melalui jaringan Ethernet kantor.</li>
+    </ul>
+
+    <img src="img/ethernet-traffic.png" alt="Ilustrasi Ethernet Traffic" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan switch modern untuk menghindari collision dan meningkatkan throughput.</li>
+      <li>Implementasikan VLAN untuk segmentasi dan manajemen traffic Ethernet.</li>
+      <li>Monitor penggunaan bandwidth dan error frame untuk performa optimal.</li>
+      <li>Pastikan NIC dan kabel mendukung kecepatan link agar Ethernet traffic stabil.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="mpls-traffic" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">MPLS Traffic</h2>
+    <p class="note-paragraph">
+      <strong>MPLS Traffic</strong> adalah jenis lalu lintas jaringan yang menggunakan 
+      <strong>Multiprotocol Label Switching (MPLS)</strong> untuk pengiriman paket data. 
+      MPLS mempermudah forwarding paket berdasarkan label, bukan alamat IP, sehingga 
+      meningkatkan efisiensi routing dan mendukung Quality of Service (QoS).
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Mengirim paket data berdasarkan label MPLS daripada alamat IP.</li>
+      <li>Mendukung pengaturan jalur khusus (traffic engineering) untuk performa optimal.</li>
+      <li>Menyediakan QoS untuk prioritas trafik tertentu (VoIP, video, data kritikal).</li>
+      <li>Mempermudah integrasi berbagai protokol dalam satu jaringan backbone.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik MPLS Traffic</h3>
+    <ul>
+      <li>Connection-oriented di layer 2.5; paket diberi label sebelum forwarding.</li>
+      <li>Dapat membawa berbagai jenis payload: IP, Ethernet, ATM, Frame Relay.</li>
+      <li>Mendukung jalur statis maupun dinamis melalui MPLS TE (Traffic Engineering).</li>
+      <li>Meningkatkan efisiensi routing dibandingkan routing IP tradisional.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Routing cepat berbasis label, mengurangi beban pada router.</li>
+      <li>Prioritas dan QoS terjamin untuk trafik penting.</li>
+      <li>Mendukung berbagai protokol dan jenis payload dalam satu jaringan.</li>
+      <li>Mempermudah pengaturan jalur (traffic engineering) untuk menghindari kemacetan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Implementasi lebih kompleks dibandingkan routing IP standar.</li>
+      <li>Perlu perangkat MPLS-aware (router/switch dengan kemampuan MPLS).</li>
+      <li>Konfigurasi TE dan QoS memerlukan keahlian khusus.</li>
+      <li>Kurang efisien untuk jaringan kecil tanpa kebutuhan QoS atau traffic engineering.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>ISP menggunakan MPLS untuk mengatur jalur VoIP dengan latensi rendah.</li>
+      <li>Perusahaan menggunakan MPLS VPN untuk menghubungkan beberapa kantor cabang.</li>
+      <li>Backbone jaringan operator menggunakan MPLS untuk traffic engineering dan prioritas paket kritikal.</li>
+    </ul>
+
+    <img src="img/mpls-traffic.png" alt="Ilustrasi MPLS Traffic" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pastikan router dan switch mendukung MPLS dan label switching.</li>
+      <li>Gunakan MPLS TE untuk jalur kritikal agar menghindari congestion.</li>
+      <li>Implementasikan QoS untuk memprioritaskan trafik penting di jaringan MPLS.</li>
+      <li>Monitor label-switched paths (LSP) agar performa dan stabilitas tetap optimal.</li>
+    </ul>
+  </main>
+</section>
+
+
+<section id="vxlan-overlay-traffic" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">VXLAN Traffic</h2>
+    <p class="note-paragraph">
+      <strong>VXLAN (Virtual Extensible LAN) Traffic</strong> adalah jenis lalu lintas jaringan yang menggunakan 
+      protokol VXLAN untuk membuat overlay network di atas infrastruktur IP/L3. VXLAN memungkinkan 
+      segmentasi layer 2 dalam jaringan layer 3, sangat berguna untuk data center modern dan virtualisasi.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Membungkus frame Layer 2 ke dalam paket UDP untuk transport Layer 3.</li>
+      <li>Mendukung pembuatan overlay network dengan ribuan segment (VXLAN IDs).</li>
+      <li>Meningkatkan skalabilitas data center dan multi-tenant environment.</li>
+      <li>Mendukung mobilitas VM antar host tanpa mengubah alamat IP Layer 2.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik VXLAN Traffic</h3>
+    <ul>
+      <li>Berbasis encapsulation: frame L2 dikapsulkan ke dalam UDP/IP.</li>
+      <li>Menggunakan VXLAN Network Identifier (VNI) untuk segmentasi.</li>
+      <li>Dapat melewati jaringan L3 (IP) tanpa kehilangan isolasi L2.</li>
+      <li>Dukungan untuk multitenancy dan overlay networks di cloud/data center.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Meningkatkan skalabilitas LAN tradisional hingga ribuan segment virtual.</li>
+      <li>Mendukung mobilitas VM tanpa perlu perubahan IP fisik.</li>
+      <li>Integrasi mudah dengan hypervisor dan SDN controllers.</li>
+      <li>Membuat overlay network terisolasi dan aman untuk tenant berbeda.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Menambah overhead karena encapsulation (UDP/IP headers tambahan).</li>
+      <li>Memerlukan perangkat dan switch yang mendukung VXLAN (VTEP).</li>
+      <li>Kompleksitas manajemen lebih tinggi dibanding VLAN tradisional.</li>
+      <li>Monitoring dan troubleshooting lebih sulit karena lalu lintas overlay.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Data center menggunakan VXLAN untuk memisahkan tenant A dan B secara virtual.</li>
+      <li>VM yang berpindah dari host satu ke host lain tetap menggunakan alamat IP yang sama.</li>
+      <li>Jaringan cloud hybrid memanfaatkan VXLAN overlay untuk integrasi L2 di atas L3.</li>
+    </ul>
+
+    <img src="img/vxlan-traffic.png" alt="Ilustrasi VXLAN Traffic" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pastikan switch/router mendukung VXLAN dan VTEP untuk overlay network.</li>
+      <li>Monitor overlay traffic untuk menghindari congestion di jaringan fisik.</li>
+      <li>Gunakan VXLAN IDs unik untuk setiap tenant agar tidak terjadi konflik segment.</li>
+      <li>Integrasikan dengan SDN/Orchestrator untuk manajemen dan automasi yang lebih efisien.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="voice-video-traffic" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Voice & Video Traffic</h2>
+    <p class="note-paragraph">
+      <strong>Voice & Video Traffic</strong> adalah jenis lalu lintas jaringan yang membawa data suara dan video 
+      secara real-time melalui jaringan IP. Biasanya menggunakan protokol seperti VoIP (SIP/RTP) untuk suara 
+      dan RTP/RTCP untuk video streaming agar kualitas komunikasi tetap optimal.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menyampaikan komunikasi suara dan video secara real-time antar pengguna.</li>
+      <li>Mendukung aplikasi VoIP, video conference, dan streaming multimedia.</li>
+      <li>Menggunakan protokol transport seperti RTP/UDP untuk latency rendah.</li>
+      <li>Mendukung QoS untuk prioritas dan kualitas layanan yang konsisten.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Voice & Video Traffic</h3>
+    <ul>
+      <li>Real-time dan latency-sensitive; delay lebih dari beberapa ratus ms bisa mengganggu kualitas.</li>
+      <li>Memerlukan bandwidth cukup dan jitter rendah agar kualitas suara/video tetap baik.</li>
+      <li>Biasanya dikirim via UDP untuk mengurangi overhead dan delay retransmission.</li>
+      <li>Memerlukan QoS dan prioritas tinggi di jaringan untuk menghindari packet loss.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Mendukung komunikasi real-time yang penting untuk bisnis dan kolaborasi.</li>
+      <li>Efisien dalam penggunaan bandwidth dibandingkan metode tradisional.</li>
+      <li>Dapat diintegrasikan dengan aplikasi enterprise dan cloud.</li>
+      <li>Dapat menggunakan codec untuk kompresi dan optimalisasi kualitas.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Sangat sensitif terhadap latency, jitter, dan packet loss.</li>
+      <li>Memerlukan QoS dan jaringan yang stabil agar kualitas tetap baik.</li>
+      <li>Pengaturan codec dan bandwidth perlu disesuaikan dengan kapasitas jaringan.</li>
+      <li>Kesalahan konfigurasi jaringan dapat menyebabkan drop panggilan atau video putus-putus.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Panggilan VoIP antar kantor menggunakan SIP/RTP dengan QoS untuk kualitas optimal.</li>
+      <li>Video conference perusahaan yang menghubungkan beberapa lokasi menggunakan bandwidth prioritas.</li>
+      <li>Streaming webinar atau online training dengan latency rendah dan jitter minimal.</li>
+    </ul>
+
+    <img src="img/voice-video-traffic.png" alt="Ilustrasi Voice & Video Traffic" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Prioritaskan voice & video traffic menggunakan QoS agar kualitas real-time tetap optimal.</li>
+      <li>Monitor jitter, latency, dan packet loss secara berkala.</li>
+      <li>Gunakan codec efisien untuk menghemat bandwidth tanpa mengurangi kualitas.</li>
+      <li>Pastikan jaringan mendukung trafik burst saat konferensi multi-pengguna.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="storage-traffic" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Storage Traffic (iSCSI, FCoE, NFS)</h2>
+    <p class="note-paragraph">
+      <strong>Storage Traffic</strong> adalah jenis lalu lintas jaringan yang mengangkut data dari dan ke perangkat penyimpanan (storage) 
+      menggunakan protokol khusus seperti <strong>iSCSI</strong>, <strong>FCoE (Fibre Channel over Ethernet)</strong>, dan <strong>NFS (Network File System)</strong>. 
+      Traffic ini umumnya sensitif terhadap latency dan membutuhkan bandwidth tinggi untuk performa optimal.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Mengirim data blok atau file dari server ke storage dan sebaliknya.</li>
+      <li>Mendukung SAN (Storage Area Network) dan NAS (Network Attached Storage).</li>
+      <li>Memastikan transfer data cepat, handal, dan konsisten untuk aplikasi kritikal.</li>
+      <li>Mendukung protokol yang spesifik untuk storage seperti iSCSI, FCoE, dan NFS.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Storage Traffic</h3>
+    <ul>
+      <li>Sangat sensitif terhadap latency dan packet loss.</li>
+      <li>Menggunakan protokol transport TCP/IP (iSCSI, NFS) atau Ethernet encapsulation (FCoE).</li>
+      <li>Biasanya prioritas tinggi di jaringan enterprise untuk mencegah bottleneck.</li>
+      <li>Sering menggunakan dedicated network atau VLAN untuk isolasi dari traffic lain.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Performa tinggi dan konsisten untuk akses storage kritikal.</li>
+      <li>Mendukung virtualisasi dan clustering di data center.</li>
+      <li>Memudahkan manajemen storage melalui protokol standar.</li>
+      <li>Memungkinkan integrasi SAN/NAS dengan jaringan IP yang ada.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Memerlukan bandwidth tinggi agar tidak terjadi bottleneck.</li>
+      <li>Perlu monitoring khusus untuk latency, jitter, dan packet loss.</li>
+      <li>Implementasi lebih kompleks dibanding traffic data biasa.</li>
+      <li>FCoE memerlukan perangkat yang mendukung Ethernet dengan lossless mode.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Server database mengakses SAN via iSCSI untuk membaca dan menulis data blok secara cepat.</li>
+      <li>Virtual machine menggunakan storage FCoE untuk performa tinggi dan integrasi dengan VLAN.</li>
+      <li>File server menggunakan NFS untuk berbagi file antar server Linux dalam jaringan enterprise.</li>
+    </ul>
+
+    <img src="img/storage-traffic.png" alt="Ilustrasi Storage Traffic" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pisahkan storage traffic dari jaringan data biasa menggunakan VLAN atau dedicated link.</li>
+      <li>Monitor latency, throughput, dan error untuk menjaga performa storage tetap optimal.</li>
+      <li>Gunakan protokol yang sesuai dengan kebutuhan: iSCSI untuk IP-based SAN, FCoE untuk Ethernet lossless, NFS untuk file sharing.</li>
+      <li>Pastikan jaringan mendukung prioritas traffic storage untuk mencegah bottleneck pada aplikasi kritikal.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="management-traffic" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Management Traffic</h2>
+    <p class="note-paragraph">
+      <strong>Management Traffic</strong> adalah jenis lalu lintas jaringan yang digunakan untuk mengelola, 
+      memonitor, dan mengatur perangkat jaringan. Berbeda dengan data pengguna, management traffic membawa 
+      informasi untuk administrasi jaringan seperti konfigurasi, status perangkat, dan protokol monitoring.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menyediakan akses untuk konfigurasi perangkat (switch, router, firewall).</li>
+      <li>Mendukung protokol manajemen jaringan seperti SNMP, SSH, Telnet, dan ICMP.</li>
+      <li>Memantau kesehatan dan performa jaringan secara real-time.</li>
+      <li>Mendukung pengumpulan log, auditing, dan alerting pada jaringan enterprise.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Management Traffic</h3>
+    <ul>
+      <li>Berukuran kecil dibandingkan data traffic, biasanya berupa paket ringan.</li>
+      <li>Bersifat kritikal untuk operasional jaringan meskipun volume rendah.</li>
+      <li>Memerlukan keamanan tinggi karena membawa akses ke perangkat jaringan.</li>
+      <li>Dapat diprioritaskan menggunakan QoS agar tidak terganggu traffic lain.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Memudahkan administrasi dan pemantauan jaringan.</li>
+      <li>Meningkatkan stabilitas jaringan melalui monitoring real-time.</li>
+      <li>Memungkinkan automasi jaringan dengan protokol manajemen modern.</li>
+      <li>Dapat mengurangi downtime dengan deteksi dini masalah jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Jika terganggu atau hilang, perangkat tidak bisa dimonitor atau dikonfigurasi.</li>
+      <li>Memerlukan proteksi keamanan karena traffic ini sensitif.</li>
+      <li>Overhead kecil tapi tetap bisa menjadi bottleneck di jaringan sangat padat jika tidak diatur.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Administrator mengakses switch melalui SSH untuk konfigurasi VLAN.</li>
+      <li>Router mengirim SNMP traps ke server monitoring untuk alert jaringan.</li>
+      <li>Perangkat firewall mengirim log aktivitas ke syslog server untuk audit keamanan.</li>
+    </ul>
+
+    <img src="img/management-traffic.png" alt="Ilustrasi Management Traffic" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pisahkan management traffic ke VLAN atau jaringan dedicated untuk keamanan.</li>
+      <li>Gunakan protokol aman seperti SSH dan SNMPv3 untuk akses jaringan.</li>
+      <li>Prioritaskan traffic ini agar tetap responsif di jaringan sibuk.</li>
+      <li>Monitor terus status perangkat agar gangguan jaringan bisa diatasi lebih cepat.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="control-plane-traffic" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Control Plane Traffic</h2>
+    <p class="note-paragraph">
+      <strong>Control Plane Traffic</strong> adalah jenis lalu lintas jaringan yang digunakan oleh perangkat jaringan 
+      untuk saling bertukar informasi kontrol, seperti routing, signaling, dan protokol manajemen link. 
+      Traffic ini berbeda dari data pengguna (data plane) karena bertujuan mengatur jalannya jaringan.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menyampaikan update routing antar router (OSPF, BGP, IS-IS).</li>
+      <li>Mendukung protokol signaling dan manajemen link (ICMP, LDP, BFD).</li>
+      <li>Memastikan jaringan tetap stabil dan perangkat dapat menentukan jalur optimal.</li>
+      <li>Mendukung monitoring, diagnosa, dan troubleshooting jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Control Plane Traffic</h3>
+    <ul>
+      <li>Volume biasanya kecil, tapi sangat kritikal untuk operasional jaringan.</li>
+      <li>Memiliki prioritas tinggi agar routing dan signaling tidak terganggu.</li>
+      <li>Bersifat connectionless atau connection-oriented tergantung protokol.</li>
+      <li>Tidak membawa data pengguna, melainkan informasi kontrol jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Menjaga kestabilan jaringan dengan update routing real-time.</li>
+      <li>Mendukung protokol routing dinamis dan manajemen link secara efisien.</li>
+      <li>Memudahkan troubleshooting karena informasi kontrol tersedia di perangkat.</li>
+      <li>Meningkatkan keandalan dan ketersediaan jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Jika control plane traffic terganggu, jaringan bisa menjadi tidak stabil atau routing gagal.</li>
+      <li>Perlu pengaturan QoS agar prioritasnya tetap tinggi di jaringan padat.</li>
+      <li>Overhead kecil tapi kritikal, sehingga kehilangan paket bisa berdampak besar.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Router OSPF saling bertukar LSA untuk update jalur terbaik.</li>
+      <li>BGP update antara ISP untuk menentukan path internet optimal.</li>
+      <li>LDP exchange di MPLS untuk membangun Label Switched Path (LSP).</li>
+    </ul>
+
+    <img src="img/control-plane-traffic.png" alt="Ilustrasi Control Plane Traffic" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Prioritaskan control plane traffic dengan QoS untuk menghindari gangguan routing.</li>
+      <li>Monitor control plane agar network convergence tetap cepat dan stabil.</li>
+      <li>Segmentasi traffic control dari data plane untuk isolasi dan keamanan.</li>
+      <li>Pastikan protokol routing dan signaling selalu kompatibel antar perangkat.</li>
+    </ul>
+  </main>
+</section>
+<section id="multicast" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Multicast Traffic</h2>
+    <p class="note-paragraph">
+      <strong>Multicast Traffic</strong> adalah jenis lalu lintas jaringan di mana satu sumber mengirimkan data 
+      ke sekelompok tujuan tertentu secara bersamaan. Berbeda dari unicast (satu-ke-satu) atau broadcast (satu-ke-semua), 
+      multicast efisien untuk pengiriman data ke banyak penerima yang terdaftar di grup multicast.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Mendistribusikan konten secara efisien ke beberapa penerima tanpa menggandakan paket.</li>
+      <li>Mendukung aplikasi streaming video, IPTV, dan konferensi video.</li>
+      <li>Mengurangi beban jaringan dibandingkan jika menggunakan unicast untuk semua penerima.</li>
+      <li>Memungkinkan grup multicast untuk berlangganan atau berhenti menerima traffic secara dinamis.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Multicast Traffic</h3>
+    <ul>
+      <li>Sumber mengirim satu paket, tetapi dapat diterima banyak penerima.</li>
+      <li>Memerlukan protokol manajemen grup seperti IGMP (IPv4) atau MLD (IPv6).</li>
+      <li>Routing multicast menggunakan PIM (Protocol Independent Multicast) untuk mendistribusi paket.</li>
+      <li>Efisien dalam penggunaan bandwidth karena paket tidak digandakan di jaringan backbone.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Penggunaan bandwidth lebih efisien dibanding unicast untuk banyak penerima.</li>
+      <li>Cocok untuk aplikasi streaming dan distribusi konten skala besar.</li>
+      <li>Mendukung dynamic group membership melalui protokol IGMP/MLD.</li>
+      <li>Dapat dikombinasikan dengan QoS untuk memastikan kualitas streaming real-time.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Kompleksitas manajemen lebih tinggi dibanding unicast.</li>
+      <li>Memerlukan perangkat jaringan yang mendukung multicast routing (PIM, IGMP snooping).</li>
+      <li>Jika tidak dikonfigurasi dengan benar, multicast dapat menyebabkan traffic flood di jaringan.</li>
+      <li>Debugging dan troubleshooting lebih rumit dibanding unicast atau broadcast.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Streaming video konferensi ke beberapa kantor cabang menggunakan multicast group.</li>
+      <li>IPTV provider mendistribusikan saluran TV ke banyak pelanggan melalui jaringan multicast.</li>
+      <li>Pembaruan software atau patch dikirimkan ke banyak server secara efisien dengan multicast.</li>
+    </ul>
+
+    <img src="img/multicast-traffic.png" alt="Ilustrasi Multicast Traffic" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan IGMP snooping untuk membatasi multicast hanya ke port yang membutuhkannya.</li>
+      <li>Pastikan routing multicast dikonfigurasi dengan PIM di seluruh jaringan.</li>
+      <li>Monitor grup multicast dan bandwidth untuk menghindari flooding traffic.</li>
+      <li>Segmentasi jaringan jika perlu untuk mengisolasi multicast dari traffic biasa.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="tunnel" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Tunnel</h2>
+    <p class="note-paragraph">
+      <strong>Tunnel</strong> adalah mekanisme jaringan yang mengenkapsulasi paket data dari satu protokol 
+      ke dalam protokol lain agar dapat dikirim melalui jaringan yang tidak mendukung protokol asli. 
+      Tunnel banyak digunakan untuk membangun koneksi aman, VPN, dan overlay network.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Mengangkut paket data protokol tertentu melalui jaringan lain (misal IP melalui IPsec atau GRE).</li>
+      <li>Menyediakan jalur privat atau aman antara dua titik jaringan (VPN, MPLS, GRE).</li>
+      <li>Mendukung virtualisasi jaringan dan overlay untuk data center atau cloud.</li>
+      <li>Memungkinkan routing antar jaringan yang tidak kompatibel secara langsung.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Tunnel</h3>
+    <ul>
+      <li>Data dienkapsulasi dengan header tambahan sesuai jenis tunnel.</li>
+      <li>Dapat menggunakan berbagai protokol tunneling seperti GRE, IPsec, L2TP, VXLAN.</li>
+      <li>Memungkinkan transmisi paket antar jaringan yang berbeda layer atau lokasi.</li>
+      <li>Bisa dienkripsi (secure tunnel) atau hanya encapsulation (unsecure tunnel).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Memungkinkan komunikasi antar jaringan yang berbeda protokol atau topologi.</li>
+      <li>Mendukung keamanan data melalui enkripsi (VPN tunnel).</li>
+      <li>Mempermudah integrasi site-to-site dan remote access.</li>
+      <li>Dapat digunakan untuk overlay network di cloud dan data center.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Menambah overhead karena header tambahan pada setiap paket.</li>
+      <li>Jika tidak dienkripsi, data masih bisa diintip atau diubah di jaringan publik.</li>
+      <li>Konfigurasi dan troubleshooting lebih kompleks dibanding jalur langsung.</li>
+      <li>Performa bisa menurun jika tunnel membawa banyak paket besar (MTU dan fragmentation perlu diperhatikan).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>GRE tunnel menghubungkan dua kantor cabang melalui internet.</li>
+      <li>IPsec VPN tunnel untuk koneksi aman karyawan remote ke kantor.</li>
+      <li>VXLAN tunnel untuk overlay network antar server di data center.</li>
+    </ul>
+
+    <img src="img/tunnel.png" alt="Ilustrasi Tunnel" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pilih protokol tunnel sesuai kebutuhan: GRE untuk encapsulation, IPsec untuk keamanan.</li>
+      <li>Periksa MTU agar tidak terjadi fragmentation pada tunnel.</li>
+      <li>Monitor performa tunnel dan enkripsi jika digunakan untuk VPN.</li>
+      <li>Gunakan logging dan monitoring untuk troubleshooting jaringan tunneled.</li>
+    </ul>
+  </main>
+</section>
+
+
+<section id="vpn" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">VPN (Virtual Private Network)</h2>
+    <p class="note-paragraph">
+      <strong>VPN (Virtual Private Network)</strong> adalah jenis tunnel yang membuat koneksi jaringan aman 
+      dan privat melalui jaringan publik seperti Internet. VPN mengenkripsi data dan memastikan integritas serta 
+      kerahasiaan komunikasi antara dua titik jaringan atau pengguna dan server.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menyediakan koneksi aman antara remote user dan jaringan perusahaan.</li>
+      <li>Mendukung site-to-site VPN untuk menghubungkan beberapa kantor cabang.</li>
+      <li>Melindungi data melalui enkripsi, autentikasi, dan integritas paket.</li>
+      <li>Membuat jalur privat melalui jaringan publik tanpa mengubah infrastruktur fisik.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik VPN</h3>
+    <ul>
+      <li>Menggunakan protokol tunneling seperti IPsec, SSL/TLS, atau L2TP.</li>
+      <li>Menyediakan enkripsi untuk keamanan data saat transit.</li>
+      <li>Dapat berupa remote access VPN (user ke jaringan) atau site-to-site VPN (jaringan ke jaringan).</li>
+      <li>Mendukung autentikasi pengguna atau perangkat sebelum akses diberikan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Keamanan data terjamin saat melewati jaringan publik.</li>
+      <li>Mendukung mobilitas dan akses remote untuk karyawan.</li>
+      <li>Mudah diterapkan tanpa perlu membangun jaringan fisik baru.</li>
+      <li>Mendukung integrasi dengan firewall dan sistem autentikasi enterprise.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Menambah overhead karena enkripsi dan encapsulation paket.</li>
+      <li>Performa bisa berkurang tergantung protokol dan kapasitas perangkat.</li>
+      <li>Konfigurasi VPN site-to-site bisa kompleks untuk jaringan besar.</li>
+      <li>Jika kunci atau sertifikat bocor, keamanan VPN bisa terancam.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Remote worker menggunakan SSL VPN untuk mengakses server kantor.</li>
+      <li>Dua kantor cabang terhubung melalui IPsec VPN di internet.</li>
+      <li>VPN site-to-site menghubungkan pusat data dengan cloud provider secara aman.</li>
+    </ul>
+
+    <img src="img/vpn-traffic.png" alt="Ilustrasi VPN Tunnel" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pilih protokol VPN sesuai kebutuhan: IPsec untuk site-to-site, SSL untuk remote access.</li>
+      <li>Gunakan enkripsi kuat (AES 256-bit) dan autentikasi multifaktor untuk keamanan optimal.</li>
+      <li>Monitor performa dan latency VPN untuk memastikan koneksi stabil.</li>
+      <li>Periksa sertifikat dan kunci secara berkala untuk mencegah kebocoran data.</li>
+    </ul>
+  </main>
+</section>
+
 
 
   <!-- Bootstrap JS -->
