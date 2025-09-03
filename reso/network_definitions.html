@@ -61,7 +61,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="#">Cisco Products</a>
+        <!-- <a class="navbar-brand" href="#">Definitions</a> -->
         <div class="ms-auto">
         <ul class="navbar-nav">
     <ul class="navbar-nav">
@@ -456,6 +456,715 @@
   </main>
 </section>
 
+<section id="handshake" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Handshake</h2>
+    <p class="note-paragraph">
+      <strong>Handshake</strong> adalah proses komunikasi awal antara dua perangkat jaringan untuk membangun koneksi yang aman dan teratur sebelum data dikirim. 
+      Handshake memastikan kedua pihak setuju pada protokol, kecepatan transfer, dan parameter komunikasi lainnya.
+    </p>
+
+    <h3 class="note-subtitle">Jenis Handshake Umum</h3>
+    <ul>
+      <li><strong>TCP 3-way Handshake:</strong> Proses awal koneksi TCP antara client dan server untuk menyetujui sinkronisasi nomor urut paket.</li>
+      <li><strong>SSL/TLS Handshake:</strong> Digunakan untuk membuat koneksi aman antara client dan server dengan pertukaran sertifikat dan kunci enkripsi.</li>
+      <li><strong>Wireless Handshake:</strong> Digunakan pada Wi-Fi untuk otentikasi dan pengaturan enkripsi antara perangkat dan access point.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Langkah TCP 3-way Handshake</h3>
+    <ul>
+      <li><strong>SYN:</strong> Client mengirim permintaan koneksi ke server.</li>
+      <li><strong>SYN-ACK:</strong> Server menerima dan menyetujui koneksi, membalas dengan nomor urut baru.</li>
+      <li><strong>ACK:</strong> Client mengonfirmasi penerimaan dan koneksi resmi terbentuk.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Pentingnya Handshake</h3>
+    <ul>
+      <li>Memastikan koneksi yang stabil dan terkoordinasi.</li>
+      <li>Mencegah kehilangan data akibat sinkronisasi yang salah.</li>
+      <li>Menetapkan parameter keamanan dan enkripsi sebelum data dikirim.</li>
+      <li>Mendukung protokol komunikasi yang andal (reliable protocol).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Browser melakukan handshake TLS dengan server web sebelum memulai transfer HTTPS.</li>
+      <li>Client VoIP menyelesaikan handshake dengan server untuk memastikan audio stream stabil.</li>
+      <li>Perangkat IoT melakukan handshake dengan gateway untuk otentikasi dan enkripsi data.</li>
+    </ul>
+
+    <img src="img/handshake.png" alt="Ilustrasi Handshake" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pastikan firewall atau perangkat keamanan tidak memblokir paket handshake.</li>
+      <li>Monitoring handshake bisa membantu mendeteksi masalah koneksi awal.</li>
+      <li>Gunakan protokol handshake yang sesuai dengan jenis komunikasi (TCP, TLS, Wi-Fi, dll.).</li>
+      <li>Optimalkan timeout dan retry untuk handshake agar koneksi lebih handal.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="mtu" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">MTU (Maximum Transmission Unit)</h2>
+    <p class="note-paragraph">
+      <strong>MTU</strong> adalah ukuran maksimum paket data (dalam byte) yang dapat dikirimkan melalui sebuah jaringan atau interface tanpa perlu fragmentasi. 
+      MTU yang sesuai penting untuk mengoptimalkan performa jaringan dan mencegah terjadinya fragmentasi yang dapat memperlambat komunikasi.
+    </p>
+
+    <h3 class="note-subtitle">Penyebab Pentingnya MTU</h3>
+    <ul>
+      <li>Paket terlalu besar melebihi MTU akan dipecah menjadi fragmen, meningkatkan latency dan overhead.</li>
+      <li>Paket yang lebih kecil dari MTU akan mengurangi efisiensi karena header relatif lebih besar.</li>
+      <li>Kesalahan konfigurasi MTU dapat menyebabkan <strong>packet loss</strong> atau koneksi lambat.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Nilai MTU Umum</h3>
+    <ul>
+      <li>Ethernet standar: 1500 byte</li>
+      <li>Jaringan PPPoE: 1492 byte</li>
+      <li>Jaringan MPLS: 1500 byte (atau lebih rendah jika ada overhead MPLS)</li>
+      <li>IPv6 biasanya menggunakan MTU minimum 1280 byte</li>
+    </ul>
+
+    <h3 class="note-subtitle">Dampak MTU Tidak Sesuai</h3>
+    <ul>
+      <li>Fragmentasi paket yang meningkatkan overhead dan menurunkan performa.</li>
+      <li>Terjadi koneksi lambat atau timeout pada aplikasi sensitif latency.</li>
+      <li>Paket hilang jika perangkat jaringan tidak mendukung fragmentasi.</li>
+      <li>Gangguan pada protokol seperti VPN, VoIP, dan streaming video.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>VPN gagal terkoneksi karena MTU di link VPN lebih kecil dari paket data yang dikirim.</li>
+      <li>Streaming video buffering karena fragmentasi paket akibat MTU terlalu kecil.</li>
+      <li>Ping ke server gagal ketika paket ICMP lebih besar dari MTU jalur.</li>
+    </ul>
+
+    <img src="img/mtu.png" alt="Ilustrasi MTU" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Mengatur MTU</h3>
+    <ul>
+      <li>Gunakan perintah <strong>ping</strong> dengan opsi <em>size</em> untuk menentukan MTU maksimum tanpa fragmentasi.</li>
+      <li>Sesuaikan MTU pada router, switch, dan endpoint agar konsisten di seluruh jalur.</li>
+      <li>Periksa overhead protokol seperti PPPoE atau VPN saat menentukan MTU.</li>
+      <li>Monitoring performa jaringan untuk mendeteksi masalah fragmentasi.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="ttl" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">TTL (Time To Live)</h2>
+    <p class="note-paragraph">
+      <strong>TTL</strong> adalah nilai pada paket jaringan yang menentukan berapa lama paket tersebut boleh “hidup” atau berapa hop (lompatan) yang dapat dilalui sebelum dibuang oleh router. 
+      TTL membantu mencegah paket yang tersesat di jaringan bergerak terus tanpa batas dan mengurangi risiko loop.
+    </p>
+
+    <h3 class="note-subtitle">Cara Kerja TTL</h3>
+    <ul>
+      <li>Setiap paket dikirim dengan nilai TTL tertentu, misalnya 64, 128, atau 255.</li>
+      <li>Setiap kali paket melewati router, nilai TTL dikurangi 1.</li>
+      <li>Jika TTL mencapai 0 sebelum paket mencapai tujuan, paket dibuang dan router biasanya mengirim pesan ICMP "Time Exceeded".</li>
+    </ul>
+
+    <h3 class="note-subtitle">Pentingnya TTL</h3>
+    <ul>
+      <li>Mencegah paket tersesat di jaringan akibat routing loop.</li>
+      <li>Memberikan informasi jumlah hop yang dilewati paket (berguna untuk traceroute).</li>
+      <li>Membantu mengelola performa jaringan dan keamanan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Melakukan ping ke server dan melihat TTL untuk memastikan jarak hop jaringan.</li>
+      <li>Traceroute menggunakan TTL untuk menentukan jalur paket dari sumber ke tujuan.</li>
+      <li>Loop routing yang tidak sengaja membuat paket TTL habis sebelum sampai tujuan.</li>
+    </ul>
+
+    <img src="img/ttl.png" alt="Ilustrasi TTL" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan TTL untuk troubleshooting koneksi jaringan dengan traceroute.</li>
+      <li>Pastikan nilai TTL default sesuai kebutuhan, misalnya untuk VoIP, VPN, atau jaringan internal.</li>
+      <li>Periksa nilai TTL yang tidak biasa pada paket masuk sebagai indikasi serangan jaringan (misalnya spoofing).</li>
+      <li>TTL juga bisa disesuaikan pada firewall atau router untuk membatasi jangkauan paket tertentu.</li>
+    </ul>
+  </main>
+</section>
+<section id="ack-nack" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">ACK / NACK</h2>
+    <p class="note-paragraph">
+      <strong>ACK (Acknowledgment)</strong> dan <strong>NACK (Negative Acknowledgment)</strong> adalah mekanisme pada komunikasi jaringan untuk mengonfirmasi penerimaan data. 
+      ACK menandakan bahwa paket data diterima dengan benar, sedangkan NACK menandakan adanya kesalahan atau paket hilang sehingga perlu dikirim ulang.
+    </p>
+
+    <h3 class="note-subtitle">Cara Kerja</h3>
+    <ul>
+      <li>Pengirim mengirim paket data ke penerima.</li>
+      <li>Penerima memeriksa integritas paket menggunakan checksum atau metode lain.</li>
+      <li>Jika paket diterima tanpa error → penerima mengirim ACK ke pengirim.</li>
+      <li>Jika paket rusak atau hilang → penerima mengirim NACK agar pengirim mengirim ulang paket tersebut.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Pentingnya ACK / NACK</h3>
+    <ul>
+      <li>Menjamin keandalan komunikasi jaringan (reliable transmission).</li>
+      <li>Mencegah kehilangan data atau korupsi informasi.</li>
+      <li>Digunakan pada protokol TCP dan protokol data kritikal lainnya.</li>
+      <li>Meningkatkan efisiensi retransmisi dengan hanya mengirim ulang paket yang gagal.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>TCP menggunakan ACK untuk memastikan semua segmen data diterima dengan benar.</li>
+      <li>Protocol seperti XMODEM, HDLC, atau Modbus menggunakan ACK/NACK untuk mengonfirmasi transfer data antar perangkat.</li>
+      <li>File transfer jaringan kadang memerlukan NACK untuk mengirim ulang paket yang rusak.</li>
+    </ul>
+
+    <img src="img/ack-nack.png" alt="Ilustrasi ACK/NACK" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Monitoring ACK/NACK bisa membantu mendeteksi masalah packet loss atau kualitas link.</li>
+      <li>Protokol dengan ACK/NACK lebih andal tapi menambah overhead, sesuaikan dengan kebutuhan.</li>
+      <li>Perhatikan timeout ACK untuk memastikan retransmisi terjadi tepat waktu.</li>
+      <li>Gunakan ACK/NACK pada aplikasi kritikal seperti database, VoIP, atau transfer file sensitif.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="spoofing" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Spoofing</h2>
+    <p class="note-paragraph">
+      <strong>Spoofing</strong> adalah teknik serangan di mana pihak jahat menyamar sebagai entitas tepercaya untuk mendapatkan akses, mencuri data, atau mengelabui sistem jaringan. 
+      Spoofing dapat terjadi pada IP, email, DNS, atau protokol lain di jaringan.
+    </p>
+
+    <h3 class="note-subtitle">Jenis-jenis Spoofing</h3>
+    <ul>
+      <li><strong>IP Spoofing:</strong> Mengubah alamat IP pengirim agar terlihat berasal dari alamat yang dipercaya.</li>
+      <li><strong>Email Spoofing:</strong> Memalsukan alamat pengirim email untuk menipu penerima agar membuka link berbahaya atau memberikan informasi sensitif.</li>
+      <li><strong>DNS Spoofing:</strong> Mengubah cache DNS agar pengguna diarahkan ke situs palsu.</li>
+      <li><strong>ARP Spoofing:</strong> Mengirim paket ARP palsu untuk memposisikan diri sebagai gateway di jaringan lokal.</li>
+      <li><strong>MAC Spoofing:</strong> Mengubah alamat MAC perangkat agar mengelabui sistem kontrol akses jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Dampak Spoofing</h3>
+    <ul>
+      <li>Pencurian data sensitif, password, atau informasi finansial.</li>
+      <li>Intersepsi atau manipulasi paket data.</li>
+      <li>Gangguan layanan (Denial of Service) atau akses tidak sah ke sistem.</li>
+      <li>Kehilangan kepercayaan pengguna pada jaringan atau layanan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Penyerang mengirim email phishing dengan alamat palsu menyerupai bank, meminta verifikasi akun.</li>
+      <li>Perangkat jahat melakukan ARP spoofing di jaringan kantor untuk mencuri username dan password.</li>
+      <li>IP spoofing digunakan untuk menyembunyikan sumber serangan DDoS.</li>
+    </ul>
+
+    <img src="img/spoofing.png" alt="Ilustrasi Spoofing" class="note-image" />
+
+    <h3 class="note-subtitle">Cara Mencegah Spoofing</h3>
+    <ul>
+      <li>Gunakan firewall dan IDS/IPS untuk mendeteksi paket mencurigakan.</li>
+      <li>Implementasikan protokol keamanan seperti HTTPS, SPF, DKIM, dan DMARC pada email.</li>
+      <li>Gunakan ARP inspection, port security, dan IP source guard pada switch jaringan.</li>
+      <li>Perbarui perangkat dan software secara rutin untuk menutup celah keamanan.</li>
+      <li>Edukasikan pengguna tentang phishing dan serangan spoofing lainnya.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="sniffing" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Sniffing</h2>
+    <p class="note-paragraph">
+      <strong>Sniffing</strong> adalah teknik memantau, menangkap, dan menganalisis paket data yang melintas di jaringan. 
+      Sniffing dapat digunakan untuk tujuan legal (network monitoring) maupun serangan (mencuri informasi sensitif seperti username, password, atau data pribadi).
+    </p>
+
+    <h3 class="note-subtitle">Jenis-jenis Sniffing</h3>
+    <ul>
+      <li><strong>Passive Sniffing:</strong> Hanya memantau paket data tanpa mengubah atau mengintervensi trafik.</li>
+      <li><strong>Active Sniffing:</strong> Memanipulasi jaringan (misalnya ARP spoofing) untuk mengarahkan paket ke perangkat penyerang.</li>
+      <li><strong>Wi-Fi Sniffing:</strong> Menangkap paket pada jaringan nirkabel menggunakan tools seperti Wireshark atau Aircrack-ng.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Dampak Sniffing</h3>
+    <ul>
+      <li>Pencurian data sensitif seperti password, nomor kartu kredit, atau informasi pribadi.</li>
+      <li>Pengintaian trafik untuk menemukan celah keamanan.</li>
+      <li>Penyalahgunaan data untuk serangan lebih lanjut seperti spoofing atau session hijacking.</li>
+      <li>Potensi gangguan privasi dan keamanan jaringan perusahaan maupun individu.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Penyerang menggunakan Wireshark untuk menangkap username dan password di jaringan Wi-Fi publik.</li>
+      <li>Sniffing aktif pada LAN kantor untuk mendapatkan akses ke server internal.</li>
+      <li>Penggunaan sniffing untuk audit jaringan secara legal untuk mendeteksi masalah performa atau celah keamanan.</li>
+    </ul>
+
+    <img src="img/sniffing.png" alt="Ilustrasi Sniffing" class="note-image" />
+
+    <h3 class="note-subtitle">Cara Mencegah Sniffing</h3>
+    <ul>
+      <li>Gunakan enkripsi end-to-end seperti HTTPS, SSH, atau VPN.</li>
+      <li>Segmentasi jaringan untuk membatasi akses ke trafik sensitif.</li>
+      <li>Implementasikan port security dan ARP inspection pada switch.</li>
+      <li>Monitoring jaringan untuk mendeteksi aktivitas mencurigakan.</li>
+      <li>Edukasikan pengguna untuk tidak menggunakan jaringan publik tanpa perlindungan VPN.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="mitm" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">MITM (Man-in-the-Middle)</h2>
+    <p class="note-paragraph">
+      <strong>MITM (Man-in-the-Middle)</strong> adalah serangan di mana penyerang menyusup di antara dua pihak yang berkomunikasi untuk memantau, mencuri, atau memanipulasi data yang dikirim. 
+      MITM dapat terjadi pada jaringan kabel maupun nirkabel dan sering memanfaatkan teknik spoofing atau sniffing.
+    </p>
+
+    <h3 class="note-subtitle">Jenis-jenis MITM</h3>
+    <ul>
+      <li><strong>ARP Spoofing / ARP Poisoning:</strong> Penyerang menipu perangkat di LAN agar mengirim paket melalui perangkatnya.</li>
+      <li><strong>DNS Spoofing:</strong> Mengalihkan pengguna ke situs palsu dengan memalsukan jawaban DNS.</li>
+      <li><strong>HTTPS Spoofing / SSL Stripping:</strong> Mengubah koneksi HTTPS menjadi HTTP untuk membaca data yang seharusnya terenkripsi.</li>
+      <li><strong>Wi-Fi MITM:</strong> Menyediakan hotspot palsu untuk menangkap data pengguna yang terhubung.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Dampak MITM</h3>
+    <ul>
+      <li>Pencurian data sensitif seperti username, password, dan nomor kartu kredit.</li>
+      <li>Manipulasi pesan atau transaksi tanpa sepengetahuan pengguna.</li>
+      <li>Penurunan privasi dan kepercayaan pengguna terhadap layanan.</li>
+      <li>Peluang penyebaran malware melalui injeksi paket yang dimodifikasi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Pengguna terhubung ke Wi-Fi publik yang dikendalikan penyerang, lalu data login dicuri.</li>
+      <li>Penyerang mengubah transaksi perbankan online melalui MITM dan mengambil keuntungan finansial.</li>
+      <li>ARP spoofing di jaringan kantor untuk memantau email dan file internal.</li>
+    </ul>
+
+    <img src="img/mitm.png" alt="Ilustrasi MITM" class="note-image" />
+
+    <h3 class="note-subtitle">Cara Mencegah MITM</h3>
+    <ul>
+      <li>Gunakan enkripsi end-to-end seperti HTTPS, SSL/TLS, dan VPN.</li>
+      <li>Verifikasi sertifikat dan kunci publik untuk mencegah SSL stripping.</li>
+      <li>Gunakan DNSSEC untuk memvalidasi jawaban DNS.</li>
+      <li>Implementasikan ARP inspection dan port security pada jaringan lokal.</li>
+      <li>Edukasi pengguna untuk tidak mengakses jaringan publik tanpa perlindungan.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="aaa" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">AAA (Authentication, Authorization, and Accounting)</h2>
+    <p class="note-paragraph">
+      <strong>AAA</strong> adalah kerangka kerja untuk mengelola akses pengguna pada jaringan atau sistem. 
+      AAA memastikan bahwa hanya pengguna yang sah yang dapat mengakses sumber daya, menentukan apa yang mereka boleh lakukan, dan mencatat aktivitas mereka untuk audit.
+    </p>
+
+    <h3 class="note-subtitle">Komponen AAA</h3>
+    <ul>
+      <li><strong>Authentication:</strong> Memverifikasi identitas pengguna, misalnya melalui username/password, sertifikat, atau token.</li>
+      <li><strong>Authorization:</strong> Menentukan hak akses pengguna, seperti resource apa yang bisa diakses dan operasi yang diperbolehkan.</li>
+      <li><strong>Accounting:</strong> Mencatat aktivitas pengguna untuk audit, billing, atau analisis keamanan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Pentingnya AAA</h3>
+    <ul>
+      <li>Meningkatkan keamanan dengan memastikan hanya pengguna sah yang dapat mengakses jaringan.</li>
+      <li>Mencegah akses tidak sah ke sistem dan data sensitif.</li>
+      <li>Memberikan jejak audit untuk kepatuhan regulasi dan investigasi insiden.</li>
+      <li>Mendukung manajemen hak akses yang fleksibel sesuai peran pengguna.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Administrator jaringan mengatur AAA pada router Cisco untuk memverifikasi login SSH menggunakan RADIUS.</li>
+      <li>User VPN harus melakukan autentikasi dan hanya diberi akses ke subnet tertentu berdasarkan peran.</li>
+      <li>Accounting mencatat sesi pengguna, jumlah data yang dikirim, dan waktu akses untuk audit keamanan.</li>
+    </ul>
+
+    <img src="img/aaa.png" alt="Ilustrasi AAA" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan server AAA eksternal seperti RADIUS atau TACACS+ untuk manajemen terpusat.</li>
+      <li>Selalu lakukan logging aktivitas untuk audit dan keamanan.</li>
+      <li>Terapkan prinsip hak akses minimum (least privilege) pada authorization.</li>
+      <li>Perbarui metode autentikasi secara rutin, termasuk penggunaan MFA jika memungkinkan.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="radius" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">RADIUS (Remote Authentication Dial-In User Service)</h2>
+    <p class="note-paragraph">
+      <strong>RADIUS</strong> adalah protokol jaringan yang digunakan untuk otentikasi, otorisasi, dan accounting (AAA) pada pengguna atau perangkat yang mengakses jaringan. 
+      RADIUS umum digunakan pada VPN, Wi-Fi, dan perangkat jaringan untuk mengelola akses secara terpusat.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama RADIUS</h3>
+    <ul>
+      <li><strong>Authentication:</strong> Memverifikasi identitas pengguna atau perangkat sebelum mengizinkan akses.</li>
+      <li><strong>Authorization:</strong> Menentukan hak akses pengguna, misalnya subnet atau resource yang bisa diakses.</li>
+      <li><strong>Accounting:</strong> Mencatat aktivitas pengguna untuk audit, billing, atau analisis keamanan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Cara Kerja</h3>
+    <ul>
+      <li>Pengguna mencoba mengakses jaringan melalui perangkat client atau access point.</li>
+      <li>Perangkat mengirim kredensial ke server RADIUS.</li>
+      <li>RADIUS memverifikasi kredensial dan menentukan hak akses pengguna.</li>
+      <li>Server RADIUS mencatat sesi pengguna untuk accounting.</li>
+      <li>Jika kredensial valid → akses diizinkan; jika tidak → akses ditolak.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan RADIUS</h3>
+    <ul>
+      <li>Manajemen AAA terpusat untuk banyak perangkat dan pengguna.</li>
+      <li>Integrasi dengan VPN, Wi-Fi, dan switch/router enterprise.</li>
+      <li>Mendukung protokol keamanan seperti PAP, CHAP, dan EAP.</li>
+      <li>Mendukung pencatatan (logging) untuk audit dan monitoring.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Pengguna Wi-Fi perusahaan harus login melalui RADIUS server sebelum bisa mengakses internet.</li>
+      <li>VPN client memverifikasi kredensial ke RADIUS untuk memastikan hanya karyawan sah yang bisa terkoneksi.</li>
+      <li>Switch enterprise menggunakan RADIUS untuk autentikasi admin melalui SSH.</li>
+    </ul>
+
+    <img src="img/radius.png" alt="Ilustrasi RADIUS" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan RADIUS server terpusat untuk konsistensi AAA di seluruh jaringan.</li>
+      <li>Pastikan koneksi antara client dan server RADIUS terenkripsi (misal menggunakan TLS).</li>
+      <li>Periksa dan catat aktivitas accounting untuk audit keamanan.</li>
+      <li>Integrasikan RADIUS dengan LDAP atau Active Directory untuk manajemen identitas.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="tacacs" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">TACACS+ (Terminal Access Controller Access-Control System Plus)</h2>
+    <p class="note-paragraph">
+      <strong>TACACS+</strong> adalah protokol AAA (Authentication, Authorization, Accounting) yang digunakan untuk mengelola akses ke perangkat jaringan secara terpusat. 
+      TACACS+ banyak digunakan pada router, switch, dan perangkat jaringan enterprise untuk kontrol administratif dan logging aktivitas.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama TACACS+</h3>
+    <ul>
+      <li><strong>Authentication:</strong> Memverifikasi identitas administrator atau pengguna yang mencoba mengakses perangkat.</li>
+      <li><strong>Authorization:</strong> Menentukan hak akses dan level perintah yang boleh dijalankan oleh pengguna.</li>
+      <li><strong>Accounting:</strong> Mencatat semua perintah dan aktivitas pengguna untuk audit keamanan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Perbedaan TACACS+ vs RADIUS</h3>
+    <ul>
+      <li><strong>TACACS+</strong> memisahkan fungsi AAA, sedangkan <strong>RADIUS</strong> menggabungkannya.</li>
+      <li>TACACS+ lebih fokus pada manajemen perangkat jaringan, RADIUS lebih umum untuk akses jaringan seperti VPN/Wi-Fi.</li>
+      <li>Data TACACS+ dienkripsi sepenuhnya, sementara RADIUS hanya mengenkripsi password.</li>
+      <li>TACACS+ mendukung kontrol perintah granular di perangkat jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Administrator SSH ke router Cisco, TACACS+ memverifikasi identitas dan menentukan level akses (user, admin, superuser).</li>
+      <li>Semua perintah konfigurasi pada switch dicatat oleh server TACACS+ untuk audit.</li>
+      <li>Mengelola akses beberapa perangkat jaringan dari satu server TACACS+ terpusat.</li>
+    </ul>
+
+    <img src="img/tacacs-plus.png" alt="Ilustrasi TACACS+" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan TACACS+ untuk kontrol akses administratif pada jaringan enterprise.</li>
+      <li>Integrasikan TACACS+ dengan LDAP atau Active Directory untuk autentikasi terpusat.</li>
+      <li>Catat semua aktivitas untuk audit dan kepatuhan regulasi.</li>
+      <li>Pastikan koneksi antara perangkat jaringan dan server TACACS+ terenkripsi dan aman.</li>
+    </ul>
+  </main>
+</section>
+
+
+<section id="ecmp" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">ECMP (Equal-Cost Multi-Path)</h2>
+    <p class="note-paragraph">
+      <strong>ECMP</strong> adalah metode routing yang memungkinkan pengiriman paket melalui beberapa jalur yang memiliki biaya (cost) sama secara bersamaan. 
+      ECMP meningkatkan performa, redundansi, dan pemanfaatan bandwidth jaringan secara optimal.
+    </p>
+
+    <h3 class="note-subtitle">Cara Kerja ECMP</h3>
+    <ul>
+      <li>Routing protocol seperti OSPF, IS-IS, atau BGP menghitung jalur dengan cost yang sama ke tujuan.</li>
+      <li>Paket dibagi secara seimbang (load balancing) di antara jalur-jalur tersebut.</li>
+      <li>Jika salah satu jalur gagal, paket dialihkan ke jalur lain tanpa mengganggu koneksi.</li>
+      <li>ECMP biasanya menggunakan hashing berdasarkan IP, port, atau protokol untuk mendistribusikan paket secara konsisten.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan ECMP</h3>
+    <ul>
+      <li>Meningkatkan throughput dengan memanfaatkan beberapa jalur secara bersamaan.</li>
+      <li>Redundansi tinggi; jika satu jalur down, trafik tetap mengalir melalui jalur lain.</li>
+      <li>Load balancing otomatis tanpa konfigurasi manual tiap jalur.</li>
+      <li>Mengurangi bottleneck pada jalur tunggal di jaringan besar.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Data center menggunakan ECMP untuk membagi trafik antara beberapa spine switch yang memiliki cost sama.</li>
+      <li>ISP memanfaatkan ECMP untuk mendistribusikan trafik internet antar beberapa link dengan kapasitas sama.</li>
+      <li>Jaringan perusahaan dengan dua jalur VPN ke kantor cabang yang memiliki cost sama untuk redundansi dan load balancing.</li>
+    </ul>
+
+    <img src="img/ecmp.png" alt="Ilustrasi ECMP" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Periksa jalur ECMP untuk memastikan cost yang sama agar load balancing efektif.</li>
+      <li>Gunakan hash algoritma yang konsisten untuk menghindari out-of-order packet.</li>
+      <li>Monitoring performa jalur untuk mendeteksi bottleneck atau link down.</li>
+      <li>Pastikan routing protocol mendukung ECMP di jaringan Anda (OSPF, IS-IS, BGP, EIGRP).</li>
+    </ul>
+  </main>
+</section>
+
+<section id="cost-routing" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cost Routing</h2>
+    <p class="note-paragraph">
+      <strong>Cost Routing</strong> adalah metode routing di mana jalur dipilih berdasarkan nilai <strong>cost</strong> atau biaya tertentu yang diberikan pada link jaringan. 
+      Cost biasanya ditentukan berdasarkan bandwidth, delay, atau metrik lain, sehingga routing protocol memilih jalur paling optimal untuk mengirim paket.
+    </p>
+
+    <h3 class="note-subtitle">Cara Kerja Cost Routing</h3>
+    <ul>
+      <li>Routing protocol (misal OSPF, EIGRP, IS-IS) menghitung cost setiap link berdasarkan metrik yang sudah ditentukan.</li>
+      <li>Jalur dengan total cost terendah dipilih sebagai jalur utama untuk mengirim paket.</li>
+      <li>Jika jalur utama gagal, jalur dengan cost berikutnya digunakan sebagai backup.</li>
+      <li>Administrator dapat menyesuaikan cost manual untuk memengaruhi jalur yang dipilih.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan Cost Routing</h3>
+    <ul>
+      <li>Memilih jalur optimal untuk efisiensi bandwidth dan latency.</li>
+      <li>Memberikan fleksibilitas dalam mengatur prioritas jalur jaringan.</li>
+      <li>Mudah dikombinasikan dengan mekanisme failover jika jalur utama down.</li>
+      <li>Mendukung load balancing jika beberapa jalur memiliki cost yang sama.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>OSPF menghitung cost berdasarkan bandwidth; link 1 Gbps memiliki cost lebih rendah daripada link 100 Mbps.</li>
+      <li>EIGRP menggunakan formula metrik gabungan (bandwidth, delay, reliability) untuk menentukan jalur terbaik.</li>
+      <li>Administrator menurunkan cost pada link utama agar trafik prioritas selalu melewati jalur tercepat.</li>
+    </ul>
+
+    <img src="img/cost-routing.png" alt="Ilustrasi Cost Routing" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Periksa dan sesuaikan cost pada routing protocol untuk memprioritaskan jalur yang diinginkan.</li>
+      <li>Gunakan cost routing bersama ECMP untuk optimasi bandwidth dan redundansi.</li>
+      <li>Monitoring performa jalur secara berkala untuk memastikan cost routing efektif.</li>
+      <li>Hindari terlalu banyak modifikasi cost manual agar tidak menimbulkan routing loop atau jalur suboptimal.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="load-balancing" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Load Balancing</h2>
+    <p class="note-paragraph">
+      <strong>Load Balancing</strong> adalah teknik mendistribusikan trafik atau beban kerja secara merata di antara beberapa server, link, atau perangkat jaringan untuk meningkatkan performa, ketersediaan, dan redundansi.
+    </p>
+
+    <h3 class="note-subtitle">Jenis Load Balancing</h3>
+    <ul>
+      <li><strong>Layer 4 Load Balancing:</strong> Berdasarkan informasi transport layer (TCP/UDP), misal IP dan port.</li>
+      <li><strong>Layer 7 Load Balancing:</strong> Berdasarkan informasi aplikasi (HTTP, HTTPS, URL, header).</li>
+      <li><strong>DNS Load Balancing:</strong> Distribusi trafik dengan mengubah alamat IP di DNS.</li>
+      <li><strong>ECMP Load Balancing:</strong> Distribusi trafik di antara jalur routing dengan cost sama.</li>
+      <li><strong>Failover / Redundancy:</strong> Membagi beban sambil menyediakan jalur cadangan jika salah satu link atau server down.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan Load Balancing</h3>
+    <ul>
+      <li>Meningkatkan performa sistem dan jaringan dengan pemanfaatan sumber daya optimal.</li>
+      <li>Redundansi tinggi; jika satu server atau jalur gagal, trafik dialihkan ke yang lain.</li>
+      <li>Mempercepat respon aplikasi dan mengurangi bottleneck.</li>
+      <li>Skalabilitas mudah dengan menambahkan server atau link baru.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Web server cluster menggunakan load balancer untuk mendistribusikan permintaan pengguna ke beberapa server.</li>
+      <li>ISP menggunakan ECMP untuk membagi trafik internet ke beberapa link dengan kapasitas sama.</li>
+      <li>VoIP server menggunakan load balancing untuk menjaga kualitas panggilan saat trafik tinggi.</li>
+      <li>Data center menggunakan Layer 7 load balancing untuk mengarahkan permintaan HTTP ke server dengan beban paling ringan.</li>
+    </ul>
+
+    <img src="img/load-balancing.png" alt="Ilustrasi Load Balancing" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Monitor performa server dan link untuk memastikan load balancing efektif.</li>
+      <li>Pilih metode load balancing yang sesuai dengan jenis trafik dan aplikasi.</li>
+      <li>Gunakan health check untuk mendeteksi server atau link yang gagal.</li>
+      <li>Integrasikan load balancing dengan keamanan seperti firewall atau WAF untuk perlindungan tambahan.</li>
+    </ul>
+  </main>
+</section>
+
+
+<section id="failover" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Failover</h2>
+    <p class="note-paragraph">
+      <strong>Failover</strong> adalah mekanisme untuk memastikan ketersediaan layanan dengan cara memindahkan beban atau koneksi secara otomatis dari sistem, server, atau link utama yang gagal ke sistem cadangan (backup). 
+      Failover sangat penting dalam jaringan, data center, dan aplikasi kritikal untuk mencegah downtime.
+    </p>
+
+    <h3 class="note-subtitle">Jenis Failover</h3>
+    <ul>
+      <li><strong>Active-Passive:</strong> Sistem utama aktif, sistem cadangan standby dan baru aktif saat utama gagal.</li>
+      <li><strong>Active-Active:</strong> Semua sistem aktif dan saling membagi beban; jika salah satu gagal, beban dialihkan ke sistem lain.</li>
+      <li><strong>Link Failover:</strong> Trafik dialihkan otomatis ke jalur cadangan jika link utama down.</li>
+      <li><strong>Server Failover:</strong> Aplikasi atau layanan berpindah ke server cadangan tanpa intervensi manual.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan Failover</h3>
+    <ul>
+      <li>Meningkatkan ketersediaan layanan dan mengurangi downtime.</li>
+      <li>Memberikan redundansi untuk sistem, server, atau link kritikal.</li>
+      <li>Memungkinkan maintenance tanpa menghentikan layanan.</li>
+      <li>Menjamin kontinuitas layanan bagi pengguna atau aplikasi kritikal.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Router utama di kantor down, router cadangan mengambil alih koneksi internet secara otomatis.</li>
+      <li>Server database menggunakan cluster failover sehingga jika server utama gagal, server sekunder langsung melayani query.</li>
+      <li>Data center menggunakan dual power supply dan link internet dengan failover otomatis untuk menjamin uptime.</li>
+    </ul>
+
+    <img src="img/failover.png" alt="Ilustrasi Failover" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Rancang infrastruktur dengan sistem cadangan yang sesuai kebutuhan kritikal.</li>
+      <li>Uji mekanisme failover secara berkala untuk memastikan fungsionalitasnya.</li>
+      <li>Monitor status sistem utama dan cadangan agar failover otomatis berjalan lancar.</li>
+      <li>Gabungkan dengan load balancing untuk meningkatkan performa sekaligus ketersediaan.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="route-leaking" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Route Leaking</h2>
+    <p class="note-paragraph">
+      <strong>Route Leaking</strong> adalah proses memperbolehkan rute dari satu routing table atau VRF (Virtual Routing and Forwarding) untuk dapat diakses oleh routing table atau VRF lain. 
+      Ini biasanya digunakan untuk menghubungkan jaringan tersegmentasi tanpa menggabungkan seluruh routing domain.
+    </p>
+
+    <h3 class="note-subtitle">Cara Kerja Route Leaking</h3>
+    <ul>
+      <li>Setiap VRF memiliki tabel routing sendiri untuk memisahkan trafik antar tenant atau departemen.</li>
+      <li>Route leaking memungkinkan rute tertentu dari satu VRF diekspos ke VRF lain sesuai kebutuhan.</li>
+      <li>Proses ini biasanya dikontrol dengan import/export route-maps atau BGP peering antar VRF.</li>
+      <li>Hanya rute yang diizinkan yang dilewatkan, sehingga tetap menjaga isolasi jaringan secara keseluruhan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan Route Leaking</h3>
+    <ul>
+      <li>Menghubungkan jaringan terpisah tanpa mengurangi isolasi penuh antar VRF.</li>
+      <li>Mendukung komunikasi antar tenant atau departemen sesuai kebijakan.</li>
+      <li>Fleksibel untuk arsitektur multi-tenant atau service provider.</li>
+      <li>Meningkatkan efisiensi penggunaan IP dan routing tanpa menggabungkan seluruh tabel routing.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Tenant A dan Tenant B di data center menggunakan VRF terpisah, tetapi route leaking memungkinkan Tenant A mengakses server tertentu di Tenant B.</li>
+      <li>Hubungkan jaringan internal perusahaan dengan jaringan branch office yang berada di VRF berbeda.</li>
+      <li>Menyediakan layanan publik seperti DNS atau gateway yang dibagikan antar VRF tanpa mengurangi isolasi tenant.</li>
+    </ul>
+
+    <img src="img/route-leaking.png" alt="Ilustrasi Route Leaking" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Batasi route leaking hanya pada rute yang diperlukan untuk menjaga keamanan dan isolasi.</li>
+      <li>Gunakan route-map atau filter untuk mengontrol rute yang dilewatkan antar VRF.</li>
+      <li>Monitoring rute yang dileaking untuk memastikan tidak ada kebocoran rute yang tidak diinginkan.</li>
+      <li>Dokumentasikan rute leaking untuk memudahkan troubleshooting dan audit jaringan.</li>
+    </ul>
+  </main>
+</section>
+<section id="dhu" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">DHU Destination Host Unreachable</h2>
+    <p class="note-paragraph">
+      <strong>DHU Destination Host Unreachable</strong> adalah kondisi ketika koneksi dari DHU (Dial-Up / Dedicated Hosted Unit) gagal mencapai host tujuan. 
+      Pesan ini biasanya muncul saat melakukan <em>ping</em> atau tes konektivitas, menandakan masalah pada jaringan, routing, atau host tujuan.
+    </p>
+
+    <h3 class="note-subtitle">Penyebab Umum</h3>
+    <ul>
+      <li>Host tujuan mati atau tidak aktif.</li>
+      <li>Alamat IP tujuan tidak ada atau salah dikonfigurasi.</li>
+      <li>Masalah routing, misalnya jalur tidak dikenal atau paket tidak bisa diteruskan.</li>
+      <li>Firewall atau akses kontrol memblokir koneksi ke host.</li>
+      <li>Perangkat jaringan (switch/router) down atau mengalami gangguan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Dampak</h3>
+    <ul>
+      <li>Koneksi DHU gagal ke host tujuan, menyebabkan layanan tidak tersedia.</li>
+      <li>Gangguan komunikasi antar perangkat atau server di jaringan.</li>
+      <li>Menyulitkan akses aplikasi atau data yang berada di host unreachable.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Ping dari kantor cabang ke server pusat menampilkan “Destination Host Unreachable” karena server sedang down.</li>
+      <li>Router tidak memiliki route ke subnet tujuan sehingga paket tidak sampai ke host DHU.</li>
+      <li>Firewall memblokir alamat IP host tujuan, menyebabkan koneksi DHU gagal.</li>
+    </ul>
+
+    <img src="img/dhu-destination-host-unreachable.png" alt="Ilustrasi DHU Destination Host Unreachable" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Periksa status host tujuan untuk memastikan aktif dan bisa diakses.</li>
+      <li>Periksa tabel routing dan jalur network untuk memastikan paket dapat diteruskan.</li>
+      <li>Pastikan firewall dan ACL tidak memblokir akses ke host.</li>
+      <li>Gunakan tools monitoring jaringan untuk mendeteksi dan mengatasi masalah unreachable secara cepat.</li>
+      <li>Jika menggunakan DHCP, pastikan IP host tujuan valid dan tidak konflik.</li>
+    </ul>
+  </main>
+</section>
 
 
   <!-- Bootstrap JS -->
