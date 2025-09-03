@@ -117,6 +117,7 @@
         <li><a class="dropdown-item" href="#cost-routing">Cost Routing</a></li>
         <li><a class="dropdown-item" href="#load-balancing">Load Balancing</a></li>
         <li><a class="dropdown-item" href="#failover">Failover</a></li>
+        <li><a class="dropdown-item" href="#multihoming">Multihoming</a></li>
         <li><a class="dropdown-item" href="#route-leaking">Route Leaking</a></li>
         </ul>
     </li>
@@ -156,6 +157,8 @@
        Infrastructure
         </a>
         <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="#backbone">Backbone</a></li>
+        <li><a class="dropdown-item" href="#backhaul">Backhaul</a></li>
         <li><a class="dropdown-item" href="#staging-room">Staging Room / Peer Room / MMR (Main Distribution Frame)</a></li>
         <li><a class="dropdown-item" href="#ix">IX (Internet Exchange)</a></li>
         <li><a class="dropdown-item" href="#iix">IIX (Indonesia Internet Exchange)</a></li>
@@ -1080,6 +1083,49 @@
   </main>
 </section>
 
+<section id="multihoming" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Multihoming</h2>
+    <p class="note-paragraph">
+      <strong>Multihoming</strong> adalah teknik koneksi jaringan di mana sebuah perangkat atau jaringan terhubung ke lebih dari satu penyedia layanan internet (ISP) atau jalur komunikasi. 
+      Tujuannya untuk meningkatkan redundansi, ketersediaan, serta optimasi performa koneksi.
+    </p>
+
+    <h3 class="note-subtitle">Cara Kerja Multihoming</h3>
+    <ul>
+      <li>Perangkat atau router memiliki lebih dari satu koneksi WAN/ISP.</li>
+      <li>Routing diatur agar trafik bisa memilih jalur terbaik (misalnya melalui BGP).</li>
+      <li>Jika satu jalur gagal, koneksi otomatis dialihkan ke jalur lain (failover).</li>
+      <li>Dapat juga digunakan untuk load balancing antar koneksi internet.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan Multihoming</h3>
+    <ul>
+      <li>Meningkatkan ketersediaan layanan (high availability).</li>
+      <li>Meminimalisir risiko downtime akibat gangguan satu ISP.</li>
+      <li>Mendukung optimasi trafik melalui load balancing.</li>
+      <li>Menyediakan fleksibilitas dalam pemilihan jalur komunikasi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Perusahaan menggunakan dua ISP berbeda untuk memastikan koneksi internet tetap aktif jika salah satu ISP bermasalah.</li>
+      <li>Data center mengimplementasikan BGP multihoming agar trafik dari internet bisa masuk lewat jalur terdekat atau tercepat.</li>
+      <li>Kantor cabang menggunakan dua link internet (fiber & wireless) untuk redundansi dan failover.</li>
+    </ul>
+
+    <img src="img/multihoming.png" alt="Ilustrasi Multihoming" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan protokol <strong>BGP</strong> untuk multihoming skala besar (ISP atau enterprise).</li>
+      <li>Atur kebijakan routing untuk load balancing atau prioritas jalur.</li>
+      <li>Selalu monitor performa tiap koneksi untuk mendeteksi masalah lebih cepat.</li>
+      <li>Gunakan peralatan jaringan yang mendukung multi-WAN agar konfigurasi lebih optimal.</li>
+    </ul>
+  </main>
+</section>
+
 <section id="route-leaking" class="note-container container">
   <main class="note-main">
     <h2 class="note-title text-center">Route Leaking</h2>
@@ -1209,6 +1255,474 @@
     </ul>
   </main>
 </section>
+
+<section id="lte" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">LTE (Long Term Evolution)</h2>
+    <p class="note-paragraph">
+      <strong>LTE</strong> adalah standar teknologi komunikasi nirkabel generasi ke-4 (4G) yang dikembangkan untuk menyediakan akses internet berkecepatan tinggi melalui jaringan seluler. 
+      LTE menawarkan peningkatan signifikan dalam kecepatan data, efisiensi spektrum, dan latency dibanding generasi sebelumnya (3G/UMTS).
+    </p>
+
+    <h3 class="note-subtitle">Karakteristik LTE</h3>
+    <ul>
+      <li>Kecepatan download hingga ratusan Mbps dan upload puluhan Mbps.</li>
+      <li>Latency lebih rendah dibanding 3G, mendukung aplikasi real-time.</li>
+      <li>Menggunakan teknologi OFDMA (Orthogonal Frequency Division Multiple Access) untuk efisiensi spektrum.</li>
+      <li>Mendukung mobilitas tinggi hingga ratusan km/jam (misalnya pada kereta cepat).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan LTE</h3>
+    <ul>
+      <li>Akses internet cepat dan stabil melalui jaringan seluler.</li>
+      <li>Mendukung layanan multimedia seperti video streaming, VoIP, dan gaming online.</li>
+      <li>Cakupan luas karena menggunakan infrastruktur seluler.</li>
+      <li>Lebih efisien dalam penggunaan bandwidth dibanding teknologi sebelumnya.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Pengguna smartphone mengakses internet dengan kecepatan tinggi melalui 4G LTE.</li>
+      <li>Router LTE digunakan di kantor cabang atau lokasi remote sebagai backup koneksi broadband.</li>
+      <li>IoT device menggunakan koneksi LTE untuk komunikasi real-time di area yang tidak memiliki fiber atau DSL.</li>
+    </ul>
+
+    <img src="img/lte.png" alt="Ilustrasi LTE" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pilih provider dengan cakupan LTE terbaik di lokasi Anda.</li>
+      <li>Gunakan perangkat yang mendukung frekuensi LTE lokal.</li>
+      <li>Monitor penggunaan data karena LTE cenderung lebih cepat menghabiskan kuota.</li>
+      <li>Pertimbangkan upgrade ke 5G untuk kebutuhan aplikasi masa depan dengan latency lebih rendah.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="metro-e" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Metro-E (Metro Ethernet)</h2>
+    <p class="note-paragraph">
+      <strong>Metro-E (Metro Ethernet)</strong> adalah layanan jaringan berbasis teknologi Ethernet yang disediakan oleh ISP atau operator telekomunikasi untuk menghubungkan beberapa lokasi pelanggan dalam suatu area metropolitan. 
+      Metro-E banyak digunakan oleh perusahaan dan institusi untuk menyediakan konektivitas WAN dengan kecepatan tinggi, fleksibel, dan skalabel.
+    </p>
+
+    <h3 class="note-subtitle">Karakteristik Metro-E</h3>
+    <ul>
+      <li>Menggunakan standar Ethernet (IEEE 802.3) sebagai teknologi transportasi.</li>
+      <li>Menyediakan bandwidth mulai dari Mbps hingga Gbps.</li>
+      <li>Dapat digunakan sebagai pengganti leased line atau MPLS dengan biaya lebih efisien.</li>
+      <li>Mendukung konektivitas point-to-point, point-to-multipoint, maupun full mesh.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan Metro-E</h3>
+    <ul>
+      <li>Skalabilitas bandwidth sesuai kebutuhan perusahaan.</li>
+      <li>Integrasi mudah dengan jaringan LAN karena sama-sama berbasis Ethernet.</li>
+      <li>Biaya operasional lebih rendah dibanding teknologi WAN tradisional.</li>
+      <li>Performa tinggi dengan latency rendah dan throughput konsisten.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Kantor pusat dan kantor cabang di dalam kota terhubung dengan Metro-E untuk berbagi aplikasi dan database.</li>
+      <li>Penyedia layanan cloud menggunakan Metro-E untuk koneksi pelanggan dengan data center.</li>
+      <li>Perusahaan perbankan menggunakan Metro-E untuk jaringan transaksi real-time antar cabang.</li>
+    </ul>
+
+    <img src="img/metro-e.png" alt="Ilustrasi Metro Ethernet" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pilih topologi Metro-E sesuai kebutuhan (point-to-point atau multipoint).</li>
+      <li>Monitor performa Metro-E agar SLA (Service Level Agreement) tetap terpenuhi.</li>
+      <li>Gunakan redundansi (dual link) untuk menghindari downtime.</li>
+      <li>Pastikan keamanan dengan enkripsi atau VPN di atas Metro-E.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="t1" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">T1 (Transmission System 1)</h2>
+    <p class="note-paragraph">
+      <strong>T1</strong> adalah jenis saluran komunikasi digital yang pertama kali dikembangkan oleh AT&T di Amerika Serikat. 
+      T1 menyediakan kecepatan hingga <strong>1,544 Mbps</strong> dengan membagi sinyal menjadi 24 kanal digital (DS0), masing-masing berkapasitas 64 Kbps. 
+      Teknologi ini banyak digunakan untuk layanan telepon, data, maupun koneksi internet dedicated.
+    </p>
+
+    <h3 class="note-subtitle">Karakteristik T1</h3>
+    <ul>
+      <li>Kecepatan total: 1,544 Mbps.</li>
+      <li>Terdiri dari 24 kanal digital (24 DS0 × 64 Kbps).</li>
+      <li>Media transmisi: biasanya kabel tembaga twisted pair atau microwave link.</li>
+      <li>Digunakan untuk voice trunk, leased line, dan koneksi data korporasi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan T1</h3>
+    <ul>
+      <li>Koneksi dedicated dengan kecepatan stabil.</li>
+      <li>Dapat digunakan untuk komunikasi suara (telephony) maupun data.</li>
+      <li>Memberikan kualitas layanan lebih baik dibanding dial-up atau DSL pada masanya.</li>
+      <li>Mendukung multi-channel yang bisa dialokasikan sesuai kebutuhan (voice/data).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan T1</h3>
+    <ul>
+      <li>Biaya implementasi dan operasional cukup tinggi.</li>
+      <li>Kecepatan relatif rendah dibanding broadband modern (fiber, 4G/5G).</li>
+      <li>Kini sudah banyak digantikan oleh Ethernet, Metro-E, dan MPLS.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Perusahaan menggunakan leased line T1 untuk koneksi data antar cabang pada era sebelum fiber optik populer.</li>
+      <li>Operator telekomunikasi menggunakan T1 untuk backbone voice (trunk telephony).</li>
+      <li>Koneksi internet dedicated berbasis T1 untuk kantor kecil hingga menengah pada tahun 1990–2000an.</li>
+    </ul>
+
+    <img src="img/t1.png" alt="Ilustrasi Jalur T1" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Jika masih menggunakan T1, pertimbangkan migrasi ke teknologi lebih baru (Fiber, Metro-E, MPLS) untuk efisiensi.</li>
+      <li>Gunakan T1 hanya bila infrastruktur modern tidak tersedia di lokasi.</li>
+      <li>Manfaatkan multiplexer untuk membagi kanal T1 sesuai kebutuhan voice dan data.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="sd-wan" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">SD-WAN (Software-Defined Wide Area Network)</h2>
+    <p class="note-paragraph">
+      <strong>SD-WAN</strong> adalah teknologi jaringan WAN modern yang memanfaatkan pendekatan berbasis perangkat lunak (software-defined) 
+      untuk mengelola konektivitas, aplikasi, dan layanan dengan lebih fleksibel. 
+      SD-WAN memungkinkan perusahaan memanfaatkan berbagai jenis koneksi (MPLS, broadband, LTE/5G) secara bersamaan dengan manajemen terpusat.
+    </p>
+
+    <h3 class="note-subtitle">Karakteristik SD-WAN</h3>
+    <ul>
+      <li>Menggunakan overlay berbasis software di atas infrastruktur WAN fisik.</li>
+      <li>Manajemen dan orkestrasi dilakukan secara terpusat melalui controller.</li>
+      <li>Mendukung pemilihan jalur dinamis (dynamic path selection) berdasarkan aplikasi dan kualitas koneksi.</li>
+      <li>Meningkatkan keamanan dengan enkripsi end-to-end pada seluruh trafik WAN.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan SD-WAN</h3>
+    <ul>
+      <li>Fleksibilitas dalam menggunakan berbagai jenis koneksi (MPLS, fiber, broadband, LTE/5G).</li>
+      <li>Pengelolaan WAN lebih mudah melalui centralized management.</li>
+      <li>Optimasi performa aplikasi dengan pemilihan jalur terbaik secara otomatis.</li>
+      <li>Efisiensi biaya dengan mengurangi ketergantungan pada MPLS yang mahal.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Perusahaan multinasional menggunakan SD-WAN untuk menghubungkan kantor cabang di berbagai negara dengan biaya lebih hemat.</li>
+      <li>Kantor cabang memanfaatkan broadband lokal + link 4G sebagai backup untuk menggantikan MPLS tunggal.</li>
+      <li>Organisasi menggunakan SD-WAN untuk memastikan aplikasi cloud (SaaS) seperti Office 365 berjalan optimal.</li>
+    </ul>
+
+    <img src="img/sd-wan.png" alt="Ilustrasi SD-WAN" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Identifikasi aplikasi kritikal dan atur kebijakan jalur trafik sesuai prioritas.</li>
+      <li>Gabungkan SD-WAN dengan keamanan tambahan (firewall, IDS/IPS) untuk proteksi menyeluruh.</li>
+      <li>Monitor performa aplikasi dan koneksi secara real-time melalui dashboard SD-WAN.</li>
+      <li>Pertimbangkan hybrid WAN (MPLS + broadband/5G) untuk transisi lebih mulus.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="cpe" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">CPE (Customer Premises Equipment)</h2>
+    <p class="note-paragraph">
+      <strong>CPE</strong> adalah perangkat jaringan yang ditempatkan di lokasi pelanggan (<em>customer premises</em>) 
+      untuk menghubungkan ke jaringan penyedia layanan (ISP atau operator telekomunikasi). 
+      Perangkat ini biasanya menjadi titik akhir antara jaringan pelanggan dan jaringan penyedia layanan.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menghubungkan jaringan internal pelanggan dengan jaringan ISP.</li>
+      <li>Mengatur akses internet, VPN, atau layanan data lainnya.</li>
+      <li>Berfungsi sebagai perangkat terminasi dari layanan broadband, fiber, atau leased line.</li>
+      <li>Memberikan fungsi tambahan seperti firewall, NAT, dan QoS.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis CPE</h3>
+    <ul>
+      <li><strong>Modem</strong> – perangkat dasar untuk koneksi DSL atau kabel.</li>
+      <li><strong>Router</strong> – mengatur routing trafik dan akses internet.</li>
+      <li><strong>ONT/ONU</strong> – perangkat terminasi untuk layanan fiber (FTTH).</li>
+      <li><strong>Firewall/UTM</strong> – untuk keamanan jaringan pelanggan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Pelanggan memiliki kontrol langsung terhadap perangkat di sisi mereka.</li>
+      <li>Dapat disesuaikan dengan kebutuhan (konfigurasi khusus, keamanan, QoS).</li>
+      <li>Memungkinkan integrasi berbagai layanan (Internet, VoIP, IPTV).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Perangkat bisa terbatas sesuai dukungan ISP.</li>
+      <li>Jika dikelola pelanggan, membutuhkan pengetahuan teknis lebih.</li>
+      <li>Perangkat bisa menjadi titik kegagalan jika tidak redundant.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Pelanggan FTTH menggunakan ONT di rumah sebagai terminasi fiber.</li>
+      <li>Kantor kecil menggunakan router CPE yang disediakan ISP untuk akses internet bisnis.</li>
+      <li>Perusahaan besar memasang CPE khusus berupa firewall/UTM untuk keamanan tambahan.</li>
+    </ul>
+
+    <img src="img/cpe.png" alt="Ilustrasi CPE" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pilih CPE dengan kapasitas sesuai kebutuhan trafik (bandwidth & jumlah user).</li>
+      <li>Aktifkan fitur keamanan dasar (firewall, password kuat, enkripsi Wi-Fi).</li>
+      <li>Lakukan update firmware secara berkala.</li>
+      <li>Jika layanan kritikal, gunakan CPE dengan fitur failover (dual WAN).</li>
+    </ul>
+  </main>
+</section>
+
+<section id="pe" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">PE (Provider Edge Router)</h2>
+    <p class="note-paragraph">
+      <strong>PE (Provider Edge)</strong> adalah router yang berada di sisi tepi jaringan penyedia layanan (ISP) 
+      yang berfungsi sebagai penghubung antara jaringan pelanggan (<em>Customer Edge / CE</em>) dengan jaringan inti penyedia layanan (<em>Provider Core / P</em>). 
+      Perangkat ini sangat penting dalam arsitektur MPLS dan layanan VPN.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Mengelola koneksi antara <strong>CE (Customer Edge)</strong> dan jaringan provider.</li>
+      <li>Menyediakan layanan <strong>VPN/MPLS</strong> untuk pelanggan.</li>
+      <li>Mengklasifikasikan dan memetakan trafik pelanggan ke dalam label MPLS.</li>
+      <li>Menerapkan kebijakan QoS, keamanan, dan routing antar pelanggan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik</h3>
+    <ul>
+      <li>Berada di perbatasan antara jaringan ISP dan pelanggan.</li>
+      <li>Menyimpan tabel routing khusus untuk tiap pelanggan (VRF – Virtual Routing and Forwarding).</li>
+      <li>Mendukung protokol routing dinamis (BGP, OSPF, EIGRP) untuk pertukaran rute dengan CE.</li>
+      <li>Dapat melayani banyak pelanggan sekaligus (multi-tenant).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Mendukung skala besar dengan isolasi pelanggan melalui VRF/MPLS.</li>
+      <li>Fleksibel dalam integrasi dengan berbagai protokol routing.</li>
+      <li>Meningkatkan keamanan dengan pemisahan trafik antar pelanggan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Konfigurasi kompleks, terutama untuk multi-tenant dan MPLS VPN.</li>
+      <li>Biaya perangkat relatif tinggi.</li>
+      <li>Menjadi titik kritis – jika gagal, bisa mempengaruhi banyak pelanggan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>ISP menggunakan PE router untuk menyediakan layanan MPLS VPN bagi perusahaan multinasional.</li>
+      <li>PE router menghubungkan kantor cabang pelanggan ke jaringan cloud melalui MPLS.</li>
+      <li>PE digunakan untuk pemetaan QoS agar trafik VoIP pelanggan mendapat prioritas.</li>
+    </ul>
+
+    <img src="img/pe.png" alt="Ilustrasi Provider Edge Router" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan <strong>VRF</strong> untuk isolasi pelanggan pada PE.</li>
+      <li>Lakukan redundancy PE dengan protokol failover (HSRP/VRRP) untuk meningkatkan keandalan.</li>
+      <li>Monitor kapasitas CPU & memori karena PE menangani banyak tabel routing pelanggan.</li>
+      <li>Pastikan PE mendukung protokol yang digunakan pelanggan (BGP, OSPF, EIGRP, dsb.).</li>
+    </ul>
+  </main>
+</section>
+
+<section id="network-appliance" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Network Appliance</h2>
+    <p class="note-paragraph">
+      <strong>Network Appliance</strong> adalah perangkat khusus yang dirancang untuk menjalankan fungsi tertentu 
+      dalam jaringan, seperti keamanan, optimasi, monitoring, atau pengelolaan trafik. 
+      Tidak seperti router atau switch umum, network appliance biasanya difokuskan pada satu tugas spesifik 
+      dan sering berbentuk perangkat keras khusus dengan sistem operasi terintegrasi.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menangani fungsi keamanan (firewall, IDS/IPS, proxy).</li>
+      <li>Mengelola trafik (load balancer, WAN optimizer).</li>
+      <li>Menyediakan monitoring dan analitik jaringan.</li>
+      <li>Mendukung layanan tambahan seperti VPN, caching, atau filtering konten.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis Network Appliance</h3>
+    <ul>
+      <li><strong>Firewall Appliance</strong> – perangkat khusus untuk keamanan jaringan.</li>
+      <li><strong>IDS/IPS Appliance</strong> – untuk deteksi dan pencegahan serangan.</li>
+      <li><strong>Load Balancer Appliance</strong> – membagi trafik aplikasi ke beberapa server.</li>
+      <li><strong>WAN Optimization Appliance</strong> – meningkatkan efisiensi penggunaan link WAN.</li>
+      <li><strong>Proxy / Caching Appliance</strong> – mempercepat akses web dan mengurangi bandwidth.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Performa tinggi karena perangkat khusus dengan hardware teroptimasi.</li>
+      <li>Mudah dikelola karena fungsi fokus pada satu area.</li>
+      <li>Meningkatkan keamanan dan efisiensi jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Biaya relatif tinggi dibanding solusi berbasis software.</li>
+      <li>Kurang fleksibel untuk kebutuhan di luar fungsi spesifiknya.</li>
+      <li>Bisa menambah kompleksitas jika terlalu banyak appliance berbeda.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Perusahaan menggunakan firewall appliance untuk melindungi jaringan internal.</li>
+      <li>Penyedia layanan cloud memakai load balancer appliance untuk distribusi trafik aplikasi.</li>
+      <li>Kantor cabang menggunakan WAN optimization appliance untuk menghemat bandwidth MPLS.</li>
+    </ul>
+
+    <img src="img/network-appliance.png" alt="Ilustrasi Network Appliance" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pilih network appliance sesuai kebutuhan utama (security, performance, optimization).</li>
+      <li>Pastikan perangkat mendukung update firmware/patch keamanan secara rutin.</li>
+      <li>Gunakan integrasi dengan monitoring system (SNMP, Syslog) untuk visibilitas.</li>
+      <li>Pertimbangkan solusi virtual appliance jika ingin fleksibilitas di lingkungan cloud.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="virtualization-host" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Virtualization Host</h2>
+    <p class="note-paragraph">
+      <strong>Virtualization Host</strong> adalah server fisik yang menjalankan perangkat lunak hypervisor 
+      untuk membuat dan mengelola mesin virtual (VM). 
+      Host ini menyediakan sumber daya komputasi (CPU, RAM, storage, dan network) yang dibagi ke beberapa VM 
+      sehingga satu perangkat fisik dapat digunakan untuk berbagai kebutuhan secara efisien.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Menjadi platform untuk menjalankan beberapa <strong>virtual machine (VM)</strong> secara bersamaan.</li>
+      <li>Mengalokasikan dan mengatur sumber daya fisik ke lingkungan virtual.</li>
+      <li>Mendukung konsolidasi server untuk mengurangi kebutuhan perangkat fisik.</li>
+      <li>Memudahkan pengelolaan, migrasi, dan skalabilitas aplikasi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Komponen Utama</h3>
+    <ul>
+      <li><strong>Hypervisor</strong> – perangkat lunak (misalnya VMware ESXi, Microsoft Hyper-V, KVM) yang mengelola VM.</li>
+      <li><strong>Hardware</strong> – server dengan prosesor multi-core, RAM besar, dan storage cepat.</li>
+      <li><strong>VM</strong> – sistem operasi dan aplikasi yang berjalan di atas hypervisor.</li>
+      <li><strong>Management Tools</strong> – software pengelola VM (misalnya vCenter, SCVMM, OpenStack).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Efisiensi penggunaan sumber daya server fisik.</li>
+      <li>Mendukung isolasi antar aplikasi/lingkungan kerja.</li>
+      <li>Fleksibel untuk deployment dan testing berbagai sistem operasi.</li>
+      <li>Memudahkan disaster recovery dengan snapshot dan live migration.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Ketergantungan pada hardware fisik – jika host gagal, semua VM ikut terdampak.</li>
+      <li>Butuh spesifikasi tinggi agar bisa menjalankan banyak VM.</li>
+      <li>Memerlukan manajemen yang baik untuk menghindari resource contention.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Perusahaan menggunakan virtualization host untuk menjalankan server database, web, dan aplikasi di satu perangkat fisik.</li>
+      <li>Data center memanfaatkan cluster virtualization host untuk membangun private cloud.</li>
+      <li>Tim developer menggunakan virtualization host untuk testing berbagai sistem operasi.</li>
+    </ul>
+
+    <img src="img/virtualization-host.png" alt="Ilustrasi Virtualization Host" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pilih server dengan spesifikasi sesuai jumlah VM yang direncanakan.</li>
+      <li>Gunakan storage cepat (SSD/NVMe) untuk meningkatkan performa VM.</li>
+      <li>Aktifkan fitur high availability (HA) atau clustering untuk redundancy.</li>
+      <li>Monitor penggunaan CPU, RAM, dan I/O untuk mencegah bottleneck.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="ecc-ram" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">ECC RAM (Error-Correcting Code RAM)</h2>
+    <p class="note-paragraph">
+      <strong>ECC RAM</strong> adalah jenis memori komputer yang dilengkapi dengan mekanisme 
+      <em>error detection</em> dan <em>error correction</em>. 
+      ECC RAM dapat mendeteksi dan memperbaiki kesalahan data tingkat bit yang terjadi saat penyimpanan atau transfer data di memori, 
+      sehingga meningkatkan keandalan sistem, terutama pada server dan perangkat kritikal.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Mendeteksi kesalahan bit tunggal (<em>single-bit error</em>) pada data di memori.</li>
+      <li>Memperbaiki kesalahan tersebut secara otomatis tanpa mengganggu sistem.</li>
+      <li>Mencegah terjadinya crash, corrupt file, atau error pada aplikasi penting.</li>
+      <li>Meningkatkan keandalan sistem pada server, data center, dan perangkat mission-critical.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Menjamin integritas data dengan memperbaiki kesalahan bit secara real-time.</li>
+      <li>Meningkatkan stabilitas sistem, terutama pada server yang berjalan 24/7.</li>
+      <li>Sangat penting untuk aplikasi sensitif (database, financial, scientific computing).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Lebih mahal dibanding RAM non-ECC.</li>
+      <li>Biasanya hanya didukung oleh server-grade motherboard dan CPU tertentu.</li>
+      <li>Kecepatan sedikit lebih rendah dibanding RAM non-ECC (perbedaan kecil).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Server database perusahaan menggunakan ECC RAM untuk mencegah data corrupt.</li>
+      <li>Workstation untuk perhitungan ilmiah (scientific computing) menggunakan ECC RAM agar hasil tetap akurat.</li>
+      <li>Data center dengan virtualisasi masif mengandalkan ECC RAM demi stabilitas jangka panjang.</li>
+    </ul>
+
+    <img src="img/ecc-ram.png" alt="Ilustrasi ECC RAM" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan ECC RAM jika sistem digunakan untuk server, storage, atau aplikasi kritikal.</li>
+      <li>Pastikan motherboard dan prosesor mendukung ECC RAM sebelum membeli.</li>
+      <li>Jika kebutuhan hanya untuk gaming atau PC biasa, RAM non-ECC lebih ekonomis.</li>
+      <li>Monitor error log ECC untuk memastikan tidak ada masalah hardware yang lebih serius.</li>
+    </ul>
+  </main>
+</section>
+
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
