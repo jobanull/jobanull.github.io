@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hot Standby Router Protocol (HSRP)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Hot Standby Router Protocol (HSRP)</h2>
+    <p class="note-paragraph">
+      HSRP (Hot Standby Router Protocol) adalah protokol <em>first hop redundancy</em> yang dikembangkan oleh Cisco
+      untuk menyediakan ketersediaan gateway default yang tinggi (<em>high availability</em>) pada jaringan.
+      Dengan HSRP, dua atau lebih router bekerja sama membentuk satu alamat IP virtual sebagai gateway.
+      Jika router utama gagal, router cadangan otomatis mengambil alih fungsi tanpa mengganggu konektivitas pengguna.
+    </p>
+
+    <h3 class="note-subtitle">Tujuan HSRP</h3>
+    <ul class="note-list">
+      <li>Mencegah kegagalan jaringan akibat gateway default yang mati.</li>
+      <li>Memastikan koneksi tetap aktif tanpa perubahan konfigurasi pada klien.</li>
+      <li>Menyediakan transisi otomatis (<em>failover</em>) antar router.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Cara Kerja HSRP</h3>
+    <p class="note-paragraph">
+      Dalam HSRP, router membentuk satu grup HSRP yang memiliki:
+    </p>
+    <ul class="note-list">
+      <li><strong>IP Virtual</strong> – Digunakan klien sebagai gateway default.</li>
+      <li><strong>Active Router</strong> – Router yang saat ini memproses lalu lintas menuju gateway.</li>
+      <li><strong>Standby Router</strong> – Router cadangan yang siap mengambil alih jika router aktif gagal.</li>
+    </ul>
+    <p class="note-paragraph">
+      Proses pergantian dari active router ke standby router dilakukan melalui mekanisme pemilihan berdasarkan
+      <em>priority</em> dan deteksi kegagalan dengan <em>hello messages</em>.
+    </p>
+
+    <h3 class="note-subtitle">State dalam HSRP</h3>
+    <ol class="note-list">
+      <li><strong>Initial</strong> – HSRP belum diaktifkan.</li>
+      <li><strong>Learn</strong> – Router belum mengetahui IP virtual.</li>
+      <li><strong>Listen</strong> – Router mengetahui IP virtual tapi tidak aktif.</li>
+      <li><strong>Speak</strong> – Router mengirim/ menerima <em>hello</em> untuk partisipasi pemilihan.</li>
+      <li><strong>Standby</strong> – Router siap menjadi aktif.</li>
+      <li><strong>Active</strong> – Router yang memproses lalu lintas untuk IP virtual.</li>
+    </ol>
+
+    <h3 class="note-subtitle">Kelebihan HSRP</h3>
+    <ul class="note-list">
+      <li>Failover otomatis dan cepat.</li>
+      <li>Tidak memerlukan konfigurasi ulang di sisi klien.</li>
+      <li>Dapat bekerja dengan VLAN dan jaringan kompleks.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan HSRP</h3>
+    <ul class="note-list">
+      <li>Protokol proprietary Cisco (tidak tersedia di semua vendor).</li>
+      <li>Menambah konsumsi sumber daya pada router.</li>
+    </ul>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+      <li>Tujuan: Membuat <strong>redundansi gateway</strong> di jaringan LAN menggunakan <strong>HSRP</strong>.</li>
+      <li><strong>Topologi:</strong> LAN (192.168.1.0/24) → Switch → R1 & R2 → ISP (192.168.190.0/24)</li>
+      <li><strong>Catatan:</strong> 
+        <ul>
+          <li>R1 memiliki prioritas lebih tinggi (110) sehingga menjadi <em>Active Router</em>.</li>
+          <li>R2 otomatis menjadi <em>Standby Router</em>.</li>
+          <li>Jika R1 down, R2 akan mengambil alih sebagai gateway virtual <code>192.168.1.1</code>.</li>
+          <li>NAT digunakan agar LAN bisa mengakses internet melalui ISP.</li>
+        </ul>
+      </li>
+    </ul>
+
+
+    <img src="img/hsrp1.png" alt="Diagram jaringan" class="note-image" />
+    <p class="note-subtitle">R1 (MAIN)</p>
+    <pre class="note-codeblock"><code>
+ip name-server 8.8.8.8                          ! DNS server Google
+ip name-server 8.8.4.4
+
+interface FastEthernet0/0
+ ip address 192.168.190.100 255.255.255.0       ! IP ke ISP
+ ip nat outside                                 ! Interface sebagai NAT outside
+ ip virtual-reassembly
+ duplex half
+
+interface FastEthernet1/0
+ ip address 192.168.1.2 255.255.255.0           ! IP LAN (backup dari virtual IP)
+ ip nat inside                                  ! Interface sebagai NAT inside
+ ip virtual-reassembly
+ duplex half
+ standby 1 ip 192.168.1.1                       ! Virtual IP untuk LAN (gateway bersama)
+ standby 1 priority 110                         ! R1 lebih tinggi → Active Router
+ standby 1 preempt                              ! Boleh reclaim jika R1 pulih
+
+ip route 0.0.0.0 0.0.0.0 192.168.190.1          ! Default route ke ISP
+
+no ip http server
+no ip http secure-server
+
+ip nat inside source list NAT-LAN interface FastEthernet0/0 overload   ! NAT LAN → Internet
+
+ip access-list standard NAT-LAN
+ permit 192.168.1.0 0.0.0.255                  ! Ijinkan seluruh subnet LAN untuk NAT
+
+    </code></pre>
+
+    <p class="note-subtitle">R2 (BACKUP)</p>
+    <pre class="note-codeblock"><code>
+no ip domain lookup
+ip name-server 8.8.8.8                          ! DNS server Google
+ip name-server 8.8.4.4
+
+interface FastEthernet0/0
+ ip address 192.168.190.101 255.255.255.0       ! IP ke ISP (berbeda dengan R1)
+ ip nat outside
+ ip virtual-reassembly
+ duplex half
+
+interface FastEthernet1/0
+ ip address 192.168.1.3 255.255.255.0           ! IP LAN (berbeda dengan R1 & virtual IP)
+ ip nat inside
+ ip virtual-reassembly
+ duplex half
+ standby 1 ip 192.168.1.1                       ! Virtual IP sama dengan R1 (gateway LAN)
+ standby 1 preempt                              ! Akan takeover bila R1 down
+
+ip route 0.0.0.0 0.0.0.0 192.168.190.1          ! Default route ke ISP
+
+no ip http server
+no ip http secure-server
+
+ip nat inside source list NAT-LAN interface FastEthernet0/0 overload
+
+ip access-list standard NAT-LAN
+ permit 192.168.1.0 0.0.0.255                  ! Subnet LAN untuk NAT
+
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan <strong>preempt</strong> agar router dengan prioritas lebih tinggi bisa mengambil alih kembali.</li>
+      <li>Sesuaikan <em>hello timer</em> dan <em>hold timer</em> untuk failover lebih cepat.</li>
+      <li>Pastikan kedua router terhubung dalam satu VLAN atau broadcast domain yang sama.</li>
+      <li>Gunakan kombinasi HSRP dengan <em>load balancing</em> menggunakan VLAN berbeda untuk optimasi trafik.</li>
+    </ul>
+
+    <hr class="note-divider" />
+
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => {
+        img.classList.toggle('expanded');
+      });
+    });
+  </script>
+</body>
+</html>
