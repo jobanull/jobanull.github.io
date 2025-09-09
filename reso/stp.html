@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Spanning Tree Protocol (STP)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Spanning Tree Protocol (STP)</h2>
+    <p class="note-paragraph">
+      STP adalah protokol <strong>Layer 2</strong> yang digunakan pada jaringan Ethernet untuk mencegah 
+      terjadinya <em>loop</em> di jaringan yang memiliki topologi redundan.  
+      Protokol ini bekerja dengan menonaktifkan jalur cadangan yang tidak dibutuhkan secara otomatis, sehingga 
+      memastikan hanya ada satu jalur aktif antara dua perangkat.
+    </p>
+
+    <h3 class="note-subtitle">Karakteristik STP</h3>
+    <ul class="note-list">
+      <li>Bekerja pada Layer 2 (Data Link).</li>
+      <li>Mencegah <em>broadcast storm</em> akibat loop.</li>
+      <li>Menggunakan konsep <strong>root bridge</strong> untuk menentukan jalur utama.</li>
+      <li>Mendukung topologi jaringan dengan jalur redundan.</li>
+      <li>Konvergensi lebih lambat dibanding protokol Layer 3, namun stabil untuk LAN.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Istilah Penting dalam Spanning Tree Protocol (STP)</h3>
+    <ul class="note-list">
+      <li><strong>Root Bridge:</strong>
+        Switch pusat yang dipilih sebagai acuan untuk menentukan jalur terpendek ke semua switch di jaringan. Semua perhitungan STP didasarkan pada root bridge.
+      </li>
+      <li><strong>Bridge ID (BID):</strong>
+        Identitas unik tiap switch, kombinasi dari <strong>priority</strong> dan <strong>MAC address</strong>. Digunakan untuk memilih root bridge dan membandingkan switch di jaringan.
+      </li>
+      <li><strong>Port Roles:</strong>
+        Menentukan fungsi tiap port dalam topologi STP:
+        <ul>
+          <li><strong>Root Port (RP):</strong> Port yang mengarah ke root bridge melalui jalur terbaik.</li>
+          <li><strong>Designated Port (DP):</strong> Port yang bertanggung jawab meneruskan traffic ke jaringan lain.</li>
+          <li><strong>Non-Designated Port:</strong> Port cadangan atau diblokir untuk mencegah loop.</li>
+        </ul>
+      </li>
+      <li><strong>BPDU (Bridge Protocol Data Unit):</strong>
+        Paket kontrol yang dikirim switch untuk pertukaran informasi STP, misalnya untuk menentukan root bridge, port roles, dan path cost.
+      </li>
+      <li><strong>Path Cost:</strong>
+        Nilai numerik yang digunakan STP untuk menentukan jalur terbaik ke root bridge. Semakin rendah path cost → jalur lebih diprioritaskan.
+      </li>
+    </ul>
+
+    <h3 class="note-subtitle">BPDU Guard</h3>
+    <ul class="note-list">
+      <li><strong>Konsep:</strong>
+        BPDU Guard adalah fitur keamanan di STP untuk <strong>melindungi port access</strong> dari masuknya BPDU.
+        <ul>
+          <li>Port access (PC, printer, server) <strong>seharusnya tidak menerima BPDU</strong>.</li>
+          <li>Jika ada BPDU masuk, artinya ada perangkat tidak sah yang bisa mengganggu topologi STP.</li>
+        </ul>
+      </li>
+      <li><strong>Fungsi:</strong>
+        <ul>
+          <li>Mendeteksi BPDU yang masuk di port access.</li>
+          <li>Jika BPDU terdeteksi → port masuk <strong>err-disabled</strong> (shutdown otomatis).</li>
+          <li>Mencegah perangkat asing menjadi <strong>root bridge</strong> atau mengacaukan jaringan.</li>
+        </ul>
+      </li>
+      <li><strong>Cara mengaktifkan:</strong>
+        <p>Khusus port:</p>
+        <pre><code>Switch(config)# interface gigabitEthernet 0/1
+    Switch(config-if)# spanning-tree portfast
+    Switch(config-if)# spanning-tree bpduguard enable</code></pre>
+        <p>Global untuk semua port access:</p>
+        <pre><code>Switch(config)# spanning-tree portfast bpduguard default</code></pre>
+      </li>
+      <li><strong>Mengaktifkan port kembali:</strong>
+        <ul>
+          <li>Manual:
+            <pre><code>Switch(config)# interface gi0/1
+    Switch(config-if)# shutdown
+    Switch(config-if)# no shutdown</code></pre>
+          </li>
+          <li>Otomatis (errdisable recovery):
+            <pre><code>Switch(config)# errdisable recovery cause bpduguard
+    Switch(config)# errdisable recovery interval 60</code></pre>
+          </li>
+        </ul>
+      </li>
+      <li><strong>Cek history BPDU Guard:</strong>
+        <pre><code>Switch# show interface status err-disabled
+    Switch# show logging
+    Switch# show spanning-tree inconsistentports</code></pre>
+      </li>
+    </ul>
+
+
+    <h3 class="note-subtitle">Tipe STP</h3>
+    <ul class="note-list">
+      <li><strong>STP (IEEE 802.1D):</strong> Versi standar asli, konvergensi lambat.</li>
+      <li><strong>RSTP (IEEE 802.1w):</strong> Versi cepat, konvergensi lebih cepat.</li>
+      <li><strong>MSTP (IEEE 802.1s):</strong> Mendukung multiple VLAN dan multiple spanning tree.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Mode STP Cisco</h3>
+    <p class="note-paragraph">
+      Cisco memiliki beberapa mode proprietary STP yang sering digunakan di jaringan VLAN:
+    </p>
+
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Mode</th>
+          <th>Standar</th>
+          <th>Per VLAN Tree</th>
+          <th>Konvergensi</th>
+          <th>Load Balancing</th>
+          <th>Kelebihan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>PVST (Per-VLAN Spanning Tree)</td>
+          <td>Cisco proprietary</td>
+          <td>Ya</td>
+          <td>Lambat (~30-50 detik)</td>
+          <td>Per VLAN</td>
+          <td>Mendukung load balancing per VLAN, stabil tapi lambat.</td>
+        </tr>
+        <tr>
+          <td>Rapid PVST (RPVST)</td>
+          <td>Cisco proprietary</td>
+          <td>Ya</td>
+          <td>Cepat (1-10 detik)</td>
+          <td>Per VLAN</td>
+          <td>Konvergensi cepat, masih mendukung load balancing per VLAN.</td>
+        </tr>
+        <tr>
+          <td>MST (Multiple Spanning Tree)</td>
+          <td>IEEE 802.1s</td>
+          <td>Tidak, per MST instance</td>
+          <td>Cepat (RSTP based)</td>
+          <td>Per MST instance</td>
+          <td>Efisien untuk banyak VLAN, hemat CPU/memori, standar IEEE.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="note-subtitle">Proses Kerja STP</h3>
+    <ol class="note-list">
+      <li>Switch menukar BPDU untuk memilih <em>root bridge</em>.</li>
+      <li>Menghitung jalur terpendek ke root bridge berdasarkan path cost.</li>
+      <li>Menentukan port roles: root port, designated port, dan non-designated port.</li>
+      <li>Menonaktifkan port cadangan untuk mencegah loop.</li>
+      <li>Memperbarui status port saat terjadi perubahan topologi (<em>convergence</em>).</li>
+    </ol>
+
+    <h3 class="note-subtitle">Keunggulan STP</h3>
+    <ul class="note-list">
+      <li>Mencegah loop di jaringan Layer 2.</li>
+      <li>Menjaga stabilitas jaringan dengan jalur redundan.</li>
+      <li>Mendukung topologi dengan multiple switch.</li>
+      <li>Dapat dioptimalkan dengan versi RSTP untuk konvergensi cepat.</li>
+    </ul>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+     <ul class="note-list">
+        <li>Konfigurasi STP dengan 3 mode, MST, PVST, RAPID-PVST</li>
+    </ul>
+
+    <img src="img/stp1.png" alt="Diagram jaringan" class="note-image" />
+
+    <h3 class="note-subtitle">IOU1</h3>
+    <pre class="note-codeblock"><code>
+
+    !
+    spanning-tree mode pvst
+    spanning-tree extend system-id
+    spanning-tree vlan 10 priority 24576
+    !
+    interface Ethernet0/0
+      switchport access vlan 10
+      switchport trunk encapsulation dot1q
+      switchport mode access
+      spanning-tree portfast
+      spanning-tree bpduguard enable
+    !
+    interface Ethernet0/1
+      switchport trunk encapsulation dot1q
+      switchport mode trunk
+    !
+    interface Ethernet0/2
+      switchport trunk encapsulation dot1q
+      switchport mode trunk
+    !           
+
+    </code></pre>
+
+
+    <h3 class="note-subtitle">IOU2</h3>
+    <pre class="note-codeblock"><code>
+    !
+    spanning-tree mode pvst
+    spanning-tree extend system-id
+    spanning-tree vlan 10 priority 28672
+    !
+    interface Ethernet0/0
+      switchport access vlan 10
+      switchport mode access
+      spanning-tree portfast
+    !
+    interface Ethernet0/1
+      switchport trunk encapsulation dot1q
+      switchport mode trunk
+      duplex auto
+    !
+    interface Ethernet0/2
+      switchport trunk encapsulation dot1q
+      switchport mode trunk
+    !
+    </code></pre>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      STP adalah protokol penting pada jaringan Ethernet yang mencegah loop dengan menonaktifkan jalur cadangan secara otomatis. 
+      Dengan pemilihan root bridge dan perhitungan path cost, STP memastikan jaringan tetap stabil dan andal meskipun terdapat jalur redundan.  
+      Untuk jaringan VLAN, Cisco menyediakan PVST, Rapid PVST, dan MST agar load balancing dan efisiensi jaringan dapat dioptimalkan.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => img.classList.toggle('expanded'));
+    });
+  </script>
+</body>
+</html>
