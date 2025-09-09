@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="note-container">
-
   <main class="note-main">
     <h2 class="note-title text-center">Dynamic Host Configuration Protocol (DHCP)</h2>
     <p class="note-paragraph">
@@ -39,6 +38,13 @@
       <li><strong>Static Allocation (Reservation)</strong> – Server memberikan IP tertentu kepada perangkat berdasarkan MAC address.</li>
     </ul>
 
+    <h3 class="note-subtitle">Komponen dalam DHCP</h3>
+    <ul class="note-list">
+      <li><strong>DHCP Client</strong> – Perangkat (PC, laptop, smartphone, dll.) yang meminta alamat IP dan konfigurasi jaringan dari server DHCP.</li>
+      <li><strong>DHCP Server</strong> – Perangkat atau layanan yang menyediakan alamat IP, subnet mask, gateway, DNS, dan konfigurasi jaringan lainnya kepada klien.</li>
+      <li><strong>DHCP Relay</strong> – Perangkat perantara (biasanya router) yang meneruskan permintaan DHCP dari klien ke server DHCP di jaringan lain (berbeda subnet).</li>
+    </ul>
+
     <h3 class="note-subtitle">Kelebihan DHCP</h3>
     <ul class="note-list">
       <li>Mengurangi pekerjaan konfigurasi manual.</li>
@@ -62,42 +68,157 @@
 
     <img src="img/dhcp1.png" alt="Diagram jaringan" class="note-image" />
     <p class="note-subtitle">Mikrotik</p>
+    <p class="note-subtitle">Router DHCP Server</p>
     <pre class="note-codeblock"><code>
-/ip pool
-add name=dhcp_pool0 ranges=192.168.1.11-192.168.1.254   # Pool DHCP: range 192.168.1.11 - 192.168.1.254
+    /ip pool
+    add name=dhcp_pool ranges=192.168.1.10-192.168.1.20
+    /ip dhcp-server
+    add address-pool=dhcp_pool disabled=no interface=ether2 lease-time=30s name=\
+        dhcp-server relay=192.168.1.1
+    /ip address
+    add address=10.10.10.1/30 interface=ether2 network=10.10.10.0
+    /ip dhcp-client
+    add disabled=no interface=ether1
+    /ip dhcp-server network
+    add address=192.168.1.0/24 dns-server=8.8.8.8,8.8.4.4 gateway=192.168.1.1
+    /ip firewall nat
+    add action=masquerade chain=srcnat out-interface=ether1
+    /system identity
+    set name=R.MTIK.SERVER
+    </code></pre>
 
-/ip dhcp-server
-add address-pool=dhcp_pool0 disabled=no interface=ether2 name=dhcp1   # DHCP server di ether2 untuk LAN
-
-/ip address
-add address=192.168.1.1/24 interface=ether2 network=192.168.1.0       # IP statis LAN sebagai gateway DHCP
-
-/ip dhcp-client
-add disabled=no interface=ether1                                      # Interface WAN (ether1) dapat IP via DHCP ISP
-
-/ip dhcp-server network
-add address=192.168.1.0/24 gateway=192.168.1.1                        # Gateway default DHCP untuk client
-
+    <p class="note-subtitle">Router DHCP Relay</p>
+    <pre class="note-codeblock"><code>
+    /ip address
+    add address=10.10.10.2/30 interface=ether1 network=10.10.10.0
+    add address=192.168.1.1/24 interface=ether2 network=192.168.1.0
+    /ip dhcp-relay
+    add dhcp-server=10.10.10.1 disabled=no interface=ether2 local-address=\
+        192.168.1.1 name=dhcp-relay
+    /ip dns
+    set servers=8.8.8.8,8.8.4.4
+    /ip firewall nat
+    add chain=srcnat out-interface=ether1 action=masquerade
+    /ip route
+    add distance=1 gateway=10.10.10.1
+    /system identity
+    set name=R.MTIK.RELAY
     </code></pre>
 
     <p class="note-subtitle">Cisco</p>
+    <p class="note-subtitle">Router DHCP Server</p>
     <pre class="note-codeblock"><code>
-ip dhcp excluded-address 192.168.1.1 192.168.1.10   ! IP 1-10 tidak dibagikan oleh DHCP
 
-ip dhcp pool DHCP_LAN
-   network 192.168.1.0 255.255.255.0                ! Jaringan LAN
-   default-router 192.168.1.1                       ! Gateway DHCP
-   dns-server 8.8.8.8                               ! DNS server Google
+    hostname R.CISCO.SERVER
+    !
+    ip dhcp excluded-address 192.168.1.1 192.168.1.10
+    !
+    ip dhcp pool DHCP_LAN
+     network 192.168.1.0 255.255.255.0
+     default-router 192.168.1.1
+     dns-server 8.8.8.8
+    !
+    interface FastEthernet0/0
+    ip address dhcp
+    ip nat outside
+    duplex half
+    !
+    interface FastEthernet1/0
+    ip address 10.10.10.1 255.255.255.252
+    ip nat inside
+    duplex half
+    !
+    ip route 0.0.0.0 0.0.0.0 192.168.190.1
+    ip route 192.168.1.0 255.255.255.0 10.10.10.2
+    !
+    ip nat inside source list 1 interface FastEthernet0/0 overload
+    !
+    access-list 1 permit 192.168.1.0 0.0.0.255
+    !
+    </code></pre>
+    
+    <p class="note-subtitle">Router DHCP Relay</p>
+    <pre class="note-codeblock"><code>
 
-ip tcp synwait-time 5                               ! (Opsional) Atur waktu tunggu TCP SYN = 5 detik
+    hostname R.CISCO.RELAY
+    !
+    interface FastEthernet0/0
+      ip address 10.10.10.2 255.255.255.252
+      duplex half
+    !
+    interface FastEthernet1/0
+      ip address 192.168.1.1 255.255.255.0
+      ip helper-address 10.10.10.1
+      duplex half
+    !
+    ip route 0.0.0.0 0.0.0.0 10.10.10.1
+    !
 
-interface FastEthernet0/0
- ip address dhcp                                    ! Interface WAN dapat IP dari ISP via DHCP
- duplex half
+    </code></pre>
+    
 
-interface FastEthernet1/0
- ip address 192.168.1.1 255.255.255.0               ! IP gateway LAN
- duplex half
+    <p class="note-subtitle">Juniper</p>
+    <pre class="note-codeblock"><code>
+<!-- root> show configuration 
+## Last commit: 2025-08-25 23:05:53 UTC by root
+version 14.1R4.8;
+system {
+    root-authentication {
+        encrypted-password "$1$qMLCNOZR$.YKMsjP/Kkhd6MUZrlgWH1"; ## SECRET-DATA
+    }
+    services {
+        dhcp-local-server {
+            group DHCP-LAN {
+                interface em2.0;
+            }
+        }
+    }
+    syslog {
+        user * {
+            any emergency;
+        }
+        file messages {
+            any notice;
+            authorization info;
+        }
+        file interactive-commands {
+            interactive-commands any;
+        }                               
+    }
+}
+interfaces {
+    em2 {
+        unit 0 {
+            family inet {
+                address 192.168.1.1/24;
+            }
+        }
+    }
+}
+access {
+    address-assignment {
+        ##
+        ## Warning: requires 'subscriber-address-assignment' license
+        ##
+        pool LAN-DHCP {
+            family inet {
+                network 192.168.1.0/24;
+                range R1 {
+                    low 192.168.1.15;
+                    high 192.168.1.250;
+                }                       
+                dhcp-attributes {
+                    name-server {
+                        8.8.4.4;
+                    }
+                    router {
+                        192.168.1.1;
+                    }
+                }
+            }
+        }
+    }
+} -->
 
     </code></pre>
     

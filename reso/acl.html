@@ -146,6 +146,22 @@ access-list 100 permit ip any any
     </code></pre>
 
 
+    <h3 class="note-subtitle">Verifikasi ACL</h3>
+    <pre class="note-codeblock"><code>
+R1#show access-lists 
+
+Standard IP access list 1
+    10 deny   192.168.100.252   ! Memblokir host 192.168.100.252 (VLAN 100) keluar Fa1/0
+    20 permit any               ! Mengizinkan semua host lain
+
+Extended IP access list 100
+    10 deny icmp host 192.168.200.252 host 192.168.1.2   ! Memblokir ICMP dari VLAN 200 ke 192.168.1.2 (/30)
+    20 permit ip any any                                ! Mengizinkan trafik lainnya
+
+Extended IP access list ACL_NAMED
+    10 deny icmp host 192.168.210.252 host 192.168.1.2   ! Memblokir ICMP dari VLAN 210 ke 192.168.1.2 (/30)
+    20 permit ip any any                                ! Mengizinkan trafik lainnya
+    </code></pre>
    
     <script>
       document.querySelectorAll('.note-image').forEach(img => {

@@ -77,30 +77,8 @@ add chain=forward src-address=172.16.10.0/24 dst-address=192.168.10.0/24 \
 
     <p class="note-subtitle">Cisco ASA</p>
     <pre class="note-codeblock"><code>
-interface GigabitEthernet0/0
- nameif outside
- security-level 0
- ip address 10.10.10.1 255.255.255.252
 
-interface GigabitEthernet0/1
- nameif inside
- security-level 100
- ip address 192.168.10.1 255.255.255.0
-
-interface GigabitEthernet0/2
- nameif dmz
- security-level 50
- ip address 172.16.10.1 255.255.255.0
-
-! NAT agar server DMZ dapat diakses publik
-object network WEB-SERVER
- host 172.16.10.10
- nat (dmz,outside) static 203.0.113.10
-
-! ACL: hanya izinkan HTTP/HTTPS ke DMZ
-access-list OUTSIDE_IN permit tcp any host 203.0.113.10 eq 80
-access-list OUTSIDE_IN permit tcp any host 203.0.113.10 eq 443
-access-group OUTSIDE_IN in interface outside
+      on progress..
     </code></pre>
     
 

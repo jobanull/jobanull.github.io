@@ -172,13 +172,6 @@ interfaces {
             }
         }
     }
-    em3 {
-        unit 0 {
-            family inet {
-                address 192.168.3.1/30;   # Jaringan PC3
-            }
-        }
-    }
     fxp0 {
         unit 0 {
             family inet {
@@ -223,6 +216,229 @@ policy-options {
     }
 }
     </code></pre>
+
+    <h3 class="note-subtitle">Verifikasi BGP</h3>
+
+    <h3 class="note-subtitle">R.Mikrotik</h3>
+    <pre class="note-codeblock"><code>
+[admin@RB1] > routing bgp peer print status 
+Flags: X - disabled, E - established 
+ 0 E name="BGP-R.Cisco" instance=default remote-address=12.1.1.2 
+     remote-as=64111 tcp-md5-key="" nexthop-choice=default multihop=yes 
+     route-reflect=no hold-time=3m ttl=255 in-filter="" out-filter="" 
+     address-families=ip default-originate=never remove-private-as=no 
+     as-override=no passive=no use-bfd=no remote-id=192.168.1.1 
+     local-address=10.1.1.1 uptime=6m11s prefix-count=1 updates-sent=5 
+     updates-received=1 withdrawn-sent=0 withdrawn-received=0 
+     remote-hold-time=3m used-hold-time=3m used-keepalive-time=1m 
+     refresh-capability=yes state=established 
+
+ 1 E name="BGP-R.Juniper" instance=default remote-address=13.1.1.2 
+     remote-as=64113 tcp-md5-key="" nexthop-choice=default multihop=yes 
+     route-reflect=no hold-time=3m ttl=255 in-filter="" out-filter="" 
+     address-families=ip default-originate=never remove-private-as=no 
+     as-override=no passive=no use-bfd=no remote-id=13.1.1.2 
+     local-address=11.1.1.1 uptime=4m4s prefix-count=1 updates-sent=5 
+     updates-received=1 withdrawn-sent=0 withdrawn-received=0 
+     remote-hold-time=1m30s used-hold-time=1m30s used-keepalive-time=30s 
+     refresh-capability=yes as4-capability=yes state=established 
+[admin@RB1] > routing bgp advertisements print 
+PEER     PREFIX               NEXTHOP          AS-PATH    ORIGIN     LOCAL-PREF
+peer1    11.1.1.0/30          10.1.1.1                    igp       
+peer1    10.1.1.0/30          10.1.1.1                    igp       
+peer1    192.168.2.0/30       10.1.1.1         64113      igp       
+peer2    192.168.1.0/30       11.1.1.1         64111      igp       
+peer2    11.1.1.0/30          11.1.1.1                    igp       
+peer2    10.1.1.0/30          11.1.1.1                    igp       
+[admin@RB1] > ip route print where bgp
+Flags: X - disabled, A - active, D - dynamic, 
+C - connect, S - static, r - rip, b - bgp, o - ospf, m - mme, 
+B - blackhole, U - unreachable, P - prohibit 
+ #      DST-ADDRESS        PREF-SRC        GATEWAY            DISTANCE
+ 0 ADb  192.168.1.0/30                     12.1.1.2                 20
+ 1 ADb  192.168.2.0/30                     13.1.1.2                 20
+    </code></pre>
+   
+    <h3 class="note-subtitle">R.Cisco</h3>
+    <pre class="note-codeblock"><code>
+
+R-Cisco#show ip bgp summary 
+BGP router identifier 192.168.1.1, local AS number 64111
+BGP table version is 6, main routing table version 6
+4 network entries using 468 bytes of memory
+4 path entries using 208 bytes of memory
+4/3 BGP path/bestpath attribute entries using 496 bytes of memory
+2 BGP AS-PATH entries using 48 bytes of memory
+0 BGP route-map cache entries using 0 bytes of memory
+0 BGP filter-list cache entries using 0 bytes of memory
+BGP using 1220 total bytes of memory
+BGP activity 4/0 prefixes, 4/0 paths, scan interval 60 secs
+
+Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+10.1.1.1        4 64112    3133    2732        6    0    0 1d21h           3
+R-Cisco#show ip bgp neighbors 10.1.1.1 received-routes 
+BGP table version is 6, local router ID is 192.168.1.1
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale
+Origin codes: i - IGP, e - EGP, ? - incomplete
+
+   Network          Next Hop            Metric LocPrf Weight Path
+r> 10.1.1.0/30      10.1.1.1                               0 64112 i
+*> 11.1.1.0/30      10.1.1.1                               0 64112 i
+*> 192.168.2.0/30   10.1.1.1                               0 64112 64113 i
+
+Total number of prefixes 3 
+R-Cisco#show ip bgp neighbors 10.1.1.1 advertised-routes
+BGP table version is 6, local router ID is 192.168.1.1
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale
+Origin codes: i - IGP, e - EGP, ? - incomplete
+
+   Network          Next Hop            Metric LocPrf Weight Path
+*> 192.168.1.0/30   0.0.0.0                  0         32768 i
+
+Total number of prefixes 1 
+R-Cisco#show ip bgp
+BGP table version is 6, local router ID is 192.168.1.1
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale
+Origin codes: i - IGP, e - EGP, ? - incomplete
+
+   Network          Next Hop            Metric LocPrf Weight Path
+r> 10.1.1.0/30      10.1.1.1                               0 64112 i
+*> 11.1.1.0/30      10.1.1.1                               0 64112 i
+*> 192.168.1.0/30   0.0.0.0                  0         32768 i
+*> 192.168.2.0/30   10.1.1.1                               0 64112 64113 i
+R-Cisco#show ip route bgp
+     11.0.0.0/30 is subnetted, 1 subnets
+B       11.1.1.0 [20/0] via 10.1.1.1, 1d21h
+     192.168.2.0/30 is subnetted, 1 subnets
+B       192.168.2.0 [20/0] via 10.1.1.1, 1d21h
+    </code></pre>
+   
+    <h3 class="note-subtitle">R.Juniper</h3>
+    <pre class="note-codeblock"><code>
+root@R1.VMX> show bgp summary                                
+Groups: 1 Peers: 1 Down peers: 0
+Table          Tot Paths  Act Paths Suppressed    History Damp State    Pending
+inet.0               
+                       3          2          0          0          0          0
+Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
+11.1.1.1              64112         35         35       0       0       14:12 2/3/3/0              0/0/0/0
+
+root@R1.VMX> show bgp neighbor                               
+Peer: 11.1.1.1+179 AS 64112    Local: 13.1.1.2+50514 AS 64113
+  Type: External    State: Established    Flags: <Sync>
+  Last State: OpenConfirm   Last Event: RecvKeepAlive
+  Last Error: None
+  Export: [ EXPORT-LAN ] 
+  Options: <Multihop Preference LocalAddress Ttl PeerAS Refresh>
+  Local Address: 13.1.1.2 Holdtime: 90 Preference: 170
+  Number of flaps: 0
+  Peer ID: 10.1.1.1        Local ID: 13.1.1.2          Active Holdtime: 90
+  Keepalive Interval: 30         Group index: 0    Peer index: 0   
+  BFD: disabled, down
+  NLRI for restart configured on peer: inet-unicast
+  NLRI advertised by peer: inet-unicast
+  NLRI for this session: inet-unicast
+  Peer supports Refresh capability (2)
+  Stale routes from peer are kept for: 300
+  Peer does not support Restarter functionality
+  Peer does not support Receiver functionality
+  Peer supports 4 byte AS extension (peer-as 64112)
+  Peer does not support Addpath
+  Table inet.0 Bit: 10000
+    RIB State: BGP restart is complete
+    Send state: in sync
+---(backing up)---                      
+Peer: 11.1.1.1+179 AS 64112    Local: 13.1.1.2+50514 AS 64113
+  Type: External    State: Established    Flags: <Sync>
+  Last State: OpenConfirm   Last Event: RecvKeepAlive
+  Last Error: None
+  Export: [ EXPORT-LAN ] 
+  Options: <Multihop Preference LocalAddress Ttl PeerAS Refresh>
+  Local Address: 13.1.1.2 Holdtime: 90 Preference: 170
+  Number of flaps: 0
+  Peer ID: 10.1.1.1        Local ID: 13.1.1.2          Active Holdtime: 90
+  Keepalive Interval: 30         Group index: 0    Peer index: 0   
+  BFD: disabled, down
+  NLRI for restart configured on peer: inet-unicast
+  NLRI advertised by peer: inet-unicast
+  NLRI for this session: inet-unicast
+  Peer supports Refresh capability (2)
+  Stale routes from peer are kept for: 300
+  Peer does not support Restarter functionality
+  Peer does not support Receiver functionality
+  Peer supports 4 byte AS extension (peer-as 64112)
+  Peer does not support Addpath
+  Table inet.0 Bit: 10000
+    RIB State: BGP restart is complete
+    Send state: in sync
+---(backing up)---                      
+Peer: 11.1.1.1+179 AS 64112    Local: 13.1.1.2+50514 AS 64113
+  Type: External    State: Established    Flags: <Sync>
+  Last State: OpenConfirm   Last Event: RecvKeepAlive
+  Last Error: None
+  Export: [ EXPORT-LAN ] 
+  Options: <Multihop Preference LocalAddress Ttl PeerAS Refresh>
+  Local Address: 13.1.1.2 Holdtime: 90 Preference: 170
+  Number of flaps: 0
+  Peer ID: 10.1.1.1        Local ID: 13.1.1.2          Active Holdtime: 90
+  Keepalive Interval: 30         Group index: 0    Peer index: 0   
+  BFD: disabled, down
+  NLRI for restart configured on peer: inet-unicast
+  NLRI advertised by peer: inet-unicast
+  NLRI for this session: inet-unicast
+  Peer supports Refresh capability (2)
+  Stale routes from peer are kept for: 300
+  Peer does not support Restarter functionality
+  Peer does not support Receiver functionality
+  Peer supports 4 byte AS extension (peer-as 64112)
+  Peer does not support Addpath
+  Table inet.0 Bit: 10000
+    RIB State: BGP restart is complete
+    Send state: in sync
+    Active prefixes:              2     
+    Received prefixes:            3
+    Accepted prefixes:            3
+    Suppressed due to damping:    0
+    Advertised prefixes:          1
+  Last traffic (seconds): Received 7    Sent 21   Checked 47  
+  Input messages:  Total 35	Updates 3	Refreshes 0 	Octets 766
+  Output messages: Total 35	Updates 1	Refreshes 0 	Octets 734
+  Output Queue[0]: 0
+
+root@R1.VMX> show route receive-protocol bgp 11.1.1.1        
+
+inet.0: 7 destinations, 8 routes (7 active, 0 holddown, 0 hidden)
+  Prefix		  Nexthop	       MED     Lclpref    AS path
+* 10.1.1.0/30             11.1.1.1                                64112 I
+  11.1.1.0/30             11.1.1.1                                64112 I
+* 192.168.1.0/30          11.1.1.1                                64112 64111 I
+
+root@R1.VMX> show route advertising-protocol bgp 11.1.1.1    
+
+inet.0: 7 destinations, 8 routes (7 active, 0 holddown, 0 hidden)
+  Prefix		  Nexthop	       MED     Lclpref    AS path
+* 192.168.2.0/30          Self                                    I
+
+root@R1.VMX> show route protocol bgp                         
+
+inet.0: 7 destinations, 8 routes (7 active, 0 holddown, 0 hidden)
++ = Active Route, - = Last Active, * = Both
+
+10.1.1.0/30        *[BGP/170] 00:14:28, localpref 100, from 11.1.1.1
+                      AS path: 64112 I, validation-state: unverified
+                    > to 13.1.1.1 via fxp0.0
+11.1.1.0/30         [BGP/170] 00:14:28, localpref 100, from 11.1.1.1
+                      AS path: 64112 I, validation-state: unverified
+                    > to 13.1.1.1 via fxp0.0
+192.168.1.0/30     *[BGP/170] 00:14:27, localpref 100, from 11.1.1.1
+                      AS path: 64112 64111 I, validation-state: unverified
+                    > to 13.1.1.1 via fxp0.0
+
+    </code></pre>
+   
 
     <h3 class="note-subtitle">Tips Praktis</h3>
     <ul class="note-list">
