@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>EIGRP (Enhanced Interior Gateway Routing Protocol)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">EIGRP (Enhanced Interior Gateway Routing Protocol)</h2>
+    <p class="note-paragraph">
+      <strong>EIGRP</strong> adalah protokol routing interior canggih yang dikembangkan oleh Cisco. 
+      EIGRP menggunakan algoritma <em>DUAL (Diffusing Update Algorithm)</em> untuk menentukan jalur terbaik 
+      dan cepat beradaptasi terhadap perubahan topologi jaringan.
+    </p>
+    
+    <p class="note-paragraph">
+      <strong>IGRP</strong> adalah protokol routing interior yang dikembangkan oleh Cisco sebelum EIGRP. 
+      IGRP menggunakan algoritma <em>distance-vector</em> dengan metrik komposit 
+      (bandwidth, delay, load, reliability) untuk memilih jalur terbaik dalam jaringan internal. 
+      IGRP lebih sederhana tetapi kurang cepat konvergensinya dibanding EIGRP.
+    </p>
+
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Cepat konvergensi, mendukung VLSM, load balancing secara otomatis, hemat bandwidth dengan update parsial.</li>
+      <li><strong>Keterbatasan:</strong> Hanya bekerja optimal pada jaringan Cisco (proprietary) sebelum versi EIGRP untuk IPv6 terbuka.</li>
+      <li><strong>Gunakan Saat:</strong> Jaringan LAN dan WAN Cisco yang kompleks membutuhkan konvergensi cepat dan load balancing otomatis.</li>
+    </ul>
+    <h3 class="note-subtitle">IGRP vs EIGRP</h3>
+    <p class="note-paragraph">
+      IGRP dan EIGRP adalah protokol routing interior yang dikembangkan oleh Cisco. 
+      IGRP adalah versi lama dengan algoritma distance-vector, sedangkan EIGRP adalah versi 
+      lanjutan (enhanced) yang hybrid dan lebih cepat konvergensinya.
+    </p>
+
+    <h3 class="note-subtitle">Perbandingan Fitur</h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Fitur</th>
+          <th>IGRP</th>
+          <th>EIGRP</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Algoritma</td>
+          <td>Distance-vector</td>
+          <td>Hybrid (Distance-vector + Link-state, DUAL)</td>
+        </tr>
+        <tr>
+          <td>Metrik</td>
+          <td>Bandwidth, Delay, Load, Reliability</td>
+          <td>Bandwidth, Delay, Load, Reliability, MTU (lebih fleksibel)</td>
+        </tr>
+        <tr>
+          <td>Classful/Classless</td>
+          <td>Classful (tidak mendukung VLSM)</td>
+          <td>Classless (mendukung VLSM & CIDR)</td>
+        </tr>
+        <tr>
+          <td>Konvergensi</td>
+          <td>Lambat dibanding EIGRP</td>
+          <td>Cepat, menggunakan DUAL</td>
+        </tr>
+        <tr>
+          <td>Maks Hop</td>
+          <td>255</td>
+          <td>224</td>
+        </tr>
+        <tr>
+          <td>Proprietary</td>
+          <td>Hanya Cisco</td>
+          <td>Hanya Cisco (meski ada versi untuk multi-vendor terbatas)</td>
+        </tr>
+        <tr>
+          <td>Penggunaan Ideal</td>
+          <td>Jaringan internal Cisco besar sebelum EIGRP</td>
+          <td>Jaringan LAN/WAN Cisco kompleks dengan kebutuhan konvergensi cepat dan load balancing otomatis</td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Pastikan semua router EIGRP menggunakan <strong>AS number</strong> yang sama agar dapat bertukar routing.</li>
+      <li>Gunakan <strong>passive-interface</strong> untuk mencegah update EIGRP di interface tertentu.</li>
+      <li>Periksa <strong>metric EIGRP</strong> (bandwidth, delay) agar jalur terbaik sesuai kebutuhan jaringan.</li>
+    </ul>
+
+
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <!-- <ul class="note-list">
+      <li></li>
+    </ul> -->
+
+
+    <img src="img/eigrp1.png" alt="Diagram jaringan" class="note-image" />
+    
+    <p class="note-subtitle">R1</p>
+    <pre class="note-codeblock"><code>
+!
+hostname R1
+!
+interface FastEthernet0/0
+  ip address 10.10.10.1 255.255.255.252
+  duplex half
+!
+interface FastEthernet1/0
+  ip address 192.168.10.1 255.255.255.0
+  duplex half
+!
+router eigrp 100
+  network 10.10.10.0 0.0.0.3
+  network 192.168.10.0
+  no auto-summary
+!
+    </code></pre>
+
+    <p class="note-subtitle">R2</p>
+    <pre class="note-codeblock"><code>
+
+hostname R2
+!
+!
+interface FastEthernet0/0
+  ip address 10.10.10.2 255.255.255.252
+  duplex half
+!
+interface FastEthernet1/0
+  ip address 192.168.20.1 255.255.255.0
+  duplex half
+!
+router eigrp 100
+  network 10.10.10.0 0.0.0.3
+  network 192.168.20.0
+  no auto-summary
+!
+    </code></pre>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      EIGRP adalah protokol routing interior canggih yang menggabungkan kecepatan konvergensi, efisiensi bandwidth,
+      dan kemampuan load balancing otomatis. Cocok untuk jaringan Cisco yang kompleks dan membutuhkan stabilitas tinggi.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+</body>
+</html>
