@@ -70,89 +70,104 @@
     <p class="note-subtitle">Mikrotik</p>
     <p class="note-subtitle">Router DHCP Server</p>
     <pre class="note-codeblock"><code>
-    /ip pool
-    add name=dhcp_pool ranges=192.168.1.10-192.168.1.20
-    /ip dhcp-server
-    add address-pool=dhcp_pool disabled=no interface=ether2 lease-time=30s name=\
-        dhcp-server relay=192.168.1.1
-    /ip address
-    add address=10.10.10.1/30 interface=ether2 network=10.10.10.0
-    /ip dhcp-client
-    add disabled=no interface=ether1
-    /ip dhcp-server network
-    add address=192.168.1.0/24 dns-server=8.8.8.8,8.8.4.4 gateway=192.168.1.1
-    /ip firewall nat
-    add action=masquerade chain=srcnat out-interface=ether1
-    /system identity
-    set name=R.MTIK.SERVER
+/ip pool
+add name=dhcp_pool ranges=192.168.1.10-192.168.1.20                # Pool DHCP: range 192.168.1.10 - 192.168.1.20
+
+/ip dhcp-server
+add address-pool=dhcp_pool disabled=no interface=ether2 lease-time=30s name=dhcp-server relay=192.168.1.1   # DHCP server di ether2 untuk LAN, lease time 30s
+
+/ip address
+add address=10.10.10.1/30 interface=ether2 network=10.10.10.0       # IP statis LAN atau point-to-point pada ether2
+
+/ip dhcp-client
+add disabled=no interface=ether1                                     # Interface WAN (ether1) menerima IP dari ISP via DHCP
+
+/ip dhcp-server network
+add address=192.168.1.0/24 dns-server=8.8.8.8,8.8.4.4 gateway=192.168.1.1   # Pengaturan jaringan DHCP: gateway dan DNS untuk client
+
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1             # NAT untuk mengakses internet melalui WAN (ether1)
+
+/system identity
+set name=R.MTIK.SERVER                                               # Nama device
+
     </code></pre>
 
     <p class="note-subtitle">Router DHCP Relay</p>
     <pre class="note-codeblock"><code>
-    /ip address
-    add address=10.10.10.2/30 interface=ether1 network=10.10.10.0
-    add address=192.168.1.1/24 interface=ether2 network=192.168.1.0
-    /ip dhcp-relay
-    add dhcp-server=10.10.10.1 disabled=no interface=ether2 local-address=\
-        192.168.1.1 name=dhcp-relay
-    /ip dns
-    set servers=8.8.8.8,8.8.4.4
-    /ip firewall nat
-    add chain=srcnat out-interface=ether1 action=masquerade
-    /ip route
-    add distance=1 gateway=10.10.10.1
-    /system identity
-    set name=R.MTIK.RELAY
+/ip address
+add address=10.10.10.2/30 interface=ether1 network=10.10.10.0       # IP statis WAN/point-to-point ke router utama
+add address=192.168.1.1/24 interface=ether2 network=192.168.1.0     # IP LAN sebagai gateway untuk client
+
+/ip dhcp-relay
+add dhcp-server=10.10.10.1 disabled=no interface=ether2 local-address=192.168.1.1 name=dhcp-relay  # Relay DHCP dari LAN ke server 10.10.10.1
+
+/ip dns
+set servers=8.8.8.8,8.8.4.4                                        # DNS server untuk router dan client
+
+/ip firewall nat
+add chain=srcnat out-interface=ether1 action=masquerade             # NAT untuk akses internet melalui WAN
+
+/ip route
+add distance=1 gateway=10.10.10.1                                   # Default route ke gateway WAN
+
+/system identity
+set name=R.MTIK.RELAY                                               # Nama device
+
     </code></pre>
 
     <p class="note-subtitle">Cisco</p>
     <p class="note-subtitle">Router DHCP Server</p>
-    <pre class="note-codeblock"><code>
+hostname R.CISCO.SERVER                       # Nama hostname router
 
-    hostname R.CISCO.SERVER
-    !
-    ip dhcp excluded-address 192.168.1.1 192.168.1.10
-    !
-    ip dhcp pool DHCP_LAN
-     network 192.168.1.0 255.255.255.0
-     default-router 192.168.1.1
-     dns-server 8.8.8.8
-    !
-    interface FastEthernet0/0
-    ip address dhcp
-    ip nat outside
-    duplex half
-    !
-    interface FastEthernet1/0
-    ip address 10.10.10.1 255.255.255.252
-    ip nat inside
-    duplex half
-    !
-    ip route 0.0.0.0 0.0.0.0 192.168.190.1
-    ip route 192.168.1.0 255.255.255.0 10.10.10.2
-    !
-    ip nat inside source list 1 interface FastEthernet0/0 overload
-    !
-    access-list 1 permit 192.168.1.0 0.0.0.255
-    !
+! DHCP Configuration
+ip dhcp excluded-address 192.168.1.1 192.168.1.10   # IP yang tidak diberikan DHCP (gateway & reserved)
+ip dhcp pool DHCP_LAN                                # Pool DHCP untuk LAN
+ network 192.168.1.0 255.255.255.0                  # Jaringan LAN DHCP
+ default-router 192.168.1.1                          # Gateway default DHCP
+ dns-server 8.8.8.8                                  # DNS server untuk DHCP client
+
+! Interface WAN
+interface FastEthernet0/0
+ ip address dhcp                                      # Mendapat IP dari ISP via DHCP
+ ip nat outside                                      # Menandai interface sebagai NAT luar (WAN)
+ duplex half                                         # Set duplex mode
+
+! Interface LAN
+interface FastEthernet1/0
+ ip address 10.10.10.1 255.255.255.252              # IP statis LAN/point-to-point
+ ip nat inside                                       # Menandai interface sebagai NAT dalam (LAN)
+ duplex half                                         # Set duplex mode
+
+! Routing
+ip route 0.0.0.0 0.0.0.0 192.168.190.1             # Default route ke ISP
+ip route 192.168.1.0 255.255.255.0 10.10.10.2      # Route ke jaringan LAN di sisi lain
+
+! NAT Configuration
+ip nat inside source list 1 interface FastEthernet0/0 overload  # NAT overload untuk LAN ke WAN
+
+! Access List
+access-list 1 permit 192.168.1.0 0.0.0.255          # ACL untuk NAT, memperbolehkan subnet LAN
+
     </code></pre>
     
     <p class="note-subtitle">Router DHCP Relay</p>
     <pre class="note-codeblock"><code>
+hostname R.CISCO.RELAY                        # Nama hostname router
 
-    hostname R.CISCO.RELAY
-    !
-    interface FastEthernet0/0
-      ip address 10.10.10.2 255.255.255.252
-      duplex half
-    !
-    interface FastEthernet1/0
-      ip address 192.168.1.1 255.255.255.0
-      ip helper-address 10.10.10.1
-      duplex half
-    !
-    ip route 0.0.0.0 0.0.0.0 10.10.10.1
-    !
+! Interface WAN / Point-to-Point
+interface FastEthernet0/0
+ ip address 10.10.10.2 255.255.255.252       # IP statis point-to-point ke router utama
+ duplex half                                 # Set duplex mode
+
+! Interface LAN
+interface FastEthernet1/0
+ ip address 192.168.1.1 255.255.255.0       # IP LAN untuk client
+ ip helper-address 10.10.10.1               # Relay DHCP ke server di 10.10.10.1
+ duplex half                                 # Set duplex mode
+
+! Routing
+ip route 0.0.0.0 0.0.0.0 10.10.10.1         # Default route ke router utama / gateway WAN
 
     </code></pre>
     
