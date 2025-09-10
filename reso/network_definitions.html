@@ -122,6 +122,7 @@
         <li><a class="dropdown-item" href="#failover">Failover</a></li>
         <li><a class="dropdown-item" href="#multihoming">Multihoming</a></li>
         <li><a class="dropdown-item" href="#route-leaking">Route Leaking</a></li>
+        <li><a class="dropdown-item" href="#stub-routing">Stub Routing</a></li>
         </ul>
     </li>
 
@@ -1409,6 +1410,64 @@
     </ul>
   </main>
 </section>
+
+<section id="stub-routing" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Stub Routing</h2>
+    <p class="note-paragraph">
+      <strong>Stub</strong> dalam routing adalah konsep untuk membatasi informasi routing 
+      yang dikirim atau diterima oleh sebuah router atau area tertentu. 
+      Tujuannya adalah untuk <em>mengurangi ukuran routing table</em>, 
+      <em>meningkatkan efisiensi</em>, dan <em>mengurangi overhead update routing</em>, 
+      khususnya pada router yang hanya memiliki satu jalur keluar utama.
+    </p>
+
+    <h3 class="note-subtitle">Cara Kerja Stub</h3>
+    <ul>
+      <li>Router atau area stub tidak menerima semua rute detail, melainkan hanya default route atau subset tertentu.</li>
+      <li>Membatasi jenis rute yang diiklankan (connected, summary, static, redistributed, dll.).</li>
+      <li>Mengurangi jumlah informasi routing yang perlu disimpan dan diproses.</li>
+      <li>Efektif pada jaringan dengan topologi hub-and-spoke, di mana spoke hanya butuh tahu jalur keluar ke hub.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis-jenis Stub</h3>
+    <ul>
+      <li><strong>Stub Default (Connected + Summary):</strong> Hanya menerima default route serta mengiklankan rute connected dan summary.</li>
+      <li><strong>Stub Connected:</strong> Hanya mengiklankan rute yang langsung terkoneksi.</li>
+      <li><strong>Stub Summary:</strong> Hanya mengiklankan rute summary, bukan detail.</li>
+      <li><strong>Stub Static:</strong> Hanya mengiklankan rute static yang dikonfigurasi manual.</li>
+      <li><strong>Stub Redistributed:</strong> Hanya mengiklankan rute hasil redistribusi dari protokol lain.</li>
+      <li><strong>Stub Receive-Only:</strong> Router hanya menerima update, tanpa mengiklankan apapun.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan Stub</h3>
+    <ul>
+      <li>Mengurangi ukuran routing table pada router dengan resource terbatas.</li>
+      <li>Mengurangi trafik update routing di jaringan.</li>
+      <li>Meningkatkan stabilitas dan kecepatan konvergensi.</li>
+      <li>Mudah diimplementasikan pada desain jaringan sederhana.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Router branch office hanya memiliki satu jalur ke data center → cocok menggunakan stub default.</li>
+      <li>Router kecil di jaringan edge hanya butuh tahu jalur keluar tanpa semua detail rute internal.</li>
+      <li>Topologi hub-and-spoke, di mana spoke router tidak perlu menyimpan semua rute dari hub.</li>
+    </ul>
+
+    <img src="img/stub-routing.png" alt="Ilustrasi Stub Routing" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan stub untuk router dengan keterbatasan CPU/RAM.</li>
+      <li>Pilih tipe stub sesuai kebutuhan (connected, summary, static, dll.).</li>
+      <li>Jangan gunakan stub jika router butuh akses penuh ke semua rute detail.</li>
+      <li>Pastikan dokumentasi konfigurasi stub untuk mempermudah troubleshooting.</li>
+    </ul>
+  </main>
+</section>
+
+
 <section id="dhu" class="note-container container">
   <main class="note-main">
     <h2 class="note-title text-center">DHU Destination Host Unreachable</h2>
