@@ -19,16 +19,16 @@
 
     <h3 class="note-subtitle">Fungsi dan Tujuan VRF</h3>
     <ul class="note-list">
-      <li><strong>Isolasi lalu lintas</strong> – Memisahkan routing antar pelanggan atau departemen.</li>
-      <li><strong>Dukungan Multi-Tenant</strong> – Cocok untuk ISP atau data center yang melayani banyak klien.</li>
-      <li><strong>Keamanan</strong> – Mencegah pertukaran paket antar VRF yang berbeda.</li>
-      <li><strong>Efisiensi</strong> – Menghemat perangkat dengan memanfaatkan satu hardware untuk banyak jaringan logis.</li>
+      <li><strong>Isolasi lalu lintas</strong> - Memisahkan routing antar pelanggan atau departemen.</li>
+      <li><strong>Dukungan Multi-Tenant</strong> - Cocok untuk ISP atau data center yang melayani banyak klien.</li>
+      <li><strong>Keamanan</strong> - Mencegah pertukaran paket antar VRF yang berbeda.</li>
+      <li><strong>Efisiensi</strong> - Menghemat perangkat dengan memanfaatkan satu hardware untuk banyak jaringan logis.</li>
     </ul>
 
     <h3 class="note-subtitle">Jenis VRF</h3>
     <ul class="note-list">
-      <li><strong>VRF Lite</strong> – Implementasi VRF tanpa MPLS, biasanya digunakan di enterprise.</li>
-      <li><strong>MPLS VRF</strong> – VRF yang digunakan bersama MPLS untuk membangun VPN antar lokasi.</li>
+      <li><strong>VRF Lite</strong> - Implementasi VRF tanpa MPLS, biasanya digunakan di enterprise.</li>
+      <li><strong>MPLS VRF</strong> - VRF yang digunakan bersama MPLS untuk membangun VPN antar lokasi.</li>
     </ul>
 
     <h3 class="note-subtitle">Kelebihan VRF</h3>
@@ -37,6 +37,52 @@
       <li>Meningkatkan keamanan dan segmentasi jaringan.</li>
       <li>Mengurangi kebutuhan perangkat fisik terpisah.</li>
     </ul>
+
+    <h3 class="note-subtitle">VRF Lite vs Full VRF (MPLS VRF)</h3>
+    <p class="note-paragraph">
+      Dalam penerapannya, VRF dapat dibedakan menjadi dua pendekatan utama: 
+      <strong>VRF Lite</strong> dan <strong>Full VRF (MPLS VRF)</strong>. 
+      Keduanya memiliki konsep dasar yang sama, yaitu pemisahan tabel routing, 
+      tetapi berbeda pada skala dan teknologi yang digunakan.
+    </p>
+
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Aspek</th>
+          <th>VRF Lite</th>
+          <th>Full VRF (MPLS VRF)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Teknologi</strong></td>
+          <td>Hanya menggunakan konfigurasi VRF tanpa MPLS.</td>
+          <td>Menggunakan VRF bersamaan dengan MPLS untuk membangun VPN antar lokasi.</td>
+        </tr>
+        <tr>
+          <td><strong>Lingkup</strong></td>
+          <td>Biasanya dipakai di lingkungan enterprise atau kampus (skala kecil-menengah).</td>
+          <td>Digunakan oleh ISP atau data center untuk multi-tenant antar site (skala besar).</td>
+        </tr>
+        <tr>
+          <td><strong>Konektivitas</strong></td>
+          <td>Hanya berlaku lokal pada satu perangkat atau antar perangkat dengan static routing/peering.</td>
+          <td>Mendukung koneksi antar lokasi melalui backbone MPLS.</td>
+        </tr>
+        <tr>
+          <td><strong>Kompleksitas</strong></td>
+          <td>Lebih sederhana, mudah dikonfigurasi, dan murah.</td>
+          <td>Lebih kompleks karena melibatkan MPLS, BGP, dan label switching.</td>
+        </tr>
+        <tr>
+          <td><strong>Kegunaan</strong></td>
+          <td>Segmentasi jaringan internal, isolasi antar departemen/tenant kecil.</td>
+          <td>Layanan VPN berbasis MPLS untuk pelanggan dalam jumlah besar dan lokasi berbeda.</td>
+        </tr>
+      </tbody>
+    </table>
+
 
     <h3 class="note-subtitle">CONTOH KASUS</h3>
     <ul class="note-list">

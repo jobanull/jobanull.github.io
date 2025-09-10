@@ -76,6 +76,9 @@
         <li><a class="dropdown-item" href="#bottleneck">Bottleneck</a></li>
         <li><a class="dropdown-item" href="#jitter">Jitter</a></li>
         <li><a class="dropdown-item" href="#throttle-processor">Throttle Processor</a></li>
+        <li><a class="dropdown-item" href="#coliision-domain">Collision Domain</a></li>
+        <li><a class="dropdown-item" href="#diffserv">DiffServ</a></li>
+        <li><a class="dropdown-item" href="#intserv">IntServ</a></li>
         </ul>
     </li>
 
@@ -134,6 +137,11 @@
         <li><a class="dropdown-item" href="#metro-e">Metro-E (Metro Ethernet)</a></li>
         <li><a class="dropdown-item" href="#t1">T1 (Digital Signal 1)</a></li>
         <li><a class="dropdown-item" href="#sd-wan">SD-WAN (Software-Defined Wide Area Network)</a></li>
+        <li><a class="dropdown-item" href="#anycast">Anycast</a></li>
+        <li><a class="dropdown-item" href="#unicast">Unicast</a></li>
+        <li><a class="dropdown-item" href="#multicast">Multicast</a></li>
+        <li><a class="dropdown-item" href="#broadcast">Broadcast</a></li>
+ 
         </ul>
     </li>
 
@@ -166,6 +174,9 @@
         <li><a class="dropdown-item" href="#iix">IIX (Indonesia Internet Exchange)</a></li>
         <li><a class="dropdown-item" href="#open-ixp">Open IXP (Open Internet Exchange Point)</a></li>
         <li><a class="dropdown-item" href="#on-premise">On Premise</a></li>
+        <li><a class="dropdown-item" href="#high-availability">High Availability</a></li>
+        <li><a class="dropdown-item" href="#lisp">LISP</a></li>
+        <li><a class="dropdown-item" href="#dns">DNS</a></li>
         </ul>
     </li>
 
@@ -213,6 +224,8 @@
         <ul class="dropdown-menu">
         <li><a class="dropdown-item" href="#tunnel">Tunnel</a></li>
         <li><a class="dropdown-item" href="#vpn">VPN (Virtual Private Network)</a></li>
+        <li><a class="dropdown-item" href="#vpn">VPN (Virtual Private Network)</a></li>
+        <li><a class="dropdown-item" href="#dmvpn">DMVPN</a></li>
         </ul>
     </li>
     </ul>
@@ -274,7 +287,6 @@
     </ul>
   </main>
 </section>
-
 <section id="congestion" class="note-container container">
   <main class="note-main">
     <h2 class="note-title text-center">Congestion</h2>
@@ -317,8 +329,73 @@
       <li>Monitoring jaringan untuk mendeteksi hotspot atau puncak trafik.</li>
       <li>Memecah trafik ke jalur alternatif jika memungkinkan (<em>load balancing</em>).</li>
     </ul>
+
+    <h3 class="note-subtitle">Congestion Control</h3>
+    <p class="note-paragraph">
+      <strong>Congestion Control</strong> adalah mekanisme yang digunakan protokol transport, khususnya TCP, untuk mencegah dan mengendalikan kemacetan jaringan. 
+      Tujuannya adalah menjaga agar jumlah data yang dikirim tidak melebihi kapasitas jaringan, sehingga mengurangi <em>packet loss</em>, delay, dan retransmisi.
+    </p>
+
+    <h4 class="note-subsubtitle">Jenis-jenis Congestion Control</h4>
+    <ul>
+      <li><strong>Slow Start</strong> – TCP memulai pengiriman dengan jumlah kecil (cwnd rendah) lalu meningkat secara eksponensial sampai mendeteksi batas kapasitas.</li>
+      <li><strong>Congestion Avoidance</strong> – Pertumbuhan cwnd dilakukan secara linear untuk mencegah kemacetan ketika jaringan mulai penuh.</li>
+      <li><strong>Fast Retransmit</strong> – Paket yang hilang segera dikirim ulang tanpa menunggu timer habis.</li>
+      <li><strong>Fast Recovery</strong> – Setelah retransmit, TCP tidak kembali ke slow start awal, tetapi menyesuaikan cwnd agar stabil.</li>
+    </ul>
+
+    <h4 class="note-subsubtitle">Ilustrasi Mekanisme</h4>
+    <p class="note-paragraph">
+      Pada awal koneksi, TCP menggunakan <em>slow start</em> untuk mendeteksi kapasitas jaringan. Jika terjadi <strong>packet loss</strong>, maka dianggap ada congestion 
+      sehingga ukuran <em>congestion window</em> (cwnd) diturunkan. Selanjutnya TCP masuk ke mode <em>congestion avoidance</em> agar pengiriman lebih stabil.
+    </p>
+
+    <img src="img/congestion-control.png" alt="Ilustrasi Congestion Control" class="note-image" />
+
+    <h4 class="note-subsubtitle">Tujuan Utama</h4>
+    <ul>
+      <li>Menghindari kemacetan parah pada jaringan.</li>
+      <li>Mengoptimalkan throughput tanpa merugikan pengguna lain.</li>
+      <li>Menjaga fairness antara beberapa aliran data.</li>
+      <li>Meningkatkan efisiensi pengiriman data end-to-end.</li>
+    </ul>
+
+    <h3 class="note-subtitle">TCP vs UDP dalam Congestion Control</h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Aspek</th>
+          <th>TCP</th>
+          <th>UDP</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Handshake</td>
+          <td>3-Way Handshake sebelum transfer data</td>
+          <td>Tidak ada handshake (connectionless)</td>
+        </tr>
+        <tr>
+          <td>Reliability</td>
+          <td>Reliable (ACK, retransmit, ordering)</td>
+          <td>Unreliable (tidak ada ACK bawaan)</td>
+        </tr>
+        <tr>
+          <td>Congestion Control</td>
+          <td>Ada (slow start, avoidance, fast retransmit, recovery)</td>
+          <td>Tidak ada bawaan, dikendalikan aplikasi (misalnya QUIC, RTP)</td>
+        </tr>
+        <tr>
+          <td>Kegunaan</td>
+          <td>Aplikasi yang butuh keandalan (HTTP, FTP, Email)</td>
+          <td>Aplikasi real-time (VoIP, gaming, streaming)</td>
+        </tr>
+      </tbody>
+    </table>
   </main>
 </section>
+
+
 
 <section id="bottleneck" class="note-container container">
   <main class="note-main">
@@ -461,6 +538,167 @@
   </main>
 </section>
 
+<section id="coliision-domain" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Collision Domain</h2>
+    <p class="note-paragraph">
+      <strong>Collision Domain</strong> adalah sebuah area dalam jaringan komputer di mana dua atau lebih perangkat dapat berpotensi mengirim data secara bersamaan di media yang sama, sehingga terjadi tabrakan (collision). 
+      Konsep ini umumnya terjadi pada jaringan Ethernet lama yang masih menggunakan hub atau topologi shared medium.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Mendefinisikan batas di mana tabrakan paket dapat terjadi.</li>
+      <li>Membantu administrator jaringan memahami potensi bottleneck.</li>
+      <li>Menjadi dasar untuk merancang topologi agar lebih efisien.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Penyebab Collision</h3>
+    <ul>
+      <li>Penggunaan perangkat hub (shared Ethernet).</li>
+      <li>Beberapa perangkat mengirim data bersamaan pada media yang sama.</li>
+      <li>Topologi jaringan yang tidak tersegmentasi dengan baik.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Dampak Collision Domain Besar</h3>
+    <ul>
+      <li>Sering terjadi tabrakan paket (collision).</li>
+      <li>Throughput jaringan menurun.</li>
+      <li>Latency meningkat.</li>
+      <li>Kinerja jaringan tidak stabil.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Cara Mengurangi Collision Domain</h3>
+    <ul>
+      <li>Mengganti hub dengan switch (switch membuat collision domain per-port).</li>
+      <li>Menggunakan router untuk segmentasi jaringan.</li>
+      <li>Menerapkan desain jaringan modern dengan full-duplex komunikasi.</li>
+    </ul>
+
+    <img src="img/collision-domain.png" alt="Ilustrasi Collision Domain" class="note-image" />
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Pada jaringan dengan hub, semua perangkat berbagi collision domain yang sama.</li>
+      <li>Ketika diganti dengan switch, tiap port switch menjadi collision domain terpisah.</li>
+      <li>Router memisahkan broadcast domain sekaligus membatasi collision domain antar jaringan.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="diffserv" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">DiffServ (Differentiated Services)</h2>
+    <p class="note-paragraph">
+      <strong>DiffServ</strong> (Differentiated Services) adalah arsitektur Quality of Service (QoS) yang digunakan
+      untuk mengklasifikasikan dan mengelola traffic jaringan dengan memberikan prioritas berbeda pada setiap jenis data.
+      DiffServ bekerja pada layer 3 (IP) dengan memanfaatkan field <strong>DSCP (Differentiated Services Code Point)</strong> 
+      dalam header IP untuk menentukan perlakuan paket.
+    </p>
+
+    <h3 class="note-subtitle">Komponen Utama DiffServ</h3>
+    <ul>
+      <li><strong>DSCP (Differentiated Services Code Point):</strong> Nilai 6-bit pada header IP yang menentukan kelas layanan untuk paket tertentu.</li>
+      <li><strong>CoS (Class of Service):</strong> Klasifikasi pada layer 2 (Ethernet 802.1p) yang digunakan di switch untuk menandai traffic.</li>
+      <li><strong>PHB (Per-Hop Behavior):</strong> Perlakuan yang diberikan router/switch pada paket sesuai dengan nilai DSCP.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis PHB (Per-Hop Behavior)</h3>
+    <ul>
+      <li><strong>Default PHB:</strong> Traffic tanpa prioritas khusus, biasanya Best Effort.</li>
+      <li><strong>EF (Expedited Forwarding):</strong> Untuk traffic yang sangat sensitif terhadap delay (misalnya VoIP).</li>
+      <li><strong>AF (Assured Forwarding):</strong> Memberikan jaminan delivery dengan beberapa tingkat prioritas dan drop precedence.</li>
+      <li><strong>CS (Class Selector):</strong> Kompatibilitas dengan IP precedence lama.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Keuntungan DiffServ</h3>
+    <ul>
+      <li>Meningkatkan kualitas layanan untuk aplikasi real-time (voice, video).</li>
+      <li>Mengelola bandwidth dengan lebih efisien sesuai kebutuhan aplikasi.</li>
+      <li>Lebih sederhana dibandingkan arsitektur QoS sebelumnya (IntServ/RSVP).</li>
+      <li>Skalabilitas tinggi untuk jaringan enterprise maupun ISP.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus Penggunaan</h3>
+    <ul>
+      <li>Memberikan prioritas tinggi untuk trafik VoIP agar suara tidak terputus.</li>
+      <li>Mengurangi delay pada aplikasi video conference dibandingkan trafik data biasa.</li>
+      <li>Mengelompokkan traffic berdasarkan aplikasi (voice, video, data, best effort).</li>
+    </ul>
+
+    <img src="img/diffserv.png" alt="Ilustrasi DiffServ DSCP CoS PHB" class="note-image" />
+
+    <h3 class="note-subtitle">Langkah Implementasi Dasar</h3>
+    <ul>
+      <li>Klasifikasikan traffic berdasarkan aplikasi atau protokol.</li>
+      <li>Tandai paket dengan nilai DSCP atau CoS yang sesuai.</li>
+      <li>Terapkan kebijakan QoS pada router/switch (misalnya policing, shaping, scheduling).</li>
+      <li>Konfigurasi antrian (queue) sesuai prioritas traffic (misalnya LLQ untuk VoIP).</li>
+      <li>Monitoring untuk memastikan QoS berjalan sesuai kebutuhan.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="intserv" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">IntServ (Integrated Services)</h2>
+    <p class="note-paragraph">
+      <strong>IntServ</strong> (Integrated Services) adalah arsitektur Quality of Service (QoS) yang 
+      menyediakan jaminan kualitas end-to-end pada jaringan dengan cara melakukan <em>resource reservation</em>.
+      IntServ menggunakan protokol <strong>RSVP (Resource Reservation Protocol)</strong> untuk memesan 
+      bandwidth di sepanjang jalur yang dilewati oleh traffic tertentu.
+    </p>
+
+    <h3 class="note-subtitle">Komponen Utama IntServ</h3>
+    <ul>
+      <li><strong>RSVP (Resource Reservation Protocol):</strong> Protokol signaling yang digunakan untuk meminta dan mempertahankan alokasi resource jaringan.</li>
+      <li><strong>Admission Control:</strong> Mekanisme pada router untuk memutuskan apakah permintaan resource dapat dipenuhi atau tidak.</li>
+      <li><strong>Classifier:</strong> Mengidentifikasi dan mengklasifikasikan traffic berdasarkan flow.</li>
+      <li><strong>Scheduler:</strong> Mengatur bagaimana traffic diprioritaskan dan dialokasikan sesuai dengan resource yang tersedia.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik IntServ</h3>
+    <ul>
+      <li>Menyediakan <strong>guaranteed QoS</strong> untuk aplikasi real-time seperti VoIP atau video streaming.</li>
+      <li>Menggunakan model <em>flow-based</em>, setiap aliran traffic membutuhkan signaling RSVP.</li>
+      <li>Memberikan kontrol ketat atas bandwidth, delay, dan jitter.</li>
+      <li>Lebih kompleks dibandingkan DiffServ, dengan overhead signaling lebih besar.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Keuntungan IntServ</h3>
+    <ul>
+      <li>QoS dapat dijamin secara end-to-end.</li>
+      <li>Sangat cocok untuk aplikasi yang sensitif terhadap delay (misalnya video conference, VoIP).</li>
+      <li>Kontrol ketat atas resource jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan IntServ</h3>
+    <ul>
+      <li>Tidak skalabel untuk jaringan besar karena setiap flow butuh state di setiap router.</li>
+      <li>Overhead signaling tinggi karena RSVP harus dikelola secara terus menerus.</li>
+      <li>Kompleks dalam implementasi dan manajemen.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus Penggunaan</h3>
+    <ul>
+      <li>Video conference antar cabang perusahaan dengan kebutuhan delay rendah.</li>
+      <li>Jaringan penelitian atau laboratorium yang memerlukan jaminan QoS penuh.</li>
+      <li>Aplikasi industri (SCADA) yang butuh jaminan latency konstan.</li>
+    </ul>
+
+    <img src="img/intserv.png" alt="Ilustrasi IntServ RSVP" class="note-image" />
+
+    <h3 class="note-subtitle">Langkah Implementasi Dasar</h3>
+    <ul>
+      <li>Aktifkan RSVP pada router untuk mendukung signaling resource reservation.</li>
+      <li>Konfigurasi admission control agar resource dialokasikan sesuai permintaan flow.</li>
+      <li>Tentukan kebijakan QoS (bandwidth, delay, jitter) untuk tiap flow.</li>
+      <li>Uji traffic real-time (misalnya VoIP/video) untuk memastikan QoS terpenuhi.</li>
+    </ul>
+  </main>
+</section>
+
+
 <section id="handshake" class="note-container container">
   <main class="note-main">
     <h2 class="note-title text-center">Handshake</h2>
@@ -600,6 +838,7 @@
     </ul>
   </main>
 </section>
+
 <section id="ack-nack" class="note-container container">
   <main class="note-main">
     <h2 class="note-title text-center">ACK / NACK</h2>
@@ -1495,6 +1734,290 @@
     </ul>
   </main>
 </section>
+
+
+<section id="anycast" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Anycast</h2>
+    <p class="note-paragraph">
+      <strong>Anycast</strong> adalah metode pengalamatan IP di mana sebuah alamat IP yang sama 
+      dapat digunakan oleh beberapa host/server yang tersebar di lokasi berbeda. 
+      Paket data akan dikirimkan ke host terdekat (secara topologi jaringan) berdasarkan 
+      keputusan routing. 
+      Anycast banyak digunakan untuk meningkatkan performa, kecepatan akses, 
+      dan redundansi layanan.
+    </p>
+
+    <h3 class="note-subtitle">Karakteristik Anycast</h3>
+    <ul>
+      <li><strong>Satu IP, Banyak Lokasi:</strong> Beberapa server berbagi alamat IP yang sama.</li>
+      <li><strong>Routing ke Terdekat:</strong> Paket selalu diarahkan ke node/server terdekat.</li>
+      <li><strong>Skalabilitas:</strong> Dapat menambah server baru di lokasi lain dengan IP yang sama.</li>
+      <li><strong>Resiliensi:</strong> Jika satu server gagal, traffic otomatis dialihkan ke server lain.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Perbandingan dengan Metode Lain</h3>
+    <ul>
+      <li><strong>Unicast:</strong> Satu alamat IP hanya untuk satu host.</li>
+      <li><strong>Multicast:</strong> Satu alamat IP untuk mengirim data ke banyak host sekaligus.</li>
+      <li><strong>Anycast:</strong> Satu alamat IP dibagikan ke banyak host, tapi paket hanya menuju host terdekat.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan Anycast</h3>
+    <ul>
+      <li>Meningkatkan kecepatan akses dengan mengarahkan user ke server terdekat.</li>
+      <li>Memberikan redundansi otomatis jika salah satu server down.</li>
+      <li>Menyederhanakan arsitektur karena semua server menggunakan IP yang sama.</li>
+      <li>Cocok untuk layanan global dengan distribusi geografis.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>DNS publik (contoh: Google DNS 8.8.8.8, Cloudflare 1.1.1.1) menggunakan Anycast.</li>
+      <li>CDN (Content Delivery Network) mengarahkan user ke edge server terdekat.</li>
+      <li>Layanan VPN global dengan IP sama di berbagai negara.</li>
+    </ul>
+
+    <img src="img/anycast.png" alt="Ilustrasi Anycast" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan Anycast untuk layanan yang sifatnya stateless (misalnya DNS, HTTP cache).</li>
+      <li>Pastikan routing (BGP) diatur dengan benar agar lalu lintas selalu menuju node terdekat.</li>
+      <li>Monitor performa antar node untuk mendeteksi masalah routing.</li>
+      <li>Kombinasikan dengan load balancing dan failover untuk ketersediaan maksimal.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="unicast" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Unicast</h2>
+    <p class="note-paragraph">
+      <strong>Unicast</strong> adalah metode komunikasi jaringan di mana satu host 
+      mengirimkan paket data ke satu host tujuan secara langsung. 
+      Setiap alamat IP tujuan unik, sehingga komunikasi bersifat 
+      <em>one-to-one</em>. Unicast adalah bentuk komunikasi paling umum di Internet.
+    </p>
+
+    <h3 class="note-subtitle">Karakteristik Unicast</h3>
+    <ul>
+      <li><strong>Satu ke Satu:</strong> Sumber dan tujuan komunikasi hanya melibatkan dua host.</li>
+      <li><strong>Alamat IP Unik:</strong> Setiap tujuan memiliki alamat IP yang berbeda.</li>
+      <li><strong>Metode Default:</strong> Semua komunikasi jaringan pada dasarnya menggunakan Unicast, kecuali ditentukan sebaliknya.</li>
+      <li><strong>Efisien untuk Point-to-Point:</strong> Cocok untuk komunikasi langsung antar perangkat.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Perbandingan dengan Metode Lain</h3>
+    <ul>
+      <li><strong>Unicast:</strong> Satu host mengirim ke satu host (one-to-one).</li>
+      <li><strong>Broadcast:</strong> Satu host mengirim ke semua host dalam segmen jaringan (one-to-all).</li>
+      <li><strong>Multicast:</strong> Satu host mengirim ke sekelompok host yang tergabung dalam grup tertentu (one-to-many).</li>
+      <li><strong>Anycast:</strong> Satu alamat IP digunakan banyak host, tapi paket hanya menuju host terdekat.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan Unicast</h3>
+    <ul>
+      <li>Sederhana dan mudah dipahami karena komunikasi langsung antar host.</li>
+      <li>Tidak membebani host lain yang tidak terlibat dalam komunikasi.</li>
+      <li>Mendukung sebagian besar aplikasi Internet seperti web browsing, email, dan SSH.</li>
+      <li>Efektif untuk komunikasi personal atau point-to-point.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Client mengakses website melalui browser (client → server web).</li>
+      <li>SSH dari laptop ke server Linux.</li>
+      <li>Email dikirim dari satu server mail ke server mail lain.</li>
+      <li>Transfer file menggunakan FTP atau SFTP.</li>
+    </ul>
+
+    <img src="img/unicast.png" alt="Ilustrasi Unicast" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan Unicast untuk komunikasi langsung antar perangkat.</li>
+      <li>Pastikan alamat IP tujuan valid dan dapat dijangkau di jaringan.</li>
+      <li>Perhatikan efisiensi: untuk komunikasi dengan banyak penerima, gunakan Multicast atau Broadcast.</li>
+      <li>Amankan komunikasi Unicast dengan enkripsi (misalnya HTTPS, SSH).</li>
+    </ul>
+  </main>
+</section>
+
+<section id="multicast" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Multicast</h2>
+    <p class="note-paragraph">
+      <strong>Multicast</strong> adalah metode komunikasi jaringan di mana satu host 
+      mengirimkan paket data ke sekelompok host yang tergabung dalam sebuah grup tertentu. 
+      Komunikasi bersifat <em>one-to-many</em>, tetapi hanya host yang bergabung dalam 
+      grup multicast yang akan menerima paket. 
+      Metode ini lebih efisien dibanding broadcast karena tidak semua host dipaksa menerima data.
+    </p>
+
+    <h3 class="note-subtitle">Karakteristik Multicast</h3>
+    <ul>
+      <li><strong>One-to-Many:</strong> Satu sumber mengirim data ke banyak penerima dalam grup.</li>
+      <li><strong>Selective Delivery:</strong> Hanya host yang bergabung ke grup multicast yang menerima data.</li>
+      <li><strong>Alamat Multicast:</strong> Menggunakan rentang IP khusus (224.0.0.0 – 239.255.255.255 untuk IPv4).</li>
+      <li><strong>Efisien:</strong> Data dikirim sekali lalu didistribusikan ke banyak host melalui router multicast-aware.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Perbandingan dengan Metode Lain</h3>
+    <ul>
+      <li><strong>Unicast:</strong> Satu host ke satu host (one-to-one).</li>
+      <li><strong>Broadcast:</strong> Satu host ke semua host dalam segmen (one-to-all).</li>
+      <li><strong>Multicast:</strong> Satu host ke sekelompok host tertentu (one-to-many).</li>
+      <li><strong>Anycast:</strong> Satu IP digunakan beberapa host, tapi paket hanya menuju host terdekat.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan Multicast</h3>
+    <ul>
+      <li>Efisiensi bandwidth karena data hanya dikirim sekali untuk banyak penerima.</li>
+      <li>Cocok untuk aplikasi real-time seperti video streaming dan konferensi online.</li>
+      <li>Mengurangi beban server karena tidak perlu mengirim unicast terpisah ke tiap client.</li>
+      <li>Lebih hemat resource jaringan dibanding broadcast.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>IPTV atau siaran televisi melalui jaringan IP.</li>
+      <li>Video conference atau webinar dengan banyak peserta.</li>
+      <li>Sinkronisasi data antar server dalam cluster.</li>
+      <li>Distribusi update software atau patch ke banyak perangkat sekaligus.</li>
+    </ul>
+
+    <img src="img/multicast.png" alt="Ilustrasi Multicast" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan Multicast jika aplikasi membutuhkan distribusi data ke banyak penerima sekaligus.</li>
+      <li>Pastikan router/switch mendukung protokol multicast seperti IGMP (IPv4) atau MLD (IPv6).</li>
+      <li>Untuk routing multicast, gunakan protokol seperti PIM (Protocol Independent Multicast).</li>
+      <li>Hindari multicast di jaringan besar tanpa kontrol, karena dapat menimbulkan flooding.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="broadcast" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Broadcast</h2>
+    <p class="note-paragraph">
+      <strong>Broadcast</strong> adalah metode komunikasi jaringan di mana satu host 
+      mengirimkan paket data ke semua host dalam satu segmen jaringan. 
+      Komunikasi bersifat <em>one-to-all</em>, sehingga semua perangkat yang berada 
+      di jaringan yang sama akan menerima paket tersebut, meskipun tidak semua membutuhkannya.
+    </p>
+
+    <h3 class="note-subtitle">Karakteristik Broadcast</h3>
+    <ul>
+      <li><strong>One-to-All:</strong> Satu host mengirim data ke semua host di segmen jaringan.</li>
+      <li><strong>Alamat Broadcast:</strong> Biasanya menggunakan alamat khusus, contoh IPv4: <code>255.255.255.255</code> (limited broadcast).</li>
+      <li><strong>Broadcast Domain:</strong> Hanya host dalam broadcast domain yang akan menerima paket.</li>
+      <li><strong>Beban Jaringan:</strong> Semua host memproses paket broadcast meskipun tidak dibutuhkan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Perbandingan dengan Metode Lain</h3>
+    <ul>
+      <li><strong>Unicast:</strong> Satu host ke satu host (one-to-one).</li>
+      <li><strong>Broadcast:</strong> Satu host ke semua host dalam segmen (one-to-all).</li>
+      <li><strong>Multicast:</strong> Satu host ke sekelompok host tertentu (one-to-many).</li>
+      <li><strong>Anycast:</strong> Satu IP digunakan beberapa host, tapi paket hanya menuju host terdekat.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan Broadcast</h3>
+    <ul>
+      <li>Mudah digunakan untuk menemukan host atau layanan di jaringan lokal.</li>
+      <li>Dapat digunakan untuk pengumuman/pencarian tanpa mengetahui alamat tujuan spesifik.</li>
+      <li>Berguna pada protokol discovery, seperti ARP atau DHCP.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan Broadcast</h3>
+    <ul>
+      <li>Dapat membebani jaringan jika jumlah broadcast terlalu banyak.</li>
+      <li>Setiap perangkat dalam segmen harus memproses paket meskipun tidak membutuhkannya.</li>
+      <li>Tidak bisa digunakan secara efisien di jaringan besar (Internet tidak mendukung broadcast).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li><strong>ARP Request:</strong> Host menanyakan alamat MAC dari IP tertentu.</li>
+      <li><strong>DHCP Discovery:</strong> Client mencari DHCP server untuk mendapatkan alamat IP.</li>
+      <li><strong>Pengumuman Layanan:</strong> Aplikasi melakukan broadcast untuk mencari service dalam LAN.</li>
+    </ul>
+
+    <img src="img/broadcast.png" alt="Ilustrasi Broadcast" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan broadcast hanya untuk kebutuhan discovery atau pengumuman layanan.</li>
+      <li>Segmentasi jaringan dengan VLAN untuk membatasi broadcast domain.</li>
+      <li>Monitor broadcast traffic agar tidak membebani performa jaringan.</li>
+      <li>Hindari broadcast berlebihan di jaringan besar, gunakan multicast/unicast jika memungkinkan.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="nat" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">NAT (Network Address Translation)</h2>
+    <p class="note-paragraph">
+      <strong>NAT</strong> (Network Address Translation) adalah teknik dalam jaringan komputer 
+      untuk memodifikasi alamat IP pada paket yang melintas melalui router atau firewall. 
+      NAT digunakan agar alamat IP privat dalam jaringan internal bisa berkomunikasi 
+      dengan jaringan publik (Internet) atau untuk memetakan layanan tertentu.
+    </p>
+
+    <h3 class="note-subtitle">Jenis NAT</h3>
+    <ul>
+      <li>
+        <strong>Source NAT (SNAT):</strong> 
+        Mengubah alamat IP sumber dari paket. 
+        Contoh: perangkat dengan IP privat <code>192.168.1.10</code> 
+        keluar ke Internet dengan IP publik router <code>203.0.113.5</code>.
+      </li>
+      <li>
+        <strong>Destination NAT (DNAT):</strong> 
+        Mengubah alamat IP tujuan dari paket. 
+        Contoh: request ke IP publik <code>203.0.113.5</code> diteruskan ke server internal 
+        <code>192.168.1.20</code>.
+      </li>
+      <li>
+        <strong>Hairpin NAT (NAT Loopback):</strong> 
+        Memungkinkan perangkat dalam jaringan internal mengakses layanan 
+        menggunakan IP publik dari jaringan itu sendiri. 
+        Contoh: client internal mengakses <code>203.0.113.5</code>, 
+        tapi router mengarahkannya kembali ke server internal.
+      </li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan NAT</h3>
+    <ul>
+      <li>Menghemat penggunaan alamat IPv4 publik.</li>
+      <li>Meningkatkan keamanan dengan menyembunyikan IP internal.</li>
+      <li>Mendukung fleksibilitas deployment server (melalui DNAT/port forwarding).</li>
+      <li>Memungkinkan akses layanan internal dari jaringan internal maupun eksternal.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li><strong>Source NAT:</strong> Semua user kantor browsing Internet dengan satu IP publik.</li>
+      <li><strong>Destination NAT:</strong> Port forwarding web server internal agar bisa diakses dari Internet.</li>
+      <li><strong>Hairpin NAT:</strong> User internal mengakses domain publik perusahaan, diarahkan ke server lokal.</li>
+    </ul>
+
+    <img src="img/nat.png" alt="Ilustrasi NAT" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan SNAT untuk koneksi outbound Internet dari jaringan internal.</li>
+      <li>Gunakan DNAT untuk publikasi layanan internal ke Internet (port forwarding).</li>
+      <li>Aktifkan Hairpin NAT jika user internal juga perlu mengakses layanan via IP/domain publik.</li>
+      <li>Perhatikan firewall rules agar NAT tidak membuka celah keamanan.</li>
+    </ul>
+  </main>
+</section>
+
 
 <section id="pe" class="note-container container">
   <main class="note-main">
@@ -2507,6 +3030,183 @@
     </ul>
   </main>
 </section>
+
+<section id="high-availability" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">High Availability (HA) Configuration</h2>
+    <p class="note-paragraph">
+      <strong>High Availability (HA)</strong> adalah metode atau konfigurasi pada sistem, server, atau perangkat jaringan 
+      yang bertujuan untuk memastikan layanan tetap berjalan meskipun terjadi kegagalan pada salah satu komponen. 
+      Tujuan utamanya adalah <em>meminimalkan downtime</em> dan menjaga <em>ketersediaan layanan</em>.
+    </p>
+
+    <h3 class="note-subtitle">Konsep Dasar HA</h3>
+    <ul>
+      <li><strong>Redundansi:</strong> Menyediakan perangkat/server cadangan. Jika perangkat utama gagal, perangkat cadangan otomatis mengambil alih.</li>
+      <li><strong>Failover:</strong> Proses perpindahan layanan dari perangkat utama (primary/active) ke perangkat cadangan (secondary/standby) saat terjadi gangguan.</li>
+      <li><strong>Load Sharing / Load Balancing:</strong> Beberapa konfigurasi HA memungkinkan perangkat bekerja secara active-active untuk berbagi beban trafik.</li>
+      <li><strong>Heartbeat / Health Check:</strong> Mekanisme untuk memantau kondisi perangkat utama. Jika tidak ada respons, failover dijalankan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Implementasi</h3>
+    <ul>
+      <li><strong>Firewall:</strong> Cisco ASA, Fortigate, Mikrotik CCR, pfSense dengan HA active-standby atau active-active.</li>
+      <li><strong>Server / VM:</strong> VMware vSphere HA, Proxmox HA, Kubernetes HA yang memindahkan workload saat node down.</li>
+      <li><strong>Database:</strong> MySQL Cluster, PostgreSQL HA dengan master-replica untuk mencegah data loss.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Meminimalkan downtime layanan kritikal.</li>
+      <li>Meningkatkan keandalan sistem dan jaringan.</li>
+      <li>Mendukung skala besar (enterprise & data center).</li>
+      <li>Menjamin layanan tetap online meski ada kegagalan hardware/software.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Membutuhkan biaya lebih tinggi karena ada perangkat cadangan.</li>
+      <li>Konfigurasi lebih kompleks dibanding sistem tunggal.</li>
+      <li>Memerlukan monitoring dan maintenance rutin.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Dua firewall dikonfigurasi active-standby, jika firewall utama mati, cadangan langsung aktif.</li>
+      <li>Cluster server VMware vSphere HA, workload otomatis berpindah ke host lain saat satu host down.</li>
+      <li>Database PostgreSQL dengan HA: primary mati → replica otomatis menjadi primary.</li>
+    </ul>
+
+    <img src="img/ha.png" alt="Ilustrasi High Availability" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan minimal dua perangkat/server untuk redundansi.</li>
+      <li>Terapkan monitoring dan logging untuk memantau status HA.</li>
+      <li>Uji failover secara berkala untuk memastikan mekanisme berjalan.</li>
+      <li>Pertimbangkan biaya dan kebutuhan sebelum menentukan desain HA.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="lisp" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">LISP (Locator/ID Separation Protocol)</h2>
+    <p class="note-paragraph">
+      <strong>LISP</strong> (Locator/ID Separation Protocol) adalah arsitektur routing yang memisahkan 
+      fungsi alamat IP menjadi dua bagian: <em>Endpoint Identifier (EID)</em> sebagai identitas host dan 
+      <em>Routing Locator (RLOC)</em> sebagai lokasi dalam jaringan. 
+      Dengan pemisahan ini, LISP memudahkan mobilitas, multi-homing, dan skalabilitas routing.
+    </p>
+
+    <h3 class="note-subtitle">Komponen Utama LISP</h3>
+    <ul>
+      <li><strong>EID (Endpoint ID):</strong> Identitas host atau perangkat, digunakan oleh aplikasi.</li>
+      <li><strong>RLOC (Routing Locator):</strong> Lokasi perangkat di topologi jaringan, digunakan untuk forwarding.</li>
+      <li><strong>ITR (Ingress Tunnel Router):</strong> Router yang mengenkapsulasi paket dari EID ke RLOC.</li>
+      <li><strong>ETR (Egress Tunnel Router):</strong> Router yang mendekapsulasi paket dan meneruskannya ke EID.</li>
+      <li><strong>Map-Server/Map-Resolver:</strong> Basis data untuk memetakan EID ke RLOC.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Cara Kerja Sederhana</h3>
+    <ul>
+      <li>Host A (EID-A) ingin berkomunikasi dengan Host B (EID-B).</li>
+      <li>ITR mencari pemetaan EID-B ke RLOC-B melalui Map-Resolver.</li>
+      <li>ITR mengenkapsulasi paket: <em>Outer IP (RLOC-A → RLOC-B)</em> berisi <em>Inner IP (EID-A → EID-B)</em>.</li>
+      <li>ETR menerima, mendekapsulasi, lalu meneruskan paket ke Host B (EID-B).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan LISP</h3>
+    <ul>
+      <li>Mendukung mobilitas host tanpa harus mengganti identitas (IP tetap sama).</li>
+      <li>Multi-homing dengan load balancing dan failover yang lebih fleksibel.</li>
+      <li>Mengurangi ukuran routing table global, lebih scalable.</li>
+      <li>Dapat digunakan untuk overlay/VPN pada data center.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Perangkat mobile berpindah jaringan tanpa kehilangan sesi komunikasi.</li>
+      <li>Data center multi-site menggunakan LISP untuk load balancing dan redundansi.</li>
+      <li>Migrasi virtual machine antar site tetap menjaga koneksi aktif.</li>
+    </ul>
+
+    <img src="img/lisp.png" alt="Ilustrasi LISP" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pahami perbedaan fungsi EID dan RLOC sebelum implementasi.</li>
+      <li>Konfigurasikan Map-Server dan Map-Resolver dengan benar untuk pemetaan yang optimal.</li>
+      <li>Gunakan LISP untuk mendukung mobilitas, multi-homing, atau desain overlay network.</li>
+      <li>Integrasikan dengan protokol routing lain (seperti BGP) jika diperlukan di skala besar.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="dns" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Domain Name System (DNS)</h2>
+    <p class="note-paragraph">
+      <strong>DNS (Domain Name System)</strong> adalah sistem yang digunakan untuk menerjemahkan nama domain 
+      (misalnya <em>www.example.com</em>) menjadi alamat IP (misalnya <em>192.0.2.1</em>) agar dapat dipahami oleh perangkat jaringan. 
+      DNS berfungsi sebagai “buku telepon internet” yang memastikan komunikasi antar perangkat berjalan lancar.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama DNS</h3>
+    <ul>
+      <li>Mengubah nama domain menjadi alamat IP.</li>
+      <li>Memudahkan pengguna mengakses layanan tanpa menghafal alamat IP.</li>
+      <li>Menyediakan layanan hierarki dan terdistribusi untuk resolusi nama.</li>
+      <li>Memberikan dukungan keamanan melalui DNSSEC.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Internal Caching</h3>
+    <p class="note-paragraph">
+      <strong>Internal caching</strong> pada DNS digunakan untuk menyimpan hasil query sementara. 
+      Tujuannya adalah mengurangi waktu resolusi dan beban trafik ke server upstream.
+    </p>
+    <ul>
+      <li>Mengurangi latensi query DNS bagi pengguna internal.</li>
+      <li>Menghemat bandwidth karena jawaban bisa langsung diberikan dari cache.</li>
+      <li>TTL (Time To Live) menentukan berapa lama data DNS disimpan di cache.</li>
+    </ul>
+
+    <h3 class="note-subtitle">DNS Forwarding</h3>
+    <p class="note-paragraph">
+      <strong>Forwarding</strong> adalah metode di mana server DNS lokal meneruskan query yang tidak bisa dijawab 
+      ke server DNS lain (biasanya milik ISP atau public DNS seperti 8.8.8.8). 
+      Hal ini membantu efisiensi dan mempercepat resolusi nama.
+    </p>
+    <ul>
+      <li>Server DNS lokal fokus melayani cache internal.</li>
+      <li>Query eksternal diarahkan ke server upstream yang lebih cepat atau terpercaya.</li>
+      <li>Biasa digunakan untuk meningkatkan keamanan dan performa.</li>
+    </ul>
+
+    <h3 class="note-subtitle">DNSSEC (DNS Security Extensions)</h3>
+    <p class="note-paragraph">
+      <strong>DNSSEC</strong> adalah ekstensi keamanan pada DNS yang menambahkan tanda tangan digital 
+      untuk memastikan integritas dan keaslian jawaban DNS. 
+      Dengan DNSSEC, pengguna dapat yakin bahwa jawaban DNS tidak dimodifikasi oleh pihak ketiga (misalnya serangan cache poisoning).
+    </p>
+    <ul>
+      <li>Menjamin data DNS asli dari server otoritatif.</li>
+      <li>Mencegah manipulasi data (DNS spoofing).</li>
+      <li>Menggunakan kriptografi kunci publik untuk verifikasi.</li>
+    </ul>
+
+    <img src="img/dns.png" alt="Ilustrasi DNS" class="note-image" />
+
+    <h3 class="note-subtitle">Contoh Kasus Penggunaan</h3>
+    <ul>
+      <li>Perusahaan menggunakan DNS caching internal untuk mempercepat akses ke aplikasi SaaS.</li>
+      <li>ISP menggunakan DNS forwarding untuk mengoptimalkan resolusi domain bagi pelanggannya.</li>
+      <li>Bank menerapkan DNSSEC untuk memastikan pengguna tidak diarahkan ke situs palsu.</li>
+    </ul>
+  </main>
+</section>
+
+
 <section id="ip" class="note-container container">
   <main class="note-main">
     <h2 class="note-title text-center">IP (Internet Protocol)</h2>
@@ -3404,6 +4104,61 @@
     </ul>
   </main>
 </section>
+
+<section id="dmvpn" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">DMVPN (Dynamic Multipoint VPN)</h2>
+    <p class="note-paragraph">
+      <strong>DMVPN</strong> (Dynamic Multipoint VPN) adalah solusi VPN dari Cisco yang memungkinkan
+      komunikasi antar site (branch) melalui jaringan publik seperti Internet secara aman, efisien, dan fleksibel.
+      Dengan DMVPN, koneksi antar branch dapat dibuat secara dinamis tanpa perlu konfigurasi static tunnel untuk setiap pasangan site.
+    </p>
+
+    <h3 class="note-subtitle">Komponen Utama DMVPN</h3>
+    <ul>
+      <li><strong>Hub Router:</strong> Router pusat yang berfungsi sebagai titik kontrol utama untuk menghubungkan semua spoke.</li>
+      <li><strong>Spoke Router:</strong> Router cabang yang terhubung ke hub dan dapat membentuk tunnel dinamis ke spoke lain.</li>
+      <li><strong>mGRE (Multipoint GRE):</strong> Teknologi tunneling yang memungkinkan satu interface GRE digunakan untuk banyak tunnel.</li>
+      <li><strong>NHRP (Next Hop Resolution Protocol):</strong> Protokol yang memetakan IP publik dengan IP tunnel untuk membangun komunikasi dinamis.</li>
+      <li><strong>IPSec:</strong> Digunakan untuk mengamankan komunikasi antar site dengan enkripsi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Keuntungan Menggunakan DMVPN</h3>
+    <ul>
+      <li>Mengurangi konfigurasi karena spoke tidak perlu membuat tunnel langsung ke semua spoke lain.</li>
+      <li>Koneksi antar spoke dapat terbentuk otomatis (on-demand) tanpa melalui hub.</li>
+      <li>Skalabilitas tinggi, cocok untuk jaringan dengan banyak cabang.</li>
+      <li>Menghemat bandwidth karena traffic antar branch tidak harus selalu melewati hub.</li>
+      <li>Mendukung routing dinamis (OSPF, EIGRP, BGP).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Tahapan DMVPN</h3>
+    <ul>
+      <li><strong>Phase 1:</strong> Semua komunikasi antar spoke harus melewati hub.</li>
+      <li><strong>Phase 2:</strong> Spoke dapat berkomunikasi langsung dengan spoke lain setelah resolusi NHRP.</li>
+      <li><strong>Phase 3:</strong> Mendukung routing dinamis penuh dengan shortcut, lebih efisien untuk jaringan skala besar.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus Penggunaan</h3>
+    <ul>
+      <li>Perusahaan dengan kantor pusat dan banyak cabang di berbagai kota.</li>
+      <li>Jaringan retail yang membutuhkan komunikasi langsung antar cabang (misalnya sinkronisasi database).</li>
+      <li>Koneksi antar site sementara (misalnya event) tanpa konfigurasi manual tunnel satu per satu.</li>
+    </ul>
+
+    <img src="img/dmvpn.png" alt="Ilustrasi DMVPN Cisco" class="note-image" />
+
+    <h3 class="note-subtitle">Langkah Implementasi Dasar</h3>
+    <ul>
+      <li>Konfigurasi tunnel interface dengan mGRE di hub dan spoke.</li>
+      <li>Konfigurasi NHRP untuk mapping IP publik ke IP tunnel.</li>
+      <li>Aktifkan IPSec untuk keamanan data.</li>
+      <li>Tambahkan routing dinamis (EIGRP/OSPF/BGP) sesuai kebutuhan.</li>
+      <li>Uji komunikasi antar branch dan pastikan tunnel terbentuk otomatis.</li>
+    </ul>
+  </main>
+</section>
+
 
 
 

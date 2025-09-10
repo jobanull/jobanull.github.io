@@ -27,8 +27,8 @@
 
     <h3 class="note-subtitle">Jenis BGP</h3>
     <ul class="note-list">
-      <li><strong>EBGP (External BGP)</strong> – Digunakan untuk pertukaran rute antar-AS yang berbeda.</li>
-      <li><strong>IBGP (Internal BGP)</strong> – Digunakan untuk pertukaran rute antar-router dalam AS yang sama.</li>
+      <li><strong>EBGP (External BGP)</strong> - Digunakan untuk pertukaran rute antar-AS yang berbeda.</li>
+      <li><strong>IBGP (Internal BGP)</strong> - Digunakan untuk pertukaran rute antar-router dalam AS yang sama.</li>
     </ul>
 
     <h3 class="note-subtitle">Atribut Penting BGP</h3>
@@ -36,12 +36,25 @@
       BGP menggunakan sejumlah atribut untuk menentukan jalur terbaik. Beberapa yang paling umum:
     </p>
     <ul class="note-list">
-      <li><strong>Weight</strong> – Atribut lokal pada router Cisco, nilai lebih besar lebih diutamakan.</li>
-      <li><strong>Local Preference (LOCAL_PREF)</strong> – Menentukan preferensi jalur keluar dalam satu AS; nilai lebih tinggi lebih diutamakan.</li>
-      <li><strong>AS Path</strong> – Menyimpan urutan AS yang dilewati; jalur terpendek biasanya diutamakan.</li>
-      <li><strong>Multi-Exit Discriminator (MED)</strong> – Memberi sinyal jalur keluar yang diinginkan kepada AS tetangga.</li>
-      <li><strong>Next Hop</strong> – Menentukan alamat router berikut yang harus dilalui paket untuk mencapai tujuan.</li>
+      <li><strong>Weight</strong> - Atribut lokal pada router Cisco, nilai lebih besar lebih diutamakan.</li>
+      <li><strong>Local Preference (LOCAL_PREF)</strong> - Menentukan preferensi jalur keluar dalam satu AS; nilai lebih tinggi lebih diutamakan.</li>
+      <li><strong>AS Path</strong> - Menyimpan urutan AS yang dilewati; jalur terpendek biasanya diutamakan.</li>
+      <li><strong>Multi-Exit Discriminator (MED)</strong> - Memberi sinyal jalur keluar yang diinginkan kepada AS tetangga.</li>
+      <li><strong>Next Hop</strong> - Menentukan alamat router berikut yang harus dilalui paket untuk mencapai tujuan.</li>
     </ul>
+
+    <h3 class="note-subtitle">BGP Prepend</h3>
+    <p class="note-paragraph">
+      <strong>BGP Prepend</strong> (atau <em>AS Path Prepending</em>) adalah teknik untuk mengontrol <em>incoming traffic</em> 
+      dengan cara menambahkan nomor AS kita berulang kali pada atribut <strong>AS Path</strong> ketika mengiklankan rute. 
+      Tujuannya adalah membuat jalur tersebut terlihat lebih panjang sehingga router lain di internet akan lebih memilih 
+      jalur alternatif yang lebih pendek.
+    </p>
+    <p class="note-paragraph">
+      Contoh: Jika sebuah prefix diiklankan dengan AS Path <code>65001</code>, maka dengan prepend dapat diubah menjadi 
+      <code>65001 65001 65001</code>. Router tetangga akan menganggap jalur ini lebih panjang dan cenderung memilih jalur lain 
+      jika tersedia.
+    </p>
 
     <h3 class="note-subtitle">Kelebihan BGP</h3>
     <ul class="note-list">
@@ -57,6 +70,7 @@
       <li>Konsvergensi (waktu stabil) lebih lambat dibanding protokol routing internal seperti OSPF atau EIGRP.</li>
       <li>Sangat bergantung pada kebijakan dan pengaturan manual oleh administrator.</li>
     </ul>
+
 
      <h3 class="note-subtitle">CONTOH KASUS</h3>
       <ul class="note-list">
