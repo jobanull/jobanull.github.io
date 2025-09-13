@@ -79,6 +79,8 @@
         <li><a class="dropdown-item" href="#coliision-domain">Collision Domain</a></li>
         <li><a class="dropdown-item" href="#diffserv">DiffServ</a></li>
         <li><a class="dropdown-item" href="#intserv">IntServ</a></li>
+        <li><a class="dropdown-item" href="#spike">Spike</a></li>
+        <li><a class="dropdown-item" href="#scheduling">Scheduling</a></li>
         </ul>
     </li>
 
@@ -142,6 +144,7 @@
         <li><a class="dropdown-item" href="#unicast">Unicast</a></li>
         <li><a class="dropdown-item" href="#multicast">Multicast</a></li>
         <li><a class="dropdown-item" href="#broadcast">Broadcast</a></li>
+        <li><a class="dropdown-item" href="#uplink-downlink">Uplink & Downlink</a></li>
  
         </ul>
     </li>
@@ -178,6 +181,8 @@
         <li><a class="dropdown-item" href="#high-availability">High Availability</a></li>
         <li><a class="dropdown-item" href="#lisp">LISP</a></li>
         <li><a class="dropdown-item" href="#dns">DNS</a></li>
+        <li><a class="dropdown-item" href="#stackwise">Stack Wise</a></li>
+        <li><a class="dropdown-item" href="#device-naming">Device Naming Convention</a></li>
         </ul>
     </li>
 
@@ -201,9 +206,6 @@
         Traffic Type
         </a>
         <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#ip">IP (Internet Protocol)</a></li>
-        <li><a class="dropdown-item" href="#atm">ATM (Asynchronous Transfer Mode)</a></li>
-        <li><a class="dropdown-item" href="#fc-traffic">FC Traffic (Fibre Channel Traffic)</a></li>
         <li><a class="dropdown-item" href="#control-traffic">Control Traffic</a></li>
         <li><a class="dropdown-item" href="#ip-traffic">IP Traffic</a></li>
         <li><a class="dropdown-item" href="#ethernet-traffic">Ethernet Traffic</a></li>
@@ -214,6 +216,7 @@
         <li><a class="dropdown-item" href="#management-traffic">Management Traffic</a></li>
         <li><a class="dropdown-item" href="#control-plane">Control Plane Traffic</a></li>
         <li><a class="dropdown-item" href="#multicast">Multicast Traffic</a></li>
+        <li><a class="dropdown-item" href="#control-plane">Control Plane</a></li>
         </ul>
     </li>
 
@@ -339,10 +342,10 @@
 
     <h4 class="note-subsubtitle">Jenis-jenis Congestion Control</h4>
     <ul>
-      <li><strong>Slow Start</strong> – TCP memulai pengiriman dengan jumlah kecil (cwnd rendah) lalu meningkat secara eksponensial sampai mendeteksi batas kapasitas.</li>
-      <li><strong>Congestion Avoidance</strong> – Pertumbuhan cwnd dilakukan secara linear untuk mencegah kemacetan ketika jaringan mulai penuh.</li>
-      <li><strong>Fast Retransmit</strong> – Paket yang hilang segera dikirim ulang tanpa menunggu timer habis.</li>
-      <li><strong>Fast Recovery</strong> – Setelah retransmit, TCP tidak kembali ke slow start awal, tetapi menyesuaikan cwnd agar stabil.</li>
+      <li><strong>Slow Start</strong> - TCP memulai pengiriman dengan jumlah kecil (cwnd rendah) lalu meningkat secara eksponensial sampai mendeteksi batas kapasitas.</li>
+      <li><strong>Congestion Avoidance</strong> - Pertumbuhan cwnd dilakukan secara linear untuk mencegah kemacetan ketika jaringan mulai penuh.</li>
+      <li><strong>Fast Retransmit</strong> - Paket yang hilang segera dikirim ulang tanpa menunggu timer habis.</li>
+      <li><strong>Fast Recovery</strong> - Setelah retransmit, TCP tidak kembali ke slow start awal, tetapi menyesuaikan cwnd agar stabil.</li>
     </ul>
 
     <h4 class="note-subsubtitle">Ilustrasi Mekanisme</h4>
@@ -640,64 +643,130 @@
   </main>
 </section>
 
-<section id="intserv" class="note-container container">
+
+<section id="spike" class="note-container container">
   <main class="note-main">
-    <h2 class="note-title text-center">IntServ (Integrated Services)</h2>
+    <h2 class="note-title text-center">Spike (Lonjakan Trafik/Resource)</h2>
     <p class="note-paragraph">
-      <strong>IntServ</strong> (Integrated Services) adalah arsitektur Quality of Service (QoS) yang 
-      menyediakan jaminan kualitas end-to-end pada jaringan dengan cara melakukan <em>resource reservation</em>.
-      IntServ menggunakan protokol <strong>RSVP (Resource Reservation Protocol)</strong> untuk memesan 
-      bandwidth di sepanjang jalur yang dilewati oleh traffic tertentu.
+      <strong>Spike</strong> adalah lonjakan mendadak pada suatu metrik jaringan atau sistem, 
+      seperti penggunaan bandwidth, CPU, memori, atau latency. Spike biasanya bersifat 
+      <em>sementara</em> namun bisa berdampak signifikan terhadap performa jaringan atau aplikasi.
     </p>
 
-    <h3 class="note-subtitle">Komponen Utama IntServ</h3>
+    <h3 class="note-subtitle">Jenis Spike</h3>
     <ul>
-      <li><strong>RSVP (Resource Reservation Protocol):</strong> Protokol signaling yang digunakan untuk meminta dan mempertahankan alokasi resource jaringan.</li>
-      <li><strong>Admission Control:</strong> Mekanisme pada router untuk memutuskan apakah permintaan resource dapat dipenuhi atau tidak.</li>
-      <li><strong>Classifier:</strong> Mengidentifikasi dan mengklasifikasikan traffic berdasarkan flow.</li>
-      <li><strong>Scheduler:</strong> Mengatur bagaimana traffic diprioritaskan dan dialokasikan sesuai dengan resource yang tersedia.</li>
+      <li><strong>Network Spike:</strong> Lonjakan traffic di jaringan, bisa karena serangan DDoS, flooding, atau broadcast storm.</li>
+      <li><strong>CPU/Memory Spike:</strong> Resource server tiba-tiba naik drastis karena beban aplikasi atau proses yang tidak terkendali.</li>
+      <li><strong>Latency Spike:</strong> Delay jaringan tiba-tiba meningkat akibat congestion atau masalah routing.</li>
+      <li><strong>Error Spike:</strong> Lonjakan error atau packet loss dalam periode singkat.</li>
     </ul>
 
-    <h3 class="note-subtitle">Karakteristik IntServ</h3>
+    <h3 class="note-subtitle">Karakteristik Spike</h3>
     <ul>
-      <li>Menyediakan <strong>guaranteed QoS</strong> untuk aplikasi real-time seperti VoIP atau video streaming.</li>
-      <li>Menggunakan model <em>flow-based</em>, setiap aliran traffic membutuhkan signaling RSVP.</li>
-      <li>Memberikan kontrol ketat atas bandwidth, delay, dan jitter.</li>
-      <li>Lebih kompleks dibandingkan DiffServ, dengan overhead signaling lebih besar.</li>
+      <li>Terjadi <strong>secara tiba-tiba</strong> tanpa pola yang jelas.</li>
+      <li>Bersifat <strong>sementara</strong> (detik hingga menit).</li>
+      <li>Nilai metrik jauh di atas baseline normal.</li>
+      <li>Bisa berdampak pada QoS (Quality of Service) dan ketersediaan layanan.</li>
     </ul>
 
-    <h3 class="note-subtitle">Keuntungan IntServ</h3>
+    <h3 class="note-subtitle">Penyebab Umum</h3>
     <ul>
-      <li>QoS dapat dijamin secara end-to-end.</li>
-      <li>Sangat cocok untuk aplikasi yang sensitif terhadap delay (misalnya video conference, VoIP).</li>
-      <li>Kontrol ketat atas resource jaringan.</li>
+      <li>Serangan jaringan (DDoS, brute force, flooding).</li>
+      <li>Burst traffic aplikasi (misalnya update massal atau event online).</li>
+      <li>Bug atau proses looping pada aplikasi.</li>
+      <li>Kegagalan routing atau antrian buffer penuh.</li>
     </ul>
 
-    <h3 class="note-subtitle">Kekurangan IntServ</h3>
+    <h3 class="note-subtitle">Dampak Spike</h3>
     <ul>
-      <li>Tidak skalabel untuk jaringan besar karena setiap flow butuh state di setiap router.</li>
-      <li>Overhead signaling tinggi karena RSVP harus dikelola secara terus menerus.</li>
-      <li>Kompleks dalam implementasi dan manajemen.</li>
+      <li>Gangguan layanan (VoIP putus-putus, video buffering).</li>
+      <li>Server overload hingga crash.</li>
+      <li>Peningkatan delay dan packet loss.</li>
+      <li>Potensi downtime jika tidak segera ditangani.</li>
     </ul>
 
-    <h3 class="note-subtitle">Contoh Kasus Penggunaan</h3>
+    <h3 class="note-subtitle">Mitigasi & Penanganan</h3>
     <ul>
-      <li>Video conference antar cabang perusahaan dengan kebutuhan delay rendah.</li>
-      <li>Jaringan penelitian atau laboratorium yang memerlukan jaminan QoS penuh.</li>
-      <li>Aplikasi industri (SCADA) yang butuh jaminan latency konstan.</li>
+      <li>Gunakan monitoring untuk mendeteksi pola spike (Grafana, Zabbix, SolarWinds).</li>
+      <li>Terapkan QoS untuk membatasi dampak lonjakan traffic.</li>
+      <li>Gunakan rate limiting atau firewall untuk menahan serangan.</li>
+      <li>Lakukan kapasitas planning untuk menghadapi lonjakan traffic terprediksi.</li>
     </ul>
 
-    <img src="img/intserv.png" alt="Ilustrasi IntServ RSVP" class="note-image" />
+    <img src="img/spike.png" alt="Ilustrasi Spike pada Grafik" class="note-image" />
 
-    <h3 class="note-subtitle">Langkah Implementasi Dasar</h3>
+    <h3 class="note-subtitle">Contoh Kasus</h3>
     <ul>
-      <li>Aktifkan RSVP pada router untuk mendukung signaling resource reservation.</li>
-      <li>Konfigurasi admission control agar resource dialokasikan sesuai permintaan flow.</li>
-      <li>Tentukan kebijakan QoS (bandwidth, delay, jitter) untuk tiap flow.</li>
-      <li>Uji traffic real-time (misalnya VoIP/video) untuk memastikan QoS terpenuhi.</li>
+      <li>Lonjakan traffic mendadak saat e-commerce membuka flash sale.</li>
+      <li>CPU spike pada server aplikasi akibat query database tidak optimal.</li>
+      <li>Latency spike pada jaringan perusahaan saat terjadi broadcast storm.</li>
     </ul>
   </main>
 </section>
+
+<section id="scheduling" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Scheduling (FIFO, WFQ, LLQ)</h2>
+    <p class="note-paragraph">
+      <strong>Scheduling</strong> adalah mekanisme pengaturan antrian (queue) pada perangkat jaringan 
+      seperti router dan switch untuk menentukan urutan paket yang akan dikirimkan saat 
+      bandwidth terbatas. Tujuan utama scheduling adalah menjaga <em>QoS (Quality of Service)</em> 
+      agar aplikasi yang sensitif terhadap delay seperti VoIP atau video tetap berjalan lancar.
+    </p>
+
+    <h3 class="note-subtitle">Jenis Scheduling</h3>
+    <ul>
+      <li><strong>FIFO (First In, First Out):</strong> Paket yang masuk lebih dulu akan dikirim lebih dulu. 
+          Semua trafik diperlakukan sama tanpa prioritas.</li>
+      <li><strong>WFQ (Weighted Fair Queueing):</strong> Setiap flow trafik mendapat antrian terpisah 
+          dan dibagi adil berdasarkan bobot, sehingga trafik kecil (seperti VoIP) lebih cepat dilayani.</li>
+      <li><strong>LLQ (Low Latency Queueing):</strong> Kombinasi CBWFQ dengan priority queue khusus 
+          untuk trafik real-time. Memberikan prioritas mutlak pada VoIP/video, sedangkan trafik lain 
+          tetap diatur dengan adil.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Scheduling</h3>
+    <ul>
+      <li><strong>FIFO:</strong> Sederhana, tanpa prioritas, semua diperlakukan sama.</li>
+      <li><strong>WFQ:</strong> Adil, setiap flow mendapat porsi bandwidth, bisa diberi bobot.</li>
+      <li><strong>LLQ:</strong> Ada antrian prioritas untuk trafik sensitif delay, sisanya tetap terjaga.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Penyebab Scheduling Dibutuhkan</h3>
+    <ul>
+      <li>Keterbatasan bandwidth pada link WAN atau internet.</li>
+      <li>Trafik real-time (VoIP, video conference) membutuhkan delay rendah.</li>
+      <li>Kepadatan trafik data (FTP, HTTP, backup) bisa mengganggu layanan penting.</li>
+      <li>Adanya lonjakan trafik yang tidak merata antar aplikasi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Dampak Tanpa Scheduling</h3>
+    <ul>
+      <li>VoIP dan video mengalami delay, jitter, bahkan putus-putus.</li>
+      <li>Aplikasi kritikal kalah bandwidth dengan trafik besar (misal download/FTP).</li>
+      <li>Peningkatan packet loss akibat buffer penuh.</li>
+      <li>Kualitas layanan menurun secara keseluruhan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Mitigasi & Penerapan</h3>
+    <ul>
+      <li>Gunakan <strong>FIFO</strong> untuk jaringan sederhana tanpa trafik real-time.</li>
+      <li>Gunakan <strong>WFQ</strong> pada link dengan banyak flow agar adil.</li>
+      <li>Gunakan <strong>LLQ</strong> untuk menjamin trafik real-time (VoIP/video) tetap lancar.</li>
+      <li>Lakukan monitoring QoS untuk memastikan distribusi bandwidth sesuai kebutuhan.</li>
+    </ul>
+
+    <img src="img/scheduling.png" alt="Ilustrasi Scheduling (FIFO, WFQ, LLQ)" class="note-image" />
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Perusahaan menggunakan <strong>FIFO</strong> di jaringan internal sederhana tanpa VoIP.</li>
+      <li>Penyedia ISP menggunakan <strong>WFQ</strong> untuk membagi bandwidth adil antar pelanggan.</li>
+      <li>Sebuah call center memakai <strong>LLQ</strong> untuk memastikan VoIP tetap jernih meski ada trafik data besar.</li>
+    </ul>
+  </main>
+</section>
+
 
 
 <section id="handshake" class="note-container container">
@@ -1678,7 +1747,7 @@
     <ul>
       <li>Perusahaan menggunakan leased line T1 untuk koneksi data antar cabang pada era sebelum fiber optik populer.</li>
       <li>Operator telekomunikasi menggunakan T1 untuk backbone voice (trunk telephony).</li>
-      <li>Koneksi internet dedicated berbasis T1 untuk kantor kecil hingga menengah pada tahun 1990–2000an.</li>
+      <li>Koneksi internet dedicated berbasis T1 untuk kantor kecil hingga menengah pada tahun 1990-2000an.</li>
     </ul>
 
     <img src="img/t1.png" alt="Ilustrasi Jalur T1" class="note-image" />
@@ -1755,10 +1824,10 @@
 
     <h3 class="note-subtitle">Jenis CPE</h3>
     <ul>
-      <li><strong>Modem</strong> – perangkat dasar untuk koneksi DSL atau kabel.</li>
-      <li><strong>Router</strong> – mengatur routing trafik dan akses internet.</li>
-      <li><strong>ONT/ONU</strong> – perangkat terminasi untuk layanan fiber (FTTH).</li>
-      <li><strong>Firewall/UTM</strong> – untuk keamanan jaringan pelanggan.</li>
+      <li><strong>Modem</strong> - perangkat dasar untuk koneksi DSL atau kabel.</li>
+      <li><strong>Router</strong> - mengatur routing trafik dan akses internet.</li>
+      <li><strong>ONT/ONU</strong> - perangkat terminasi untuk layanan fiber (FTTH).</li>
+      <li><strong>Firewall/UTM</strong> - untuk keamanan jaringan pelanggan.</li>
     </ul>
 
     <h3 class="note-subtitle">Kelebihan</h3>
@@ -1918,7 +1987,7 @@
     <ul>
       <li><strong>One-to-Many:</strong> Satu sumber mengirim data ke banyak penerima dalam grup.</li>
       <li><strong>Selective Delivery:</strong> Hanya host yang bergabung ke grup multicast yang menerima data.</li>
-      <li><strong>Alamat Multicast:</strong> Menggunakan rentang IP khusus (224.0.0.0 – 239.255.255.255 untuk IPv4).</li>
+      <li><strong>Alamat Multicast:</strong> Menggunakan rentang IP khusus (224.0.0.0 - 239.255.255.255 untuk IPv4).</li>
       <li><strong>Efisien:</strong> Data dikirim sekali lalu didistribusikan ke banyak host melalui router multicast-aware.</li>
     </ul>
 
@@ -2017,6 +2086,63 @@
   </main>
 </section>
 
+<section id="uplink-downlink" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Uplink & Downlink</h2>
+    <p class="note-paragraph">
+      <strong>Uplink</strong> dan <strong>Downlink</strong> adalah istilah dalam komunikasi jaringan 
+      untuk menggambarkan arah aliran data. 
+      Uplink berarti mengirim data dari perangkat ke jaringan (ke arah atas), 
+      sedangkan Downlink berarti menerima data dari jaringan ke perangkat (ke arah bawah).
+    </p>
+
+    <h3 class="note-subtitle">Karakteristik Uplink</h3>
+    <ul>
+      <li><strong>Arah:</strong> Dari perangkat pengguna menuju jaringan/ISP/satelit.</li>
+      <li><strong>Contoh:</strong> Upload file ke cloud, mengirim email, streaming video ke server.</li>
+      <li><strong>Istilah lain:</strong> Disebut juga <em>upload</em> dalam konteks internet.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Downlink</h3>
+    <ul>
+      <li><strong>Arah:</strong> Dari jaringan/ISP/satelit menuju perangkat pengguna.</li>
+      <li><strong>Contoh:</strong> Download file, menerima video streaming, browsing website.</li>
+      <li><strong>Istilah lain:</strong> Disebut juga <em>download</em>.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Perbandingan Uplink & Downlink</h3>
+    <ul>
+      <li><strong>Uplink:</strong> Mengirim data keluar (user → jaringan).</li>
+      <li><strong>Downlink:</strong> Menerima data masuk (jaringan → user).</li>
+      <li><strong>Kecepatan:</strong> Pada banyak layanan internet, kecepatan downlink biasanya lebih tinggi dibanding uplink.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan & Keterbatasan</h3>
+    <ul>
+      <li><strong>Uplink:</strong> Penting untuk aktivitas upload, gaming online, video conference. Keterbatasannya biasanya bandwidth lebih kecil.</li>
+      <li><strong>Downlink:</strong> Dominan digunakan untuk konsumsi data (download, streaming). Biasanya lebih cepat, tapi tetap tergantung ISP.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li><strong>WhatsApp Call:</strong> Suara kita dikirim (uplink), suara lawan bicara diterima (downlink).</li>
+      <li><strong>YouTube:</strong> Mengunggah video (uplink), menonton video (downlink).</li>
+      <li><strong>Internet Satelit:</strong> Perangkat user mengirim sinyal ke satelit (uplink), lalu satelit mengirim balik data internet (downlink).</li>
+    </ul>
+
+    <img src="img/uplink-downlink.png" alt="Ilustrasi Uplink dan Downlink" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pilih paket internet dengan uplink memadai jika sering upload, meeting online, atau live streaming.</li>
+      <li>Pastikan kecepatan downlink cukup untuk kebutuhan streaming, gaming, dan download file besar.</li>
+      <li>Gunakan monitoring bandwidth untuk mengetahui penggunaan uplink/downlink secara real-time.</li>
+      <li>Optimalkan QoS (Quality of Service) di jaringan untuk aplikasi yang butuh uplink stabil (misalnya video conference).</li>
+    </ul>
+  </main>
+</section>
+
+
 <section id="nat" class="note-container container">
   <main class="note-main">
     <h2 class="note-title text-center">NAT (Network Address Translation)</h2>
@@ -2098,7 +2224,7 @@
     <h3 class="note-subtitle">Karakteristik</h3>
     <ul>
       <li>Berada di perbatasan antara jaringan ISP dan pelanggan.</li>
-      <li>Menyimpan tabel routing khusus untuk tiap pelanggan (VRF – Virtual Routing and Forwarding).</li>
+      <li>Menyimpan tabel routing khusus untuk tiap pelanggan (VRF - Virtual Routing and Forwarding).</li>
       <li>Mendukung protokol routing dinamis (BGP, OSPF, EIGRP) untuk pertukaran rute dengan CE.</li>
       <li>Dapat melayani banyak pelanggan sekaligus (multi-tenant).</li>
     </ul>
@@ -2114,7 +2240,7 @@
     <ul>
       <li>Konfigurasi kompleks, terutama untuk multi-tenant dan MPLS VPN.</li>
       <li>Biaya perangkat relatif tinggi.</li>
-      <li>Menjadi titik kritis – jika gagal, bisa mempengaruhi banyak pelanggan.</li>
+      <li>Menjadi titik kritis - jika gagal, bisa mempengaruhi banyak pelanggan.</li>
     </ul>
 
     <h3 class="note-subtitle">Contoh Kasus</h3>
@@ -2156,11 +2282,11 @@
 
     <h3 class="note-subtitle">Jenis Network Appliance</h3>
     <ul>
-      <li><strong>Firewall Appliance</strong> – perangkat khusus untuk keamanan jaringan.</li>
-      <li><strong>IDS/IPS Appliance</strong> – untuk deteksi dan pencegahan serangan.</li>
-      <li><strong>Load Balancer Appliance</strong> – membagi trafik aplikasi ke beberapa server.</li>
-      <li><strong>WAN Optimization Appliance</strong> – meningkatkan efisiensi penggunaan link WAN.</li>
-      <li><strong>Proxy / Caching Appliance</strong> – mempercepat akses web dan mengurangi bandwidth.</li>
+      <li><strong>Firewall Appliance</strong> - perangkat khusus untuk keamanan jaringan.</li>
+      <li><strong>IDS/IPS Appliance</strong> - untuk deteksi dan pencegahan serangan.</li>
+      <li><strong>Load Balancer Appliance</strong> - membagi trafik aplikasi ke beberapa server.</li>
+      <li><strong>WAN Optimization Appliance</strong> - meningkatkan efisiensi penggunaan link WAN.</li>
+      <li><strong>Proxy / Caching Appliance</strong> - mempercepat akses web dan mengurangi bandwidth.</li>
     </ul>
 
     <h3 class="note-subtitle">Kelebihan</h3>
@@ -2216,10 +2342,10 @@
 
     <h3 class="note-subtitle">Komponen Utama</h3>
     <ul>
-      <li><strong>Hypervisor</strong> – perangkat lunak (misalnya VMware ESXi, Microsoft Hyper-V, KVM) yang mengelola VM.</li>
-      <li><strong>Hardware</strong> – server dengan prosesor multi-core, RAM besar, dan storage cepat.</li>
-      <li><strong>VM</strong> – sistem operasi dan aplikasi yang berjalan di atas hypervisor.</li>
-      <li><strong>Management Tools</strong> – software pengelola VM (misalnya vCenter, SCVMM, OpenStack).</li>
+      <li><strong>Hypervisor</strong> - perangkat lunak (misalnya VMware ESXi, Microsoft Hyper-V, KVM) yang mengelola VM.</li>
+      <li><strong>Hardware</strong> - server dengan prosesor multi-core, RAM besar, dan storage cepat.</li>
+      <li><strong>VM</strong> - sistem operasi dan aplikasi yang berjalan di atas hypervisor.</li>
+      <li><strong>Management Tools</strong> - software pengelola VM (misalnya vCenter, SCVMM, OpenStack).</li>
     </ul>
 
     <h3 class="note-subtitle">Kelebihan</h3>
@@ -2232,7 +2358,7 @@
 
     <h3 class="note-subtitle">Kekurangan</h3>
     <ul>
-      <li>Ketergantungan pada hardware fisik – jika host gagal, semua VM ikut terdampak.</li>
+      <li>Ketergantungan pada hardware fisik - jika host gagal, semua VM ikut terdampak.</li>
       <li>Butuh spesifikasi tinggi agar bisa menjalankan banyak VM.</li>
       <li>Memerlukan manajemen yang baik untuk menghindari resource contention.</li>
     </ul>
@@ -2388,15 +2514,15 @@
 
     <h3 class="note-subtitle">Jenis Backhaul</h3>
     <ul>
-      <li><strong>Wired Backhaul</strong> – menggunakan fiber optic, kabel tembaga, atau Ethernet.</li>
-      <li><strong>Wireless Backhaul</strong> – menggunakan microwave, satelit, atau gelombang millimeter (mmWave).</li>
-      <li><strong>Hybrid Backhaul</strong> – kombinasi antara wired dan wireless untuk fleksibilitas.</li>
+      <li><strong>Wired Backhaul</strong> - menggunakan fiber optic, kabel tembaga, atau Ethernet.</li>
+      <li><strong>Wireless Backhaul</strong> - menggunakan microwave, satelit, atau gelombang millimeter (mmWave).</li>
+      <li><strong>Hybrid Backhaul</strong> - kombinasi antara wired dan wireless untuk fleksibilitas.</li>
     </ul>
 
     <h3 class="note-subtitle">Kelebihan</h3>
     <ul>
       <li>Mendukung kapasitas tinggi dengan latency rendah (terutama fiber backhaul).</li>
-      <li>Fleksibel – dapat disesuaikan dengan kondisi geografis (wireless untuk area terpencil).</li>
+      <li>Fleksibel - dapat disesuaikan dengan kondisi geografis (wireless untuk area terpencil).</li>
       <li>Penting untuk mendukung pertumbuhan trafik mobile dan broadband.</li>
     </ul>
 
@@ -3265,188 +3391,116 @@
   </main>
 </section>
 
-
-<section id="ip" class="note-container container">
+<section id="stackwise" class="note-container container">
   <main class="note-main">
-    <h2 class="note-title text-center">IP (Internet Protocol)</h2>
+    <h2 class="note-title text-center">Cisco StackWise</h2>
     <p class="note-paragraph">
-      <strong>IP (Internet Protocol)</strong> adalah protokol utama di jaringan komputer yang bertanggung jawab 
-      untuk pengalamatan dan pengiriman paket data dari sumber ke tujuan. IP memungkinkan perangkat di jaringan 
-      untuk saling berkomunikasi melalui alamat unik, yang disebut <em>IP address</em>, dan menjadi dasar 
-      bagi protokol lainnya seperti TCP dan UDP.
+      <strong>StackWise</strong> adalah teknologi dari Cisco yang memungkinkan beberapa switch fisik 
+      digabung menjadi satu kesatuan logis (logical switch). Dengan menggunakan kabel khusus StackWise, 
+      switch-switch tersebut akan bekerja seolah-olah hanya ada satu perangkat dengan satu control plane.
     </p>
 
-    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <h3 class="note-subtitle">Karakteristik Utama</h3>
     <ul>
-      <li>Menyediakan alamat unik untuk setiap perangkat di jaringan (IP address).</li>
-      <li>Mengatur pengiriman paket data dari sumber ke tujuan (routing).</li>
-      <li>Mendukung fragmentasi paket agar dapat melewati berbagai tipe jaringan.</li>
-      <li>Menjadi fondasi bagi protokol transport layer seperti TCP dan UDP.</li>
+      <li><strong>Stack Master</strong> - switch utama yang mengontrol manajemen, konfigurasi, dan distribusi.</li>
+      <li><strong>Member Switch</strong> - switch tambahan yang menambah kapasitas port dan forwarding.</li>
+      <li><strong>Redundansi</strong> - jika master gagal, otomatis salah satu member akan menjadi master baru.</li>
+      <li><strong>Skalabilitas</strong> - dapat menambah switch baru tanpa konfigurasi ulang dari nol.</li>
     </ul>
 
-    <h3 class="note-subtitle">Karakteristik IP</h3>
+    <h3 class="note-subtitle">Fungsi dan Manfaat</h3>
+    <p class="note-paragraph">
+      StackWise memberikan kemudahan manajemen, peningkatan ketersediaan, dan efisiensi jaringan. 
+      Semua switch dalam stack berbagi satu IP management dan tampil sebagai satu perangkat tunggal.
+    </p>
     <ul>
-      <li>IP versi 4 (IPv4) menggunakan alamat 32-bit, sedangkan IPv6 menggunakan 128-bit.</li>
-      <li>IP bersifat connectionless, artinya paket dikirim tanpa menjamin urutan atau keandalan.</li>
-      <li>Setiap paket IP memiliki header berisi informasi alamat, TTL, protokol, dan kontrol lainnya.</li>
-      <li>Dapat bekerja pada berbagai jenis jaringan fisik dan virtual.</li>
+      <li>Menyederhanakan administrasi jaringan karena hanya perlu satu konfigurasi.</li>
+      <li>Memperluas jumlah port dengan menambahkan switch baru ke dalam stack.</li>
+      <li>Meningkatkan keandalan karena ada failover otomatis ke switch lain.</li>
     </ul>
 
-    <h3 class="note-subtitle">Kelebihan</h3>
+    <h3 class="note-subtitle">Contoh Kasus Penggunaan</h3>
     <ul>
-      <li>Standar universal untuk komunikasi data antar perangkat.</li>
-      <li>Mendukung routing dinamis dan statis di jaringan skala kecil hingga besar.</li>
-      <li>Kompatibel dengan berbagai protokol transport dan aplikasi.</li>
-      <li>Mendukung fragmentasi paket untuk jaringan dengan MTU berbeda.</li>
+      <li>Digunakan pada <em>Distribution Layer Switch</em> untuk meningkatkan redundansi.</li>
+      <li>Di <em>Access Layer</em>, mempermudah manajemen banyak switch seolah-olah menjadi satu perangkat.</li>
+      <li>Pada jaringan kampus atau enterprise untuk mempermudah skalabilitas port.</li>
     </ul>
 
-    <h3 class="note-subtitle">Kekurangan</h3>
+    <img src="img/stackwise.png" alt="Ilustrasi Cisco StackWise" class="note-image" />
+  </main>
+</section>
+
+<section id="device-naming" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Device Naming Convention</h2>
+    <p class="note-paragraph">
+      <strong>Device Naming Convention</strong> adalah aturan penamaan perangkat dalam 
+      topologi jaringan. Tujuannya agar konsisten, mudah didokumentasikan, serta 
+      memudahkan identifikasi posisi dan fungsi perangkat dalam jaringan.
+    </p>
+
+    <h3 class="note-subtitle">Prinsip Umum</h3>
     <ul>
-      <li>Tidak menjamin keandalan pengiriman (harus didukung TCP jika perlu reliabilitas).</li>
-      <li>IPv4 terbatas pada jumlah alamat yang tersedia.</li>
-      <li>Tanpa mekanisme keamanan bawaan; membutuhkan protokol tambahan (IPSec, firewall).</li>
+      <li><strong>Konsistensi</strong> - semua perangkat dinamai dengan pola yang seragam.</li>
+      <li><strong>Deskriptif</strong> - nama mencerminkan fungsi/peran perangkat.</li>
+      <li><strong>Skalabilitas</strong> - memudahkan penambahan perangkat baru tanpa membingungkan dokumentasi.</li>
     </ul>
 
-    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <h3 class="note-subtitle">Contoh Penamaan di Enterprise</h3>
     <ul>
-      <li>Pengiriman paket data dari komputer A ke server B menggunakan IPv4 atau IPv6.</li>
-      <li>Routing internet dari ISP ke pelanggan melalui IP address unik.</li>
-      <li>Penerapan subnetting untuk membagi jaringan menjadi segmen yang lebih kecil.</li>
+      <li><strong>CSW</strong> - Core Switch</li>
+      <li><strong>DSW</strong> - Distribution Switch</li>
+      <li><strong>ASW</strong> - Access Switch</li>
+      <li><strong>CR</strong> - Core Router</li>
+      <li><strong>ER</strong> - Edge Router</li>
+      <li><strong>BR</strong> - Border Router</li>
+      <li><strong>DR</strong> - Designated Router</li>
+      <li><strong>BDR</strong> - Backup Designated Router</li>
+      <li><strong>DROTHER</strong> - Backup Designated Router</li>
     </ul>
 
-    <img src="img/ip.png" alt="Ilustrasi IP (Internet Protocol)" class="note-image" />
-
-    <h3 class="note-subtitle">Tips Praktis</h3>
+    <h3 class="note-subtitle">Contoh Penamaan di ISP/MPLS</h3>
     <ul>
-      <li>Gunakan subnetting untuk mengelola alamat IP secara efisien.</li>
-      <li>Pastikan IP address unik untuk setiap perangkat agar tidak terjadi konflik.</li>
-      <li>Gunakan IP versi terbaru (IPv6) untuk mengatasi keterbatasan IPv4.</li>
-      <li>Implementasikan keamanan tambahan seperti ACL atau IPSec untuk melindungi paket IP.</li>
+      <li><strong>CE</strong> - Customer Edge Router</li>
+      <li><strong>PE</strong> - Provider Edge Router</li>
+      <li><strong>P</strong> - Provider Core Router</li>
+      <li><strong>RPR</strong> - Regional/Remote Provider Router</li>
+      <li><strong>ICS</strong> - Internet/Core Switch</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Penamaan di Lab/Training</h3>
+    <ul>
+      <li><strong>P1ASW1</strong> - Pod 1, Access Switch 1</li>
+      <li><strong>P1DSW1</strong> - Pod 1, Distribution Switch 1</li>
+      <li><strong>P1CSW1</strong> - Pod 1, Core Switch 1</li>
+      <li><strong>P1R1</strong> - Pod 1, Router 1</li>
+      <li><strong>DR/BDR/DROTHER</strong> - Role router dalam OSPF (bukan nama tetap, tapi hasil pemilihan protokol)</li>
+    </ul>
+
+    <h3 class="note-subtitle">Pengertian Pod</h3>
+    <p class="note-paragraph">
+      <strong>Pod</strong> adalah satu set perangkat jaringan (router, switch, server, PC) 
+      yang dikonfigurasi sebagai satu lingkungan lab mandiri. Dalam pelatihan atau ujian 
+      sertifikasi, setiap peserta biasanya mendapatkan satu pod sehingga bisa berlatih 
+      dengan topologi yang sama tanpa mengganggu peserta lain. 
+      Penamaan perangkat dalam pod biasanya mengikuti pola:
+    </p>
+    <ul>
+      <li><strong>P1ASW1</strong> - Pod 1, Access Switch 1</li>
+      <li><strong>P1DSW1</strong> - Pod 1, Distribution Switch 1</li>
+      <li><strong>P1CSW1</strong> - Pod 1, Core Switch 1</li>
+      <li><strong>P1R1</strong> - Pod 1, Router 1</li>
+    </ul>
+
+    <h3 class="note-subtitle">Manfaat Naming Convention</h3>
+    <ul>
+      <li>Memudahkan identifikasi perangkat di diagram dan konfigurasi.</li>
+      <li>Mengurangi kesalahan saat troubleshooting dan deployment.</li>
+      <li>Menyediakan standar dokumentasi yang jelas di enterprise maupun ISP.</li>
     </ul>
   </main>
 </section>
 
-
-<section id="atm" class="note-container container">
-  <main class="note-main">
-    <h2 class="note-title text-center">ATM (Asynchronous Transfer Mode)</h2>
-    <p class="note-paragraph">
-      <strong>ATM (Asynchronous Transfer Mode)</strong> adalah teknologi jaringan yang menggunakan 
-      pengiriman data dalam bentuk <em>cell</em> berukuran tetap 53 byte. ATM dirancang untuk mendukung 
-      berbagai jenis trafik seperti suara, video, dan data dalam satu jaringan dengan kualitas layanan (QoS) yang terjamin.
-    </p>
-
-    <h3 class="note-subtitle">Fungsi Utama</h3>
-    <ul>
-      <li>Mengirim data dalam bentuk cell berukuran tetap untuk mempermudah switching dan multiplexing.</li>
-      <li>Mendukung integrasi suara, video, dan data dalam satu jaringan.</li>
-      <li>Memberikan jaminan QoS seperti delay rendah, jitter minim, dan bandwidth tertentu.</li>
-      <li>Mengoptimalkan pemanfaatan bandwidth pada jaringan backbone dan WAN.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Karakteristik ATM</h3>
-    <ul>
-      <li>Cell berukuran tetap 53 byte (5 byte header + 48 byte payload).</li>
-      <li>Connection-oriented, memerlukan setup sebelum data dikirim.</li>
-      <li>Dukungan QoS untuk berbagai tipe trafik (CBR, VBR, ABR, UBR).</li>
-      <li>Dapat digunakan pada jaringan LAN, WAN, dan backbone.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kelebihan</h3>
-    <ul>
-      <li>Mendukung multiple trafik (voice, video, data) dalam satu jaringan.</li>
-      <li>Kualitas layanan terjamin melalui QoS.</li>
-      <li>Cell berukuran tetap mempermudah switching cepat di jaringan backbone.</li>
-      <li>Skalabilitas tinggi untuk jaringan besar dan heterogen.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kekurangan</h3>
-    <ul>
-      <li>Kompleksitas konfigurasi dan manajemen lebih tinggi dibanding teknologi packet switching standar.</li>
-      <li>Overhead tinggi karena cell berukuran kecil (53 byte, header 5 byte).</li>
-      <li>Kurang efisien untuk trafik data burst besar dibandingkan Ethernet atau IP/MPLS.</li>
-      <li>Perangkat ATM relatif mahal dan jarang digunakan di jaringan modern.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Kasus</h3>
-    <ul>
-      <li>Jaringan backbone operator telekomunikasi menggunakan ATM untuk integrasi suara dan data.</li>
-      <li>Jaringan korporat yang membutuhkan QoS tinggi untuk video conference dan VoIP.</li>
-      <li>Penerapan ATM di WAN untuk menghubungkan beberapa kantor cabang dengan traffic berbeda.</li>
-    </ul>
-
-    <img src="img/atm.png" alt="Ilustrasi ATM (Asynchronous Transfer Mode)" class="note-image" />
-
-    <h3 class="note-subtitle">Tips Praktis</h3>
-    <ul>
-      <li>Gunakan ATM untuk jaringan yang membutuhkan QoS tinggi dan integrasi berbagai trafik.</li>
-      <li>Pastikan kapasitas link cukup untuk mendukung cell switching secara efisien.</li>
-      <li>Perhatikan konfigurasi QoS agar prioritas trafik kritikal tetap terjaga.</li>
-      <li>Pertimbangkan teknologi modern (IP/MPLS) jika ATM terlalu kompleks atau mahal.</li>
-    </ul>
-  </main>
-</section>
-
-<section id="fc-traffic" class="note-container container">
-  <main class="note-main">
-    <h2 class="note-title text-center">FC (Fibre Channel) Traffic</h2>
-    <p class="note-paragraph">
-      <strong>FC (Fibre Channel) Traffic</strong> adalah jenis lalu lintas jaringan yang menggunakan 
-      protokol Fibre Channel untuk komunikasi data berkecepatan tinggi, terutama di lingkungan 
-      penyimpanan (Storage Area Network / SAN). FC dirancang untuk transfer data blok antara server dan storage 
-      dengan latensi rendah dan reliabilitas tinggi.
-    </p>
-
-    <h3 class="note-subtitle">Fungsi Utama</h3>
-    <ul>
-      <li>Transfer data blok antara server dan storage secara cepat dan andal.</li>
-      <li>Mendukung SAN untuk kebutuhan enterprise dengan performa tinggi.</li>
-      <li>Menyediakan jalur dedicated dengan latency rendah untuk aplikasi kritikal.</li>
-      <li>Mendukung protokol SCSI over Fibre Channel untuk akses storage.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Karakteristik FC Traffic</h3>
-    <ul>
-      <li>Kecepatan tinggi: 1, 2, 4, 8, 16, 32, bahkan 64 Gbps.</li>
-      <li>Reliabel dan connection-oriented, memastikan data sampai tanpa kehilangan.</li>
-      <li>Umumnya menggunakan topologi point-to-point, arbitrated loop, atau switched fabric.</li>
-      <li>Dirancang khusus untuk trafik storage, bukan data jaringan umum.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kelebihan</h3>
-    <ul>
-      <li>Kecepatan transfer tinggi untuk kebutuhan storage enterprise.</li>
-      <li>Latency rendah sehingga cocok untuk database dan aplikasi kritikal.</li>
-      <li>Jaminan reliabilitas dengan error detection dan recovery bawaan.</li>
-      <li>Dedicated bandwidth mengurangi risiko gangguan dari trafik lain.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kekurangan</h3>
-    <ul>
-      <li>Biaya infrastruktur tinggi (HBA, switch, kabel fibre optic).</li>
-      <li>Kurang fleksibel dibanding Ethernet untuk kebutuhan general-purpose networking.</li>
-      <li>Topologi dan manajemen lebih kompleks, memerlukan keahlian khusus.</li>
-      <li>Tidak ideal untuk trafik data umum atau internet.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Kasus</h3>
-    <ul>
-      <li>Server database perusahaan mengakses storage SAN melalui FC untuk performa maksimal.</li>
-      <li>Data backup rutin ke disk array menggunakan FC traffic untuk kecepatan tinggi.</li>
-      <li>Virtualisasi server memanfaatkan FC untuk storage shared tanpa mengganggu jaringan LAN.</li>
-    </ul>
-
-    <img src="img/fc-traffic.png" alt="Ilustrasi FC (Fibre Channel) Traffic" class="note-image" />
-
-    <h3 class="note-subtitle">Tips Praktis</h3>
-    <ul>
-      <li>Pastikan infrastruktur FC (HBA, switch, kabel) sesuai standar dan performa yang dibutuhkan.</li>
-      <li>Gunakan topologi switched fabric untuk skala besar dan redundansi tinggi.</li>
-      <li>Monitor latensi dan throughput untuk menghindari bottleneck pada storage network.</li>
-      <li>Gunakan zoning dan security SAN untuk membatasi akses traffic FC yang sensitif.</li>
-    </ul>
-  </main>
-</section>
 
 <section id="control-traffic" class="note-container container">
   <main class="note-main">
@@ -3983,6 +4037,7 @@
     </ul>
   </main>
 </section>
+
 <section id="multicast" class="note-container container">
   <main class="note-main">
     <h2 class="note-title text-center">Multicast Traffic</h2>
@@ -4042,6 +4097,68 @@
     </ul>
   </main>
 </section>
+
+<section id="control-plane" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Control Plane</h2>
+    <p class="note-paragraph">
+      <strong>Control Plane</strong> adalah bagian dari arsitektur perangkat jaringan (router, switch, firewall) 
+      yang bertugas untuk mengambil keputusan bagaimana lalu lintas harus diarahkan. 
+      Control plane mengatur logika, protokol routing, serta pembuatan tabel forwarding yang nantinya digunakan oleh data plane.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Mengelola protokol routing (OSPF, EIGRP, BGP, IS-IS).</li>
+      <li>Membangun dan memelihara tabel routing (RIB).</li>
+      <li>Menghasilkan tabel forwarding (FIB) untuk data plane.</li>
+      <li>Menangani signaling, manajemen, dan update routing.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Control Plane</h3>
+    <ul>
+      <li>Berjalan di CPU perangkat jaringan.</li>
+      <li>Menggunakan control traffic (misalnya OSPF hello, BGP update, ARP, ICMP redirect).</li>
+      <li>Lebih fokus pada pengambilan keputusan, bukan forwarding paket.</li>
+      <li>Mengonsumsi lebih banyak resource (CPU & memori) dibanding data plane.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Memungkinkan pengambilan keputusan cerdas dalam routing & manajemen traffic.</li>
+      <li>Memberikan fleksibilitas dalam mendukung berbagai protokol routing.</li>
+      <li>Dapat dioptimalkan untuk high availability melalui protokol redundansi.</li>
+      <li>Terpisah dari data plane, sehingga forwarding tetap berjalan meski control plane sibuk.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Jika CPU overload, control plane bisa terganggu dan routing terputus.</li>
+      <li>Lebih rentan terhadap serangan DoS/DDoS berbasis control traffic.</li>
+      <li>Membutuhkan proteksi ekstra (misalnya Control Plane Policing - CoPP).</li>
+      <li>Tidak langsung mem-forward traffic user, hanya membuat keputusan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Router menghitung SPF (Shortest Path First) dengan OSPF untuk menentukan rute terbaik.</li>
+      <li>BGP mengiklankan dan menerima update routing antar Autonomous System.</li>
+      <li>Switch menjalankan STP (Spanning Tree Protocol) untuk mencegah loop.</li>
+      <li>ARP request & reply dikelola sebagai bagian dari control plane.</li>
+    </ul>
+
+    <img src="img/control-plane.png" alt="Ilustrasi Control Plane" class="note-image" />
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan <em>Control Plane Policing (CoPP)</em> untuk melindungi CPU dari serangan.</li>
+      <li>Monitor penggunaan CPU dan memori untuk menghindari overload.</li>
+      <li>Segmentasi management plane dan control plane untuk keamanan ekstra.</li>
+      <li>Pastikan protokol routing hanya diaktifkan di interface yang relevan.</li>
+    </ul>
+  </main>
+</section>
+
 
 <section id="tunnel" class="note-container container">
   <main class="note-main">
