@@ -142,11 +142,277 @@ router eigrp 100
 !
     </code></pre>
 
-    <h3 class="note-subtitle">Ringkasan</h3>
+    <h3 class="note-subtitle">Distribute-List pada EIGRP</h3>
     <p class="note-paragraph">
-      EIGRP adalah protokol routing interior canggih yang menggabungkan kecepatan konvergensi, efisiensi bandwidth,
-      dan kemampuan load balancing otomatis. Cocok untuk jaringan Cisco yang kompleks dan membutuhkan stabilitas tinggi.
+      <strong>Distribute-list</strong> adalah fitur di EIGRP (juga tersedia pada protokol routing lain) untuk mengontrol route yang masuk (<em>inbound</em>) atau keluar (<em>outbound</em>) dari routing table. 
+      Dengan kata lain, distribute-list digunakan untuk <em>filtering route</em> berdasarkan:
     </p>
+    <ul class="note-list">
+      <li><strong>Access-list (ACL)</strong> → filter berdasarkan network address.</li>
+      <li><strong>Prefix-list</strong> → filter lebih spesifik, lebih sering digunakan pada konfigurasi modern.</li>
+      <li><strong>Route-map</strong> → filter lebih fleksibel, dapat menggabungkan prefix dengan kondisi lain seperti tag atau metric.</li>
+    </ul>
+
+    <h4 class="note-subtitle">Jenis Filtering</h4>
+    <ul class="note-list">
+      <li>
+        <strong>Inbound distribute-list:</strong> mencegah route tertentu masuk ke routing table EIGRP. 
+        Efek: router tidak akan mengenal route tersebut sama sekali.
+        <pre><code>
+    router eigrp &lt;AS&gt;
+    distribute-list &lt;ACL/PREFIX&gt; in &lt;interface&gt;
+        </code></pre>
+      </li>
+      <li>
+        <strong>Outbound distribute-list:</strong> mencegah router meng-advertise route tertentu ke tetangganya. 
+        Efek: router tetap menyimpan route tersebut di routing table, tetapi tetangga tidak akan menerima.
+        <pre><code>
+    router eigrp &lt;AS&gt;
+    distribute-list &lt;ACL/PREFIX&gt; out &lt;interface&gt;
+        </code></pre>
+      </li>
+    </ul>
+
+    <h4 class="note-subtitle">Contoh Kasus</h4>
+    <p class="note-paragraph">
+      Misalnya kita memiliki topologi di mana R1 terhubung ke R2 lewat FastEthernet0/0. 
+      R1 memiliki jaringan 192.168.10.0/24 dan 192.168.20.0/24, tetapi kita hanya ingin meng-advertise 192.168.10.0/24 ke R2.
+    </p>
+
+    <p class="note-paragraph"><strong>Konfigurasi Outbound Filtering di R1:</strong></p>
+    <pre><code>
+    R1(config)# access-list 1 permit 192.168.10.0 0.0.0.255
+    R1(config)# router eigrp 100
+    R1(config-router)# network 192.168.10.0
+    R1(config-router)# network 192.168.20.0
+    R1(config-router)# distribute-list 1 out FastEthernet0/0
+    </code></pre>
+    <p class="note-paragraph">Hasil: R2 hanya belajar 192.168.10.0/24, tidak mengetahui 192.168.20.0/24.</p>
+
+    <p class="note-paragraph"><strong>Konfigurasi Inbound Filtering di R2:</strong></p>
+    <pre><code>
+    R2(config)# access-list 1 permit 192.168.10.0 0.0.0.255
+    R2(config)# router eigrp 100
+    R2(config-router)# distribute-list 1 in FastEthernet0/0
+    </code></pre>
+    <p class="note-paragraph">Hasil: R2 hanya menaruh 192.168.10.0/24 ke routing table, walaupun R1 sebenarnya mengirim dua network.</p>
+
+    <h4 class="note-subtitle">Ringkasan Penting</h4>
+    <ul class="note-list">
+      <li><strong>Inbound:</strong> route dicegah masuk ke routing table.</li>
+      <li><strong>Outbound:</strong> route dicegah keluar ke tetangga.</li>
+      <li>Bisa menggunakan <strong>ACL</strong>, <strong>prefix-list</strong>, atau <strong>route-map</strong> untuk filtering.</li>
+      <li>Outbound filtering lebih “ramah” → router tetap mengetahui route, hanya tidak dibagikan ke tetangga.</li>
+      <li>Inbound filtering bisa menyulitkan troubleshooting karena router benar-benar tidak mengenal route tersebut.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Prefix-List pada EIGRP</h3>
+    <p class="note-paragraph">
+      <strong>Prefix-list</strong> adalah cara modern menggantikan ACL untuk <em>filtering route</em>. 
+      Lebih fleksibel dan spesifik karena bisa mengatur:
+    </p>
+    <ul class="note-list">
+      <li><strong>Network prefix</strong> → misalnya 192.168.10.0/24</li>
+      <li><strong>Prefix length range</strong> → misalnya 192.168.0.0/16 le 24 (artinya semua subnet dari /16 sampai /24)</li>
+    </ul>
+    <p class="note-paragraph">
+      Prefix-list sangat umum dipakai untuk filtering pada EIGRP, OSPF, maupun BGP.
+    </p>
+
+    <h4 class="note-subtitle">Filtering Prefix-List Inbound</h4>
+    <p class="note-paragraph">
+      Inbound prefix-list diterapkan saat router menerima update EIGRP dari tetangga. 
+      Jika network tidak diizinkan oleh prefix-list, maka network tersebut tidak akan masuk ke routing table router.
+    </p>
+
+    <h4 class="note-subtitle">Sintaks Dasar</h4>
+    <p class="note-paragraph"><strong>Buat prefix-list:</strong></p>
+    <pre><code>
+    ip prefix-list &lt;NAMA&gt; seq &lt;NOMOR&gt; permit|deny &lt;prefix&gt; [ge &lt;n&gt;] [le &lt;m&gt;]
+    </code></pre>
+    <ul class="note-list">
+      <li><strong>ge</strong> = greater-equal (panjang prefix minimal)</li>
+      <li><strong>le</strong> = less-equal (panjang prefix maksimal)</li>
+    </ul>
+    <p class="note-paragraph"><strong>Terapkan di EIGRP:</strong></p>
+    <pre><code>
+    router eigrp &lt;AS&gt;
+    distribute-list prefix &lt;NAMA&gt; in &lt;interface&gt;
+    </code></pre>
+
+    <h4 class="note-subtitle">Contoh Kasus</h4>
+    <p class="note-paragraph">
+      Misalnya R1 meng-advertise ke R2 jaringan:
+      192.168.10.0/24, 192.168.20.0/24, 192.168.30.0/24. 
+      Tapi di R2, kita hanya ingin menerima 192.168.10.0/24 dan 192.168.20.0/24.
+    </p>
+    <pre><code>
+    R2(config)# ip prefix-list ALLOW_ROUTES seq 5 permit 192.168.10.0/24
+    R2(config)# ip prefix-list ALLOW_ROUTES seq 10 permit 192.168.20.0/24
+    R2(config)# ip prefix-list ALLOW_ROUTES seq 20 deny 0.0.0.0/0 le 32
+    !
+    R2(config)# router eigrp 100
+    R2(config-router)# distribute-list prefix ALLOW_ROUTES in FastEthernet0/0
+    </code></pre>
+    <p class="note-paragraph">Efek:</p>
+    <ul class="note-list">
+      <li>192.168.10.0/24 → diterima</li>
+      <li>192.168.20.0/24 → diterima</li>
+      <li>192.168.30.0/24 → ditolak (tidak ada di routing table)</li>
+    </ul>
+
+    <h4 class="note-subtitle">Contoh dengan Range Prefix</h4>
+    <p class="note-paragraph">
+      Jika ingin menerima semua subnet dari 192.168.0.0/16 dengan prefix /24 saja:
+    </p>
+    <pre><code>
+    ip prefix-list ALLOW_ROUTES seq 5 permit 192.168.0.0/16 ge 24 le 24
+    </code></pre>
+    <p class="note-paragraph">Artinya: hanya menerima network dengan /24 subnet dari 192.168.0.0/16.</p>
+
+    <h4 class="note-subtitle">Ringkasan</h4>
+    <ul class="note-list">
+      <li>Prefix-list lebih baik daripada ACL untuk filtering route.</li>
+      <li><strong>in</strong> → filter route yang masuk ke router.</li>
+      <li>Bisa menggunakan <strong>ge</strong> dan <strong>le</strong> untuk range prefix, membuat prefix-list lebih powerful.</li>
+      <li>Jangan lupa buat <strong>deny all</strong> di akhir jika ingin filtering strict (default ada implicit deny all).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Prefix-List Outbound pada EIGRP</h3>
+    <p class="note-paragraph">
+      <strong>Konsep:</strong> Prefix-list outbound digunakan untuk mengontrol route yang router iklankan ke tetangga.  
+      Bedanya dengan inbound:
+    </p>
+    <ul class="note-list">
+      <li><strong>Inbound:</strong> route tidak masuk ke routing table router.</li>
+      <li><strong>Outbound:</strong> router tetap menyimpan route di routing table, tetapi hanya mengiklankan route tertentu ke neighbor.</li>
+    </ul>
+    <p class="note-paragraph">
+      Outbound biasanya lebih aman untuk <em>policy control</em>, karena router tetap mengetahui semua route, tetapi tetangga hanya menerima route yang diizinkan.
+    </p>
+
+    <h4 class="note-subtitle">Sintaks Dasar</h4>
+    <p class="note-paragraph"><strong>Buat prefix-list:</strong></p>
+    <pre><code>
+    ip prefix-list &lt;NAMA&gt; seq &lt;NOMOR&gt; permit|deny &lt;prefix&gt; [ge &lt;n&gt;] [le &lt;m&gt;]
+    </code></pre>
+    <p class="note-paragraph"><strong>Terapkan ke EIGRP:</strong></p>
+    <pre><code>
+    router eigrp &lt;AS&gt;
+    distribute-list prefix &lt;NAMA&gt; out &lt;interface&gt;
+    </code></pre>
+
+    <h4 class="note-subtitle">Contoh Kasus</h4>
+    <p class="note-paragraph">
+      Misalnya R1 memiliki tiga jaringan: 192.168.10.0/24, 192.168.20.0/24, 192.168.30.0/24 pada EIGRP AS 100. 
+      Kita hanya ingin meng-advertise 192.168.10.0/24 dan 192.168.20.0/24 ke R2.
+    </p>
+    <pre><code>
+    R1(config)# ip prefix-list EXPORT_ROUTES seq 5 permit 192.168.10.0/24
+    R1(config)# ip prefix-list EXPORT_ROUTES seq 10 permit 192.168.20.0/24
+    R1(config)# ip prefix-list EXPORT_ROUTES seq 20 deny 0.0.0.0/0 le 32
+    !
+    R1(config)# router eigrp 100
+    R1(config-router)# network 192.168.10.0 0.0.0.255
+    R1(config-router)# network 192.168.20.0 0.0.0.255
+    R1(config-router)# network 192.168.30.0 0.0.0.255
+    R1(config-router)# distribute-list prefix EXPORT_ROUTES out FastEthernet0/0
+    </code></pre>
+    <p class="note-paragraph">Efek:</p>
+    <ul class="note-list">
+      <li>R1 tetap menyimpan ketiga route di routing table.</li>
+      <li>R2 hanya menerima 192.168.10.0/24 dan 192.168.20.0/24.</li>
+      <li>192.168.30.0/24 tidak pernah sampai ke R2.</li>
+    </ul>
+
+    <h4 class="note-subtitle">Contoh dengan Range Prefix</h4>
+    <p class="note-paragraph">
+      Jika hanya ingin meng-advertise network /24 dari blok 192.168.0.0/16:
+    </p>
+    <pre><code>
+    ip prefix-list EXPORT_ROUTES seq 5 permit 192.168.0.0/16 ge 24 le 24
+    </code></pre>
+    <p class="note-paragraph">Efek: hanya subnet /24 dari 192.168.0.0/16 yang diiklankan ke neighbor.</p>
+
+    <h4 class="note-subtitle">Ringkasan</h4>
+    <ul class="note-list">
+      <li>Prefix-list outbound → filter route yang keluar (advertise).</li>
+      <li>Router tetap menyimpan semua route, tetapi neighbor hanya menerima route yang di-permit.</li>
+      <li>Lebih fleksibel karena bisa menggunakan <strong>ge</strong> &amp; <strong>le</strong> untuk range subnet.</li>
+      <li>Cocok untuk policy-based control, misalnya ISP hanya meng-advertise sebagian prefix ke customer.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Filtering ACL Ganjil &amp; Genap pada EIGRP</h3>
+    <p class="note-paragraph">
+      <strong>Konsep:</strong> ACL (Access Control List) bisa digunakan untuk filtering route di EIGRP melalui distribute-list. 
+      Kita bisa membuat pola subnet berdasarkan angka terakhir (host portion) untuk membedakan network ganjil dan genap. Triknya: menggunakan <strong>wildcard mask</strong>.
+    </p>
+
+    <h4 class="note-subtitle">Ganjil &amp; Genap dalam IP Address</h4>
+    <p class="note-paragraph">
+      Misalnya network kelas C /24:
+    </p>
+    <ul class="note-list">
+      <li><strong>Ganjil:</strong> 192.168.1.1, 192.168.1.3, ...</li>
+      <li><strong>Genap:</strong> 192.168.1.0, 192.168.1.2, ...</li>
+    </ul>
+    <p class="note-paragraph">
+      Dalam routing, filtering biasanya di level network prefix, bukan host. Triknya: buat ACL yang “mengizinkan” subnet tertentu berdasarkan angka terakhir network.
+    </p>
+    <p class="note-paragraph">
+      Contoh blok /24 dari 192.168.0.0/16:
+    </p>
+    <ul class="note-list">
+      <li><strong>Genap:</strong> 192.168.0.0/24, 192.168.2.0/24, 192.168.4.0/24 …</li>
+      <li><strong>Ganjil:</strong> 192.168.1.0/24, 192.168.3.0/24, 192.168.5.0/24 …</li>
+    </ul>
+
+    <h4 class="note-subtitle">Cara Membuat ACL</h4>
+    <p class="note-paragraph"><strong>1. Filter Network Genap:</strong></p>
+    <pre><code>
+    access-list 10 permit 192.168.0.0 0.0.254.255
+    </code></pre>
+    <p class="note-paragraph">Penjelasan:</p>
+    <ul class="note-list">
+      <li>192.168.0.0 → base network</li>
+      <li>0.0.254.255 → wildcard mask: bit ke-2 dari belakang dipakai untuk “skip”, sehingga hanya network genap (/24) yang match</li>
+    </ul>
+
+    <p class="note-paragraph"><strong>2. Filter Network Ganjil:</strong></p>
+    <pre><code>
+    access-list 11 permit 192.168.1.0 0.0.254.255
+    </code></pre>
+    <p class="note-paragraph">Efek: semua subnet ganjil (/24) dari blok 192.168.0.0/16.</p>
+
+    <h4 class="note-subtitle">Contoh Kasus</h4>
+    <p class="note-paragraph">
+      Misalnya R1 meng-advertise banyak subnet dari 192.168.0.0/16, tetapi R2 hanya ingin menerima subnet genap.
+    </p>
+
+    <p class="note-paragraph"><strong>Inbound Filtering di R2:</strong></p>
+    <pre><code>
+    R2(config)# access-list 10 permit 192.168.0.0 0.0.254.255
+    R2(config)# router eigrp 100
+    R2(config-router)# distribute-list 10 in FastEthernet0/0
+    </code></pre>
+    <p class="note-paragraph">Efek: R2 hanya menerima route 192.168.0.0/24, 192.168.2.0/24, 192.168.4.0/24, dst. Semua subnet ganjil tidak masuk ke routing table.</p>
+
+    <p class="note-paragraph"><strong>Alternatif Outbound Filtering di R1:</strong></p>
+    <pre><code>
+    R1(config)# access-list 11 permit 192.168.1.0 0.0.254.255
+    R1(config)# router eigrp 100
+    R1(config-router)# distribute-list 11 out FastEthernet0/0
+    </code></pre>
+    <p class="note-paragraph">Efek: R1 tetap menyimpan semua route, tetapi ke R2 hanya subnet ganjil yang di-advertise.</p>
+
+    <h4 class="note-subtitle">Ringkasan</h4>
+    <ul class="note-list">
+      <li>ACL dengan wildcard mask dapat digunakan untuk filter “ganjil &amp; genap”.</li>
+      <li>0.0.254.255 → lompat 2 network sekali, cocok untuk filter genap/ganjil.</li>
+      <li>Bisa diterapkan di <strong>distribute-list in</strong> (kontrol route diterima) atau <strong>out</strong> (kontrol route diiklankan).</li>
+    </ul>
+
+
 
     <hr class="note-divider" />
   </main>
