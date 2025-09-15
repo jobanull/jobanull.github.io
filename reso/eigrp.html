@@ -1299,80 +1299,80 @@ show ip eigrp topology
 
     <h3 class="note-subtitle">EIGRP OTP (Over The Top) dengan Route Reflector 🚀</h3>
 
-<h4 class="note-subtitle">Konsep EIGRP OTP</h4>
-<p class="note-paragraph">
-OTP = Over The Top, fitur Cisco untuk membangun overlay EIGRP di atas transport IP (MPLS, Internet, Metro-E, GRE).
-</p>
-<ul class="note-list">
-  <li>Alternatif DMVPN/MPLS VPN → lebih ringan (tidak butuh GRE/NHRP).</li>
-  <li>OTP memanfaatkan <strong>LISP (Locator/ID Separation Protocol)</strong> sebagai control-plane mapping (EID ↔ RLOC).</li>
-  <li>Spoke hanya adjacency dengan Route Reflector (RR), bukan full-mesh.</li>
-</ul>
-<p class="note-paragraph">
-Singkatnya: <br>
-<strong>Spoke ↔ RR (EIGRP over LISP)</strong> → RR distribusikan route antar spoke.
-</p>
+    <h4 class="note-subtitle">Konsep EIGRP OTP</h4>
+    <p class="note-paragraph">
+    OTP = Over The Top, fitur Cisco untuk membangun overlay EIGRP di atas transport IP (MPLS, Internet, Metro-E, GRE).
+    </p>
+    <ul class="note-list">
+      <li>Alternatif DMVPN/MPLS VPN → lebih ringan (tidak butuh GRE/NHRP).</li>
+      <li>OTP memanfaatkan <strong>LISP (Locator/ID Separation Protocol)</strong> sebagai control-plane mapping (EID ↔ RLOC).</li>
+      <li>Spoke hanya adjacency dengan Route Reflector (RR), bukan full-mesh.</li>
+    </ul>
+    <p class="note-paragraph">
+    Singkatnya: <br>
+    <strong>Spoke ↔ RR (EIGRP over LISP)</strong> → RR distribusikan route antar spoke.
+    </p>
 
-<h4 class="note-subtitle">Peran Route Reflector (RR)</h4>
-<ul class="note-list">
-  <li>Mirip dengan BGP Route Reflector.</li>
-  <li>RR menerima update dari spoke → meneruskan ke spoke lain.</li>
-  <li>Mengurangi overhead adjacency (spoke hanya ke RR).</li>
-  <li>Sangat efisien untuk hub-spoke besar (100+ cabang).</li>
-</ul>
+    <h4 class="note-subtitle">Peran Route Reflector (RR)</h4>
+    <ul class="note-list">
+      <li>Mirip dengan BGP Route Reflector.</li>
+      <li>RR menerima update dari spoke → meneruskan ke spoke lain.</li>
+      <li>Mengurangi overhead adjacency (spoke hanya ke RR).</li>
+      <li>Sangat efisien untuk hub-spoke besar (100+ cabang).</li>
+    </ul>
 
-<h4 class="note-subtitle">Konfigurasi OTP dengan RR (High-level)</h4>
-<p class="note-paragraph"><strong>Topologi:</strong> R1 = RR (pusat), R2 &amp; R3 = Spoke.</p>
+    <h4 class="note-subtitle">Konfigurasi OTP dengan RR (High-level)</h4>
+    <p class="note-paragraph"><strong>Topologi:</strong> R1 = RR (pusat), R2 &amp; R3 = Spoke.</p>
 
-<p class="note-paragraph"><strong>1. Konfigurasi Route Reflector (R1)</strong></p>
-<pre><code>
-router eigrp OTP
- !
- address-family ipv4 unicast autonomous-system 100
-  af-interface default
-   no shutdown
-  exit-af-interface
-  topology base
-   exit-af-topology
- exit-address-family
- !
- address-family ipv4 unicast vrf RED autonomous-system 100
-  remote-neighbors source GigabitEthernet0/0 unicast-listen lisp-0
-  route-reflector-client
- exit-address-family
-</code></pre>
+    <p class="note-paragraph"><strong>1. Konfigurasi Route Reflector (R1)</strong></p>
+    <pre><code>
+    router eigrp OTP
+    !
+    address-family ipv4 unicast autonomous-system 100
+      af-interface default
+      no shutdown
+      exit-af-interface
+      topology base
+      exit-af-topology
+    exit-address-family
+    !
+    address-family ipv4 unicast vrf RED autonomous-system 100
+      remote-neighbors source GigabitEthernet0/0 unicast-listen lisp-0
+      route-reflector-client
+    exit-address-family
+    </code></pre>
 
-<p class="note-paragraph"><strong>2. Konfigurasi Spoke (R2 &amp; R3)</strong></p>
-<pre><code>
-router eigrp OTP
- !
- address-family ipv4 unicast vrf RED autonomous-system 100
-  remote-neighbors source GigabitEthernet0/0 unicast-listen lisp-0
- exit-address-family
-</code></pre>
+    <p class="note-paragraph"><strong>2. Konfigurasi Spoke (R2 &amp; R3)</strong></p>
+    <pre><code>
+    router eigrp OTP
+    !
+    address-family ipv4 unicast vrf RED autonomous-system 100
+      remote-neighbors source GigabitEthernet0/0 unicast-listen lisp-0
+    exit-address-family
+    </code></pre>
 
-<ul class="note-list">
-  <li><code>route-reflector-client</code> → aktifkan mode RR di R1.</li>
-  <li>Spoke adjacency hanya ke RR, tidak antar-spoke.</li>
-</ul>
+    <ul class="note-list">
+      <li><code>route-reflector-client</code> → aktifkan mode RR di R1.</li>
+      <li>Spoke adjacency hanya ke RR, tidak antar-spoke.</li>
+    </ul>
 
-<h4 class="note-subtitle">Verifikasi</h4>
-<pre><code>
-show ip eigrp neighbors
-show ip route eigrp
-</code></pre>
-<p class="note-paragraph">
-RR akan melihat semua spoke sebagai neighbor.  
-Route dari Spoke A → sampai ke Spoke B melalui RR.
-</p>
+    <h4 class="note-subtitle">Verifikasi</h4>
+    <pre><code>
+    show ip eigrp neighbors
+    show ip route eigrp
+    </code></pre>
+    <p class="note-paragraph">
+    RR akan melihat semua spoke sebagai neighbor.  
+    Route dari Spoke A → sampai ke Spoke B melalui RR.
+    </p>
 
-<h4 class="note-subtitle">Ringkasan</h4>
-<ul class="note-list">
-  <li><strong>EIGRP OTP</strong> = overlay EIGRP via LISP (tanpa GRE/NHRP).</li>
-  <li><strong>Route Reflector</strong> = pusat distribusi rute antar spoke.</li>
-  <li>Spoke adjacency hanya ke RR → scalable & hemat overhead.</li>
-  <li>Cocok untuk hub-spoke skala besar dengan EIGRP.</li>
-</ul>
+    <h4 class="note-subtitle">Ringkasan</h4>
+    <ul class="note-list">
+      <li><strong>EIGRP OTP</strong> = overlay EIGRP via LISP (tanpa GRE/NHRP).</li>
+      <li><strong>Route Reflector</strong> = pusat distribusi rute antar spoke.</li>
+      <li>Spoke adjacency hanya ke RR → scalable & hemat overhead.</li>
+      <li>Cocok untuk hub-spoke skala besar dengan EIGRP.</li>
+    </ul>
 
 
 

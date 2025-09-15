@@ -274,6 +274,1570 @@ set name=R7
     </p>
 
     <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+    <section class="note-section">
+  <h3 class="note-title">OSPF Virtual Link 📡</h3>
+
+  <h4 class="note-subtitle">Pengertian OSPF Virtual Link</h4>
+  <p class="note-paragraph">
+    Virtual Link adalah tunnel logical dalam OSPF yang menghubungkan area non-backbone (Area selain Area 0) ke Area 0 (Backbone) melalui transit area.
+  </p>
+  <p class="note-paragraph">
+    OSPF mensyaratkan bahwa semua area harus terhubung ke Area 0, karena Area 0 adalah backbone tempat semua routing OSPF dikonsolidasikan.
+    Kalau ada area yang terpisah dari Area 0 (misalnya karena desain topologi), maka Virtual Link dipakai untuk membuat jalur logical backbone.
+  </p>
+
+  <h4 class="note-subtitle">Kapan Virtual Link Dibutuhkan?</h4>
+  <ul class="note-list">
+    <li>Saat ada area yang tidak langsung terhubung ke Area 0.</li>
+    <li>Contoh topologi: <code>Area 1 --- Area 2 --- Area 0</code> → Area 1 tidak langsung ke Area 0, maka Virtual Link diperlukan melalui Area 2.</li>
+    <li>Saat backbone Area 0 terputus (split), Virtual Link bisa dipakai untuk menjembatani backbone yang terpisah.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Karakteristik OSPF Virtual Link</h4>
+  <ul class="note-list">
+    <li>Dibuat antara dua ABR (Area Border Router).</li>
+    <li>Transit area (area yang dilalui Virtual Link) <strong>tidak boleh</strong> Stub Area.</li>
+    <li>Virtual Link akan membuat logical adjacency seolah-olah router tersebut langsung terhubung ke Area 0.</li>
+    <li>Parameter yang dinegosiasikan mirip dengan link fisik (Hello/Dead Interval, Authentication, dll).</li>
+  </ul>
+
+  <h4 class="note-subtitle">Contoh Topologi</h4>
+  <pre class="note-paragraph"><code>
+[R1] --- Area 1 --- [R2] --- Area 2 --- [R3] --- Area 0
+
+R2 terhubung ke Area 1 dan Area 2
+R3 terhubung ke Area 2 dan Area 0
+
+Supaya Area 1 bisa terkoneksi ke Area 0 → Buat Virtual Link antara R2 (ABR di Area 1-2)
+dan R3 (ABR di Area 2-0) melalui Area 2.
+  </code></pre>
+
+  <h4 class="note-subtitle">Konfigurasi Virtual Link (Cisco IOS)</h4>
+  <p class="note-paragraph">Misalkan:</p>
+  <ul class="note-list">
+    <li>R2 ABR → Router ID: <code>2.2.2.2</code></li>
+    <li>R3 ABR → Router ID: <code>3.3.3.3</code></li>
+    <li>Transit area = <code>Area 2</code></li>
+  </ul>
+
+  <p class="note-paragraph"><strong>Pada R2:</strong></p>
+  <pre><code>
+router ospf 1
+ area 2 virtual-link 3.3.3.3
+  </code></pre>
+
+  <p class="note-paragraph"><strong>Pada R3:</strong></p>
+  <pre><code>
+router ospf 1
+ area 2 virtual-link 2.2.2.2
+  </code></pre>
+
+  <h4 class="note-subtitle">Verifikasi</h4>
+  <pre><code>
+show ip ospf virtual-links
+  </code></pre>
+  <p class="note-paragraph">
+    Jika sukses, statusnya akan <strong>UP</strong> dan adjacency ke Area 0 terbentuk.
+  </p>
+
+  <h4 class="note-subtitle">Kelemahan Virtual Link</h4>
+  <ul class="note-list">
+    <li>Membuat topologi lebih kompleks → sulit troubleshooting.</li>
+    <li>Mengurangi scalability (karena transit area tidak bisa stub).</li>
+    <li>Biasanya hanya solusi sementara → lebih baik desain ulang agar semua area langsung terkoneksi ke Area 0.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Ringkasan</h4>
+  <ul class="note-list">
+    <li>Virtual Link = cara membuat koneksi logical ke Area 0 melalui transit area.</li>
+    <li>Hanya dibuat antara ABR dan transit area tidak boleh stub.</li>
+    <li>Gunakan sebagai solusi sementara; desain topologi ideal tetap seluruh area terhubung langsung ke Area 0.</li>
+  </ul>
+</section>
+
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+    <!-- OSPF over GRE Tunnel -->
+<section class="note-section">
+  <h3 class="note-title">OSPF over GRE Tunnel 🌐</h3>
+
+  <h4 class="note-subtitle">Pengertian OSPF over GRE Tunnel</h4>
+  <p class="note-paragraph">
+    GRE (Generic Routing Encapsulation) adalah protokol tunneling yang bisa membawa berbagai protokol (termasuk OSPF) melalui jaringan IP yang sudah ada.
+  </p>
+  <p class="note-paragraph">
+    OSPF over GRE digunakan untuk menjalankan OSPF di jaringan yang tidak langsung terhubung atau melewati WAN/Internet.
+  </p>
+  <p class="note-paragraph">
+    Jadi, GRE membuat <em>“virtual link fisik”</em> untuk OSPF, tapi di atas IP publik/private network.
+  </p>
+
+  <h4 class="note-subtitle">Kapan Digunakan?</h4>
+  <ul class="note-list">
+    <li>Menghubungkan OSPF Area 0 antar lokasi yang terpisah secara fisik.</li>
+    <li>Menghubungkan non-backbone area yang tidak bisa langsung ke Area 0.</li>
+    <li>Ketika infrastruktur fisik tidak mendukung OSPF adjacency langsung, misalnya ISP MPLS atau internet publik.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Karakteristik OSPF over GRE</h4>
+  <ul class="note-list">
+    <li>OSPF melihat GRE sebagai link point-to-point.</li>
+    <li>Bisa digunakan di atas IP publik tanpa harus mengubah desain OSPF inti.</li>
+    <li>Memungkinkan OSPF tetap berjalan normal, meskipun jalur fisik sebenarnya berbeda.</li>
+    <li>GRE tunnel bisa dikombinasikan dengan IPsec jika ingin keamanan.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Contoh Topologi</h4>
+  <pre class="note-paragraph"><code>
+Site A (R1) ---------- Internet ---------- Site B (R2)
+        | GRE Tunnel | 
+        OSPF Area 0  
+
+R1 dan R2 seolah-olah langsung terhubung ke Area 0 melalui tunnel.
+OSPF adjacency terbentuk di atas GRE tunnel.
+  </code></pre>
+
+  <h4 class="note-subtitle">Konfigurasi OSPF over GRE (Cisco IOS)</h4>
+  <p class="note-paragraph"><strong>Misalkan:</strong></p>
+  <ul class="note-list">
+    <li>Tunnel IP: R1 = <code>10.10.10.1</code>, R2 = <code>10.10.10.2</code></li>
+    <li>Tunnel source/destination: R1 = <code>192.168.1.1</code>, R2 = <code>192.168.2.1</code></li>
+  </ul>
+
+  <p class="note-paragraph"><strong>1️⃣ Konfigurasi Tunnel</strong></p>
+  <pre><code>
+R1
+interface Tunnel0
+ ip address 10.10.10.1 255.255.255.0
+ tunnel source 192.168.1.1
+ tunnel destination 192.168.2.1
+
+R2
+interface Tunnel0
+ ip address 10.10.10.2 255.255.255.0
+ tunnel source 192.168.2.1
+ tunnel destination 192.168.1.1
+  </code></pre>
+
+  <p class="note-paragraph"><strong>2️⃣ Konfigurasi OSPF</strong></p>
+  <pre><code>
+R1
+router ospf 1
+ network 10.10.10.0 0.0.0.255 area 0
+
+R2
+router ospf 1
+ network 10.10.10.0 0.0.0.255 area 0
+  </code></pre>
+
+  <p class="note-paragraph">
+    Setelah konfigurasi, OSPF akan membentuk adjacency melalui <code>Tunnel0</code> seolah-olah R1 dan R2 terhubung langsung.
+  </p>
+
+  <h4 class="note-subtitle">Kelebihan OSPF over GRE</h4>
+  <ul class="note-list">
+    <li>Bisa menembus jaringan yang berbeda subnet atau ISP.</li>
+    <li>Tidak tergantung pada topologi fisik.</li>
+    <li>Fleksibel, bisa dikombinasikan dengan keamanan (IPsec).</li>
+  </ul>
+
+  <h4 class="note-subtitle">Kekurangan</h4>
+  <ul class="note-list">
+    <li>Tambah overhead karena GRE encapsulation.</li>
+    <li>Latensi sedikit lebih tinggi dibanding link langsung.</li>
+    <li>Harus memastikan MTU tunnel cukup agar OSPF packet tidak fragment.</li>
+  </ul>
+</section>
+
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+    <!-- OSPF Standar Area -->
+<section class="note-section">
+  <h3 class="note-title">OSPF Standar Area 🟦</h3>
+
+  <h4 class="note-subtitle">Pengertian OSPF Standar Area</h4>
+  <p class="note-paragraph">
+    Standar Area adalah tipe area OSPF default jika kita tidak menandainya sebagai khusus (Stub, Totally Stub, NSSA, dll).
+  </p>
+  <p class="note-paragraph">
+    Semua router di area ini mempunyai link ke backbone (Area 0) secara langsung atau melalui ABR.
+  </p>
+  <p class="note-paragraph">
+    Router dalam standar area dapat menerima semua jenis LSA (Link State Advertisement) dari OSPF:
+  </p>
+  <ul class="note-list">
+    <li><strong>LSA Type 1</strong>: Router LSA (internal area)</li>
+    <li><strong>LSA Type 2</strong>: Network LSA (broadcast/multi-access)</li>
+    <li><strong>LSA Type 3</strong>: Summary LSA (dari ABR)</li>
+    <li><strong>LSA Type 4</strong>: ASBR Summary LSA</li>
+    <li><strong>LSA Type 5</strong>: External LSA (dari ASBR)</li>
+  </ul>
+
+  <h4 class="note-subtitle">Karakteristik Standar Area</h4>
+  <ul class="note-list">
+    <li>Menerima semua jenis LSA → routing lengkap.</li>
+    <li>Tidak ada pembatasan update eksternal.</li>
+    <li>Bisa menjadi area backbone (Area 0) atau area non-backbone.</li>
+    <li>Biasanya digunakan di jaringan internal utama yang membutuhkan routing penuh.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Kelebihan</h4>
+  <ul class="note-list">
+    <li>Mendapatkan informasi routing lengkap.</li>
+    <li>Fleksibel untuk pertumbuhan jaringan.</li>
+    <li>Cocok untuk area inti atau pusat distribusi.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Kekurangan</h4>
+  <ul class="note-list">
+    <li>Bisa lebih boros resource pada router karena menyimpan semua LSA.</li>
+    <li>Lebih kompleks dibanding area khusus seperti Stub/NSSA.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Contoh Topologi</h4>
+  <pre class="note-paragraph"><code>
+          Area 0 (Backbone)
+        /        |        \
+   Area 1      Area 2    Area 3
+(Standard Area) 
+
+Semua area non-backbone bisa tetap standar area jika ingin menerima routing penuh.
+ABR akan meneruskan semua summary LSA ke area tersebut.
+  </code></pre>
+</section>
+
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+    <!-- OSPF Stub Area -->
+<section class="note-section">
+  <h3 class="note-title">OSPF Stub Area 🌿</h3>
+
+  <h4 class="note-subtitle">Pengertian OSPF Stub Area</h4>
+  <p class="note-paragraph">
+    Stub Area adalah area OSPF yang tidak menerima <strong>LSA Type 5 (External LSA)</strong> dari ASBR.
+  </p>
+  <p class="note-paragraph">
+    Tujuannya: mengurangi ukuran routing table dan menghemat resource router.
+  </p>
+  <p class="note-paragraph">
+    Semua paket eksternal (dari luar OSPF) diarahkan ke default route yang diberikan oleh ABR.
+  </p>
+
+  <h4 class="note-subtitle">Karakteristik Stub Area</h4>
+  <ul class="note-list">
+    <li>Tidak ada LSA Type 5 (External LSA).</li>
+    <li>Menerima LSA Type 1, 2, dan 3 saja.</li>
+    <li>ABR menyediakan default route (<code>0.0.0.0</code>) untuk area ini.</li>
+    <li>Tidak bisa menjadi Area 0 (Backbone).</li>
+    <li>Biasanya digunakan di area ujung (edge area) jaringan internal.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Keuntungan Stub Area</h4>
+  <ul class="note-list">
+    <li>Mengurangi ukuran routing table.</li>
+    <li>Mengurangi penggunaan CPU dan memory pada router di area tersebut.</li>
+    <li>Cocok untuk area dengan banyak router tapi sedikit koneksi ke luar.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Kekurangan</h4>
+  <ul class="note-list">
+    <li>Tidak bisa langsung mencapai external network selain default route.</li>
+    <li>Kurang fleksibel dibanding Standard Area.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Contoh Topologi</h4>
+  <pre class="note-paragraph"><code>
+          Area 0 (Backbone)
+                |
+              ABR
+                |
+           Stub Area (Area 1)
+
+Router di Stub Area akan menerima routing internal (LSA 1, 2) 
+dan summary dari ABR (LSA 3),
+tapi semua eksternal route (LSA 5) diganti default route.
+  </code></pre>
+
+  <h4 class="note-subtitle">Konfigurasi Stub Area (Cisco IOS)</h4>
+  <pre><code>
+router ospf 1
+ area 1 stub
+  </code></pre>
+  <p class="note-paragraph">
+    Secara otomatis, ABR akan menyebarkan default route ke area ini.
+  </p>
+</section>
+
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+    <!-- OSPF Totally Stub Area -->
+<section class="note-section">
+  <h3 class="note-title">OSPF Totally Stub Area 🚫🌿</h3>
+
+  <h4 class="note-subtitle">Pengertian OSPF Totally Stub Area</h4>
+  <p class="note-paragraph">
+    Totally Stub Area adalah area OSPF yang tidak menerima <strong>LSA Type 3 (Summary)</strong> maupun <strong>Type 5 (External)</strong> dari ABR.
+  </p>
+  <p class="note-paragraph">
+    Tujuannya: meminimalkan routing table di area ujung dengan hanya mengandalkan <strong>default route</strong> untuk semua tujuan di luar area.
+  </p>
+
+  <h4 class="note-subtitle">Karakteristik Totally Stub Area</h4>
+  <ul class="note-list">
+    <li>Tidak ada LSA Type 3 → tidak ada info tentang network di area lain.</li>
+    <li>Tidak ada LSA Type 5 → tidak ada info tentang network eksternal.</li>
+    <li>Semua paket keluar area diarahkan ke <code>0.0.0.0</code> yang diberikan ABR.</li>
+    <li>Tidak bisa menjadi Area 0 (Backbone).</li>
+    <li>Hanya menerima LSA Type 1 (Router LSA) dan LSA Type 2 (Network LSA) di dalam area itu sendiri.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Keuntungan Totally Stub Area</h4>
+  <ul class="note-list">
+    <li>Routing table sangat kecil → hemat memori dan CPU.</li>
+    <li>Cocok untuk area edge dengan banyak router tapi hanya sedikit jaringan internal.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Kekurangan</h4>
+  <ul class="note-list">
+    <li>Tidak tahu rute spesifik ke area lain → semua diarahkan ke default route.</li>
+    <li>Kurang fleksibel untuk koneksi langsung ke area lain atau eksternal.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Contoh Topologi</h4>
+  <pre class="note-paragraph"><code>
+          Area 0 (Backbone)
+                |
+              ABR
+                |
+   Totally Stub Area (Area 1)
+
+Router di Totally Stub Area hanya menyimpan routing internal area
+dan default route ke ABR untuk semua tujuan lain.
+  </code></pre>
+
+  <h4 class="note-subtitle">Konfigurasi TSA (Cisco IOS)</h4>
+  <pre><code>
+router ospf 1
+ area 1 stub no-summary
+  </code></pre>
+  <p class="note-paragraph">
+    <code>no-summary</code> menandakan tidak menerima LSA Type 3 → menjadikannya <strong>Totally Stub</strong>.  
+    ABR akan menyebarkan satu default route untuk seluruh area ini.
+  </p>
+</section>
+
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+    <!-- OSPF NSSA Area -->
+<section class="note-section">
+  <h3 class="note-title">OSPF NSSA (Not-So-Stubby Area) 🌐</h3>
+
+  <h4 class="note-subtitle">Pengertian NSSA Area</h4>
+  <p class="note-paragraph">
+    NSSA (Not-So-Stubby Area) adalah area <em>stub</em> yang diperbolehkan menerima beberapa <strong>external routes</strong> dari <strong>ASBR internal</strong> tanpa harus menerima semua <strong>LSA Type 5</strong> dari OSPF eksternal.
+  </p>
+  <p class="note-paragraph">
+    Digunakan untuk area ujung yang perlu mengiklankan beberapa network eksternal, tapi tetap ingin menghemat routing table.
+  </p>
+  <p class="note-paragraph">
+    LSA eksternal dikonversi menjadi <strong>Type 7</strong> di dalam NSSA, dan diterjemahkan menjadi <strong>Type 5</strong> saat keluar area oleh ABR.
+  </p>
+
+  <h4 class="note-subtitle">Karakteristik NSSA</h4>
+  <ul class="note-list">
+    <li>Tidak menerima LSA Type 5 dari OSPF eksternal (seperti Stub Area).</li>
+    <li>Bisa mengiklankan internal ASBR → LSA Type 7 diubah menjadi Type 5 saat diteruskan ke backbone.</li>
+    <li>Bisa menjadi <strong>Totally NSSA</strong> → tidak menerima LSA Type 3 juga (summary dari ABR).</li>
+    <li>Cocok untuk area edge yang butuh mengiklankan beberapa eksternal route tapi tetap kecil routing table.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Totally NSSA</h4>
+  <ul class="note-list">
+    <li>Sama seperti NSSA tapi lebih ketat.</li>
+    <li>Tidak menerima LSA Type 3 (Summary) → seperti Totally Stub.</li>
+    <li>Hanya mengandalkan default route dari ABR untuk network lain di luar area.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Keuntungan NSSA / Totally NSSA</h4>
+  <ul class="note-list">
+    <li>Routing table lebih kecil dibanding Standard Area.</li>
+    <li>Tetap bisa mengiklankan network eksternal lokal (misal: MPLS VPN, internet link).</li>
+    <li>Flexible untuk desain area edge yang butuh “kontrol” LSA.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Kekurangan</h4>
+  <ul class="note-list">
+    <li>Konfigurasi lebih kompleks dibanding Stub/Totally Stub.</li>
+    <li>Perlu perhatian <strong>LSA Type 7 → 5 translation</strong> di ABR.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Contoh Topologi</h4>
+  <pre class="note-paragraph"><code>
+          Area 0 (Backbone)
+                |
+              ABR
+                |
+            NSSA Area (Area 2)
+          /                     \
+     ASBR (eksternal)        Internal Routers
+
+ASBR di NSSA mengiklankan eksternal route → LSA Type 7
+→ diterjemahkan ABR ke Type 5 untuk backbone.
+Router internal NSSA tetap hemat routing table.
+  </code></pre>
+
+  <h4 class="note-subtitle">Konfigurasi NSSA (Cisco IOS)</h4>
+  <pre><code>
+router ospf 1
+ area 2 nssa
+  </code></pre>
+
+  <h4 class="note-subtitle">Konfigurasi Totally NSSA</h4>
+  <pre><code>
+router ospf 1
+ area 2 nssa no-summary
+  </code></pre>
+  <p class="note-paragraph">
+    <code>no-summary</code> → menandakan tidak menerima LSA Type 3, sama seperti <strong>Totally Stub</strong>.
+  </p>
+</section>
+
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+    <!-- OSPF External Route Type 1 (E1) -->
+<section class="note-section">
+  <h3 class="note-title">OSPF External Route Type 1 (E1) 🌍</h3>
+
+  <h4 class="note-subtitle">Pengertian E1</h4>
+  <p class="note-paragraph">
+    E1 adalah tipe rute eksternal OSPF di mana biaya total (<em>metric</em>) ke jaringan eksternal
+    menggabungkan:
+  </p>
+  <ul class="note-list">
+    <li><strong>Cost internal OSPF</strong> dari router lokal ke ASBR (router yang memasukkan rute eksternal).</li>
+    <li><strong>External cost</strong> yang diberikan ASBR itu sendiri.</li>
+  </ul>
+  <p class="note-paragraph"><strong>Rumus total metric E1:</strong></p>
+  <pre><code>Total Cost = Cost ke ASBR + External Cost</code></pre>
+  <p class="note-paragraph">Biasanya digunakan untuk <em>load balancing</em> ketika ada banyak jalur ke rute eksternal.</p>
+
+  <h4 class="note-subtitle">Karakteristik E1</h4>
+  <ul class="note-list">
+    <li>Biaya internal OSPF dihitung sampai ke ASBR.</li>
+    <li>External metric (yang diiklankan ASBR) ditambahkan ke biaya internal.</li>
+    <li>Digunakan ketika ingin menghitung jalur terpendek ke jaringan eksternal.</li>
+    <li>Default OSPF eksternal di Cisco biasanya E2, tapi bisa diganti E1.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Perbedaan E1 vs E2</h4>
+  <table class="note-table">
+    <thead>
+      <tr>
+        <th>Fitur</th>
+        <th>E1</th>
+        <th>E2</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Biaya total</td>
+        <td>Cost internal + external</td>
+        <td>Hanya external cost</td>
+      </tr>
+      <tr>
+        <td>Pengaruh jalur internal</td>
+        <td>Ada</td>
+        <td>Tidak</td>
+      </tr>
+      <tr>
+        <td>Cocok untuk</td>
+        <td>Banyak jalur ke ASBR</td>
+        <td>Jalur tunggal ke ASBR</td>
+      </tr>
+      <tr>
+        <td>Default Cisco</td>
+        <td>Tidak</td>
+        <td>Ya</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4 class="note-subtitle">Contoh Topologi</h4>
+  <pre class="note-paragraph"><code>
+R1 --(OSPF)-- R2 -- ASBR -- Internet
+
+Jika tipe E1:
+R1 menghitung cost R1 → R2 → ASBR + external cost.
+
+Jika tipe E2:
+R1 hanya menggunakan external cost dari ASBR,
+jalur internal OSPF tidak diperhitungkan.
+  </code></pre>
+
+  <h4 class="note-subtitle">Konfigurasi E1 (Cisco IOS)</h4>
+  <pre><code>
+router ospf 1
+ redistribute static subnets metric-type 1
+  </code></pre>
+  <p class="note-paragraph">
+    <code>metric-type 1</code> → mengiklankan sebagai E1.
+  </p>
+</section>
+
+
+<!-- Distribute-List di OSPF -->
+<section class="note-section">
+  <h3 class="note-title">Distribute-List di OSPF 🚦</h3>
+
+  <h4 class="note-subtitle">Pengertian</h4>
+  <p class="note-paragraph">
+    Distribute-List digunakan untuk memfilter rute yang masuk ke <strong>routing table (RIB)</strong>, 
+    bukan ke <strong>LSDB (Link-State Database)</strong>.
+  </p>
+  <p class="note-paragraph">
+    Artinya: LSA tetap ada di LSDB, tetapi rute tertentu tidak akan dipasang ke routing table jika diblok oleh distribute-list.
+  </p>
+  <p class="note-paragraph">
+    👉 Jadi, distribute-list <strong>tidak menghentikan flooding LSA</strong>, hanya mencegah instalasi ke RIB.
+  </p>
+
+  <h4 class="note-subtitle">Jenis Filtering</h4>
+  <ul class="note-list">
+    <li>
+      <strong>Inbound Filtering</strong> (paling umum)  
+      Mengontrol rute mana yang boleh masuk ke routing table dari LSDB.  
+      <pre><code>distribute-list ACL_NUMBER in [interface]
+distribute-list prefix PREFIX_NAME in</code></pre>
+    </li>
+    <li>
+      <strong>Outbound Filtering</strong>  
+      Hanya berlaku di redistribution (misalnya dari OSPF ke BGP).  
+      ❌ Tidak bisa digunakan untuk mencegah flooding OSPF LSA antar router.
+    </li>
+  </ul>
+
+  <h4 class="note-subtitle">Contoh Kasus</h4>
+  <pre class="note-paragraph"><code>
+Topologi:
+R1 --- OSPF --- R2
+
+R1 mengiklankan 192.168.10.0/24 dan 192.168.20.0/24.
+Tujuan: R2 hanya menerima 192.168.10.0/24.
+  </code></pre>
+
+  <h5 class="note-subtitle">Konfigurasi dengan ACL</h5>
+  <pre><code>
+ip access-list standard BLOCK_NET
+ permit 192.168.10.0 0.0.0.255
+!
+router ospf 1
+ distribute-list BLOCK_NET in
+  </code></pre>
+
+  <h5 class="note-subtitle">Konfigurasi dengan Prefix-List</h5>
+  <pre><code>
+ip prefix-list ALLOW_NET seq 5 permit 192.168.10.0/24
+!
+router ospf 1
+ distribute-list prefix ALLOW_NET in
+  </code></pre>
+
+  <h4 class="note-subtitle">Verifikasi</h4>
+  <ul class="note-list">
+    <li><code>show ip route ospf</code> → hanya terlihat 192.168.10.0/24.</li>
+    <li><code>show ip ospf database</code> → tetap terlihat dua LSA (10.0/24 & 20.0/24).</li>
+  </ul>
+  <p class="note-paragraph">
+    👉 Perbedaan inilah yang membedakan distribute-list dengan <em>area filter</em> atau <em>prefix-suppression</em>.
+  </p>
+
+  <h4 class="note-subtitle">Ringkasan</h4>
+  <ul class="note-list">
+    <li>Distribute-list di OSPF = filter ke routing table, bukan LSDB.</li>
+    <li>Bisa menggunakan ACL atau Prefix-list.</li>
+    <li>Cocok untuk “menyembunyikan” route dari proses forwarding, tanpa menghentikan LSA flooding.</li>
+  </ul>
+</section>
+
+
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+
+    <!-- OSPF Internal Route Summarization -->
+<section class="note-section">
+  <h3 class="note-title">OSPF Internal Route Summarization 🗂️</h3>
+
+  <h4 class="note-subtitle">Pengertian</h4>
+  <p class="note-paragraph">
+    Internal Summarization di OSPF adalah proses meringkas beberapa network internal 
+    (<strong>LSA Type 1 &amp; 2</strong>) menjadi summary address saat dibawa keluar dari area oleh <strong>ABR</strong>.
+  </p>
+  <p class="note-paragraph">
+    Disebut juga <em>Inter-Area Route Summarization</em>, karena hasil ringkasan dikirim ke area lain dalam bentuk 
+    <strong>LSA Type 3 (Summary LSA)</strong>.
+  </p>
+
+  <h4 class="note-subtitle">Kenapa Summarization Penting?</h4>
+  <ul class="note-list">
+    <li>Mengurangi ukuran LSDB &amp; routing table → lebih efisien.</li>
+    <li>Mengurangi flooding LSA antar area.</li>
+    <li>Membuat topologi lebih stabil → perubahan kecil di area tertentu tidak tersebar ke semua area.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Syarat Summarization Internal</h4>
+  <ul class="note-list">
+    <li>Hanya dilakukan di <strong>ABR</strong>, bukan router internal area.</li>
+    <li>Hanya berlaku untuk network internal area.</li>
+    <li>Tidak berlaku untuk external route (itu menggunakan ASBR Summarization).</li>
+  </ul>
+
+  <h4 class="note-subtitle">Contoh Kasus</h4>
+  <pre><code>
+Area 1 memiliki subnet:
+10.1.1.0/24
+10.1.2.0/24
+10.1.3.0/24
+10.1.4.0/24
+
+Tanpa summarization:
+→ Semua /24 diiklankan ke Area 0.
+
+Dengan summarization:
+→ Bisa diringkas menjadi 10.1.0.0/16 (atau 10.1.0.0/22).
+  </code></pre>
+
+  <h4 class="note-subtitle">Konfigurasi (Cisco IOS)</h4>
+  <pre><code>
+router ospf 1
+ area 1 range 10.1.0.0 255.255.0.0
+  </code></pre>
+  <p class="note-paragraph">
+    <strong>area 1</strong> → area asal network internal <br>
+    <strong>range 10.1.0.0 255.255.0.0</strong> → summary prefix
+  </p>
+
+  <h4 class="note-subtitle">Verifikasi</h4>
+  <pre><code>
+show ip route ospf
+show ip ospf database summary
+  </code></pre>
+  <p class="note-paragraph">
+    Router di area lain hanya melihat summary <code>10.1.0.0/16</code>.  
+    Subnet detail tetap ada di Area 1, tapi tidak dibawa keluar.
+  </p>
+
+  <h4 class="note-subtitle">Ringkasan</h4>
+  <ul class="note-list">
+    <li>Summarization Internal dilakukan di ABR dengan <code>area range</code>.</li>
+    <li>Meringkas internal routes (LSA 1 &amp; 2) menjadi Summary LSA (Type 3).</li>
+    <li>Tujuan: mengurangi routing table &amp; meningkatkan stabilitas OSPF.</li>
+  </ul>
+</section>
+
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+    <!-- OSPF External Route Summarization -->
+<section class="note-section">
+  <h3 class="note-title">OSPF External Route Summarization 🌐</h3>
+
+  <h4 class="note-subtitle">Pengertian</h4>
+  <p class="note-paragraph">
+    External Summarization adalah proses meringkas beberapa rute eksternal 
+    (hasil redistribusi ke OSPF → <strong>LSA Type 5 atau LSA Type 7</strong>) menjadi satu summary route.  
+    Dilakukan di <strong>ASBR (Autonomous System Boundary Router)</strong>, bukan di ABR.
+  </p>
+  <p class="note-paragraph">
+    Rute eksternal bisa berasal dari <em>static route, RIP, EIGRP, BGP</em>, atau protokol lain yang di-redistribusi ke OSPF.
+  </p>
+
+  <h4 class="note-subtitle">Perbedaan dengan Internal Summarization</h4>
+  <table class="note-table">
+    <thead>
+      <tr>
+        <th>Fitur</th>
+        <th>Internal Summarization</th>
+        <th>External Summarization</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Dilakukan di</td>
+        <td>ABR</td>
+        <td>ASBR</td>
+      </tr>
+      <tr>
+        <td>Rute yang diringkas</td>
+        <td>Internal OSPF (LSA 1 &amp; 2)</td>
+        <td>External OSPF (LSA 5 atau 7)</td>
+      </tr>
+      <tr>
+        <td>Perintah Cisco IOS</td>
+        <td><code>area range</code></td>
+        <td><code>summary-address</code></td>
+      </tr>
+      <tr>
+        <td>LSA yang dihasilkan</td>
+        <td>Type 3 (Summary LSA)</td>
+        <td>Type 5 (External LSA)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4 class="note-subtitle">Contoh Kasus</h4>
+  <pre><code>
+ASBR memiliki static route:
+ip route 172.16.1.0 255.255.255.0 Null0
+ip route 172.16.2.0 255.255.255.0 Null0
+ip route 172.16.3.0 255.255.255.0 Null0
+ip route 172.16.4.0 255.255.255.0 Null0
+
+Tanpa summarization:
+→ Semua /24 akan diiklankan sebagai LSA 5.
+
+Dengan summarization:
+→ Cukup satu entry saja: 172.16.0.0/16
+  </code></pre>
+
+  <h4 class="note-subtitle">Konfigurasi (Cisco IOS)</h4>
+  <pre><code>
+router ospf 1
+ redistribute static subnets
+ summary-address 172.16.0.0 255.255.0.0
+  </code></pre>
+  <p class="note-paragraph">
+    <strong>redistribute static subnets</strong> → memasukkan static route ke OSPF. <br>
+    <strong>summary-address 172.16.0.0 255.255.0.0</strong> → meringkas semua /24 menjadi satu summary /16.
+  </p>
+
+  <h4 class="note-subtitle">Verifikasi</h4>
+  <pre><code>
+show ip route ospf
+show ip ospf database external
+  </code></pre>
+  <p class="note-paragraph">
+    Harusnya hanya terlihat satu entry <code>172.16.0.0/16</code> sebagai external route.
+  </p>
+
+  <h4 class="note-subtitle">Ringkasan</h4>
+  <ul class="note-list">
+    <li>External Summarization = meringkas rute eksternal (hasil redistribusi).</li>
+    <li>Dilakukan di <strong>ASBR</strong> dengan <code>summary-address</code>.</li>
+    <li>Menghasilkan <strong>External LSA (Type 5 atau 7 → 5)</strong>.</li>
+    <li>Membuat routing table lebih ringkas, stabil, dan hemat resource.</li>
+  </ul>
+</section>
+
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+    <!-- OSPF Redistribution Default Route -->
+<section class="note-section">
+  <h3 class="note-title">Redistribution Default Route di OSPF ✅</h3>
+
+  <h4 class="note-subtitle">Pengertian</h4>
+  <p class="note-paragraph">
+    Dalam OSPF, kita bisa memasukkan default route (<code>0.0.0.0/0</code>) ke dalam domain OSPF supaya semua router tahu jalur keluar menuju Internet atau upstream router.  
+    Default route biasanya dibuat manual di ASBR atau ABR, lalu di-redistribute ke OSPF agar tersebar ke seluruh area.
+  </p>
+
+  <h4 class="note-subtitle">Cara Membuat Default Route di OSPF</h4>
+  <ol class="note-list">
+    <li>
+      <strong>Menggunakan <code>default-information originate</code></strong>  
+      <p>Paling umum digunakan. Router akan menyebarkan default route jika router tersebut punya default route di routing table.</p>
+      <pre><code>
+router ospf 1
+ default-information originate
+      </code></pre>
+      <p>
+        ➡️ OSPF akan mengiklankan <code>0.0.0.0/0</code> ke seluruh domain OSPF.  
+        Syarat: router harus sudah punya default route (misalnya static ke ISP).
+      </p>
+    </li>
+    <li>
+      <strong>Menggunakan <code>default-information originate always</code></strong>  
+      <p>Dipakai kalau router tidak punya default route di routing table, tapi tetap ingin mengiklankan default route.</p>
+      <pre><code>
+router ospf 1
+ default-information originate always
+      </code></pre>
+    </li>
+    <li>
+      <strong>Menggunakan <code>redistribute static</code></strong>  
+      <p>Kita membuat default static route manual, lalu redistribusikan ke OSPF.</p>
+      <pre><code>
+ip route 0.0.0.0 0.0.0.0 &lt;next-hop-ip&gt;
+!
+router ospf 1
+ redistribute static subnets
+      </code></pre>
+      <p>
+        Cara ini lebih fleksibel, tetapi default route akan dianggap sebagai external route (<strong>Type 5 LSA</strong>).
+      </p>
+    </li>
+  </ol>
+
+  <h4 class="note-subtitle">Jenis LSA yang Digunakan</h4>
+  <ul class="note-list">
+    <li>Default route diiklankan sebagai <strong>LSA Type 5 (External LSA)</strong>.</li>
+    <li>Jika disebarkan di NSSA area → muncul sebagai <strong>Type 7</strong>, lalu diterjemahkan menjadi <strong>Type 5</strong> di ABR.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Contoh Topologi</h4>
+  <pre><code>
+   [ISP]
+     |
+  (R1 - ASBR)
+     |
+   OSPF Area 0 ---- R2 ---- R3
+
+R1 punya default route ke ISP:
+ip route 0.0.0.0 0.0.0.0 200.1.1.1
+
+Dengan 'default-information originate', 
+R2 &amp; R3 akan dapat default route via OSPF.
+  </code></pre>
+
+  <h4 class="note-subtitle">Verifikasi</h4>
+  <pre><code>
+show ip route ospf
+  </code></pre>
+  <p class="note-paragraph">
+    Akan terlihat entry seperti:  
+    <code>O*E2  0.0.0.0/0 [110/1] via &lt;next-hop&gt;</code>  
+    <strong>E2</strong> = External Type 2 (default).  
+    Bisa juga diubah menjadi <strong>E1</strong> agar biaya internal ikut dihitung.
+  </p>
+
+  <h4 class="note-subtitle">Ringkasan</h4>
+  <ul class="note-list">
+    <li><code>default-information originate</code> → cara umum menyebarkan default route di OSPF.</li>
+    <li>Opsi <code>always</code> → tetap mengiklankan default meski tidak ada default di RIB.</li>
+    <li><code>redistribute static</code> → menghasilkan external LSA.</li>
+    <li>Default route muncul sebagai <strong>E1</strong> atau <strong>E2</strong> external route di OSPF.</li>
+  </ul>
+</section>
+
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+    <!-- OSPF Redistribution Static -->
+<section class="note-section">
+  <h3 class="note-title">Redistribution – Static ke OSPF 🚀</h3>
+
+  <h4 class="note-subtitle">Pengertian</h4>
+  <p class="note-paragraph">
+    Redistribution Static = proses memasukkan <strong>static route</strong> yang ada di router ke dalam domain OSPF.  
+    Static route yang diredistribusikan akan menjadi <strong>External LSA (Type 5)</strong> jika dimasukkan oleh ASBR.  
+    Jika dilakukan di NSSA area → route menjadi <strong>LSA Type 7</strong>, lalu diterjemahkan ke Type 5 oleh ABR.
+  </p>
+
+  <h4 class="note-subtitle">Kenapa Redistribute Static?</h4>
+  <ul class="note-list">
+    <li>Mengiklankan <strong>default route (0.0.0.0/0)</strong> ke OSPF domain.</li>
+    <li>Mengiklankan network eksternal yang hanya diketahui via static (contoh: ISP, DMZ).</li>
+    <li>Integrasi rute sementara / policy-based routing ke OSPF.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Contoh Topologi</h4>
+  <pre><code>
+   [ISP: 200.1.1.1]
+        |
+       R1 (ASBR)
+        |
+     OSPF Area 0
+
+Static route di R1:
+ip route 0.0.0.0 0.0.0.0 200.1.1.1
+ip route 172.16.10.0 255.255.255.0 200.1.1.2
+  </code></pre>
+  <p>Kita ingin supaya semua router OSPF tahu rute ini.</p>
+
+  <h4 class="note-subtitle">Konfigurasi Cisco IOS</h4>
+  <pre><code>
+router ospf 1
+ redistribute static subnets
+  </code></pre>
+  <p class="note-paragraph">
+    <code>redistribute static</code> → memasukkan static route ke OSPF. <br>
+    <code>subnets</code> → wajib agar static route dengan subnet mask non-classful ikut terdistribusi.
+  </p>
+
+  <h4 class="note-subtitle">Menentukan Metric Type (E1 vs E2)</h4>
+  <ul class="note-list">
+    <li>Default → <strong>E2</strong> (External Type 2).</li>
+    <li>Kalau mau <strong>E1</strong> (cost internal ikut dihitung):</li>
+  </ul>
+  <pre><code>
+router ospf 1
+ redistribute static subnets metric-type 1
+  </code></pre>
+
+  <h4 class="note-subtitle">Menambahkan Biaya (Metric)</h4>
+  <p>Bisa override metric default (20) dengan manual:</p>
+  <pre><code>
+router ospf 1
+ redistribute static subnets metric 50
+  </code></pre>
+
+  <h4 class="note-subtitle">Filtering Static Route</h4>
+  <p>Kalau hanya ingin memasukkan route tertentu:</p>
+  <pre><code>
+ip prefix-list ONLY_DEFAULT seq 5 permit 0.0.0.0/0
+!
+router ospf 1
+ redistribute static subnets route-map ONLY_DEFAULT
+  </code></pre>
+
+  <h4 class="note-subtitle">Verifikasi</h4>
+  <pre><code>
+show ip route ospf
+show ip ospf database external
+  </code></pre>
+  <p class="note-paragraph">
+    Harus terlihat static route sebagai <strong>O E2</strong> (default) atau <strong>O E1</strong> kalau pakai metric-type 1.
+  </p>
+
+  <h4 class="note-subtitle">Ringkasan</h4>
+  <ul class="note-list">
+    <li>Redistribute Static → OSPF = menjadikan static route sebagai <strong>External LSA</strong>.</li>
+    <li>Default = <strong>E2</strong>, bisa diubah ke <strong>E1</strong>.</li>
+    <li>Gunakan <code>subnets</code> agar semua static non-classful ikut terbawa.</li>
+    <li>Bisa difilter dengan <strong>prefix-list / route-map</strong> agar tidak semua static masuk OSPF.</li>
+  </ul>
+</section>
+
+
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+<!-- OSPF Redistribution Connected -->
+<section class="note-section">
+  <h3 class="note-title">Redistribution – Connected ke OSPF 🚀</h3>
+
+  <h4 class="note-subtitle">Pengertian</h4>
+  <p class="note-paragraph">
+    <strong>Redistribution Connected</strong> = memasukkan semua <em>connected interface</em> router ke dalam OSPF sebagai 
+    <strong>External Route (LSA Type 5)</strong>.  
+    Berbeda dengan <code>network</code> statement yang mengaktifkan adjacency di interface, 
+    <code>redistribute connected</code> hanya memasukkan prefix connected ke LSDB tanpa peduli adjacency.
+  </p>
+
+  <h4 class="note-subtitle">Kenapa Redistribute Connected?</h4>
+  <ul class="note-list">
+    <li>Mengiklankan interface yang tidak ingin ikut adjacency, tapi subnetnya perlu diketahui OSPF (contoh: loopback, management VLAN).</li>
+    <li>Mengiklankan link eksternal (misalnya ke ISP) tanpa perlu network statement.</li>
+    <li>Mengiklankan default route kalau dibuat sebagai connected (contoh: via <code>Null0</code>).</li>
+  </ul>
+
+  <h4 class="note-subtitle">Contoh Kasus</h4>
+  <pre><code>
+Interface Router:
+Loopback0:    10.10.10.1/32
+Ethernet0/0:  192.168.1.1/24 (OSPF enabled)
+Ethernet0/1:  200.1.1.1/30 (ISP link, tidak mau adjacency OSPF)
+
+Config tanpa redistribute:
+router ospf 1
+ network 192.168.1.0 0.0.0.255 area 0
+→ Hanya 192.168.1.0/24 diiklankan.
+
+Kalau mau 10.10.10.1/32 & 200.1.1.0/30 ikut masuk OSPF:
+router ospf 1
+ redistribute connected subnets
+  </code></pre>
+
+  <h4 class="note-subtitle">Konfigurasi Cisco IOS</h4>
+  <pre><code>
+router ospf 1
+ redistribute connected subnets
+  </code></pre>
+
+  <h5 class="note-subsubtitle">🔹 Opsi tambahan:</h5>
+  <ul class="note-list">
+    <li>Menentukan metric:</li>
+  </ul>
+  <pre><code>
+router ospf 1
+ redistribute connected subnets metric 50
+  </code></pre>
+  <ul class="note-list">
+    <li>Mengubah tipe external (default E2 → E1):</li>
+  </ul>
+  <pre><code>
+router ospf 1
+ redistribute connected subnets metric-type 1
+  </code></pre>
+  <ul class="note-list">
+    <li>Membatasi interface tertentu (pakai prefix-list & route-map):</li>
+  </ul>
+  <pre><code>
+ip prefix-list ONLY_LOOPBACK seq 5 permit 10.10.10.1/32
+!
+route-map REDIST-CONN permit 10
+ match ip address prefix-list ONLY_LOOPBACK
+!
+router ospf 1
+ redistribute connected subnets route-map REDIST-CONN
+  </code></pre>
+
+  <h4 class="note-subtitle">Verifikasi</h4>
+  <pre><code>
+show ip route ospf
+show ip ospf database external
+  </code></pre>
+  <p class="note-paragraph">
+    Harusnya terlihat route connected masuk sebagai <strong>O E2</strong> (default) 
+    atau <strong>O E1</strong> kalau metric-type 1.
+  </p>
+
+  <h4 class="note-subtitle">Ringkasan</h4>
+  <ul class="note-list">
+    <li><strong>Redistribute Connected</strong> → memasukkan semua connected interface ke OSPF.</li>
+    <li>Default → External LSA Type 5 (E2).</li>
+    <li>Berguna untuk loopback, manajemen, atau link eksternal.</li>
+    <li>Bisa difilter agar hanya interface tertentu yang ikut.</li>
+  </ul>
+</section>
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+    <!-- OSPF Redistribution RIP -->
+<section class="note-section">
+  <h3 class="note-title">Redistribution – RIP ke OSPF 🚀</h3>
+
+  <h4 class="note-subtitle">Pengertian</h4>
+  <p class="note-paragraph">
+    <strong>Redistribution RIP → OSPF</strong> artinya route yang didapat (atau dibuat) oleh RIP akan dimasukkan ke domain OSPF.  
+    Router yang melakukan redistribusi berperan sebagai <strong>ASBR (Autonomous System Boundary Router)</strong>.  
+    Hasil redistribusi: route RIP akan muncul di OSPF sebagai <strong>External Route (LSA Type 5)</strong>.  
+    Kalau redistribusi dilakukan di <em>NSSA Area</em>, maka route masuk sebagai <strong>Type 7 LSA</strong> lalu diterjemahkan jadi <strong>Type 5</strong> oleh ABR.
+  </p>
+
+  <h4 class="note-subtitle">Kenapa Redistribute RIP ke OSPF?</h4>
+  <ul class="note-list">
+    <li>Transisi jaringan dari RIP ke OSPF (migrasi protokol lama ke baru).</li>
+    <li>Integrasi network kecil (pakai RIP) ke backbone OSPF.</li>
+    <li>Supaya semua router OSPF tahu rute yang hanya diketahui oleh domain RIP.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Contoh Topologi</h4>
+  <pre><code>
+   RIP domain
+   (10.10.0.0/16)
+      |
+     R1 (ASBR)
+      |
+   OSPF Area 0
+
+R1 menjalankan RIP untuk LAN lama (10.10.0.0/16).
+R1 juga menjalankan OSPF sebagai backbone.
+Agar router OSPF tahu jalur ke 10.10.0.0/16,
+perlu redistribute RIP ke OSPF.
+  </code></pre>
+
+  <h4 class="note-subtitle">Konfigurasi Cisco IOS</h4>
+  <pre><code>
+router ospf 1
+ redistribute rip subnets
+  </code></pre>
+  <p class="note-paragraph">
+    <strong>Penjelasan:</strong><br>
+    <code>subnets</code> → wajib, agar semua subnet RIP (bukan hanya classful) ikut terdistribusi. <br>
+    Default metric = 20, <strong>metric-type</strong> = E2 (external type 2).
+  </p>
+
+  <h4 class="note-subtitle">Opsi Tambahan</h4>
+  <ul class="note-list">
+    <li>Menentukan metric manual:</li>
+  </ul>
+  <pre><code>
+router ospf 1
+ redistribute rip subnets metric 50
+  </code></pre>
+  <ul class="note-list">
+    <li>Mengubah menjadi Type E1 (biar metric internal ikut dihitung):</li>
+  </ul>
+  <pre><code>
+router ospf 1
+ redistribute rip subnets metric-type 1
+  </code></pre>
+  <ul class="note-list">
+    <li>Filtering route RIP tertentu:</li>
+  </ul>
+  <pre><code>
+ip prefix-list ONLY_RIP_NET seq 5 permit 10.10.0.0/16
+!
+route-map RIP_TO_OSPF permit 10
+ match ip address prefix-list ONLY_RIP_NET
+!
+router ospf 1
+ redistribute rip subnets route-map RIP_TO_OSPF
+  </code></pre>
+
+  <h4 class="note-subtitle">Verifikasi</h4>
+  <pre><code>
+show ip route ospf
+show ip ospf database external
+  </code></pre>
+  <p class="note-paragraph">
+    Hasil: route RIP akan muncul di OSPF dengan tanda <strong>O E2</strong> (default).  
+    Kalau <code>metric-type 1</code> digunakan, akan muncul sebagai <strong>O E1</strong>.
+  </p>
+
+  <h4 class="note-subtitle">Ringkasan</h4>
+  <ul class="note-list">
+    <li><strong>Redistribute RIP → OSPF</strong> = memasukkan route dari domain RIP ke domain OSPF.</li>
+    <li>Default: External Type 5 LSA (E2), metric 20.</li>
+    <li>Bisa diubah ke E1 atau set metric manual.</li>
+    <li>Bisa difilter supaya hanya route tertentu dari RIP yang diiklankan ke OSPF.</li>
+  </ul>
+</section>
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+    <!-- OSPF Redistribution EIGRP -->
+<section class="note-section">
+  <h3 class="note-title">Redistribution – EIGRP ke OSPF 🚀</h3>
+
+  <h4 class="note-subtitle">Pengertian</h4>
+  <p class="note-paragraph">
+    <strong>Redistribution EIGRP → OSPF</strong> = semua route yang ada di domain EIGRP akan di-inject ke dalam domain OSPF.  
+    Router yang melakukan redistribusi akan menjadi <strong>ASBR (Autonomous System Boundary Router)</strong>.  
+    Route EIGRP di OSPF akan muncul sebagai <strong>External Route (LSA Type 5)</strong>.  
+    Kalau redistribusi dilakukan di <em>NSSA Area</em>, maka route masuk sebagai <strong>Type 7 LSA</strong> dulu lalu diterjemahkan menjadi <strong>Type 5</strong> oleh ABR.
+  </p>
+
+  <h4 class="note-subtitle">Kenapa Redistribute EIGRP ke OSPF?</h4>
+  <ul class="note-list">
+    <li>Transisi/migrasi jaringan dari EIGRP ke OSPF.</li>
+    <li>Interkoneksi antar-domain IGP berbeda.</li>
+    <li>Supaya backbone OSPF tetap tahu jalur menuju jaringan EIGRP.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Contoh Topologi</h4>
+  <pre><code>
+   [EIGRP Domain]
+   172.16.0.0/16
+        |
+       R1 (ASBR)
+        |
+   [OSPF Area 0]
+
+R1 menjalankan EIGRP AS 100 untuk LAN.
+R1 juga menjalankan OSPF Area 0 ke backbone.
+Agar semua router OSPF tahu rute 172.16.0.0/16, perlu redistribusi.
+  </code></pre>
+
+  <h4 class="note-subtitle">Konfigurasi Cisco IOS</h4>
+  <pre><code>
+router ospf 1
+ redistribute eigrp 100 subnets
+  </code></pre>
+  <p class="note-paragraph">
+    <strong>Penjelasan:</strong><br>
+    <code>eigrp 100</code> = nomor autonomous-system EIGRP yang diredistribusi. <br>
+    <code>subnets</code> = wajib, supaya semua prefix (termasuk non-classful) ikut disebarkan. <br>
+    Default metric OSPF external = <strong>20</strong>, tipe <strong>E2</strong>.
+  </p>
+
+  <h4 class="note-subtitle">Opsi Tambahan</h4>
+  <ul class="note-list">
+    <li><strong>Menentukan metric manual</strong>:</li>
+  </ul>
+  <pre><code>
+router ospf 1
+ redistribute eigrp 100 subnets metric 50
+  </code></pre>
+
+  <ul class="note-list">
+    <li><strong>Mengubah metric-type (E1 vs E2)</strong>:</li>
+  </ul>
+  <pre><code>
+router ospf 1
+ redistribute eigrp 100 subnets metric-type 1
+  </code></pre>
+  <p class="note-paragraph">
+    Default → E2 (hanya cost eksternal).  
+    Bisa diubah ke E1 agar biaya internal OSPF ikut dihitung.
+  </p>
+
+  <ul class="note-list">
+    <li><strong>Filtering route (hanya route tertentu)</strong>:</li>
+  </ul>
+  <pre><code>
+ip prefix-list ONLY_EIGRP_NET seq 5 permit 172.16.0.0/16
+!
+route-map EIGRP_TO_OSPF permit 10
+ match ip address prefix-list ONLY_EIGRP_NET
+!
+router ospf 1
+ redistribute eigrp 100 subnets route-map EIGRP_TO_OSPF
+  </code></pre>
+
+  <h4 class="note-subtitle">Verifikasi</h4>
+  <pre><code>
+show ip route ospf
+show ip ospf database external
+  </code></pre>
+  <p class="note-paragraph">
+    🔎 Hasil: route dari EIGRP muncul sebagai <strong>O E2</strong> (default).  
+    Kalau <code>metric-type 1</code> digunakan → akan muncul sebagai <strong>O E1</strong>.  
+    Bisa dicek juga LSDB apakah Type 5 LSA muncul sesuai prefix yang di-redistribute.
+  </p>
+
+  <h4 class="note-subtitle">Ringkasan</h4>
+  <ul class="note-list">
+    <li><strong>Redistribution EIGRP → OSPF</strong> menjadikan router sebagai ASBR.</li>
+    <li>Default: External LSA Type 5 (E2), metric 20.</li>
+    <li>Bisa diubah ke E1 atau metric lain sesuai kebutuhan.</li>
+    <li>Filtering dengan route-map/prefix-list penting agar tidak semua route EIGRP masuk OSPF.</li>
+  </ul>
+</section>
+
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <!-- OSPF Path Selection -->
+<section class="note-section">
+  <h3 class="note-title">OSPF Pindah Jalur (Path Selection) 🚦</h3>
+
+  <h4 class="note-subtitle">Pengertian</h4>
+  <p class="note-paragraph">
+    <strong>OSPF</strong> adalah protokol link-state yang menentukan jalur terbaik berdasarkan <strong>cost</strong>.  
+    Cost dihitung dari <em>bandwidth interface</em>, dengan rumus default Cisco:
+  </p>
+  <pre><code>Cost = Reference Bandwidth (100 Mbps) / Bandwidth Interface (Mbps)</code></pre>
+  <p class="note-paragraph">
+    ⚠️ Maksimum cost = <strong>65.535</strong>.  
+    <br>Jika ada lebih dari satu jalur:
+    <ul class="note-list">
+      <li>OSPF pilih jalur dengan cost terkecil.</li>
+      <li>Kalau cost sama → <strong>Equal Cost Load Balancing (ECMP)</strong>.</li>
+      <li>Kalau cost berbeda → hanya jalur dengan cost terendah dipakai, lainnya jadi backup.</li>
+    </ul>
+  </p>
+
+  <h4 class="note-subtitle">Contoh Topologi</h4>
+  <pre><code>
+R1 ----(100 Mbps)---- R2
+ |                    |
+(10 Mbps)          (100 Mbps)
+ |                    |
+R3 --------------------
+
+Dari R1 ke R3 ada 2 jalur:
+- R1–R2–R3 via link 100 Mbps
+- R1–R3 langsung via link 10 Mbps
+
+Perhitungan Cost:
+100 Mbps → cost = 1
+10 Mbps  → cost = 10
+
+➡️ OSPF akan pilih jalur lewat R1–R2–R3 (100 Mbps).
+  </code></pre>
+
+  <h4 class="note-subtitle">Manipulasi Jalur di OSPF</h4>
+  <ol class="note-list">
+    <li>
+      <strong>Mengubah Reference Bandwidth</strong><br>
+      Default reference = 100 Mbps (tidak cocok di jaringan modern).  
+      Bisa diubah:
+      <pre><code>
+router ospf 1
+ auto-cost reference-bandwidth 10000
+      </code></pre>
+      👉 Reference sekarang 10 Gbps.
+    </li>
+
+    <li>
+      <strong>Mengubah Cost di Interface</strong><br>
+      Bisa pakai manual cost, misalnya untuk backup link:
+      <pre><code>
+interface GigabitEthernet0/0
+ ip ospf cost 50
+      </code></pre>
+    </li>
+
+    <li>
+      <strong>Mengatur Load Balancing</strong><br>
+      Kalau cost dibuat sama di dua jalur:
+      <pre><code>
+interface Gi0/0
+ ip ospf cost 10
+!
+interface Gi0/1
+ ip ospf cost 10
+      </code></pre>
+      ➡️ OSPF akan <strong>load balance (ECMP)</strong>.
+    </li>
+
+    <li>
+      <strong>Unequal Path (Backup)</strong><br>
+      OSPF tidak mendukung unequal cost load balancing (beda dengan EIGRP).  
+      Kalau cost beda → hanya cost terendah yang dipakai, lainnya standby.
+    </li>
+  </ol>
+
+  <h4 class="note-subtitle">Verifikasi</h4>
+  <pre><code>
+show ip route ospf
+show ip ospf interface
+show ip ospf database
+  </code></pre>
+  <p class="note-paragraph">
+    Bisa dipakai untuk cek <strong>metric</strong> dan <strong>jalur aktif</strong>.
+  </p>
+
+  <h4 class="note-subtitle">Ringkasan</h4>
+  <ul class="note-list">
+    <li>OSPF memilih jalur berdasarkan <strong>cost terkecil</strong>.</li>
+    <li>Default cost = 100 Mbps / bandwidth interface.</li>
+    <li>Bisa diubah lewat <code>ip ospf cost</code> atau <code>auto-cost reference-bandwidth</code>.</li>
+    <li><strong>ECMP</strong>: kalau cost sama → load balancing.</li>
+    <li><strong>Unequal cost</strong>: tidak didukung, hanya link dengan cost terendah yang dipakai.</li>
+  </ul>
+</section>
+
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+<!-- OSPF Authentication -->
+<section class="note-section">
+  <h3 class="note-title">OSPF Authentication 🔐</h3>
+
+  <h4 class="note-subtitle">Pengertian</h4>
+  <p class="note-paragraph">
+    <strong>OSPF Authentication</strong> adalah mekanisme untuk mengamankan pertukaran LSA antar-router OSPF.  
+    Tujuan utamanya adalah mencegah router asing atau attacker masuk ke domain OSPF dan merusak <em>Link-State Database (LSDB)</em>.  
+    Authentication bisa diterapkan di level <strong>area</strong> atau <strong>interface</strong>.
+  </p>
+
+  <h4 class="note-subtitle">Jenis Authentication di OSPF</h4>
+  <ol class="note-list">
+    <li>
+      <strong>Null Authentication (Default)</strong><br>
+      Tidak ada autentikasi. Semua router OSPF bisa bertukar LSA selama area sama.  
+      ➡️ Default mode OSPF.
+    </li>
+    <li>
+      <strong>Plaintext Authentication</strong><br>
+      Password dikirim dalam bentuk <em>clear text</em> (tidak dienkripsi). Lemah secara keamanan.  
+      <pre><code>
+interface GigabitEthernet0/0
+ ip ospf authentication
+ ip ospf authentication-key cisco123
+      </code></pre>
+    </li>
+    <li>
+      <strong>MD5 Authentication (Message Digest 5)</strong><br>
+      Password tidak dikirim langsung, tapi di-hash MD5.  
+      Umum dipakai di jaringan enterprise.  
+      <pre><code>
+interface GigabitEthernet0/0
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 1 md5 cisco123
+      </code></pre>
+      👉 <code>1</code> = key-id (untuk rotasi key), <code>cisco123</code> = shared secret.
+    </li>
+    <li>
+      <strong>HMAC-SHA Authentication (OSPFv3 / IPv6)</strong><br>
+      Di OSPFv3, authentication menggunakan <strong>IPsec (AH/ESP)</strong> dengan HMAC-SHA.  
+      Lebih aman daripada MD5.
+    </li>
+  </ol>
+
+  <h4 class="note-subtitle">Konfigurasi di Area vs Interface</h4>
+  <ul class="note-list">
+    <li>
+      <strong>Area Authentication</strong><br>
+      <pre><code>
+router ospf 1
+ area 0 authentication message-digest
+      </code></pre>
+      ➡️ Semua interface di Area 0 wajib pakai MD5.
+    </li>
+    <li>
+      <strong>Interface Authentication</strong><br>
+      <pre><code>
+interface Gi0/0
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 1 md5 rahasia123
+      </code></pre>
+      ➡️ Lebih granular, bisa beda antar-interface.
+    </li>
+  </ul>
+
+  <h4 class="note-subtitle">Syarat Sukses Authentication</h4>
+  <ul class="note-list">
+    <li>Semua router di link harus pakai tipe autentikasi yang sama.</li>
+    <li>Kalau satu pakai MD5, satu pakai plaintext → adjacency gagal.</li>
+    <li>Password (key) harus sama persis.</li>
+    <li>Untuk MD5, <em>key-id</em> boleh beda, asal password sama.</li>
+  </ul>
+
+  <h4 class="note-subtitle">Verifikasi</h4>
+  <pre><code>
+show ip ospf neighbor
+show ip ospf interface
+  </code></pre>
+  <p class="note-paragraph">
+    Jika authentication gagal → OSPF adjacency tidak terbentuk.  
+    Error yang sering muncul: <em>Mismatched Authentication Type</em> atau <em>Key not valid</em>.
+  </p>
+
+  <h4 class="note-subtitle">Ringkasan</h4>
+  <ul class="note-list">
+    <li>OSPF mendukung Null, Plaintext, MD5, dan OSPFv3 mendukung IPsec/HMAC-SHA.</li>
+    <li>MD5 Authentication adalah pilihan paling umum (aman & simpel).</li>
+    <li>Bisa diterapkan di <strong>area</strong> atau <strong>interface</strong>.</li>
+    <li>Semua router di link harus cocok tipe & password-nya.</li>
+  </ul>
+</section>
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+    <!-- OSPF dalam VRF Lite -->
+<section class="note-section">
+  <h3 class="note-title">OSPF dalam VRF Lite 👍</h3>
+
+  <h4 class="note-subtitle">Konsep OSPF di VRF Lite</h4>
+  <p class="note-paragraph">
+    Saat membuat <strong>VRF Lite</strong>, otomatis setiap VRF punya <em>routing table</em> sendiri.  
+    Jika OSPF dijalankan dalam VRF, maka OSPF juga berjalan terpisah per VRF.  
+    ➡️ <strong>OSPF instance VRF-A</strong> tidak akan tahu jalur di <strong>VRF-B</strong>.  
+    ➡️ Bisa ada beberapa OSPF process dengan <code>vrf &lt;nama_vrf&gt;</code>.
+  </p>
+
+  <h4 class="note-subtitle">Contoh Kasus</h4>
+  <pre><code>
+R1
++ Gi0/0 → VRF CUST_A → OSPF process untuk Customer A
++ Gi0/1 → VRF CUST_B → OSPF process untuk Customer B
+  </code></pre>
+  <p class="note-paragraph">
+    Customer A & B bisa pakai IP yang sama (overlap).  
+    Keduanya butuh routing dinamis dengan OSPF.  
+    Solusi → jalankan OSPF per VRF.
+  </p>
+
+  <h4 class="note-subtitle">Konfigurasi Cisco IOS</h4>
+  <ol class="note-list">
+    <li>
+      <strong>Buat VRF</strong>
+      <pre><code>
+ip vrf CUST_A
+ rd 1:100
+!
+ip vrf CUST_B
+ rd 1:200
+      </code></pre>
+    </li>
+    <li>
+      <strong>Masukkan interface ke VRF</strong>
+      <pre><code>
+interface Gi0/0
+ ip vrf forwarding CUST_A
+ ip address 10.1.1.1 255.255.255.0
+!
+interface Gi0/1
+ ip vrf forwarding CUST_B
+ ip address 10.1.1.1 255.255.255.0
+      </code></pre>
+      👉 Kedua interface bisa pakai IP sama karena terisolasi di VRF berbeda.
+    </li>
+    <li>
+      <strong>Jalankan OSPF di masing-masing VRF</strong>
+      <pre><code>
+router ospf 10 vrf CUST_A
+ router-id 1.1.1.1
+ network 10.1.1.0 0.0.0.255 area 0
+!
+router ospf 20 vrf CUST_B
+ router-id 2.2.2.2
+ network 10.1.1.0 0.0.0.255 area 0
+      </code></pre>
+      ➡️ Bedanya dengan OSPF biasa: ada keyword <code>vrf &lt;nama_vrf&gt;</code>.
+    </li>
+  </ol>
+
+  <h4 class="note-subtitle">Routing Table</h4>
+  <pre><code>
+show ip route vrf CUST_A
+show ip route vrf CUST_B
+  </code></pre>
+  <p class="note-paragraph">
+    Routing OSPF VRF-A tidak muncul di VRF-B, masing-masing punya database sendiri.  
+    Bisa dicek dengan <code>show ip ospf vrf CUST_A database</code>.
+  </p>
+
+  <h4 class="note-subtitle">Integrasi antar-VRF (Opsional)</h4>
+  <p class="note-paragraph">
+    Jika perlu komunikasi antar VRF, opsi yang bisa dipakai:
+  </p>
+  <ul class="note-list">
+    <li>Route leaking (static / import-export).</li>
+    <li>BGP VPNv4 (kalau sudah MPLS).</li>
+  </ul>
+  <pre><code>
+ip route vrf CUST_A 192.168.20.0 255.255.255.0 10.1.1.2 global
+ip route vrf CUST_B 192.168.10.0 255.255.255.0 10.1.1.2 global
+  </code></pre>
+
+  <h4 class="note-subtitle">Ringkasan</h4>
+  <ul class="note-list">
+    <li>OSPF VRF Lite = OSPF per VRF, tiap customer/tenant punya OSPF sendiri.</li>
+    <li>Konfigurasi: <code>router ospf &lt;id&gt; vrf &lt;nama_vrf&gt;</code>.</li>
+    <li>Database & routing table OSPF benar-benar terisolasi per VRF.</li>
+    <li>Komunikasi antar VRF → perlu route leaking atau BGP VPNv4.</li>
+  </ul>
+</section>
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
   </main>
 
   <script>
