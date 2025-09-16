@@ -19,16 +19,16 @@
 
     <h3 class="note-subtitle">Fungsi Utama EEM</h3>
     <ul class="note-list">
-      <li><strong>Monitoring</strong> – Mengawasi kondisi tertentu, misalnya interface down, CPU tinggi, syslog, atau SNMP trap.</li>
-      <li><strong>Automation</strong> – Menjalankan aksi otomatis seperti mengeksekusi perintah CLI, reset interface, atau kirim notifikasi.</li>
-      <li><strong>Scripting</strong> – Mendukung skrip sederhana dengan applet berbasis CLI atau skrip kompleks dengan TCL.</li>
+      <li><strong>Monitoring</strong> - Mengawasi kondisi tertentu, misalnya interface down, CPU tinggi, syslog, atau SNMP trap.</li>
+      <li><strong>Automation</strong> - Menjalankan aksi otomatis seperti mengeksekusi perintah CLI, reset interface, atau kirim notifikasi.</li>
+      <li><strong>Scripting</strong> - Mendukung skrip sederhana dengan applet berbasis CLI atau skrip kompleks dengan TCL.</li>
     </ul>
 
     <h3 class="note-subtitle">Komponen EEM</h3>
     <ul class="note-list">
-      <li><strong>Event Detector</strong> – Pemicu event (timer, syslog, CLI, interface, SNMP).</li>
-      <li><strong>Action</strong> – Tindakan setelah event terdeteksi (jalankan perintah, kirim log, aktifkan ulang interface).</li>
-      <li><strong>Policy</strong> – Aturan yang menentukan hubungan event dan action (Applet atau TCL script).</li>
+      <li><strong>Event Detector</strong> - Pemicu event (timer, syslog, CLI, interface, SNMP).</li>
+      <li><strong>Action</strong> - Tindakan setelah event terdeteksi (jalankan perintah, kirim log, aktifkan ulang interface).</li>
+      <li><strong>Policy</strong> - Aturan yang menentukan hubungan event dan action (Applet atau TCL script).</li>
     </ul>
 
     <h3 class="note-subtitle">Contoh Konfigurasi</h3>
@@ -60,10 +60,10 @@ event manager applet SHOW_IP
 
     <h3 class="note-subtitle">Kegunaan di Dunia Nyata</h3>
     <ul class="note-list">
-      <li><strong>Auto-recovery</strong> – Memulihkan link secara otomatis saat down.</li>
-      <li><strong>Proactive monitoring</strong> – Memberikan alert/log tanpa perlu NMS eksternal.</li>
-      <li><strong>Scheduled task</strong> – Menjalankan perintah berkala (mirip cron di Linux).</li>
-      <li><strong>Integrasi</strong> – Bisa bekerja sama dengan syslog, SNMP, atau policy keamanan.</li>
+      <li><strong>Auto-recovery</strong> - Memulihkan link secara otomatis saat down.</li>
+      <li><strong>Proactive monitoring</strong> - Memberikan alert/log tanpa perlu NMS eksternal.</li>
+      <li><strong>Scheduled task</strong> - Menjalankan perintah berkala (mirip cron di Linux).</li>
+      <li><strong>Integrasi</strong> - Bisa bekerja sama dengan syslog, SNMP, atau policy keamanan.</li>
     </ul>
 
     <h3 class="note-subtitle">Tips Praktis</h3>
@@ -83,9 +83,9 @@ event manager applet SHOW_IP
 
 
 
-<!-- Lab 1 – VLAN dan Trunk -->
+<!-- Lab 1 - VLAN dan Trunk -->
 <section class="note-section">
-  <h3 class="note-title">Lab 1 – VLAN dan Trunk 🖧</h3>
+  <h3 class="note-title">Lab 1 - VLAN dan Trunk 🖧</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -113,7 +113,7 @@ event manager applet SHOW_IP
 
   <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
 
-  <h5 class="note-subsubtitle">Step 1 – Buat VLAN</h5>
+  <h5 class="note-subsubtitle">Step 1 - Buat VLAN</h5>
   <pre class="note-codeblock"><code>
 Switch(config)# vlan 10
 Switch(config-vlan)# name HR
@@ -128,7 +128,7 @@ Switch(config-vlan)# name IT
 Switch(config-vlan)# exit
   </code></pre>
 
-  <h5 class="note-subsubtitle">Step 2 – Assign VLAN ke port</h5>
+  <h5 class="note-subsubtitle">Step 2 - Assign VLAN ke port</h5>
   <pre class="note-codeblock"><code>
 Switch(config)# interface range fa0/1-5
 Switch(config-if-range)# switchport mode access
@@ -143,14 +143,14 @@ Switch(config-if-range)# switchport mode access
 Switch(config-if-range)# switchport access vlan 30
   </code></pre>
 
-  <h5 class="note-subsubtitle">Step 3 – Konfigurasi Trunk (antar switch)</h5>
+  <h5 class="note-subsubtitle">Step 3 - Konfigurasi Trunk (antar switch)</h5>
   <pre class="note-codeblock"><code>
 Switch(config)# interface gi0/1
 Switch(config-if)# switchport mode trunk
 Switch(config-if)# switchport trunk allowed vlan 10,20,30
   </code></pre>
 
-  <h5 class="note-subsubtitle">Step 4 – Verifikasi</h5>
+  <h5 class="note-subsubtitle">Step 4 - Verifikasi</h5>
   <ul class="note-list">
     <li>Cek VLAN: <code>show vlan brief</code></li>
     <li>Cek trunk: <code>show interfaces trunk</code></li>
@@ -164,9 +164,9 @@ Switch(config-if)# switchport trunk allowed vlan 10,20,30
   </ul>
 </section>
 
-<!-- Lab 2 – InterVLAN Routing -->
+<!-- Lab 2 - InterVLAN Routing -->
 <section class="note-section">
-  <h3 class="note-title">Lab 2 – InterVLAN Routing 🔀</h3>
+  <h3 class="note-title">Lab 2 - InterVLAN Routing 🔀</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -245,9 +245,9 @@ Switch# ping 192.168.30.1   # dari VLAN 10 ke VLAN 30
   </ul>
 </section>
 
-<!-- Lab 3 – SPAN (Switch Port Analyzer) -->
+<!-- Lab 3 - SPAN (Switch Port Analyzer) -->
 <section class="note-section">
-  <h3 class="note-title">Lab 3 – SPAN (Switch Port Analyzer) 🔍</h3>
+  <h3 class="note-title">Lab 3 - SPAN (Switch Port Analyzer) 🔍</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -291,9 +291,9 @@ Switch# show monitor
   </ul>
 </section>
 
-<!-- Lab 4 – RSPAN (Remote SPAN) -->
+<!-- Lab 4 - RSPAN (Remote SPAN) -->
 <section class="note-section">
-  <h3 class="note-title">Lab 4 – RSPAN (Remote SPAN) 🌐</h3>
+  <h3 class="note-title">Lab 4 - RSPAN (Remote SPAN) 🌐</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -352,9 +352,9 @@ Switch# show monitor
   </ul>
 </section>
 
-<!-- Lab 5 – EtherChannel Mode On -->
+<!-- Lab 5 - EtherChannel Mode On -->
 <section class="note-section">
-  <h3 class="note-title">Lab 5 – EtherChannel Mode On 🔗</h3>
+  <h3 class="note-title">Lab 5 - EtherChannel Mode On 🔗</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -406,9 +406,9 @@ Switch# show interfaces port-channel
   </ul>
 </section>
 
-<!-- Lab 6 – EtherChannel PAgP -->
+<!-- Lab 6 - EtherChannel PAgP -->
 <section class="note-section">
-  <h3 class="note-title">Lab 6 – EtherChannel PAgP 🔗🤝</h3>
+  <h3 class="note-title">Lab 6 - EtherChannel PAgP 🔗🤝</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -473,9 +473,9 @@ Switch# show interfaces port-channel
   </ul>
 </section>
 
-<!-- Lab 7 – EtherChannel LACP -->
+<!-- Lab 7 - EtherChannel LACP -->
 <section class="note-section">
-  <h3 class="note-title">Lab 7 – EtherChannel LACP 🔗⚡</h3>
+  <h3 class="note-title">Lab 7 - EtherChannel LACP 🔗⚡</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -540,9 +540,9 @@ Switch# show interfaces port-channel
   </ul>
 </section>
 
-<!-- Lab 8 – EtherChannel Layer 3 -->
+<!-- Lab 8 - EtherChannel Layer 3 -->
 <section class="note-section">
-  <h3 class="note-title">Lab 8 – EtherChannel Layer 3 🌐🔗</h3>
+  <h3 class="note-title">Lab 8 - EtherChannel Layer 3 🌐🔗</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -595,16 +595,16 @@ Switch# show ip interface brief
   </ul>
 </section>
 
-<!-- Lab 9 – STP Tuning: PortFast -->
+<!-- Lab 9 - STP Tuning: PortFast -->
 <section class="note-section">
-  <h3 class="note-title">Lab 9 – STP Tuning: PortFast ⚡</h3>
+  <h3 class="note-title">Lab 9 - STP Tuning: PortFast ⚡</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
     STP (Spanning Tree Protocol) mencegah looping di jaringan Layer 2.
   </p>
   <p class="note-paragraph">
-    Biasanya, port STP butuh 30–50 detik untuk berpindah ke <strong>forwarding state</strong>.
+    Biasanya, port STP butuh 30-50 detik untuk berpindah ke <strong>forwarding state</strong>.
   </p>
   <p class="note-paragraph">
     <strong>PortFast</strong>: memaksa port langsung ke forwarding state saat switch start, cocok untuk port end-device seperti PC atau server.
@@ -643,9 +643,9 @@ Switch# show spanning-tree interface fa0/10
   </ul>
 </section>
 
-<!-- Lab 10 – STP Tuning: UplinkFast -->
+<!-- Lab 10 - STP Tuning: UplinkFast -->
 <section class="note-section">
-  <h3 class="note-title">Lab 10 – STP Tuning: UplinkFast ⚡🔄</h3>
+  <h3 class="note-title">Lab 10 - STP Tuning: UplinkFast ⚡🔄</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -661,7 +661,7 @@ Switch# show spanning-tree interface fa0/10
   <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
   <p class="note-paragraph">
     Switch akses memiliki 2 uplink ke distribution switch.  
-    Jika uplink utama putus, tanpa UplinkFast butuh 30–50 detik untuk STP memilih port baru → downtime.  
+    Jika uplink utama putus, tanpa UplinkFast butuh 30-50 detik untuk STP memilih port baru → downtime.  
     Dengan UplinkFast, port cadangan langsung forwarding → downtime minimal.
   </p>
 
@@ -688,9 +688,9 @@ Switch# show spanning-tree
 </section>
 
 
-<!-- Lab 11 – STP Tuning: BPDU Guard -->
+<!-- Lab 11 - STP Tuning: BPDU Guard -->
 <section class="note-section">
-  <h3 class="note-title">Lab 11 – STP Tuning: BPDU Guard 🛡️⚡</h3>
+  <h3 class="note-title">Lab 11 - STP Tuning: BPDU Guard 🛡️⚡</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -737,9 +737,9 @@ Switch# show errdisable recovery
   </ul>
 </section>
 
-<!-- Lab 12 – STP Tuning: BPDU Filter -->
+<!-- Lab 12 - STP Tuning: BPDU Filter -->
 <section class="note-section">
-  <h3 class="note-title">Lab 12 – STP Tuning: BPDU Filter 🛡️🚫</h3>
+  <h3 class="note-title">Lab 12 - STP Tuning: BPDU Filter 🛡️🚫</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -796,9 +796,9 @@ Switch# show spanning-tree interface fa0/10 detail
 </section>
 
 
-<!-- Lab 13 – STP Tuning: Root Guard -->
+<!-- Lab 13 - STP Tuning: Root Guard -->
 <section class="note-section">
-  <h3 class="note-title">Lab 13 – STP Tuning: Root Guard 🛡️👑</h3>
+  <h3 class="note-title">Lab 13 - STP Tuning: Root Guard 🛡️👑</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -841,9 +841,9 @@ Switch# show spanning-tree inconsistentports
   </ul>
 </section>
 
-<!-- Lab 14 – MSTP (Multiple Spanning Tree Protocol) -->
+<!-- Lab 14 - MSTP (Multiple Spanning Tree Protocol) -->
 <section class="note-section">
-  <h3 class="note-title">Lab 14 – MSTP (Multiple Spanning Tree Protocol) 🌐🕸️</h3>
+  <h3 class="note-title">Lab 14 - MSTP (Multiple Spanning Tree Protocol) 🌐🕸️</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -862,12 +862,12 @@ Switch# show spanning-tree inconsistentports
 
   <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
   <p class="note-paragraph">
-    Kantor memiliki 6 VLAN: 10–15.  
+    Kantor memiliki 6 VLAN: 10-15.  
     Tujuan konfigurasi:
   </p>
   <ul class="note-list">
-    <li>VLAN 10–12 → MST Instance 1</li>
-    <li>VLAN 13–15 → MST Instance 2</li>
+    <li>VLAN 10-12 → MST Instance 1</li>
+    <li>VLAN 13-15 → MST Instance 2</li>
   </ul>
   <p class="note-paragraph">
     Dengan MSTP, link cadangan bisa digunakan lebih optimal dibanding STP klasik.
@@ -902,13 +902,13 @@ Switch# show spanning-tree mst detail
   </ul>
 </section>
 
-<!-- Lab 15 – RSTP (Rapid Spanning Tree Protocol) -->
+<!-- Lab 15 - RSTP (Rapid Spanning Tree Protocol) -->
 <section class="note-section">
-  <h3 class="note-title">Lab 15 – RSTP (Rapid Spanning Tree Protocol) ⚡🕸️</h3>
+  <h3 class="note-title">Lab 15 - RSTP (Rapid Spanning Tree Protocol) ⚡🕸️</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
-    RSTP (IEEE 802.1w) adalah versi cepat STP dengan konvergensi lebih singkat (1–10 detik dibanding 30–50 detik STP klasik).
+    RSTP (IEEE 802.1w) adalah versi cepat STP dengan konvergensi lebih singkat (1-10 detik dibanding 30-50 detik STP klasik).
   </p>
   <p class="note-paragraph">
     Mekanisme utama:
@@ -954,9 +954,9 @@ Switch# show spanning-tree summary
   </ul>
 </section>
 
-<!-- Lab 16 – Port Security: Violation Default -->
+<!-- Lab 16 - Port Security: Violation Default -->
 <section class="note-section">
-  <h3 class="note-title">Lab 16 – Port Security: Violation Default 🔒</h3>
+  <h3 class="note-title">Lab 16 - Port Security: Violation Default 🔒</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -1004,9 +1004,9 @@ Switch# show running-config | include port-security
   </ul>
 </section>
 
-<!-- Lab 17 – Port Security: Violation Recovery -->
+<!-- Lab 17 - Port Security: Violation Recovery -->
 <section class="note-section">
-  <h3 class="note-title">Lab 17 – Port Security: Violation Recovery ⏱️🔒</h3>
+  <h3 class="note-title">Lab 17 - Port Security: Violation Recovery ⏱️🔒</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -1052,9 +1052,9 @@ Switch# show port-security interface fa0/10
 </section>
 
 
-<!-- Lab 18 – Port Security: Violation Action -->
+<!-- Lab 18 - Port Security: Violation Action -->
 <section class="note-section">
-  <h3 class="note-title">Lab 18 – Port Security: Violation Action ⚠️🔒</h3>
+  <h3 class="note-title">Lab 18 - Port Security: Violation Action ⚠️🔒</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -1105,9 +1105,9 @@ Switch# show port-security
 </section>
 
 
-<!-- Lab 19 – HSRP: Konfigurasi Dasar -->
+<!-- Lab 19 - HSRP: Konfigurasi Dasar -->
 <section class="note-section">
-  <h3 class="note-title">Lab 19 – HSRP: Konfigurasi Dasar 🔄🛡️</h3>
+  <h3 class="note-title">Lab 19 - HSRP: Konfigurasi Dasar 🔄🛡️</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -1166,9 +1166,9 @@ R2# show standby
   </ul>
 </section>
 
-<!-- Lab 20 – HSRP: Track Route -->
+<!-- Lab 20 - HSRP: Track Route -->
 <section class="note-section">
-  <h3 class="note-title">Lab 20 – HSRP: Track Route 🛰️🔄</h3>
+  <h3 class="note-title">Lab 20 - HSRP: Track Route 🛰️🔄</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -1225,9 +1225,9 @@ R2# show standby
 </section>
 
 
-<!-- Lab 21 – HSRP: With IP SLA -->
+<!-- Lab 21 - HSRP: With IP SLA -->
 <section class="note-section">
-  <h3 class="note-title">Lab 21 – HSRP: With IP SLA 🌐🔄</h3>
+  <h3 class="note-title">Lab 21 - HSRP: With IP SLA 🌐🔄</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -1291,9 +1291,9 @@ R2# show standby
   </ul>
 </section>
 
-<!-- Lab 22 – HSRP: Load Balancing -->
+<!-- Lab 22 - HSRP: Load Balancing -->
 <section class="note-section">
-  <h3 class="note-title">Lab 22 – HSRP: Load Balancing ⚖️🔄</h3>
+  <h3 class="note-title">Lab 22 - HSRP: Load Balancing ⚖️🔄</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -1357,9 +1357,9 @@ R2# show standby
 </section>
 
 
-<!-- Lab 23 – VRRP: Konfigurasi Dasar -->
+<!-- Lab 23 - VRRP: Konfigurasi Dasar -->
 <section class="note-section">
-  <h3 class="note-title">Lab 23 – VRRP: Konfigurasi Dasar 🖧🔄</h3>
+  <h3 class="note-title">Lab 23 - VRRP: Konfigurasi Dasar 🖧🔄</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -1416,9 +1416,9 @@ R2# show vrrp
   </ul>
 </section>
 
-<!-- Lab 24 – VRRP: Track Route -->
+<!-- Lab 24 - VRRP: Track Route -->
 <section class="note-section">
-  <h3 class="note-title">Lab 24 – VRRP: Track Route 🛰️🔄</h3>
+  <h3 class="note-title">Lab 24 - VRRP: Track Route 🛰️🔄</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -1479,9 +1479,9 @@ R2# show vrrp
 </section>
 
 
-<!-- Lab 25 – VRRP: With IP SLA -->
+<!-- Lab 25 - VRRP: With IP SLA -->
 <section class="note-section">
-  <h3 class="note-title">Lab 25 – VRRP: With IP SLA 🛰️📡</h3>
+  <h3 class="note-title">Lab 25 - VRRP: With IP SLA 🛰️📡</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -1542,9 +1542,9 @@ R2# show vrrp
   </ul>
 </section>
 
-<!-- Lab 26 – VRRP: Load Balancing -->
+<!-- Lab 26 - VRRP: Load Balancing -->
 <section class="note-section">
-  <h3 class="note-title">Lab 26 – VRRP: Load Balancing ⚖️</h3>
+  <h3 class="note-title">Lab 26 - VRRP: Load Balancing ⚖️</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">
@@ -1608,9 +1608,9 @@ R2# show vrrp
 </section>
 
 
-<!-- Lab 27 – GLBP: Konfigurasi Dasar -->
+<!-- Lab 27 - GLBP: Konfigurasi Dasar -->
 <section class="note-section">
-  <h3 class="note-title">Lab 27 – GLBP: Konfigurasi Dasar ⚡</h3>
+  <h3 class="note-title">Lab 27 - GLBP: Konfigurasi Dasar ⚡</h3>
 
   <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
   <p class="note-paragraph">

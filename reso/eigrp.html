@@ -1093,7 +1093,7 @@ maximum-paths 4
       <h4 class="note-subtitle">2. Unequal-cost Load Balancing (Variance)</h4>
       <p class="note-paragraph">
         Memanfaatkan jalur metric lebih besar.  
-        Syarat: metric jalur alternatif ≤ (metric successor × variance).
+        Syarat: metric jalur alternatif ≤ (metric successor - variance).
       </p>
       <pre class="note-codeblock"><code>
 router eigrp 100
@@ -1106,7 +1106,7 @@ variance 2
       </ul>
       <p class="note-paragraph">
         Default → hanya jalur via R2 dipakai.  
-        Dengan <code>variance 2</code> → 1500 ≤ (1000 × 2) → jalur via R4 ikut dipakai.
+        Dengan <code>variance 2</code> → 1500 ≤ (1000 - 2) → jalur via R4 ikut dipakai.
       </p>
 
       <h4 class="note-subtitle">Verifikasi</h4>
