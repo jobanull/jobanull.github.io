@@ -143,8 +143,19 @@
 }
 
 .note-card.expanded .note-card-content {
-  max-height: 1000px; /* cukup besar supaya bisa menampung konten */
-  padding: 1rem 1.5rem;
+  padding: 1rem 1.5rem; /* padding naik saat expand */
+}
+
+.note-card-header {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toggle-btn {
+  display: inline-block;
+  transition: transform 0.3s ease;
 }
 
 .note-card.expanded .toggle-btn {
