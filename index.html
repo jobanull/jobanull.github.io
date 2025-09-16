@@ -60,6 +60,9 @@
           <li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="#resource">Resources</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#temp">Temporary</a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -745,8 +748,50 @@
       </section>
 
 
+      <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="temp">
+          <div class="my-auto">
+            <h2 class="mb-5">Temporary - Video Playlist</h2>
+
+            <div class="container text-center">
+              <!-- Video Player -->
+              <div class="mb-3" style="max-width: 70%; margin: auto;">
+                <iframe id="ytPlayer" width="100%" height="500" 
+                        src="https://www.youtube.com/embed/lB5Rspcy1ck" 
+                        title="YouTube video player" frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen></iframe>
+              </div>
+
+              <!-- Navigation Buttons -->
+              <div>
+                <button class="btn btn-secondary me-2" onclick="prevVideo()">Previous</button>
+                <button class="btn btn-primary" onclick="nextVideo()">Next</button>
+              </div>
+            </div>
+          </div>
+        </section>
 
     </div>
+
+    <script>
+  // Daftar video YouTube
+  const videos = [
+    "https://www.youtube.com/embed/wtADVy8G5GM?start=841",
+  ];
+
+  let currentIndex = 0;
+  const player = document.getElementById("ytPlayer");
+
+  function nextVideo() {
+    currentIndex = (currentIndex + 1) % videos.length;
+    player.src = videos[currentIndex];
+  }
+
+  function prevVideo() {
+    currentIndex = (currentIndex - 1 + videos.length) % videos.length;
+    player.src = videos[currentIndex];
+  }
+</script>
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
