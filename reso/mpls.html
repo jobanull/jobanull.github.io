@@ -259,6 +259,522 @@ set name=R7
     </p>
 
     <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+
+    <!-- MPLS Overview & Labs -->
+<section class="note-section">
+  <h3 class="note-title">MPLS Overview & Labs 🚀</h3>
+
+  <h4 class="note-subtitle">📌 1. Konsep Dasar MPLS</h4>
+  <p class="note-paragraph">
+    MPLS (Multiprotocol Label Switching) adalah teknologi forwarding berbasis label yang mempercepat proses routing di jaringan besar.
+  </p>
+  <h5 class="note-subsubtitle">Cara Kerja</h5>
+  <ul class="note-list">
+    <li>Paket data diberikan <strong>label</strong> saat masuk ke jaringan MPLS</li>
+    <li>Router dalam core jaringan (<strong>LSR</strong>) meneruskan paket berdasarkan label, bukan IP</li>
+  </ul>
+  <h5 class="note-subsubtitle">Terminologi Penting</h5>
+  <ul class="note-list">
+    <li><strong>FEC</strong> (Forwarding Equivalence Class): Sekelompok paket yang diperlakukan sama</li>
+    <li><strong>LER</strong> (Label Edge Router): Router di edge yang memberi/menghapus label</li>
+    <li><strong>LSR</strong> (Label Switch Router): Router di core yang meneruskan paket berbasis label</li>
+  </ul>
+  <h5 class="note-subsubtitle">Label Operations</h5>
+  <ul class="note-list">
+    <li><strong>Push</strong>: Menambahkan label baru (biasanya di ingress)</li>
+    <li><strong>Swap</strong>: Mengganti label lama dengan yang baru (di core LSR)</li>
+    <li><strong>Pop</strong>: Menghapus label (biasanya di egress)</li>
+  </ul>
+
+  <h4 class="note-subtitle">📌 2. Arsitektur MPLS</h4>
+  <ul class="note-list">
+    <li><strong>PE (Provider Edge)</strong>: Menghubungkan jaringan pelanggan ke MPLS core</li>
+    <li><strong>P (Provider/Core Router)</strong>: Hanya meneruskan paket MPLS di backbone</li>
+  </ul>
+  <p class="note-paragraph">
+    <strong>Forwarding MPLS:</strong> Paket masuk → PE memberi label → LSR swap label → PE egress hapus label → paket sampai CE
+  </p>
+
+  <h4 class="note-subtitle">📌 3. Mekanisme Labeling</h4>
+  <h5 class="note-subsubtitle">Label Distribution</h5>
+  <ul class="note-list">
+    <li><strong>LDP</strong> (Label Distribution Protocol): Distribusi label otomatis</li>
+    <li><strong>RSVP-TE</strong>: Untuk Traffic Engineering, jalur spesifik</li>
+  </ul>
+  <h5 class="note-subsubtitle">Traffic Engineering & QoS</h5>
+  <p class="note-paragraph">
+    Memastikan jalur optimal untuk aplikasi kritikal
+  </p>
+
+  <h4 class="note-subtitle">📌 4. MPLS VPN</h4>
+  <h5 class="note-subsubtitle">Jenis</h5>
+  <ul class="note-list">
+    <li><strong>Layer 3 VPN (L3VPN)</strong>: Routing antar site pelanggan via MPLS</li>
+    <li><strong>Layer 2 VPN (L2VPN)</strong>: Transparan Layer 2 antar site</li>
+  </ul>
+  <h5 class="note-subsubtitle">Routing PE-CE</h5>
+  <ul class="note-list">
+    <li>Static Routing</li>
+    <li>Dynamic Routing (misal OSPF, EIGRP, BGP)</li>
+  </ul>
+
+  <h4 class="note-subtitle">📌 5. Lab MPLS</h4>
+  <h5 class="note-subsubtitle">Lab 1 - MPLS Backbone</h5>
+  <ul class="note-list">
+    <li>Membangun MPLS core antara P dan PE router</li>
+    <li>Konfigurasi LDP dan verifikasi label</li>
+  </ul>
+
+  <h5 class="note-subsubtitle">Lab 2 - MPLS VPN</h5>
+  <ul class="note-list">
+    <li>Membuat L3VPN antar beberapa PE-CE</li>
+    <li>Menghubungkan beberapa site pelanggan</li>
+  </ul>
+
+  <h5 class="note-subsubtitle">Lab 3 - MPLS VPN - PE-CE Static Routing</h5>
+  <ul class="note-list">
+    <li>Menggunakan static route untuk PE-CE</li>
+    <li>Memastikan paket pelanggan bisa saling reach melalui MPLS</li>
+  </ul>
+</section>
+
+<!-- Lab 1 - MPLS Backbone -->
+<section class="note-section">
+  <h3 class="note-title">Lab 1 - MPLS Backbone 🏗️</h3>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Kita punya jaringan MPLS sederhana dengan 3 router core dan 2 router edge:
+  </p>
+  <pre class="note-codeblock"><code>
+CE1 --- PE1 --- P1 --- P2 --- PE2 --- CE2
+  </code></pre>
+  <ul class="note-list">
+    <li><strong>PE1 & PE2</strong>: Provider Edge Router</li>
+    <li><strong>P1 & P2</strong>: Core Router (LSR)</li>
+    <li><strong>CE1 & CE2</strong>: Customer Edge Router (tidak perlu MPLS, hanya IP routing biasa)</li>
+  </ul>
+
+  <h4 class="note-subtitle">🎯 Goal Lab</h4>
+  <ul class="note-list">
+    <li>Membangun MPLS backbone antara PE1, P1, P2, PE2</li>
+    <li>Mengaktifkan LDP untuk distribusi label</li>
+    <li>Verifikasi label dan konektivitas antar router MPLS</li>
+  </ul>
+
+  <h4 class="note-subtitle">🌐 IP Addressing (Contoh)</h4>
+  <table class="note-table">
+    <thead>
+      <tr>
+        <th>Link</th>
+        <th>IP PE1</th>
+        <th>IP P1</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>PE1-P1</td>
+        <td>10.0.12.1/30</td>
+        <td>10.0.12.2/30</td>
+      </tr>
+      <tr>
+        <td>P1-P2</td>
+        <td>10.0.23.1/30</td>
+        <td>10.0.23.2/30</td>
+      </tr>
+      <tr>
+        <td>P2-PE2</td>
+        <td>10.0.24.1/30</td>
+        <td>10.0.24.2/30</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi MPLS Backbone</h4>
+
+  <h5 class="note-subsubtitle">Step 1 - Aktifkan MPLS di Core Router (P1 & P2)</h5>
+  <pre class="note-codeblock"><code>
+! Aktifkan MPLS pada interface core
+interface FastEthernet0/0
+ ip address 10.0.12.2 255.255.255.252
+ mpls ip
+!
+interface FastEthernet0/1
+ ip address 10.0.23.1 255.255.255.252
+ mpls ip
+!
+mpls label protocol ldp
+  </code></pre>
+
+  <h5 class="note-subsubtitle">Step 2 - Aktifkan MPLS di PE Router</h5>
+  <p class="note-paragraph"><strong>PE1</strong></p>
+  <pre class="note-codeblock"><code>
+interface FastEthernet0/0
+ ip address 10.0.12.1 255.255.255.252
+ mpls ip
+!
+interface FastEthernet0/1
+ ip address 192.168.1.1 255.255.255.0  ! Link ke CE1
+!
+mpls label protocol ldp
+  </code></pre>
+
+  <p class="note-paragraph"><strong>PE2</strong></p>
+  <pre class="note-codeblock"><code>
+interface FastEthernet0/0
+ ip address 10.0.24.2 255.255.255.252
+ mpls ip
+!
+interface FastEthernet0/1
+ ip address 192.168.2.1 255.255.255.0  ! Link ke CE2
+!
+mpls label protocol ldp
+  </code></pre>
+
+  <h5 class="note-subsubtitle">Step 3 - Routing di Core & PE</h5>
+  <p class="note-paragraph">Bisa pakai OSPF di MPLS core agar semua router tahu jalur ke PE:</p>
+  <pre class="note-codeblock"><code>
+router ospf 1
+ network 10.0.0.0 0.0.255.255 area 0
+  </code></pre>
+
+  <h5 class="note-subsubtitle">Step 4 - Verifikasi</h5>
+  <p class="note-paragraph"><strong>Periksa label LDP</strong></p>
+  <pre class="note-codeblock"><code>
+show mpls ldp neighbor
+show mpls forwarding-table
+  </code></pre>
+  <p class="note-paragraph"><strong>Tes konektivitas antar PE</strong></p>
+  <pre class="note-codeblock"><code>
+ping 10.0.24.2  ! dari PE1 ke PE2
+  </code></pre>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>PE1 bisa reach PE2 melalui MPLS core</li>
+    <li>Core router hanya swap label, tidak mengubah IP paket</li>
+    <li>LDP neighbor terbentuk di antara PE1-P1, P1-P2, P2-PE2</li>
+  </ul>
+</section>
+
+
+<!-- Lab 2 - MPLS VPN (L3VPN) -->
+<section class="note-section">
+  <h3 class="note-title">Lab 2 - MPLS VPN (L3VPN) 🌐</h3>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Kita ingin menghubungkan dua site pelanggan melalui MPLS backbone yang sudah dibuat di Lab 1.
+  </p>
+  <pre class="note-codeblock"><code>
+CE1 --- PE1 --- P1 --- P2 --- PE2 --- CE2
+  </code></pre>
+  <ul class="note-list">
+    <li><strong>PE1 & PE2</strong>: Provider Edge Router</li>
+    <li><strong>P1 & P2</strong>: Core MPLS Router</li>
+    <li><strong>CE1 & CE2</strong>: Customer Edge Router</li>
+    <li>MPLS backbone sudah aktif (Lab 1)</li>
+  </ul>
+
+  <h4 class="note-subtitle">🎯 Goal Lab</h4>
+  <ul class="note-list">
+    <li>Membuat Layer 3 VPN agar CE1 dan CE2 bisa saling ping</li>
+    <li>Menggunakan VRF di PE router untuk memisahkan routing pelanggan</li>
+    <li>Distribusi prefix menggunakan MP-BGP antar PE</li>
+  </ul>
+
+  <h4 class="note-subtitle">🌐 IP Addressing Contoh</h4>
+  <table class="note-table">
+    <thead>
+      <tr>
+        <th>Device</th>
+        <th>Interface</th>
+        <th>IP Address</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>CE1</td>
+        <td>Fa0/0</td>
+        <td>192.168.10.1/24</td>
+      </tr>
+      <tr>
+        <td>PE1</td>
+        <td>Fa0/1</td>
+        <td>192.168.10.254/24</td>
+      </tr>
+      <tr>
+        <td>PE1</td>
+        <td>Fa0/0</td>
+        <td>10.0.12.1/30</td>
+      </tr>
+      <tr>
+        <td>PE2</td>
+        <td>Fa0/0</td>
+        <td>10.0.24.2/30</td>
+      </tr>
+      <tr>
+        <td>PE2</td>
+        <td>Fa0/1</td>
+        <td>192.168.20.254/24</td>
+      </tr>
+      <tr>
+        <td>CE2</td>
+        <td>Fa0/0</td>
+        <td>192.168.20.1/24</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi MPLS L3VPN</h4>
+
+  <h5 class="note-subsubtitle">Step 1 - Buat VRF di PE Router</h5>
+  <p class="note-paragraph"><strong>PE1</strong></p>
+  <pre class="note-codeblock"><code>
+ip vrf CUSTOMER1
+ rd 100:1
+ route-target export 100:1
+ route-target import 100:1
+!
+interface FastEthernet0/1  ! link ke CE1
+ ip vrf forwarding CUSTOMER1
+ ip address 192.168.10.254 255.255.255.0
+!
+interface FastEthernet0/0  ! link ke MPLS core
+ ip address 10.0.12.1 255.255.255.252
+ mpls ip
+  </code></pre>
+
+  <p class="note-paragraph"><strong>PE2</strong></p>
+  <pre class="note-codeblock"><code>
+ip vrf CUSTOMER1
+ rd 100:1
+ route-target export 100:1
+ route-target import 100:1
+!
+interface FastEthernet0/1  ! link ke CE2
+ ip vrf forwarding CUSTOMER1
+ ip address 192.168.20.254 255.255.255.0
+!
+interface FastEthernet0/0  ! link ke MPLS core
+ ip address 10.0.24.2 255.255.255.252
+ mpls ip
+  </code></pre>
+
+  <h5 class="note-subsubtitle">Step 2 - Routing PE-CE</h5>
+  <p class="note-paragraph">Bisa pakai static routing atau dynamic routing (OSPF/BGP). Contoh static routing:</p>
+  <pre class="note-codeblock"><code>
+CE1
+ip route 0.0.0.0 0.0.0.0 192.168.10.254
+
+CE2
+ip route 0.0.0.0 0.0.0.0 192.168.20.254
+  </code></pre>
+
+  <h5 class="note-subsubtitle">Step 3 - Aktifkan MP-BGP di PE</h5>
+  <p class="note-paragraph"><strong>PE1</strong></p>
+  <pre class="note-codeblock"><code>
+router bgp 65001
+ bgp log-neighbor-changes
+ neighbor 10.0.12.2 remote-as 65000
+ neighbor 10.0.12.2 update-source FastEthernet0/0
+ !
+ address-family vpnv4
+  neighbor 10.0.12.2 activate
+ exit-address-family
+  </code></pre>
+
+  <p class="note-paragraph"><strong>PE2</strong></p>
+  <pre class="note-codeblock"><code>
+router bgp 65002
+ bgp log-neighbor-changes
+ neighbor 10.0.24.1 remote-as 65000
+ neighbor 10.0.24.1 update-source FastEthernet0/0
+ !
+ address-family vpnv4
+  neighbor 10.0.24.1 activate
+ exit-address-family
+  </code></pre>
+
+  <p class="note-paragraph"><em>Catatan: P1 dan P2 sebagai core tidak perlu BGP VPN, hanya MPLS + LDP.</em></p>
+
+  <h5 class="note-subsubtitle">Step 4 - Verifikasi</h5>
+  <ul class="note-list">
+    <li>Cek VRF di PE: <code>show ip route vrf CUSTOMER1</code></li>
+    <li>Cek konektivitas CE1 ↔ CE2: <code>ping 192.168.20.1 source 192.168.10.1</code></li>
+    <li>Cek MPLS VPN label: <code>show mpls forwarding-table</code></li>
+  </ul>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>CE1 bisa ping CE2 melalui MPLS VPN</li>
+    <li>Traffic pelanggan dipisahkan oleh VRF</li>
+    <li>Core MPLS hanya melakukan swap label, tidak menyentuh IP CE</li>
+  </ul>
+</section>
+
+
+<!-- Lab 3 - MPLS VPN: PE-CE Static Routing -->
+<section class="note-section">
+  <h3 class="note-title">Lab 3 - MPLS VPN: PE-CE Static Routing 🛠️</h3>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Topologi sama dengan Lab 2:
+  </p>
+  <pre class="note-codeblock"><code>
+CE1 --- PE1 --- P1 --- P2 --- PE2 --- CE2
+  </code></pre>
+  <ul class="note-list">
+    <li>Goal Lab: Membuat MPLS VPN agar CE1 dan CE2 saling reach menggunakan static route</li>
+    <li>Menghubungkan beberapa site pelanggan melalui VRF</li>
+    <li>Core MPLS (P1 & P2) tetap hanya swap label, tidak perlu tahu prefix pelanggan</li>
+  </ul>
+
+  <h4 class="note-subtitle">🌐 IP Addressing Contoh</h4>
+  <table class="note-table">
+    <thead>
+      <tr>
+        <th>Device</th>
+        <th>Interface</th>
+        <th>IP Address</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>CE1</td>
+        <td>Fa0/0</td>
+        <td>192.168.10.1/24</td>
+      </tr>
+      <tr>
+        <td>PE1</td>
+        <td>Fa0/1</td>
+        <td>192.168.10.254/24</td>
+      </tr>
+      <tr>
+        <td>PE1</td>
+        <td>Fa0/0</td>
+        <td>10.0.12.1/30</td>
+      </tr>
+      <tr>
+        <td>PE2</td>
+        <td>Fa0/0</td>
+        <td>10.0.24.2/30</td>
+      </tr>
+      <tr>
+        <td>PE2</td>
+        <td>Fa0/1</td>
+        <td>192.168.20.254/24</td>
+      </tr>
+      <tr>
+        <td>CE2</td>
+        <td>Fa0/0</td>
+        <td>192.168.20.1/24</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi MPLS VPN - Static Routing</h4>
+
+  <h5 class="note-subsubtitle">Step 1 - Buat VRF di PE Router</h5>
+  <p class="note-paragraph"><strong>PE1</strong></p>
+  <pre class="note-codeblock"><code>
+ip vrf CUSTOMER1
+ rd 100:1
+ route-target export 100:1
+ route-target import 100:1
+!
+interface FastEthernet0/1  ! link ke CE1
+ ip vrf forwarding CUSTOMER1
+ ip address 192.168.10.254 255.255.255.0
+!
+interface FastEthernet0/0  ! link ke MPLS core
+ ip address 10.0.12.1 255.255.255.252
+ mpls ip
+  </code></pre>
+
+  <p class="note-paragraph"><strong>PE2</strong></p>
+  <pre class="note-codeblock"><code>
+ip vrf CUSTOMER1
+ rd 100:1
+ route-target export 100:1
+ route-target import 100:1
+!
+interface FastEthernet0/1  ! link ke CE2
+ ip vrf forwarding CUSTOMER1
+ ip address 192.168.20.254 255.255.255.0
+!
+interface FastEthernet0/0  ! link ke MPLS core
+ ip address 10.0.24.2 255.255.255.252
+ mpls ip
+  </code></pre>
+
+  <h5 class="note-subsubtitle">Step 2 - Routing PE-CE Static</h5>
+  <pre class="note-codeblock"><code>
+CE1
+ip route 0.0.0.0 0.0.0.0 192.168.10.254
+
+CE2
+ip route 0.0.0.0 0.0.0.0 192.168.20.254
+
+PE1
+ip route vrf CUSTOMER1 192.168.20.0 255.255.255.0 10.0.12.2
+
+PE2
+ip route vrf CUSTOMER1 192.168.10.0 255.255.255.0 10.0.24.1
+  </code></pre>
+  <p class="note-paragraph"><em>Catatan: 10.0.12.2 di PE1 adalah next-hop ke PE2 melalui core MPLS. Next-hop bisa berupa interface MPLS backbone.</em></p>
+
+  <h5 class="note-subsubtitle">Step 3 - Aktifkan MPLS di Core</h5>
+  <p class="note-paragraph"><strong>P1</strong></p>
+  <pre class="note-codeblock"><code>
+interface FastEthernet0/0
+ ip address 10.0.12.2 255.255.255.252
+ mpls ip
+!
+interface FastEthernet0/1
+ ip address 10.0.23.1 255.255.255.252
+ mpls ip
+!
+mpls label protocol ldp
+  </code></pre>
+
+  <p class="note-paragraph"><strong>P2</strong></p>
+  <pre class="note-codeblock"><code>
+interface FastEthernet0/0
+ ip address 10.0.23.2 255.255.255.252
+ mpls ip
+!
+interface FastEthernet0/1
+ ip address 10.0.24.1 255.255.255.252
+ mpls ip
+!
+mpls label protocol ldp
+  </code></pre>
+
+  <h5 class="note-subsubtitle">Step 4 - Verifikasi</h5>
+  <ul class="note-list">
+    <li>Cek VRF di PE: <code>show ip route vrf CUSTOMER1</code></li>
+    <li>Ping CE1 ↔ CE2: <code>ping 192.168.20.1 source 192.168.10.1</code></li>
+    <li>Cek MPLS label forwarding: <code>show mpls forwarding-table</code></li>
+  </ul>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>CE1 bisa ping CE2 melalui MPLS VPN</li>
+    <li>Routing antar site menggunakan static route di PE</li>
+    <li>Core MPLS tetap hanya swap label</li>
+    <li>Tidak perlu dynamic routing antara PE-CE</li>
+  </ul>
+</section>
+
+
+
+    <hr class="note-divider" />
+
   </main>
 
   <script>

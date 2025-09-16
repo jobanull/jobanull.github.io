@@ -145,8 +145,10 @@ router eigrp 100
     <hr class="note-divider" />
     <hr class="note-divider" />
     <hr class="note-divider" />
-    
-    <h3 class="note-subtitle">Distribute-List pada EIGRP</h3>
+
+
+    <section class="note-section">
+    <h3 class="note-title">Distribute-List pada EIGRP</h3>
     <p class="note-paragraph">
       <strong>Distribute-list</strong> adalah fitur di EIGRP (juga tersedia pada protokol routing lain) untuk mengontrol route yang masuk (<em>inbound</em>) atau keluar (<em>outbound</em>) dari routing table. 
       Dengan kata lain, distribute-list digunakan untuk <em>filtering route</em> berdasarkan:
@@ -162,7 +164,7 @@ router eigrp 100
       <li>
         <strong>Inbound distribute-list:</strong> mencegah route tertentu masuk ke routing table EIGRP. 
         Efek: router tidak akan mengenal route tersebut sama sekali.
-        <pre><code>
+        <pre class="note-codeblock"><code>
     router eigrp &lt;AS&gt;
     distribute-list &lt;ACL/PREFIX&gt; in &lt;interface&gt;
         </code></pre>
@@ -170,7 +172,7 @@ router eigrp 100
       <li>
         <strong>Outbound distribute-list:</strong> mencegah router meng-advertise route tertentu ke tetangganya. 
         Efek: router tetap menyimpan route tersebut di routing table, tetapi tetangga tidak akan menerima.
-        <pre><code>
+        <pre class="note-codeblock"><code>
     router eigrp &lt;AS&gt;
     distribute-list &lt;ACL/PREFIX&gt; out &lt;interface&gt;
         </code></pre>
@@ -184,7 +186,7 @@ router eigrp 100
     </p>
 
     <p class="note-paragraph"><strong>Konfigurasi Outbound Filtering di R1:</strong></p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     R1(config)# access-list 1 permit 192.168.10.0 0.0.0.255
     R1(config)# router eigrp 100
     R1(config-router)# network 192.168.10.0
@@ -194,7 +196,7 @@ router eigrp 100
     <p class="note-paragraph">Hasil: R2 hanya belajar 192.168.10.0/24, tidak mengetahui 192.168.20.0/24.</p>
 
     <p class="note-paragraph"><strong>Konfigurasi Inbound Filtering di R2:</strong></p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     R2(config)# access-list 1 permit 192.168.10.0 0.0.0.255
     R2(config)# router eigrp 100
     R2(config-router)# distribute-list 1 in FastEthernet0/0
@@ -209,12 +211,14 @@ router eigrp 100
       <li>Outbound filtering lebih “ramah” → router tetap mengetahui route, hanya tidak dibagikan ke tetangga.</li>
       <li>Inbound filtering bisa menyulitkan troubleshooting karena router benar-benar tidak mengenal route tersebut.</li>
     </ul>
+    </section>
 
     <hr class="note-divider" />
     <hr class="note-divider" />
     <hr class="note-divider" />
 
-    <h3 class="note-subtitle">Prefix-List pada EIGRP</h3>
+    <section class="note-section">
+    <h3 class="note-title">Prefix-List pada EIGRP</h3>
     <p class="note-paragraph">
       <strong>Prefix-list</strong> adalah cara modern menggantikan ACL untuk <em>filtering route</em>. 
       Lebih fleksibel dan spesifik karena bisa mengatur:
@@ -235,7 +239,7 @@ router eigrp 100
 
     <h4 class="note-subtitle">Sintaks Dasar</h4>
     <p class="note-paragraph"><strong>Buat prefix-list:</strong></p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     ip prefix-list &lt;NAMA&gt; seq &lt;NOMOR&gt; permit|deny &lt;prefix&gt; [ge &lt;n&gt;] [le &lt;m&gt;]
     </code></pre>
     <ul class="note-list">
@@ -243,7 +247,7 @@ router eigrp 100
       <li><strong>le</strong> = less-equal (panjang prefix maksimal)</li>
     </ul>
     <p class="note-paragraph"><strong>Terapkan di EIGRP:</strong></p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     router eigrp &lt;AS&gt;
     distribute-list prefix &lt;NAMA&gt; in &lt;interface&gt;
     </code></pre>
@@ -254,7 +258,7 @@ router eigrp 100
       192.168.10.0/24, 192.168.20.0/24, 192.168.30.0/24. 
       Tapi di R2, kita hanya ingin menerima 192.168.10.0/24 dan 192.168.20.0/24.
     </p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     R2(config)# ip prefix-list ALLOW_ROUTES seq 5 permit 192.168.10.0/24
     R2(config)# ip prefix-list ALLOW_ROUTES seq 10 permit 192.168.20.0/24
     R2(config)# ip prefix-list ALLOW_ROUTES seq 20 deny 0.0.0.0/0 le 32
@@ -273,7 +277,7 @@ router eigrp 100
     <p class="note-paragraph">
       Jika ingin menerima semua subnet dari 192.168.0.0/16 dengan prefix /24 saja:
     </p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     ip prefix-list ALLOW_ROUTES seq 5 permit 192.168.0.0/16 ge 24 le 24
     </code></pre>
     <p class="note-paragraph">Artinya: hanya menerima network dengan /24 subnet dari 192.168.0.0/16.</p>
@@ -285,12 +289,13 @@ router eigrp 100
       <li>Bisa menggunakan <strong>ge</strong> dan <strong>le</strong> untuk range prefix, membuat prefix-list lebih powerful.</li>
       <li>Jangan lupa buat <strong>deny all</strong> di akhir jika ingin filtering strict (default ada implicit deny all).</li>
     </ul>
-
+    </section>
     <hr class="note-divider" />
     <hr class="note-divider" />
     <hr class="note-divider" />
-
-    <h3 class="note-subtitle">Prefix-List Outbound pada EIGRP</h3>
+    
+    <section class="note-section">
+    <h3 class="note-title">Prefix-List Outbound pada EIGRP</h3>
     <p class="note-paragraph">
       <strong>Konsep:</strong> Prefix-list outbound digunakan untuk mengontrol route yang router iklankan ke tetangga.  
       Bedanya dengan inbound:
@@ -305,11 +310,11 @@ router eigrp 100
 
     <h4 class="note-subtitle">Sintaks Dasar</h4>
     <p class="note-paragraph"><strong>Buat prefix-list:</strong></p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     ip prefix-list &lt;NAMA&gt; seq &lt;NOMOR&gt; permit|deny &lt;prefix&gt; [ge &lt;n&gt;] [le &lt;m&gt;]
     </code></pre>
     <p class="note-paragraph"><strong>Terapkan ke EIGRP:</strong></p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     router eigrp &lt;AS&gt;
     distribute-list prefix &lt;NAMA&gt; out &lt;interface&gt;
     </code></pre>
@@ -319,7 +324,7 @@ router eigrp 100
       Misalnya R1 memiliki tiga jaringan: 192.168.10.0/24, 192.168.20.0/24, 192.168.30.0/24 pada EIGRP AS 100. 
       Kita hanya ingin meng-advertise 192.168.10.0/24 dan 192.168.20.0/24 ke R2.
     </p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     R1(config)# ip prefix-list EXPORT_ROUTES seq 5 permit 192.168.10.0/24
     R1(config)# ip prefix-list EXPORT_ROUTES seq 10 permit 192.168.20.0/24
     R1(config)# ip prefix-list EXPORT_ROUTES seq 20 deny 0.0.0.0/0 le 32
@@ -341,7 +346,7 @@ router eigrp 100
     <p class="note-paragraph">
       Jika hanya ingin meng-advertise network /24 dari blok 192.168.0.0/16:
     </p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     ip prefix-list EXPORT_ROUTES seq 5 permit 192.168.0.0/16 ge 24 le 24
     </code></pre>
     <p class="note-paragraph">Efek: hanya subnet /24 dari 192.168.0.0/16 yang diiklankan ke neighbor.</p>
@@ -353,12 +358,14 @@ router eigrp 100
       <li>Lebih fleksibel karena bisa menggunakan <strong>ge</strong> &amp; <strong>le</strong> untuk range subnet.</li>
       <li>Cocok untuk policy-based control, misalnya ISP hanya meng-advertise sebagian prefix ke customer.</li>
     </ul>
-
+    </section>
     <hr class="note-divider" />
     <hr class="note-divider" />
     <hr class="note-divider" />
 
-    <h3 class="note-subtitle">Filtering ACL Ganjil &amp; Genap pada EIGRP</h3>
+    <section class="note-section">
+
+    <h3 class="note-title">Filtering ACL Ganjil &amp; Genap pada EIGRP</h3>
     <p class="note-paragraph">
       <strong>Konsep:</strong> ACL (Access Control List) bisa digunakan untuk filtering route di EIGRP melalui distribute-list. 
       Kita bisa membuat pola subnet berdasarkan angka terakhir (host portion) untuk membedakan network ganjil dan genap. Triknya: menggunakan <strong>wildcard mask</strong>.
@@ -385,7 +392,7 @@ router eigrp 100
 
     <h4 class="note-subtitle">Cara Membuat ACL</h4>
     <p class="note-paragraph"><strong>1. Filter Network Genap:</strong></p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     access-list 10 permit 192.168.0.0 0.0.254.255
     </code></pre>
     <p class="note-paragraph">Penjelasan:</p>
@@ -395,7 +402,7 @@ router eigrp 100
     </ul>
 
     <p class="note-paragraph"><strong>2. Filter Network Ganjil:</strong></p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     access-list 11 permit 192.168.1.0 0.0.254.255
     </code></pre>
     <p class="note-paragraph">Efek: semua subnet ganjil (/24) dari blok 192.168.0.0/16.</p>
@@ -406,7 +413,7 @@ router eigrp 100
     </p>
 
     <p class="note-paragraph"><strong>Inbound Filtering di R2:</strong></p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     R2(config)# access-list 10 permit 192.168.0.0 0.0.254.255
     R2(config)# router eigrp 100
     R2(config-router)# distribute-list 10 in FastEthernet0/0
@@ -414,7 +421,7 @@ router eigrp 100
     <p class="note-paragraph">Efek: R2 hanya menerima route 192.168.0.0/24, 192.168.2.0/24, 192.168.4.0/24, dst. Semua subnet ganjil tidak masuk ke routing table.</p>
 
     <p class="note-paragraph"><strong>Alternatif Outbound Filtering di R1:</strong></p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     R1(config)# access-list 11 permit 192.168.1.0 0.0.254.255
     R1(config)# router eigrp 100
     R1(config-router)# distribute-list 11 out FastEthernet0/0
@@ -427,12 +434,14 @@ router eigrp 100
       <li>0.0.254.255 → lompat 2 network sekali, cocok untuk filter genap/ganjil.</li>
       <li>Bisa diterapkan di <strong>distribute-list in</strong> (kontrol route diterima) atau <strong>out</strong> (kontrol route diiklankan).</li>
     </ul>
+    </section>
 
     <hr class="note-divider" />
     <hr class="note-divider" />
     <hr class="note-divider" />
 
-    <h3 class="note-subtitle">Filtering AD pada EIGRP</h3>
+  <section class="note-section">
+    <h3 class="note-title">Filtering AD pada EIGRP</h3>
       <p class="note-paragraph">
       <strong>Konsep:</strong> Filtering AD bukan berarti membuang route dengan AD tertentu, melainkan mengontrol preferensi route dengan cara memanipulasi nilai AD. 
             Semakin kecil nilai AD, semakin dipercaya. Dengan ini kita bisa membuat <em>backup route</em>, menurunkan prioritas protokol tertentu, atau menghindari loop.
@@ -456,14 +465,14 @@ router eigrp 100
       </p>
 
       <h4 class="note-subtitle">Konfigurasi Global AD di EIGRP</h4>
-      <pre><code>
+      <pre class="note-codeblock"><code>
       router eigrp 100
       distance eigrp &lt;internal-distance&gt; &lt;external-distance&gt;
       </code></pre>
       <p class="note-paragraph">
       Contoh:
       </p>
-      <pre><code>
+      <pre class="note-codeblock"><code>
       router eigrp 100
       distance eigrp 95 180
       </code></pre>
@@ -479,7 +488,7 @@ router eigrp 100
       <p class="note-paragraph">
       Untuk lebih granular, kita bisa set AD berdasarkan prefix tertentu dengan ACL/prefix-list.
       </p>
-      <pre><code>
+      <pre class="note-codeblock"><code>
       access-list 10 permit 10.10.10.0 0.0.0.255
       router eigrp 100
       distance 200 0.0.0.0 255.255.255.255 10
@@ -495,12 +504,15 @@ router eigrp 100
       <li>Bukan membuang route, melainkan menurunkan prioritas supaya tidak dipilih.</li>
       <li>Cocok untuk policy routing, backup path, dan kontrol redistribusi antar protokol.</li>
       </ul>
+    </section>
 
     <hr class="note-divider" />
     <hr class="note-divider" />
     <hr class="note-divider" />
 
-    <h3 class="note-subtitle">EIGRP Authentication 🚀</h3>
+
+    <section class="note-section">
+    <h3 class="note-title">EIGRP Authentication 🚀</h3>
       <p class="note-paragraph">
       <strong>Konsep:</strong> Authentication di EIGRP dipakai untuk memastikan hanya router yang sah yang bisa membentuk adjacency. 
       Jika kunci tidak cocok → adjacency gagal → tidak ada pertukaran routing. 
@@ -510,7 +522,7 @@ router eigrp 100
 
       <h4 class="note-subtitle">Langkah Konfigurasi (MD5 Authentication)</h4>
       <p class="note-paragraph"><strong>1. Buat Key-Chain</strong></p>
-      <pre><code>
+      <pre class="note-codeblock"><code>
       R1(config)# key chain EIGRP_KEYS
       R1(config-keychain)# key 1
       R1(config-keychain-key)# key-string cisco123
@@ -518,7 +530,7 @@ router eigrp 100
       <p class="note-paragraph">👉 <code>key-string</code> = password (harus sama di semua router).</p>
 
       <p class="note-paragraph"><strong>2. Aktifkan Authentication di Interface</strong></p>
-      <pre><code>
+      <pre class="note-codeblock"><code>
       R1(config)# interface FastEthernet0/0
       R1(config-if)# ip authentication mode eigrp 100 md5
       R1(config-if)# ip authentication key-chain eigrp 100 EIGRP_KEYS
@@ -526,7 +538,7 @@ router eigrp 100
       <p class="note-paragraph">👉 <code>100</code> = nomor Autonomous System (AS) EIGRP.</p>
 
       <p class="note-paragraph"><strong>3. Ulangi di Router Neighbor (R2)</strong></p>
-      <pre><code>
+      <pre class="note-codeblock"><code>
       R2(config)# key chain EIGRP_KEYS
       R2(config-keychain)# key 1
       R2(config-keychain-key)# key-string cisco123
@@ -537,16 +549,16 @@ router eigrp 100
       </code></pre>
 
       <h4 class="note-subtitle">Verifikasi</h4>
-      <pre><code>
+      <pre class="note-codeblock"><code>
       R1# show ip eigrp neighbors
       </code></pre>
       <p class="note-paragraph">👉 Jika password salah, adjacency tidak terbentuk.</p>
-      <pre><code>
+      <pre class="note-codeblock"><code>
       %DUAL-5-NBRCHANGE: IP-EIGRP(0) 100: Neighbor 192.168.1.2 (FastEthernet0/0) is down: authentication failure
       </code></pre>
 
       <h4 class="note-subtitle">Authentication dengan SHA-256 (lebih baru)</h4>
-      <pre><code>
+      <pre class="note-codeblock"><code>
       R1(config)# key chain EIGRP_KEYS
       R1(config-keychain)# key 1
       R1(config-keychain-key)# key-string cisco123
@@ -561,12 +573,13 @@ router eigrp 100
       <li>Langkah: buat key-chain → aktifkan di interface dengan AS number.</li>
       <li>Efek: jika password tidak cocok, adjacency gagal terbentuk.</li>
       </ul>
-
+    </section>
     <hr class="note-divider" />
     <hr class="note-divider" />
     <hr class="note-divider" />
 
-    <h3 class="note-subtitle">EIGRP Summarization</h3>
+    <section class="note-section">
+    <h3 class="note-title">EIGRP Summarization</h3>
     <p class="note-paragraph">
     <strong>Konsep:</strong> Summarization = menggabungkan beberapa route detail (specific routes) menjadi satu route summary yang lebih besar. 
     Tujuannya untuk mengurangi ukuran routing table, mengurangi traffic update, dan meningkatkan stabilitas (jika 1 subnet down, summary tetap ada).
@@ -578,7 +591,7 @@ router eigrp 100
     Misalnya 192.168.1.0/24 dan 192.168.2.0/24 otomatis disummarize ke 192.168.0.0/16. 
     Sejak IOS 12.2(13)T, auto-summary <strong>disabled by default</strong>.
     </p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     router eigrp 100
     auto-summary
     </code></pre>
@@ -596,7 +609,7 @@ router eigrp 100
     <li>192.168.4.0/24</li>
     </ul>
     <p class="note-paragraph">👉 Semua bisa disummarize menjadi 192.168.0.0/22</p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     R1(config)# interface FastEthernet0/0
     R1(config-if)# ip summary-address eigrp 100 192.168.0.0 255.255.252.0
     </code></pre>
@@ -612,7 +625,7 @@ router eigrp 100
     <p class="note-paragraph">
     Saat router membuat summary, otomatis dibuatkan static route ke Null0:
     </p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     ip route 192.168.0.0 255.255.252.0 Null0
     </code></pre>
     <p class="note-paragraph">
@@ -621,13 +634,13 @@ router eigrp 100
 
     <h4 class="note-subtitle">Verifikasi</h4>
     <p class="note-paragraph"><strong>Cek routing table di neighbor:</strong></p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     R2# show ip route eigrp
     </code></pre>
     <p class="note-paragraph">Neighbor hanya melihat 192.168.0.0/22, bukan detail /24.</p>
 
     <p class="note-paragraph"><strong>Cek summary di interface:</strong></p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     R1# show ip eigrp interface detail FastEthernet0/0
     </code></pre>
 
@@ -639,665 +652,690 @@ router eigrp 100
     <li>EIGRP selalu membuat Null0 route untuk mencegah loop.</li>
     </ul>
 
+    </section>
 
     <hr class="note-divider" />
     <hr class="note-divider" />
     <hr class="note-divider" />
 
-<h3 class="note-subtitle">EIGRP Unicast Update</h3>
-<p class="note-paragraph">
-<strong>Konsep Dasar:</strong> Normalnya, EIGRP mengirim update ke multicast address <code>224.0.0.10</code>. 
-Artinya semua router EIGRP di segmen jaringan akan menerima update. 
-Namun dalam kondisi tertentu, update bisa dikirim menggunakan <strong>unicast</strong>.
-</p>
+    <section class="note-section">
 
-<h4 class="note-subtitle">Kapan EIGRP Menggunakan Unicast?</h4>
-<ul class="note-list">
-<li><strong>Neighbor Discovery / Recovery:</strong> jika adjacency dengan tetangga tertentu down, EIGRP bisa kirim unicast hello/update untuk mencoba recovery.</li>
-<li><strong>Peer Tidak Mendukung Multicast:</strong> misalnya di point-to-point link (Serial, GRE tunnel, NBMA seperti Frame Relay, DMVPN).</li>
-<li><strong>Explicit Unicast Neighbor:</strong> jika menggunakan perintah <code>neighbor</code> di konfigurasi EIGRP, maka interface tersebut tidak lagi menggunakan multicast, melainkan unicast.</li>
-</ul>
+    <h3 class="note-title">EIGRP Unicast Update</h3>
+    <p class="note-paragraph">
+    <strong>Konsep Dasar:</strong> Normalnya, EIGRP mengirim update ke multicast address <code>224.0.0.10</code>. 
+    Artinya semua router EIGRP di segmen jaringan akan menerima update. 
+    Namun dalam kondisi tertentu, update bisa dikirim menggunakan <strong>unicast</strong>.
+    </p>
 
-<h4 class="note-subtitle">Contoh Konfigurasi (Unicast Neighbor)</h4>
-<p class="note-paragraph"><strong>R1</strong> dan <strong>R2</strong> terhubung point-to-point (10.1.1.1 ↔ 10.1.1.2). Kita paksa EIGRP pakai unicast update:</p>
+    <h4 class="note-subtitle">Kapan EIGRP Menggunakan Unicast?</h4>
+    <ul class="note-list">
+    <li><strong>Neighbor Discovery / Recovery:</strong> jika adjacency dengan tetangga tertentu down, EIGRP bisa kirim unicast hello/update untuk mencoba recovery.</li>
+    <li><strong>Peer Tidak Mendukung Multicast:</strong> misalnya di point-to-point link (Serial, GRE tunnel, NBMA seperti Frame Relay, DMVPN).</li>
+    <li><strong>Explicit Unicast Neighbor:</strong> jika menggunakan perintah <code>neighbor</code> di konfigurasi EIGRP, maka interface tersebut tidak lagi menggunakan multicast, melainkan unicast.</li>
+    </ul>
 
-<p class="note-paragraph"><strong>R1:</strong></p>
-<pre><code>
-router eigrp 100
- network 10.1.1.0 0.0.0.255
- neighbor 10.1.1.2 FastEthernet0/0
-</code></pre>
+    <h4 class="note-subtitle">Contoh Konfigurasi (Unicast Neighbor)</h4>
+    <p class="note-paragraph"><strong>R1</strong> dan <strong>R2</strong> terhubung point-to-point (10.1.1.1 ↔ 10.1.1.2). Kita paksa EIGRP pakai unicast update:</p>
 
-<p class="note-paragraph"><strong>R2:</strong></p>
-<pre><code>
-router eigrp 100
- network 10.1.1.0 0.0.0.255
- neighbor 10.1.1.1 FastEthernet0/0
-</code></pre>
+    <p class="note-paragraph"><strong>R1:</strong></p>
+    <pre class="note-codeblock"><code>
+    router eigrp 100
+    network 10.1.1.0 0.0.0.255
+    neighbor 10.1.1.2 FastEthernet0/0
+    </code></pre>
 
-<p class="note-paragraph">👉 Efek: multicast ke <code>224.0.0.10</code> tidak dipakai di interface tersebut. Semua hello & update dikirim unicast ke neighbor.</p>
+    <p class="note-paragraph"><strong>R2:</strong></p>
+    <pre class="note-codeblock"><code>
+    router eigrp 100
+    network 10.1.1.0 0.0.0.255
+    neighbor 10.1.1.1 FastEthernet0/0
+    </code></pre>
 
-<h4 class="note-subtitle">Verifikasi</h4>
-<pre><code>
-show ip eigrp neighbors
-show ip eigrp interface detail
-</code></pre>
-<p class="note-paragraph">👉 Akan terlihat bahwa multicast disabled di interface dengan konfigurasi neighbor.</p>
+    <p class="note-paragraph">👉 Efek: multicast ke <code>224.0.0.10</code> tidak dipakai di interface tersebut. Semua hello & update dikirim unicast ke neighbor.</p>
 
-<h4 class="note-subtitle">Ringkasan</h4>
-<ul class="note-list">
-<li>Default: update via multicast (<code>224.0.0.10</code>).</li>
-<li>Unicast dipakai saat:
-  <ul>
-    <li>Lingkungan tidak mendukung multicast.</li>
-    <li>Neighbor ditentukan manual dengan perintah <code>neighbor</code>.</li>
-    <li>Recovery adjacency tertentu.</li>
-  </ul>
-</li>
-<li>Kelebihan unicast → lebih terkontrol, tapi kurang scalable (harus set neighbor manual satu per satu).</li>
-</ul>
+    <h4 class="note-subtitle">Verifikasi</h4>
+    <pre class="note-codeblock"><code>
+    show ip eigrp neighbors
+    show ip eigrp interface detail
+    </code></pre>
+    <p class="note-paragraph">👉 Akan terlihat bahwa multicast disabled di interface dengan konfigurasi neighbor.</p>
 
-    <hr class="note-divider" />
-    <hr class="note-divider" />
-    <hr class="note-divider" />
-
-    <h3 class="note-subtitle">EIGRP Summary Address untuk Default Route (0.0.0.0/0) 🚀</h3>
-<p class="note-paragraph">
-<strong>Konsep:</strong> Selain untuk merangkum subnet, manual summary di EIGRP juga bisa digunakan untuk mengiklankan <strong>default route (0.0.0.0/0)</strong>. 
-Caranya: membuat summary ke 0.0.0.0/0 di interface, sehingga neighbor akan menerima default route via EIGRP. 
-Umumnya dipakai di topologi hub-and-spoke (DMVPN, branch office), agar branch cukup tahu default route tanpa belajar semua prefix dari HQ.
-</p>
-
-<h4 class="note-subtitle">Langkah Konfigurasi</h4>
-<p class="note-paragraph"><strong>Contoh Topologi:</strong> R1 (HQ) terkoneksi ke Internet, R2 (Branch) terkoneksi ke R1 melalui 192.168.12.0/24. 
-Tujuan: R2 cukup mendapat default route (0.0.0.0/0) dari R1.</p>
-
-<p class="note-paragraph"><strong>1. Buat Default Route di R1</strong></p>
-<pre><code>
-R1(config)# ip route 0.0.0.0 0.0.0.0 &lt;next-hop-to-Internet&gt;
-</code></pre>
-
-<p class="note-paragraph"><strong>2. Konfigurasi Summary Address ke 0.0.0.0/0 di Interface ke R2</strong></p>
-<pre><code>
-R1(config)# interface FastEthernet0/0
-R1(config-if)# ip summary-address eigrp 100 0.0.0.0 0.0.0.0
-</code></pre>
-<p class="note-paragraph">👉 Efek: R1 mengiklankan default route ke R2 melalui EIGRP.</p>
-
-<h4 class="note-subtitle">Verifikasi</h4>
-<p class="note-paragraph">Di R2, cek routing table:</p>
-<pre><code>
-R2# show ip route eigrp
-</code></pre>
-<p class="note-paragraph">Output menampilkan:</p>
-<pre><code>
-D*EX 0.0.0.0/0 [170/...] via 192.168.12.1, FastEthernet0/0
-</code></pre>
-<ul class="note-list">
-<li><code>D</code> = EIGRP</li>
-<li><code>*</code> = candidate default route</li>
-<li><code>EX</code> = external (asalnya static, lalu diiklankan via EIGRP)</li>
-</ul>
-
-<h4 class="note-subtitle">Catatan Penting</h4>
-<ul class="note-list">
-<li>Default route dari static → dianggap <strong>EIGRP External</strong> (AD = 170).</li>
-<li>Jika ingin <strong>EIGRP Internal</strong> (AD = 90), bisa pakai redistribusi network 0.0.0.0 atau trik tertentu.</li>
-<li>Namun dalam banyak kasus, default via summary sudah cukup untuk branch.</li>
-</ul>
-
-<h4 class="note-subtitle">Ringkasan</h4>
-<ul class="note-list">
-<li><code>ip summary-address eigrp 100 0.0.0.0 0.0.0.0</code> = cara mengiklankan default route via EIGRP.</li>
-<li>Dibuat di <strong>interface</strong>, bukan di mode router eigrp.</li>
-<li>Neighbor akan belajar default route dengan tanda <code>D*EX</code>.</li>
-<li>Sering dipakai di topologi hub-spoke agar branch cukup tahu default route tanpa full routing table.</li>
-</ul>
-
+    <h4 class="note-subtitle">Ringkasan</h4>
+    <ul class="note-list">
+    <li>Default: update via multicast (<code>224.0.0.10</code>).</li>
+    <li>Unicast dipakai saat:
+      <ul>
+        <li>Lingkungan tidak mendukung multicast.</li>
+        <li>Neighbor ditentukan manual dengan perintah <code>neighbor</code>.</li>
+        <li>Recovery adjacency tertentu.</li>
+      </ul>
+    </li>
+    <li>Kelebihan unicast → lebih terkontrol, tapi kurang scalable (harus set neighbor manual satu per satu).</li>
+    </ul>
+    </section>
 
     <hr class="note-divider" />
     <hr class="note-divider" />
     <hr class="note-divider" />
 
-    <h3 class="note-subtitle">Redistribution antara EIGRP ↔ RIP 🚀</h3>
-<p class="note-paragraph">
-<strong>Konsep Redistribution:</strong> Redistribution adalah proses mengimpor route dari satu protokol routing ke protokol lain.
-Dalam kasus ini, route dari <strong>RIP ↔ EIGRP</strong> saling dipertukarkan.
-</p>
+    <section class="note-section">
+    <h3 class="note-title">EIGRP Summary Address untuk Default Route (0.0.0.0/0) 🚀</h3>
+    <p class="note-paragraph">
+    <strong>Konsep:</strong> Selain untuk merangkum subnet, manual summary di EIGRP juga bisa digunakan untuk mengiklankan <strong>default route (0.0.0.0/0)</strong>. 
+    Caranya: membuat summary ke 0.0.0.0/0 di interface, sehingga neighbor akan menerima default route via EIGRP. 
+    Umumnya dipakai di topologi hub-and-spoke (DMVPN, branch office), agar branch cukup tahu default route tanpa belajar semua prefix dari HQ.
+    </p>
 
-<ul class="note-list">
-<li><strong>Kegunaan:</strong> migrasi protokol (misalnya dari RIP ke EIGRP), interkoneksi antar domain berbeda, integrasi lab/testbed.</li>
-<li><strong>Catatan:</strong> Redistribution bisa menimbulkan <em>routing loop</em>, sehingga biasanya digabung dengan filtering (route-map, prefix-list) atau summarization.</li>
-</ul>
+    <h4 class="note-subtitle">Langkah Konfigurasi</h4>
+    <p class="note-paragraph"><strong>Contoh Topologi:</strong> R1 (HQ) terkoneksi ke Internet, R2 (Branch) terkoneksi ke R1 melalui 192.168.12.0/24. 
+    Tujuan: R2 cukup mendapat default route (0.0.0.0/0) dari R1.</p>
 
-<h4 class="note-subtitle">Langkah Konfigurasi Dasar</h4>
+    <p class="note-paragraph"><strong>1. Buat Default Route di R1</strong></p>
+    <pre class="note-codeblock"><code>
+    R1(config)# ip route 0.0.0.0 0.0.0.0 &lt;next-hop-to-Internet&gt;
+    </code></pre>
 
-<p class="note-paragraph"><strong>1. Redistribute RIP → EIGRP</strong></p>
-<pre><code>
-router eigrp 100
- redistribute rip metric 10000 100 255 1 1500
-</code></pre>
-<p class="note-paragraph">
-👉 RIP hanya menggunakan hop count, sedangkan EIGRP membutuhkan <em>composite metric</em> 
-(bandwidth, delay, reliability, load, MTU). Tanpa metric, route RIP tidak bisa masuk ke EIGRP.
-</p>
+    <p class="note-paragraph"><strong>2. Konfigurasi Summary Address ke 0.0.0.0/0 di Interface ke R2</strong></p>
+    <pre class="note-codeblock"><code>
+    R1(config)# interface FastEthernet0/0
+    R1(config-if)# ip summary-address eigrp 100 0.0.0.0 0.0.0.0
+    </code></pre>
+    <p class="note-paragraph">👉 Efek: R1 mengiklankan default route ke R2 melalui EIGRP.</p>
 
-<p class="note-paragraph"><strong>Format metric EIGRP:</strong></p>
-<pre><code>
-metric &lt;bandwidth&gt; &lt;delay&gt; &lt;reliability&gt; &lt;load&gt; &lt;MTU&gt;
-</code></pre>
-<ul class="note-list">
-<li><strong>Bandwidth</strong> = dalam Kbps</li>
-<li><strong>Delay</strong> = dalam tens of microseconds</li>
-<li><strong>Reliability</strong> = 255 (maksimal)</li>
-<li><strong>Load</strong> = 1 (ringan)</li>
-<li><strong>MTU</strong> = biasanya 1500</li>
-</ul>
+    <h4 class="note-subtitle">Verifikasi</h4>
+    <p class="note-paragraph">Di R2, cek routing table:</p>
+    <pre class="note-codeblock"><code>
+    R2# show ip route eigrp
+    </code></pre>
+    <p class="note-paragraph">Output menampilkan:</p>
+    <pre class="note-codeblock"><code>
+    D*EX 0.0.0.0/0 [170/...] via 192.168.12.1, FastEthernet0/0
+    </code></pre>
+    <ul class="note-list">
+    <li><code>D</code> = EIGRP</li>
+    <li><code>*</code> = candidate default route</li>
+    <li><code>EX</code> = external (asalnya static, lalu diiklankan via EIGRP)</li>
+    </ul>
 
-<p class="note-paragraph"><strong>2. Redistribute EIGRP → RIP</strong></p>
-<pre><code>
-router rip
- version 2
- redistribute eigrp 100 metric 2
-</code></pre>
-<p class="note-paragraph">
-👉 RIP hanya butuh <strong>hop count</strong>. Default metric wajib diset manual, jika tidak route tidak akan muncul.
-</p>
+    <h4 class="note-subtitle">Catatan Penting</h4>
+    <ul class="note-list">
+    <li>Default route dari static → dianggap <strong>EIGRP External</strong> (AD = 170).</li>
+    <li>Jika ingin <strong>EIGRP Internal</strong> (AD = 90), bisa pakai redistribusi network 0.0.0.0 atau trik tertentu.</li>
+    <li>Namun dalam banyak kasus, default via summary sudah cukup untuk branch.</li>
+    </ul>
 
-<h4 class="note-subtitle">Contoh Kasus (Lab Mini)</h4>
-<p class="note-paragraph"><strong>Topologi:</strong></p>
-<ul class="note-list">
-<li>R1 = RIP (192.168.1.0/24)</li>
-<li>R2 = EIGRP 100 (192.168.2.0/24)</li>
-<li>Koneksi antar R1 ↔ R2 = 10.1.1.0/24</li>
-</ul>
-<p class="note-paragraph">Tujuan: R1 tahu network EIGRP, R2 tahu network RIP.</p>
-
-<p class="note-paragraph"><strong>Konfigurasi di R1 (RIP + Redistribute EIGRP)</strong></p>
-<pre><code>
-router rip
- version 2
- network 192.168.1.0
- network 10.1.1.0
- redistribute eigrp 100 metric 2
-</code></pre>
-
-<p class="note-paragraph"><strong>Konfigurasi di R2 (EIGRP + Redistribute RIP)</strong></p>
-<pre><code>
-router eigrp 100
- network 192.168.2.0
- network 10.1.1.0
- redistribute rip metric 10000 100 255 1 1500
-</code></pre>
-
-<h4 class="note-subtitle">Verifikasi</h4>
-<p class="note-paragraph"><strong>Di R1:</strong></p>
-<pre><code>
-show ip route rip
-</code></pre>
-<p class="note-paragraph">Harus terlihat route dari 192.168.2.0/24.</p>
-
-<p class="note-paragraph"><strong>Di R2:</strong></p>
-<pre><code>
-show ip route eigrp
-</code></pre>
-<p class="note-paragraph">Harus terlihat route dari 192.168.1.0/24.</p>
-
-<h4 class="note-subtitle">Ringkasan</h4>
-<ul class="note-list">
-<li>Redistribution RIP → EIGRP wajib menambahkan <strong>5 parameter metric</strong>.</li>
-<li>Redistribution EIGRP → RIP wajib menambahkan <strong>hop count metric</strong>.</li>
-<li>Tanpa metric, route tidak diterima.</li>
-<li>Hati-hati terhadap looping → gunakan filtering/summarization.</li>
-</ul>
-
-    <hr class="note-divider" />
-    <hr class="note-divider" />
-    <hr class="note-divider" />
-
-    <h3 class="note-subtitle">Redistribution antara EIGRP ↔ OSPF 🚀</h3>
-<p class="note-paragraph">
-<strong>Konsep Redistribution:</strong> memasukkan route dari satu protokol routing ke protokol lain.  
-Dalam hal ini: <strong>OSPF ↔ EIGRP</strong>.
-</p>
-
-<ul class="note-list">
-<li><strong>Kegunaan:</strong> migrasi protokol, integrasi antar domain yang berbeda, skenario lab multi-protocol.</li>
-<li><strong>Peringatan:</strong> Redistribution bisa menimbulkan <em>routing loop</em> → biasanya dikombinasikan dengan filtering atau tagging.</li>
-</ul>
-
-<h4 class="note-subtitle">Redistribusi OSPF → EIGRP</h4>
-<p class="note-paragraph">
-OSPF menggunakan <strong>cost</strong>, sedangkan EIGRP membutuhkan <em>composite metric</em>.  
-👉 Maka metric wajib diberikan saat redistribusi.
-</p>
-<pre><code>
-router eigrp 100
- redistribute ospf 1 metric 10000 100 255 1 1500
-</code></pre>
-<ul class="note-list">
-<li><strong>ospf 1</strong> = ID proses OSPF</li>
-<li><strong>metric</strong> = bandwidth, delay, reliability, load, MTU</li>
-</ul>
-
-<h4 class="note-subtitle">Redistribusi EIGRP → OSPF</h4>
-<p class="note-paragraph">
-OSPF membutuhkan <strong>external type (E1/E2)</strong> dan <strong>cost</strong>.  
-👉 Wajib memberikan metric, serta gunakan <code>subnets</code> agar prefix VLSM ikut diiklankan.
-</p>
-<pre><code>
-router ospf 1
- redistribute eigrp 100 subnets metric 50
-</code></pre>
-<p class="note-paragraph">
-Secara default, route didistribusikan sebagai <strong>E2 (External Type 2)</strong>.  
-Jika ingin <strong>E1 (External Type 1)</strong> (cost internal dihitung):
-</p>
-<pre><code>
-router ospf 1
- redistribute eigrp 100 subnets metric 50 metric-type 1
-</code></pre>
-
-<h4 class="note-subtitle">Contoh Kasus (Lab Mini)</h4>
-<ul class="note-list">
-<li><strong>R1</strong> → OSPF area 0, network 192.168.1.0/24</li>
-<li><strong>R2</strong> → EIGRP AS 100, network 192.168.2.0/24</li>
-<li>Koneksi antar R1 ↔ R2 = 10.1.1.0/24</li>
-</ul>
-
-<p class="note-paragraph"><strong>Konfigurasi di R1 (OSPF → EIGRP)</strong></p>
-<pre><code>
-router eigrp 100
- network 10.1.1.0
- redistribute ospf 1 metric 10000 100 255 1 1500
-</code></pre>
-
-<p class="note-paragraph"><strong>Konfigurasi di R2 (EIGRP → OSPF)</strong></p>
-<pre><code>
-router ospf 1
- network 10.1.1.0 0.0.0.255 area 0
- redistribute eigrp 100 subnets metric 50 metric-type 1
-</code></pre>
-
-<p class="note-paragraph"><strong>Hasil:</strong></p>
-<ul class="note-list">
-<li>R1 akan belajar <code>192.168.2.0/24</code> dari EIGRP.</li>
-<li>R2 akan belajar <code>192.168.1.0/24</code> dari OSPF.</li>
-</ul>
-
-<h4 class="note-subtitle">Verifikasi</h4>
-<p class="note-paragraph"><strong>Di R1 (OSPF domain):</strong></p>
-<pre><code>
-show ip route ospf
-</code></pre>
-<p class="note-paragraph">Harus muncul route 192.168.2.0/24 sebagai <strong>O E2</strong> atau <strong>O E1</strong>.</p>
-
-<p class="note-paragraph"><strong>Di R2 (EIGRP domain):</strong></p>
-<pre><code>
-show ip route eigrp
-</code></pre>
-<p class="note-paragraph">Harus muncul route 192.168.1.0/24 sebagai <strong>D EX</strong>.</p>
-
-<h4 class="note-subtitle">Ringkasan</h4>
-<ul class="note-list">
-<li><strong>OSPF → EIGRP</strong> → wajib metric 5 parameter.</li>
-<li><strong>EIGRP → OSPF</strong> → wajib <code>subnets</code> + metric + pilih <strong>E1/E2</strong>.</li>
-<li>Default OSPF external = <strong>E2</strong>.</li>
-<li>Route EIGRP hasil redistribusi = selalu <strong>External (EX)</strong>.</li>
-<li>Untuk menghindari loop → gunakan tagging atau filtering.</li>
-</ul>
-
-
-    <hr class="note-divider" />
-    <hr class="note-divider" />
-    <hr class="note-divider" />
+    <h4 class="note-subtitle">Ringkasan</h4>
+    <ul class="note-list">
+    <li><code>ip summary-address eigrp 100 0.0.0.0 0.0.0.0</code> = cara mengiklankan default route via EIGRP.</li>
+    <li>Dibuat di <strong>interface</strong>, bukan di mode router eigrp.</li>
+    <li>Neighbor akan belajar default route dengan tanda <code>D*EX</code>.</li>
+    <li>Sering dipakai di topologi hub-spoke agar branch cukup tahu default route tanpa full routing table.</li>
+    </ul>
+    </section>
     
-    <h3 class="note-subtitle">EIGRP Pindah Jalur dengan Delay (Bandwidth/Delay Influence) 🚀</h3>
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
 
-<h4 class="note-subtitle">Konsep Dasar Metric di EIGRP</h4>
-<p class="note-paragraph">
-EIGRP menghitung metric berdasarkan parameter berikut:
-</p>
-<ul class="note-list">
-  <li><strong>Bandwidth</strong> → minimum bandwidth sepanjang path</li>
-  <li><strong>Delay</strong> → total delay sepanjang path (dalam tens of microseconds)</li>
-  <li><strong>Reliability</strong> → opsional, default 255</li>
-  <li><strong>Load</strong> → opsional, default 1</li>
-  <li><strong>MTU</strong> → tidak berpengaruh dalam perhitungan metric</li>
-</ul>
+    <section class="note-section">
 
-<p class="note-paragraph">
-👉 Dengan <strong>K-values default</strong> (K1=1, K3=1, lainnya=0), formula metric:
-</p>
-<pre><code>
-Metric = [ (10^7 / minimum_bandwidth) + (sum_of_delays / 10) ] * 256
-</code></pre>
+    <h3 class="note-title">Redistribution antara EIGRP ↔ RIP 🚀</h3>
+    <p class="note-paragraph">
+    <strong>Konsep Redistribution:</strong> Redistribution adalah proses mengimpor route dari satu protokol routing ke protokol lain.
+    Dalam kasus ini, route dari <strong>RIP ↔ EIGRP</strong> saling dipertukarkan.
+    </p>
 
-<h4 class="note-subtitle">Mengontrol Jalur dengan Delay</h4>
-<p class="note-paragraph">
-Untuk mengalihkan jalur tanpa mengubah topologi, kita bisa <strong>modifikasi delay</strong> di interface.  
-Semakin besar delay → metric makin besar → jalur jadi kurang disukai.
-</p>
-<p class="note-paragraph">
-Biasanya dipakai untuk <em>traffic engineering</em>, misalnya menentukan primary/backup link.
-</p>
+    <ul class="note-list">
+    <li><strong>Kegunaan:</strong> migrasi protokol (misalnya dari RIP ke EIGRP), interkoneksi antar domain berbeda, integrasi lab/testbed.</li>
+    <li><strong>Catatan:</strong> Redistribution bisa menimbulkan <em>routing loop</em>, sehingga biasanya digabung dengan filtering (route-map, prefix-list) atau summarization.</li>
+    </ul>
 
-<h4 class="note-subtitle">Contoh Kasus</h4>
-<pre><code>
-R1 --- R2 --- R3
-  \           /
-   --- R4 ----
-</code></pre>
-<p class="note-paragraph">
-Ada 2 jalur R1 → R3 (via R2 dan via R4).  
-Default: EIGRP pilih jalur dengan metric lebih kecil (misalnya via R2).  
-Jika ingin paksa pindah ke R4, tambahkan delay di link ke R2.
-</p>
+    <h4 class="note-subtitle">Langkah Konfigurasi Dasar</h4>
 
-<h4 class="note-subtitle">Konfigurasi</h4>
-<pre><code>
-R1(config)# interface FastEthernet0/0
-R1(config-if)# delay 20000
-</code></pre>
-<p class="note-paragraph">
-👉 <strong>Penjelasan:</strong>  
-- Delay default FastEthernet = 100 (tens of microseconds = 1 ms).  
-- Diset ke 20000 → delay naik jadi 2000 ms.  
-- Metric naik → EIGRP akan lebih suka jalur lain (via R4).
-</p>
+    <p class="note-paragraph"><strong>1. Redistribute RIP → EIGRP</strong></p>
+    <pre class="note-codeblock"><code>
+    router eigrp 100
+    redistribute rip metric 10000 100 255 1 1500
+    </code></pre>
+    <p class="note-paragraph">
+    👉 RIP hanya menggunakan hop count, sedangkan EIGRP membutuhkan <em>composite metric</em> 
+    (bandwidth, delay, reliability, load, MTU). Tanpa metric, route RIP tidak bisa masuk ke EIGRP.
+    </p>
 
-<h4 class="note-subtitle">Verifikasi</h4>
-<pre><code>
-R1# show ip route
-R1# show ip eigrp topology
-</code></pre>
-<p class="note-paragraph">
-Cek metric sebelum & sesudah perubahan.  
-Jika delay dinaikkan, EIGRP akan mengganti jalur ke yang lebih optimal.
-</p>
+    <p class="note-paragraph"><strong>Format metric EIGRP:</strong></p>
+    <pre class="note-codeblock"><code>
+    metric &lt;bandwidth&gt; &lt;delay&gt; &lt;reliability&gt; &lt;load&gt; &lt;MTU&gt;
+    </code></pre>
+    <ul class="note-list">
+    <li><strong>Bandwidth</strong> = dalam Kbps</li>
+    <li><strong>Delay</strong> = dalam tens of microseconds</li>
+    <li><strong>Reliability</strong> = 255 (maksimal)</li>
+    <li><strong>Load</strong> = 1 (ringan)</li>
+    <li><strong>MTU</strong> = biasanya 1500</li>
+    </ul>
 
-<h4 class="note-subtitle">Catatan</h4>
-<ul class="note-list">
-  <li>Perubahan <strong>delay</strong> tidak memengaruhi kecepatan fisik interface → hanya memengaruhi perhitungan EIGRP.</li>
-  <li>Lebih disarankan mengubah delay daripada bandwidth (bandwidth bisa dipakai QoS).</li>
-  <li>Bisa juga dimanfaatkan untuk <strong>unequal-cost load balancing</strong> (pakai variance).</li>
-</ul>
+    <p class="note-paragraph"><strong>2. Redistribute EIGRP → RIP</strong></p>
+    <pre class="note-codeblock"><code>
+    router rip
+    version 2
+    redistribute eigrp 100 metric 2
+    </code></pre>
+    <p class="note-paragraph">
+    👉 RIP hanya butuh <strong>hop count</strong>. Default metric wajib diset manual, jika tidak route tidak akan muncul.
+    </p>
 
-<h4 class="note-subtitle">Ringkasan</h4>
-<ul class="note-list">
-  <li>EIGRP memilih jalur berdasarkan <strong>bandwidth + delay</strong>.</li>
-  <li>Untuk memaksa pindah jalur → tambahkan delay di interface yang ingin diturunkan prioritasnya.</li>
-  <li>Gunakan <code>show ip eigrp topology</code> untuk melihat perubahan metric.</li>
-  <li>Aman: tidak mengubah kecepatan fisik link, hanya preferensi routing.</li>
-</ul>
+    <h4 class="note-subtitle">Contoh Kasus (Lab Mini)</h4>
+    <p class="note-paragraph"><strong>Topologi:</strong></p>
+    <ul class="note-list">
+    <li>R1 = RIP (192.168.1.0/24)</li>
+    <li>R2 = EIGRP 100 (192.168.2.0/24)</li>
+    <li>Koneksi antar R1 ↔ R2 = 10.1.1.0/24</li>
+    </ul>
+    <p class="note-paragraph">Tujuan: R1 tahu network EIGRP, R2 tahu network RIP.</p>
+
+    <p class="note-paragraph"><strong>Konfigurasi di R1 (RIP + Redistribute EIGRP)</strong></p>
+    <pre class="note-codeblock"><code>
+    router rip
+    version 2
+    network 192.168.1.0
+    network 10.1.1.0
+    redistribute eigrp 100 metric 2
+    </code></pre>
+
+    <p class="note-paragraph"><strong>Konfigurasi di R2 (EIGRP + Redistribute RIP)</strong></p>
+    <pre class="note-codeblock"><code>
+    router eigrp 100
+    network 192.168.2.0
+    network 10.1.1.0
+    redistribute rip metric 10000 100 255 1 1500
+    </code></pre>
+
+    <h4 class="note-subtitle">Verifikasi</h4>
+    <p class="note-paragraph"><strong>Di R1:</strong></p>
+    <pre class="note-codeblock"><code>
+    show ip route rip
+    </code></pre>
+    <p class="note-paragraph">Harus terlihat route dari 192.168.2.0/24.</p>
+
+    <p class="note-paragraph"><strong>Di R2:</strong></p>
+    <pre class="note-codeblock"><code>
+    show ip route eigrp
+    </code></pre>
+    <p class="note-paragraph">Harus terlihat route dari 192.168.1.0/24.</p>
+
+    <h4 class="note-subtitle">Ringkasan</h4>
+    <ul class="note-list">
+    <li>Redistribution RIP → EIGRP wajib menambahkan <strong>5 parameter metric</strong>.</li>
+    <li>Redistribution EIGRP → RIP wajib menambahkan <strong>hop count metric</strong>.</li>
+    <li>Tanpa metric, route tidak diterima.</li>
+    <li>Hati-hati terhadap looping → gunakan filtering/summarization.</li>
+    </ul>
+    </section>
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+    <section class="note-section">
+
+    <h3 class="note-title">Redistribution antara EIGRP ↔ OSPF 🚀</h3>
+    <p class="note-paragraph">
+    <strong>Konsep Redistribution:</strong> memasukkan route dari satu protokol routing ke protokol lain.  
+    Dalam hal ini: <strong>OSPF ↔ EIGRP</strong>.
+    </p>
+
+    <ul class="note-list">
+    <li><strong>Kegunaan:</strong> migrasi protokol, integrasi antar domain yang berbeda, skenario lab multi-protocol.</li>
+    <li><strong>Peringatan:</strong> Redistribution bisa menimbulkan <em>routing loop</em> → biasanya dikombinasikan dengan filtering atau tagging.</li>
+    </ul>
+
+    <h4 class="note-subtitle">Redistribusi OSPF → EIGRP</h4>
+    <p class="note-paragraph">
+    OSPF menggunakan <strong>cost</strong>, sedangkan EIGRP membutuhkan <em>composite metric</em>.  
+    👉 Maka metric wajib diberikan saat redistribusi.
+    </p>
+    <pre class="note-codeblock"><code>
+    router eigrp 100
+    redistribute ospf 1 metric 10000 100 255 1 1500
+    </code></pre>
+    <ul class="note-list">
+    <li><strong>ospf 1</strong> = ID proses OSPF</li>
+    <li><strong>metric</strong> = bandwidth, delay, reliability, load, MTU</li>
+    </ul>
+
+    <h4 class="note-subtitle">Redistribusi EIGRP → OSPF</h4>
+    <p class="note-paragraph">
+    OSPF membutuhkan <strong>external type (E1/E2)</strong> dan <strong>cost</strong>.  
+    👉 Wajib memberikan metric, serta gunakan <code>subnets</code> agar prefix VLSM ikut diiklankan.
+    </p>
+    <pre class="note-codeblock"><code>
+    router ospf 1
+    redistribute eigrp 100 subnets metric 50
+    </code></pre>
+    <p class="note-paragraph">
+    Secara default, route didistribusikan sebagai <strong>E2 (External Type 2)</strong>.  
+    Jika ingin <strong>E1 (External Type 1)</strong> (cost internal dihitung):
+    </p>
+    <pre class="note-codeblock"><code>
+    router ospf 1
+    redistribute eigrp 100 subnets metric 50 metric-type 1
+    </code></pre>
+
+    <h4 class="note-subtitle">Contoh Kasus (Lab Mini)</h4>
+    <ul class="note-list">
+    <li><strong>R1</strong> → OSPF area 0, network 192.168.1.0/24</li>
+    <li><strong>R2</strong> → EIGRP AS 100, network 192.168.2.0/24</li>
+    <li>Koneksi antar R1 ↔ R2 = 10.1.1.0/24</li>
+    </ul>
+
+    <p class="note-paragraph"><strong>Konfigurasi di R1 (OSPF → EIGRP)</strong></p>
+    <pre class="note-codeblock"><code>
+    router eigrp 100
+    network 10.1.1.0
+    redistribute ospf 1 metric 10000 100 255 1 1500
+    </code></pre>
+
+    <p class="note-paragraph"><strong>Konfigurasi di R2 (EIGRP → OSPF)</strong></p>
+    <pre class="note-codeblock"><code>
+    router ospf 1
+    network 10.1.1.0 0.0.0.255 area 0
+    redistribute eigrp 100 subnets metric 50 metric-type 1
+    </code></pre>
+
+    <p class="note-paragraph"><strong>Hasil:</strong></p>
+    <ul class="note-list">
+    <li>R1 akan belajar <code>192.168.2.0/24</code> dari EIGRP.</li>
+    <li>R2 akan belajar <code>192.168.1.0/24</code> dari OSPF.</li>
+    </ul>
+
+    <h4 class="note-subtitle">Verifikasi</h4>
+    <p class="note-paragraph"><strong>Di R1 (OSPF domain):</strong></p>
+    <pre class="note-codeblock"><code>
+    show ip route ospf
+    </code></pre>
+    <p class="note-paragraph">Harus muncul route 192.168.2.0/24 sebagai <strong>O E2</strong> atau <strong>O E1</strong>.</p>
+
+    <p class="note-paragraph"><strong>Di R2 (EIGRP domain):</strong></p>
+    <pre class="note-codeblock"><code>
+    show ip route eigrp
+    </code></pre>
+    <p class="note-paragraph">Harus muncul route 192.168.1.0/24 sebagai <strong>D EX</strong>.</p>
+
+    <h4 class="note-subtitle">Ringkasan</h4>
+    <ul class="note-list">
+    <li><strong>OSPF → EIGRP</strong> → wajib metric 5 parameter.</li>
+    <li><strong>EIGRP → OSPF</strong> → wajib <code>subnets</code> + metric + pilih <strong>E1/E2</strong>.</li>
+    <li>Default OSPF external = <strong>E2</strong>.</li>
+    <li>Route EIGRP hasil redistribusi = selalu <strong>External (EX)</strong>.</li>
+    <li>Untuk menghindari loop → gunakan tagging atau filtering.</li>
+    </ul>
+
+    </section>
 
 
     <hr class="note-divider" />
     <hr class="note-divider" />
     <hr class="note-divider" />
+
+    <section class="note-section">
     
-    <h3 class="note-subtitle">Load Balancing di EIGRP 🚀</h3>
+    <h3 class="note-title">EIGRP Pindah Jalur dengan Delay (Bandwidth/Delay Influence) 🚀</h3>
 
-<h4 class="note-subtitle">Konsep Load Balancing</h4>
-<p class="note-paragraph">
-Load balancing = kemampuan router menggunakan lebih dari satu jalur untuk trafik menuju tujuan yang sama.
-</p>
-<p class="note-paragraph">
-Di EIGRP ada 2 mode:
-</p>
-<ul class="note-list">
-  <li><strong>Equal-cost load balancing (ECMP)</strong> → jika ada 2 atau lebih jalur dengan metric identik, router akan memakai semuanya.</li>
-  <li><strong>Unequal-cost load balancing</strong> → memungkinkan penggunaan jalur dengan metric berbeda menggunakan perintah <code>variance</code>.</li>
-</ul>
+    <h4 class="note-subtitle">Konsep Dasar Metric di EIGRP</h4>
+    <p class="note-paragraph">
+    EIGRP menghitung metric berdasarkan parameter berikut:
+    </p>
+    <ul class="note-list">
+      <li><strong>Bandwidth</strong> → minimum bandwidth sepanjang path</li>
+      <li><strong>Delay</strong> → total delay sepanjang path (dalam tens of microseconds)</li>
+      <li><strong>Reliability</strong> → opsional, default 255</li>
+      <li><strong>Load</strong> → opsional, default 1</li>
+      <li><strong>MTU</strong> → tidak berpengaruh dalam perhitungan metric</li>
+    </ul>
 
-<h4 class="note-subtitle">1. Equal-cost Load Balancing</h4>
-<ul class="note-list">
-  <li>Default di EIGRP (maksimal 4 jalur, bisa diubah sampai 16).</li>
-  <li>Syarat: dua atau lebih jalur punya metric <strong>identik</strong>.</li>
-  <li>Router otomatis membagi trafik (per-flow atau per-packet, tergantung IOS).</li>
-</ul>
-<pre><code>
-router eigrp 100
- maximum-paths 4
-</code></pre>
-<p class="note-paragraph">
-👉 Default <code>maximum-paths</code> = 4.  
-Jika diset ke 1 → load balancing dimatikan.  
-Bisa ditingkatkan hingga 16 jalur.
-</p>
+    <p class="note-paragraph">
+    👉 Dengan <strong>K-values default</strong> (K1=1, K3=1, lainnya=0), formula metric:
+    </p>
+    <pre class="note-codeblock"><code>
+    Metric = [ (10^7 / minimum_bandwidth) + (sum_of_delays / 10) ] * 256
+    </code></pre>
 
-<h4 class="note-subtitle">2. Unequal-cost Load Balancing (Variance)</h4>
-<p class="note-paragraph">
-Digunakan kalau kita ingin memanfaatkan jalur dengan metric lebih besar.  
-Syarat: metric jalur alternatif ≤ (metric successor × variance).
-</p>
-<pre><code>
-router eigrp 100
- variance 2
-</code></pre>
+    <h4 class="note-subtitle">Mengontrol Jalur dengan Delay</h4>
+    <p class="note-paragraph">
+    Untuk mengalihkan jalur tanpa mengubah topologi, kita bisa <strong>modifikasi delay</strong> di interface.  
+    Semakin besar delay → metric makin besar → jalur jadi kurang disukai.
+    </p>
+    <p class="note-paragraph">
+    Biasanya dipakai untuk <em>traffic engineering</em>, misalnya menentukan primary/backup link.
+    </p>
 
-<p class="note-paragraph"><strong>Contoh Kasus:</strong></p>
-<ul class="note-list">
-  <li>Jalur via R2: metric = 1000 (successor)</li>
-  <li>Jalur via R4: metric = 1500 (feasible successor)</li>
-</ul>
-<p class="note-paragraph">
-Default → hanya jalur via R2 dipakai.  
-Dengan <code>variance 2</code> → karena 1500 ≤ (1000 × 2), jalur via R4 ikut dipakai.
-</p>
+    <h4 class="note-subtitle">Contoh Kasus</h4>
+    <pre class="note-codeblock"><code>
+    R1 --- R2 --- R3
+      \           /
+      --- R4 ----
+    </code></pre>
+    <p class="note-paragraph">
+    Ada 2 jalur R1 → R3 (via R2 dan via R4).  
+    Default: EIGRP pilih jalur dengan metric lebih kecil (misalnya via R2).  
+    Jika ingin paksa pindah ke R4, tambahkan delay di link ke R2.
+    </p>
 
-<h4 class="note-subtitle">Verifikasi</h4>
-<pre><code>
-show ip route
-show ip eigrp topology
-</code></pre>
-<p class="note-paragraph">
-Contoh output:
-</p>
-<pre><code>
-D 192.168.3.0/24 [90/1000] via 10.1.1.2, FastEthernet0/0
-                  [90/1500] via 10.1.2.2, FastEthernet0/1
-</code></pre>
+    <h4 class="note-subtitle">Konfigurasi</h4>
+    <pre class="note-codeblock"><code>
+    R1(config)# interface FastEthernet0/0
+    R1(config-if)# delay 20000
+    </code></pre>
+    <p class="note-paragraph">
+    👉 <strong>Penjelasan:</strong>  
+    - Delay default FastEthernet = 100 (tens of microseconds = 1 ms).  
+    - Diset ke 20000 → delay naik jadi 2000 ms.  
+    - Metric naik → EIGRP akan lebih suka jalur lain (via R4).
+    </p>
 
-<h4 class="note-subtitle">Catatan</h4>
-<ul class="note-list">
-  <li>Unequal-cost load balancing hanya bekerja dengan <strong>Feasible Successor</strong>.</li>
-  <li>Jika jalur cadangan tidak lolos Feasibility Condition, meskipun metric memenuhi variance → tidak dipakai.</li>
-  <li>Trafik didistribusikan <strong>proporsional dengan metric</strong> → jalur lebih cepat (metric lebih kecil) dapat trafik lebih banyak.</li>
-</ul>
+    <h4 class="note-subtitle">Verifikasi</h4>
+    <pre class="note-codeblock"><code>
+    R1# show ip route
+    R1# show ip eigrp topology
+    </code></pre>
+    <p class="note-paragraph">
+    Cek metric sebelum & sesudah perubahan.  
+    Jika delay dinaikkan, EIGRP akan mengganti jalur ke yang lebih optimal.
+    </p>
 
-<h4 class="note-subtitle">Ringkasan</h4>
-<ul class="note-list">
-  <li><strong>Equal-cost LB</strong> → default, butuh metric identik.</li>
-  <li><strong>Unequal-cost LB</strong> → pakai variance, bisa manfaatkan jalur backup dengan metric lebih besar.</li>
-  <li>Gunakan <code>show ip eigrp topology</code> & <code>show ip route</code> untuk verifikasi.</li>
-  <li>Keamanan loop tetap terjaga karena hanya feasible successor yang dipakai.</li>
-</ul>
+    <h4 class="note-subtitle">Catatan</h4>
+    <ul class="note-list">
+      <li>Perubahan <strong>delay</strong> tidak memengaruhi kecepatan fisik interface → hanya memengaruhi perhitungan EIGRP.</li>
+      <li>Lebih disarankan mengubah delay daripada bandwidth (bandwidth bisa dipakai QoS).</li>
+      <li>Bisa juga dimanfaatkan untuk <strong>unequal-cost load balancing</strong> (pakai variance).</li>
+    </ul>
 
+    <h4 class="note-subtitle">Ringkasan</h4>
+    <ul class="note-list">
+      <li>EIGRP memilih jalur berdasarkan <strong>bandwidth + delay</strong>.</li>
+      <li>Untuk memaksa pindah jalur → tambahkan delay di interface yang ingin diturunkan prioritasnya.</li>
+      <li>Gunakan <code>show ip eigrp topology</code> untuk melihat perubahan metric.</li>
+      <li>Aman: tidak mengubah kecepatan fisik link, hanya preferensi routing.</li>
+    </ul>
+    </section>
 
     <hr class="note-divider" />
     <hr class="note-divider" />
     <hr class="note-divider" />
+
+    <section class="note-section">
     
-    <h3 class="note-subtitle">EIGRP Stub Router (Default: Connected + Summary) 🚀</h3>
+    <h3 class="note-title">Load Balancing di EIGRP 🚀</h3>
 
-<h4 class="note-subtitle">Konsep EIGRP Stub</h4>
-<p class="note-paragraph">
-Stub router = router di ujung jaringan (branch, remote site).
-</p>
-<p class="note-paragraph">Tujuannya:</p>
-<ul class="note-list">
-  <li>Mengurangi ukuran routing table (hemat CPU & memory).</li>
-  <li>Mengurangi EIGRP query yang membanjiri link WAN.</li>
-  <li>Router pusat tahu stub hanya punya jalur lokal → tidak kirim query ke stub.</li>
-</ul>
+    <h4 class="note-subtitle">Konsep Load Balancing</h4>
+    <p class="note-paragraph">
+    Load balancing = kemampuan router menggunakan lebih dari satu jalur untuk trafik menuju tujuan yang sama.
+    </p>
+    <p class="note-paragraph">
+    Di EIGRP ada 2 mode:
+    </p>
+    <ul class="note-list">
+      <li><strong>Equal-cost load balancing (ECMP)</strong> → jika ada 2 atau lebih jalur dengan metric identik, router akan memakai semuanya.</li>
+      <li><strong>Unequal-cost load balancing</strong> → memungkinkan penggunaan jalur dengan metric berbeda menggunakan perintah <code>variance</code>.</li>
+    </ul>
 
-<h4 class="note-subtitle">Mode Stub</h4>
-<p class="note-paragraph">Saat aktifkan <code>eigrp stub</code>, kita bisa pilih informasi yang diiklankan:</p>
-<ul class="note-list">
-  <li><code>connected</code> → hanya jaringan langsung terkoneksi.</li>
-  <li><code>summary</code> → hanya summary address (jika ada).</li>
-  <li><code>static</code> → route static.</li>
-  <li><code>redistributed</code> → hasil redistribusi.</li>
-</ul>
-<p class="note-paragraph"><strong>Default = connected + summary</strong></p>
+    <h4 class="note-subtitle">1. Equal-cost Load Balancing</h4>
+    <ul class="note-list">
+      <li>Default di EIGRP (maksimal 4 jalur, bisa diubah sampai 16).</li>
+      <li>Syarat: dua atau lebih jalur punya metric <strong>identik</strong>.</li>
+      <li>Router otomatis membagi trafik (per-flow atau per-packet, tergantung IOS).</li>
+    </ul>
+    <pre class="note-codeblock"><code>
+    router eigrp 100
+    maximum-paths 4
+    </code></pre>
+    <p class="note-paragraph">
+    👉 Default <code>maximum-paths</code> = 4.  
+    Jika diset ke 1 → load balancing dimatikan.  
+    Bisa ditingkatkan hingga 16 jalur.
+    </p>
 
-<h4 class="note-subtitle">Stub Default (Connected + Summary)</h4>
-<pre><code>
-router eigrp 100
- eigrp stub
-</code></pre>
-<p class="note-paragraph">
-👉 Default: <code>connected + summary</code>.
-</p>
-<ul class="note-list">
-  <li>Router stub hanya iklankan network langsung (LAN user).</li>
-  <li>Kalau ada konfigurasi <code>ip summary-address eigrp ...</code> → ikut diiklankan.</li>
-  <li>Tidak mengiklankan route static, redistributed, atau prefix detail lain.</li>
-</ul>
+    <h4 class="note-subtitle">2. Unequal-cost Load Balancing (Variance)</h4>
+    <p class="note-paragraph">
+    Digunakan kalau kita ingin memanfaatkan jalur dengan metric lebih besar.  
+    Syarat: metric jalur alternatif ≤ (metric successor × variance).
+    </p>
+    <pre class="note-codeblock"><code>
+    router eigrp 100
+    variance 2
+    </code></pre>
 
-<h4 class="note-subtitle">Contoh Kasus</h4>
-<p class="note-paragraph"><strong>Topologi:</strong></p>
-<pre><code>
-R1 (HQ) ↔ R2 (Branch, Stub)
-LAN R2: 192.168.2.0/24
-</code></pre>
-<p class="note-paragraph"><strong>Konfigurasi R2 (Stub):</strong></p>
-<pre><code>
-router eigrp 100
- network 192.168.2.0
- eigrp stub
-</code></pre>
-<p class="note-paragraph"><strong>Efek:</strong></p>
-<ul class="note-list">
-  <li>R2 hanya iklankan 192.168.2.0/24 (connected).</li>
-  <li>Kalau ada summary, ikut diiklankan.</li>
-  <li>R2 tidak akan menerima query dari R1 jika ada route hilang.</li>
-</ul>
+    <p class="note-paragraph"><strong>Contoh Kasus:</strong></p>
+    <ul class="note-list">
+      <li>Jalur via R2: metric = 1000 (successor)</li>
+      <li>Jalur via R4: metric = 1500 (feasible successor)</li>
+    </ul>
+    <p class="note-paragraph">
+    Default → hanya jalur via R2 dipakai.  
+    Dengan <code>variance 2</code> → karena 1500 ≤ (1000 × 2), jalur via R4 ikut dipakai.
+    </p>
 
-<h4 class="note-subtitle">Verifikasi</h4>
-<pre><code>
-show ip eigrp neighbors detail
-</code></pre>
-<p class="note-paragraph">Output akan menunjukkan:</p>
-<pre><code>
-Neighbor is ... (Active)
-  Stub Peer Advertising (CONNECTED, SUMMARY)
-</code></pre>
+    <h4 class="note-subtitle">Verifikasi</h4>
+    <pre class="note-codeblock"><code>
+    show ip route
+    show ip eigrp topology
+    </code></pre>
+    <p class="note-paragraph">
+    Contoh output:
+    </p>
+    <pre class="note-codeblock"><code>
+    D 192.168.3.0/24 [90/1000] via 10.1.1.2, FastEthernet0/0
+                      [90/1500] via 10.1.2.2, FastEthernet0/1
+    </code></pre>
 
-<h4 class="note-subtitle">Ringkasan</h4>
-<ul class="note-list">
-  <li><code>eigrp stub</code> (tanpa opsi) = default → connected + summary.</li>
-  <li>Cocok untuk branch router: ringan & aman dari query.</li>
-  <li>Stub tetap bisa belajar full route dari HQ, tapi tidak iklankan banyak prefix.</li>
-  <li>Stub tidak bisa jadi transit (tidak meneruskan route dari router lain).</li>
-</ul>
+    <h4 class="note-subtitle">Catatan</h4>
+    <ul class="note-list">
+      <li>Unequal-cost load balancing hanya bekerja dengan <strong>Feasible Successor</strong>.</li>
+      <li>Jika jalur cadangan tidak lolos Feasibility Condition, meskipun metric memenuhi variance → tidak dipakai.</li>
+      <li>Trafik didistribusikan <strong>proporsional dengan metric</strong> → jalur lebih cepat (metric lebih kecil) dapat trafik lebih banyak.</li>
+    </ul>
 
-
-    <hr class="note-divider" />
-    <hr class="note-divider" />
-    <hr class="note-divider" />
-
-    <h3 class="note-subtitle">EIGRP Named Configuration 🚀</h3>
-
-<h4 class="note-subtitle">Konsep</h4>
-<p class="note-paragraph">
-Cisco menyediakan dua mode konfigurasi EIGRP:
-</p>
-<ul class="note-list">
-  <li><strong>Classic mode</strong> → <code>router eigrp &lt;AS&gt;</code></li>
-  <li><strong>Named mode</strong> → <code>router eigrp &lt;NAME&gt;</code></li>
-</ul>
-<p class="note-paragraph">
-Named Mode lebih modern (mulai IOS 15) dan fleksibel karena:
-</p>
-<ul class="note-list">
-  <li>Bisa dibagi per <em>address-family</em> (IPv4 & IPv6).</li>
-  <li>Konfigurasi interface langsung di dalam process EIGRP (tanpa network statement classful).</li>
-  <li>Lebih rapi & konsisten → mirip OSPFv3 / IS-IS.</li>
-</ul>
-
-<h4 class="note-subtitle">Perbedaan Singkat</h4>
-<table class="note-table">
-  <tr>
-    <th>Classic Mode</th>
-    <th>Named Mode</th>
-  </tr>
-  <tr>
-    <td><code>router eigrp 100</code></td>
-    <td><code>router eigrp EIGRP_NAME</code></td>
-  </tr>
-  <tr>
-    <td><code>network 192.168.1.0 0.0.0.255</code></td>
-    <td><code>af-interface Gig0/0 → no shutdown</code></td>
-  </tr>
-  <tr>
-    <td>Redistribute langsung di router</td>
-    <td>Redistribute per address-family</td>
-  </tr>
-  <tr>
-    <td>IPv4 & IPv6 config terpisah</td>
-    <td>Bisa digabung (multi address-family)</td>
-  </tr>
-</table>
-
-<h4 class="note-subtitle">Contoh Konfigurasi</h4>
-<p class="note-paragraph"><strong>1. Classic Mode (IPv4, AS 100)</strong></p>
-<pre><code>
-router eigrp 100
- network 10.1.1.0 0.0.0.255
- network 192.168.1.0 0.0.0.255
-</code></pre>
-
-<p class="note-paragraph"><strong>2. Named Mode (EIGRP "CAMPUS")</strong></p>
-<pre><code>
-router eigrp CAMPUS
- !
- address-family ipv4 unicast autonomous-system 100
-  af-interface GigabitEthernet0/0
-   no shutdown
-  exit-af-interface
-  af-interface GigabitEthernet0/1
-   no shutdown
-  exit-af-interface
-  topology base
-   exit-af-topology
- exit-address-family
- !
- address-family ipv6 unicast autonomous-system 100
-  af-interface GigabitEthernet0/0
-   no shutdown
-  exit-af-interface
- exit-address-family
-</code></pre>
-
-<h4 class="note-subtitle">Penjelasan</h4>
-<ul class="note-list">
-  <li><code>router eigrp CAMPUS</code> → membuat instance EIGRP dengan nama.</li>
-  <li><code>address-family ipv4 unicast autonomous-system 100</code> → tentukan AF & AS.</li>
-  <li><code>af-interface &lt;int&gt;</code> → aktifkan EIGRP per-interface.</li>
-  <li>Bisa menggabungkan konfigurasi IPv4 & IPv6 dalam 1 instance.</li>
-</ul>
-
-<h4 class="note-subtitle">Verifikasi</h4>
-<pre><code>
-show ip eigrp address-family ipv4 neighbors
-show ip eigrp topology
-</code></pre>
-
-<h4 class="note-subtitle">Ringkasan</h4>
-<ul class="note-list">
-  <li>Named Mode = cara baru konfigurasi EIGRP, lebih modular & multi-AF.</li>
-  <li>Default di IOS 15+ biasanya Named Mode.</li>
-  <li>Cocok untuk skala besar & dual-stack (IPv4 + IPv6).</li>
-</ul>
+    <h4 class="note-subtitle">Ringkasan</h4>
+    <ul class="note-list">
+      <li><strong>Equal-cost LB</strong> → default, butuh metric identik.</li>
+      <li><strong>Unequal-cost LB</strong> → pakai variance, bisa manfaatkan jalur backup dengan metric lebih besar.</li>
+      <li>Gunakan <code>show ip eigrp topology</code> & <code>show ip route</code> untuk verifikasi.</li>
+      <li>Keamanan loop tetap terjaga karena hanya feasible successor yang dipakai.</li>
+    </ul>
+    </section>
 
 
     <hr class="note-divider" />
     <hr class="note-divider" />
     <hr class="note-divider" />
 
-    <h3 class="note-subtitle">EIGRP OTP (Over The Top) dengan Route Reflector 🚀</h3>
+    <section class="note-section">
+    
+    <h3 class="note-title">EIGRP Stub Router (Default: Connected + Summary) 🚀</h3>
+
+    <h4 class="note-subtitle">Konsep EIGRP Stub</h4>
+    <p class="note-paragraph">
+    Stub router = router di ujung jaringan (branch, remote site).
+    </p>
+    <p class="note-paragraph">Tujuannya:</p>
+    <ul class="note-list">
+      <li>Mengurangi ukuran routing table (hemat CPU & memory).</li>
+      <li>Mengurangi EIGRP query yang membanjiri link WAN.</li>
+      <li>Router pusat tahu stub hanya punya jalur lokal → tidak kirim query ke stub.</li>
+    </ul>
+
+    <h4 class="note-subtitle">Mode Stub</h4>
+    <p class="note-paragraph">Saat aktifkan <code>eigrp stub</code>, kita bisa pilih informasi yang diiklankan:</p>
+    <ul class="note-list">
+      <li><code>connected</code> → hanya jaringan langsung terkoneksi.</li>
+      <li><code>summary</code> → hanya summary address (jika ada).</li>
+      <li><code>static</code> → route static.</li>
+      <li><code>redistributed</code> → hasil redistribusi.</li>
+    </ul>
+    <p class="note-paragraph"><strong>Default = connected + summary</strong></p>
+
+    <h4 class="note-subtitle">Stub Default (Connected + Summary)</h4>
+    <pre class="note-codeblock"><code>
+    router eigrp 100
+    eigrp stub
+    </code></pre>
+    <p class="note-paragraph">
+    👉 Default: <code>connected + summary</code>.
+    </p>
+    <ul class="note-list">
+      <li>Router stub hanya iklankan network langsung (LAN user).</li>
+      <li>Kalau ada konfigurasi <code>ip summary-address eigrp ...</code> → ikut diiklankan.</li>
+      <li>Tidak mengiklankan route static, redistributed, atau prefix detail lain.</li>
+    </ul>
+
+    <h4 class="note-subtitle">Contoh Kasus</h4>
+    <p class="note-paragraph"><strong>Topologi:</strong></p>
+    <pre class="note-codeblock"><code>
+    R1 (HQ) ↔ R2 (Branch, Stub)
+    LAN R2: 192.168.2.0/24
+    </code></pre>
+    <p class="note-paragraph"><strong>Konfigurasi R2 (Stub):</strong></p>
+    <pre class="note-codeblock"><code>
+    router eigrp 100
+    network 192.168.2.0
+    eigrp stub
+    </code></pre>
+    <p class="note-paragraph"><strong>Efek:</strong></p>
+    <ul class="note-list">
+      <li>R2 hanya iklankan 192.168.2.0/24 (connected).</li>
+      <li>Kalau ada summary, ikut diiklankan.</li>
+      <li>R2 tidak akan menerima query dari R1 jika ada route hilang.</li>
+    </ul>
+
+    <h4 class="note-subtitle">Verifikasi</h4>
+    <pre class="note-codeblock"><code>
+    show ip eigrp neighbors detail
+    </code></pre>
+    <p class="note-paragraph">Output akan menunjukkan:</p>
+    <pre class="note-codeblock"><code>
+    Neighbor is ... (Active)
+      Stub Peer Advertising (CONNECTED, SUMMARY)
+    </code></pre>
+
+    <h4 class="note-subtitle">Ringkasan</h4>
+    <ul class="note-list">
+      <li><code>eigrp stub</code> (tanpa opsi) = default → connected + summary.</li>
+      <li>Cocok untuk branch router: ringan & aman dari query.</li>
+      <li>Stub tetap bisa belajar full route dari HQ, tapi tidak iklankan banyak prefix.</li>
+      <li>Stub tidak bisa jadi transit (tidak meneruskan route dari router lain).</li>
+    </ul>
+    </section>
+
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+    <section class="note-section">
+
+    <h3 class="note-title">EIGRP Named Configuration 🚀</h3>
+
+    <h4 class="note-subtitle">Konsep</h4>
+    <p class="note-paragraph">
+    Cisco menyediakan dua mode konfigurasi EIGRP:
+    </p>
+    <ul class="note-list">
+      <li><strong>Classic mode</strong> → <code>router eigrp &lt;AS&gt;</code></li>
+      <li><strong>Named mode</strong> → <code>router eigrp &lt;NAME&gt;</code></li>
+    </ul>
+    <p class="note-paragraph">
+    Named Mode lebih modern (mulai IOS 15) dan fleksibel karena:
+    </p>
+    <ul class="note-list">
+      <li>Bisa dibagi per <em>address-family</em> (IPv4 & IPv6).</li>
+      <li>Konfigurasi interface langsung di dalam process EIGRP (tanpa network statement classful).</li>
+      <li>Lebih rapi & konsisten → mirip OSPFv3 / IS-IS.</li>
+    </ul>
+
+    <h4 class="note-subtitle">Perbedaan Singkat</h4>
+    <table class="note-table">
+      <tr>
+        <th>Classic Mode</th>
+        <th>Named Mode</th>
+      </tr>
+      <tr>
+        <td><code>router eigrp 100</code></td>
+        <td><code>router eigrp EIGRP_NAME</code></td>
+      </tr>
+      <tr>
+        <td><code>network 192.168.1.0 0.0.0.255</code></td>
+        <td><code>af-interface Gig0/0 → no shutdown</code></td>
+      </tr>
+      <tr>
+        <td>Redistribute langsung di router</td>
+        <td>Redistribute per address-family</td>
+      </tr>
+      <tr>
+        <td>IPv4 & IPv6 config terpisah</td>
+        <td>Bisa digabung (multi address-family)</td>
+      </tr>
+    </table>
+
+    <h4 class="note-subtitle">Contoh Konfigurasi</h4>
+    <p class="note-paragraph"><strong>1. Classic Mode (IPv4, AS 100)</strong></p>
+    <pre class="note-codeblock"><code>
+    router eigrp 100
+    network 10.1.1.0 0.0.0.255
+    network 192.168.1.0 0.0.0.255
+    </code></pre>
+
+    <p class="note-paragraph"><strong>2. Named Mode (EIGRP "CAMPUS")</strong></p>
+    <pre class="note-codeblock"><code>
+    router eigrp CAMPUS
+    !
+    address-family ipv4 unicast autonomous-system 100
+      af-interface GigabitEthernet0/0
+      no shutdown
+      exit-af-interface
+      af-interface GigabitEthernet0/1
+      no shutdown
+      exit-af-interface
+      topology base
+      exit-af-topology
+    exit-address-family
+    !
+    address-family ipv6 unicast autonomous-system 100
+      af-interface GigabitEthernet0/0
+      no shutdown
+      exit-af-interface
+    exit-address-family
+    </code></pre>
+
+    <h4 class="note-subtitle">Penjelasan</h4>
+    <ul class="note-list">
+      <li><code>router eigrp CAMPUS</code> → membuat instance EIGRP dengan nama.</li>
+      <li><code>address-family ipv4 unicast autonomous-system 100</code> → tentukan AF & AS.</li>
+      <li><code>af-interface &lt;int&gt;</code> → aktifkan EIGRP per-interface.</li>
+      <li>Bisa menggabungkan konfigurasi IPv4 & IPv6 dalam 1 instance.</li>
+    </ul>
+
+    <h4 class="note-subtitle">Verifikasi</h4>
+    <pre class="note-codeblock"><code>
+    show ip eigrp address-family ipv4 neighbors
+    show ip eigrp topology
+    </code></pre>
+
+    <h4 class="note-subtitle">Ringkasan</h4>
+    <ul class="note-list">
+      <li>Named Mode = cara baru konfigurasi EIGRP, lebih modular & multi-AF.</li>
+      <li>Default di IOS 15+ biasanya Named Mode.</li>
+      <li>Cocok untuk skala besar & dual-stack (IPv4 + IPv6).</li>
+    </ul>
+    </section>
+
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+    <section class="note-section">
+
+    <h3 class="note-title">EIGRP OTP (Over The Top) dengan Route Reflector 🚀</h3>
 
     <h4 class="note-subtitle">Konsep EIGRP OTP</h4>
     <p class="note-paragraph">
@@ -1325,7 +1363,7 @@ show ip eigrp topology
     <p class="note-paragraph"><strong>Topologi:</strong> R1 = RR (pusat), R2 &amp; R3 = Spoke.</p>
 
     <p class="note-paragraph"><strong>1. Konfigurasi Route Reflector (R1)</strong></p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     router eigrp OTP
     !
     address-family ipv4 unicast autonomous-system 100
@@ -1343,7 +1381,7 @@ show ip eigrp topology
     </code></pre>
 
     <p class="note-paragraph"><strong>2. Konfigurasi Spoke (R2 &amp; R3)</strong></p>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     router eigrp OTP
     !
     address-family ipv4 unicast vrf RED autonomous-system 100
@@ -1357,7 +1395,7 @@ show ip eigrp topology
     </ul>
 
     <h4 class="note-subtitle">Verifikasi</h4>
-    <pre><code>
+    <pre class="note-codeblock"><code>
     show ip eigrp neighbors
     show ip route eigrp
     </code></pre>
@@ -1374,8 +1412,7 @@ show ip eigrp topology
       <li>Cocok untuk hub-spoke skala besar dengan EIGRP.</li>
     </ul>
 
-
-
+    </section>
     <hr class="note-divider" />
     
 

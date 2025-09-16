@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Embedded Event Manager (EEM)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Embedded Event Manager (EEM)</h2>
+    <p class="note-paragraph">
+      EEM (Embedded Event Manager) adalah fitur bawaan Cisco IOS/IOS-XE/IOS-XR 
+      yang memungkinkan perangkat jaringan (router, switch, firewall) untuk 
+      melakukan <em>monitoring</em>, <em>otomatisasi</em>, dan <em>skripting</em> 
+      berdasarkan event tertentu tanpa harus menggunakan server manajemen eksternal.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama EEM</h3>
+    <ul class="note-list">
+      <li><strong>Monitoring</strong> – Mengawasi kondisi tertentu, misalnya interface down, CPU tinggi, syslog, atau SNMP trap.</li>
+      <li><strong>Automation</strong> – Menjalankan aksi otomatis seperti mengeksekusi perintah CLI, reset interface, atau kirim notifikasi.</li>
+      <li><strong>Scripting</strong> – Mendukung skrip sederhana dengan applet berbasis CLI atau skrip kompleks dengan TCL.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Komponen EEM</h3>
+    <ul class="note-list">
+      <li><strong>Event Detector</strong> – Pemicu event (timer, syslog, CLI, interface, SNMP).</li>
+      <li><strong>Action</strong> – Tindakan setelah event terdeteksi (jalankan perintah, kirim log, aktifkan ulang interface).</li>
+      <li><strong>Policy</strong> – Aturan yang menentukan hubungan event dan action (Applet atau TCL script).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Konfigurasi</h3>
+    <p class="note-subtitle">1. Monitoring interface down lalu kirim syslog</p>
+    <pre class="note-codeblock"><code>
+event manager applet IF_DOWN
+ event syslog pattern "Interface GigabitEthernet0/0, changed state to administratively down"
+ action 1.0 syslog msg "Warning: Gi0/0 down!"
+    </code></pre>
+
+    <p class="note-subtitle">2. Auto-restart interface jika link mati</p>
+    <pre class="note-codeblock"><code>
+event manager applet RESTART_IF
+ event syslog pattern "Interface GigabitEthernet0/1, changed state to down"
+ action 1.0 cli command "enable"
+ action 2.0 cli command "conf t"
+ action 3.0 cli command "interface Gi0/1"
+ action 4.0 cli command "shutdown"
+ action 5.0 wait 10
+ action 6.0 cli command "no shutdown"
+    </code></pre>
+
+    <p class="note-subtitle">3. Menjalankan perintah rutin tiap 5 menit</p>
+    <pre class="note-codeblock"><code>
+event manager applet SHOW_IP
+ event timer watchdog time 300
+ action 1.0 cli command "show ip interface brief"
+    </code></pre>
+
+    <h3 class="note-subtitle">Kegunaan di Dunia Nyata</h3>
+    <ul class="note-list">
+      <li><strong>Auto-recovery</strong> – Memulihkan link secara otomatis saat down.</li>
+      <li><strong>Proactive monitoring</strong> – Memberikan alert/log tanpa perlu NMS eksternal.</li>
+      <li><strong>Scheduled task</strong> – Menjalankan perintah berkala (mirip cron di Linux).</li>
+      <li><strong>Integrasi</strong> – Bisa bekerja sama dengan syslog, SNMP, atau policy keamanan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan EEM untuk otomatisasi ringan, bukan pengganti penuh NMS.</li>
+      <li>Hati-hati dengan aksi otomatis seperti reload/shutdown, pastikan ada delay.</li>
+      <li>Dokumentasikan semua applet EEM agar mudah di-maintain oleh tim lain.</li>
+    </ul>
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+    
+
+
+
+
+
+<!-- Lab 1 – VLAN dan Trunk -->
+<section class="note-section">
+  <h3 class="note-title">Lab 1 – VLAN dan Trunk 🖧</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    VLAN (Virtual LAN) adalah cara memisahkan jaringan secara logis di Layer 2, walau perangkat tetap terhubung ke switch yang sama.
+  </p>
+  <p class="note-paragraph">
+    Tujuan: segmentasi jaringan, keamanan, efisiensi broadcast.
+  </p>
+  <p class="note-paragraph">
+    Trunking memungkinkan satu link switch membawa traffic beberapa VLAN sekaligus. Standar yang umum: IEEE 802.1Q. Setiap frame diberi tag VLAN supaya switch tujuan bisa mengenali VLAN-nya.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Sebuah kantor memiliki 3 departemen: HR, Finance, IT. Tiap departemen perlu VLAN berbeda:
+  </p>
+  <ul class="note-list">
+    <li>VLAN 10 → HR</li>
+    <li>VLAN 20 → Finance</li>
+    <li>VLAN 30 → IT</li>
+  </ul>
+  <p class="note-paragraph">
+    Traffic antar switch tetap harus bisa membawa semua VLAN → perlu trunk link.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+
+  <h5 class="note-subsubtitle">Step 1 – Buat VLAN</h5>
+  <pre class="note-codeblock"><code>
+Switch(config)# vlan 10
+Switch(config-vlan)# name HR
+Switch(config-vlan)# exit
+
+Switch(config)# vlan 20
+Switch(config-vlan)# name Finance
+Switch(config-vlan)# exit
+
+Switch(config)# vlan 30
+Switch(config-vlan)# name IT
+Switch(config-vlan)# exit
+  </code></pre>
+
+  <h5 class="note-subsubtitle">Step 2 – Assign VLAN ke port</h5>
+  <pre class="note-codeblock"><code>
+Switch(config)# interface range fa0/1-5
+Switch(config-if-range)# switchport mode access
+Switch(config-if-range)# switchport access vlan 10
+
+Switch(config)# interface range fa0/6-10
+Switch(config-if-range)# switchport mode access
+Switch(config-if-range)# switchport access vlan 20
+
+Switch(config)# interface range fa0/11-15
+Switch(config-if-range)# switchport mode access
+Switch(config-if-range)# switchport access vlan 30
+  </code></pre>
+
+  <h5 class="note-subsubtitle">Step 3 – Konfigurasi Trunk (antar switch)</h5>
+  <pre class="note-codeblock"><code>
+Switch(config)# interface gi0/1
+Switch(config-if)# switchport mode trunk
+Switch(config-if)# switchport trunk allowed vlan 10,20,30
+  </code></pre>
+
+  <h5 class="note-subsubtitle">Step 4 – Verifikasi</h5>
+  <ul class="note-list">
+    <li>Cek VLAN: <code>show vlan brief</code></li>
+    <li>Cek trunk: <code>show interfaces trunk</code></li>
+  </ul>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Port sudah tergabung sesuai VLAN masing-masing departemen</li>
+    <li>Trunk antar switch bisa membawa traffic semua VLAN</li>
+    <li>Segmentasi jaringan berjalan sesuai rencana</li>
+  </ul>
+</section>
+
+<!-- Lab 2 – InterVLAN Routing -->
+<section class="note-section">
+  <h3 class="note-title">Lab 2 – InterVLAN Routing 🔀</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    Masalah: VLAN memisahkan jaringan di Layer 2, sehingga perangkat di VLAN berbeda tidak bisa saling berkomunikasi secara langsung.
+  </p>
+  <p class="note-paragraph">
+    Solusi: InterVLAN Routing menggunakan perangkat Layer 3 (Router atau Layer 3 Switch) untuk menghubungkan VLAN berbeda.
+  </p>
+  <p class="note-paragraph">
+    Metode umum:
+  </p>
+  <ul class="note-list">
+    <li>Router-on-a-stick: Router memiliki sub-interface untuk tiap VLAN, biasanya melalui trunk link.</li>
+    <li>Layer 3 Switch: Switch memiliki SVI (Switch Virtual Interface) untuk tiap VLAN, bisa routing langsung tanpa router tambahan.</li>
+  </ul>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Kantor sama seperti Lab 1: HR (VLAN 10), Finance (VLAN 20), IT (VLAN 30). Tujuannya: PC di HR bisa mengakses PC di Finance dan IT, tapi tetap menjaga segmentasi VLAN.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+
+  <h5 class="note-subsubtitle">1️⃣ Router-on-a-Stick</h5>
+  <pre class="note-codeblock"><code>
+Router(config)# interface gi0/0.10
+Router(config-subif)# encapsulation dot1Q 10
+Router(config-subif)# ip address 192.168.10.1 255.255.255.0
+
+Router(config)# interface gi0/0.20
+Router(config-subif)# encapsulation dot1Q 20
+Router(config-subif)# ip address 192.168.20.1 255.255.255.0
+
+Router(config)# interface gi0/0.30
+Router(config-subif)# encapsulation dot1Q 30
+Router(config-subif)# ip address 192.168.30.1 255.255.255.0
+  </code></pre>
+
+  <p class="note-paragraph">
+    Pastikan trunk antara switch dan router:
+  </p>
+  <pre class="note-codeblock"><code>
+Switch(config)# interface gi0/1
+Switch(config-if)# switchport mode trunk
+Switch(config-if)# switchport trunk allowed vlan 10,20,30
+  </code></pre>
+
+  <h5 class="note-subsubtitle">2️⃣ Layer 3 Switch (SVI)</h5>
+  <pre class="note-codeblock"><code>
+Switch(config)# interface vlan 10
+Switch(config-if)# ip address 192.168.10.1 255.255.255.0
+Switch(config-if)# no shutdown
+
+Switch(config)# interface vlan 20
+Switch(config-if)# ip address 192.168.20.1 255.255.255.0
+Switch(config-if)# no shutdown
+
+Switch(config)# interface vlan 30
+Switch(config-if)# ip address 192.168.30.1 255.255.255.0
+Switch(config-if)# no shutdown
+
+Switch(config)# ip routing
+  </code></pre>
+
+  <h5 class="note-subsubtitle">🔍 Verifikasi</h5>
+  <pre class="note-codeblock"><code>
+Switch# ping 192.168.20.1   # dari VLAN 10 ke VLAN 20
+Switch# ping 192.168.30.1   # dari VLAN 10 ke VLAN 30
+  </code></pre>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Perangkat di VLAN berbeda bisa saling berkomunikasi</li>
+    <li>Segmentasi VLAN tetap terjaga</li>
+    <li>Router-on-a-stick atau Layer 3 Switch berfungsi sebagai gateway antar VLAN</li>
+  </ul>
+</section>
+
+<!-- Lab 3 – SPAN (Switch Port Analyzer) -->
+<section class="note-section">
+  <h3 class="note-title">Lab 3 – SPAN (Switch Port Analyzer) 🔍</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    SPAN digunakan untuk memantau traffic di satu atau beberapa port switch tanpa mengganggu aliran data normal.
+  </p>
+  <p class="note-paragraph">
+    Traffic dari <strong>source port</strong> akan dicopy ke <strong>destination port</strong>, yang biasanya terhubung ke perangkat monitoring seperti Wireshark atau IDS.
+  </p>
+  <p class="note-paragraph">
+    SPAN bersifat <em>lokal</em>, artinya hanya memonitor port di switch yang sama.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    IT ingin memantau semua traffic yang masuk ke server VLAN 20 untuk analisis keamanan.
+  </p>
+  <p class="note-paragraph">
+    Server terhubung ke port Fa0/10, dan kita ingin copy traffic ke port Fa0/20 yang terhubung ke laptop Wireshark.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+  <pre class="note-codeblock"><code>
+Switch(config)# monitor session 1 source interface fa0/10
+Switch(config)# monitor session 1 destination interface fa0/20
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+Switch# show monitor
+  </code></pre>
+
+  <p class="note-paragraph">
+    Sekarang semua traffic dari Fa0/10 akan dicopy ke Fa0/20 dan bisa di-capture di Wireshark.
+  </p>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Port source dapat dimonitor tanpa mengganggu aliran data normal</li>
+    <li>Port destination menerima salinan traffic untuk analisis</li>
+    <li>Monitoring lokal berjalan efektif menggunakan SPAN</li>
+  </ul>
+</section>
+
+<!-- Lab 4 – RSPAN (Remote SPAN) -->
+<section class="note-section">
+  <h3 class="note-title">Lab 4 – RSPAN (Remote SPAN) 🌐</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    RSPAN adalah pengembangan SPAN yang memungkinkan monitoring traffic dari switch lain melalui jaringan.
+  </p>
+  <p class="note-paragraph">
+    Traffic dari <strong>source port</strong> dikirim melalui VLAN khusus RSPAN ke switch lain, lalu dicapture di <strong>destination port</strong>.
+  </p>
+  <p class="note-paragraph">
+    Membutuhkan <strong>RSPAN VLAN</strong> khusus yang dikonfigurasi di semua switch yang terlibat.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Perusahaan memiliki 2 switch: Switch A dan Switch B. Server VLAN 20 di Switch A ingin dipantau dari Switch B, tempat analyzer Wireshark terhubung.
+  </p>
+  <p class="note-paragraph">
+    Solusi: buat RSPAN VLAN 999, traffic dari server di Switch A dikirim ke Switch B melalui VLAN ini.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+
+  <h5 class="note-subsubtitle">1️⃣ Buat RSPAN VLAN</h5>
+  <pre class="note-codeblock"><code>
+Switch(config)# vlan 999
+Switch(config-vlan)# remote-span
+Switch(config-vlan)# exit
+  </code></pre>
+
+  <h5 class="note-subsubtitle">2️⃣ Konfigurasi Source Port (Switch A)</h5>
+  <pre class="note-codeblock"><code>
+Switch(config)# monitor session 1 source interface fa0/10
+Switch(config)# monitor session 1 destination remote vlan 999
+  </code></pre>
+
+  <h5 class="note-subsubtitle">3️⃣ Konfigurasi Destination Port (Switch B)</h5>
+  <pre class="note-codeblock"><code>
+Switch(config)# monitor session 1 source remote vlan 999
+Switch(config)# monitor session 1 destination interface fa0/20
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+Switch# show monitor
+  </code></pre>
+
+  <p class="note-paragraph">
+    Sekarang traffic dari server Switch A bisa dipantau di Switch B melalui port Wireshark.
+  </p>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Traffic dari switch remote dapat dimonitor tanpa mengganggu operasional normal</li>
+    <li>RSPAN VLAN berhasil menghubungkan source dan destination antar switch</li>
+    <li>Monitoring terpusat di Switch B melalui port Wireshark</li>
+  </ul>
+</section>
+
+<!-- Lab 5 – EtherChannel Mode On -->
+<section class="note-section">
+  <h3 class="note-title">Lab 5 – EtherChannel Mode On 🔗</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    EtherChannel adalah teknik menggabungkan beberapa link fisik menjadi satu link logis untuk meningkatkan bandwidth dan redundansi.
+  </p>
+  <p class="note-paragraph">
+    <strong>Mode On</strong> → membuat EtherChannel <em>static</em>, tanpa negosiasi protokol PAgP atau LACP.
+  </p>
+  <p class="note-paragraph">
+    Biasanya digunakan untuk menghubungkan switch ke switch atau switch ke server dengan multiple NIC.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Dua switch (Switch A dan Switch B) memiliki 4 kabel gigabit. Tujuannya: gabungkan 4 link menjadi 1 logical link agar bandwidth 4 Gbps dan failover otomatis jika salah satu kabel putus.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+
+  <h5 class="note-subsubtitle">1️⃣ Pilih port untuk digabung</h5>
+  <pre class="note-codeblock"><code>
+Switch(config)# interface range gi0/1-4
+Switch(config-if-range)# channel-group 1 mode on
+  </code></pre>
+
+  <h5 class="note-subsubtitle">2️⃣ Buat Port-Channel</h5>
+  <pre class="note-codeblock"><code>
+Switch(config)# interface port-channel 1
+Switch(config-if)# switchport mode trunk   # jika membawa VLAN
+Switch(config-if)# switchport trunk allowed vlan 10,20,30
+  </code></pre>
+
+  <h5 class="note-subsubtitle">3️⃣ Verifikasi</h5>
+  <pre class="note-codeblock"><code>
+Switch# show etherchannel summary
+Switch# show interfaces port-channel
+  </code></pre>
+
+  <p class="note-paragraph">
+    Output menunjukkan port-channel terbentuk, member aktif, dan trunk berjalan.
+  </p>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Beberapa link fisik tergabung menjadi satu port-channel logis</li>
+    <li>Bandwidth gabungan meningkat sesuai jumlah link</li>
+    <li>Failover otomatis jika salah satu link putus</li>
+    <li>Trunk berjalan normal jika EtherChannel membawa VLAN</li>
+  </ul>
+</section>
+
+<!-- Lab 6 – EtherChannel PAgP -->
+<section class="note-section">
+  <h3 class="note-title">Lab 6 – EtherChannel PAgP 🔗🤝</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    PAgP (Port Aggregation Protocol) adalah protokol Cisco proprietary untuk negosiasi EtherChannel secara otomatis.
+  </p>
+  <p class="note-paragraph">
+    PAgP memastikan link yang compatible bisa digabung tanpa konfigurasi statis.
+  </p>
+  <p class="note-paragraph">
+    Mode PAgP:
+  </p>
+  <ul class="note-list">
+    <li><strong>Auto</strong> → pasif, menunggu partner memulai.</li>
+    <li><strong>Desirable</strong> → aktif mencoba membuat EtherChannel.</li>
+  </ul>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Dua switch Cisco (Switch A dan Switch B) ingin membuat 4 link gigabit trunk menjadi satu EtherChannel secara otomatis.
+    Menggunakan PAgP agar negosiasi otomatis, tidak perlu konfigurasi statis.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+
+  <h5 class="note-subsubtitle">1️⃣ Konfigurasi PAgP di Switch A</h5>
+  <pre class="note-codeblock"><code>
+Switch(config)# interface range gi0/1-4
+Switch(config-if-range)# channel-group 1 mode desirable
+Switch(config-if-range)# exit
+
+Switch(config)# interface port-channel 1
+Switch(config-if)# switchport mode trunk
+Switch(config-if)# switchport trunk allowed vlan 10,20,30
+  </code></pre>
+
+  <h5 class="note-subsubtitle">2️⃣ Konfigurasi PAgP di Switch B</h5>
+  <pre class="note-codeblock"><code>
+Switch(config)# interface range gi0/1-4
+Switch(config-if-range)# channel-group 1 mode auto
+Switch(config-if-range)# exit
+
+Switch(config)# interface port-channel 1
+Switch(config-if)# switchport mode trunk
+Switch(config-if)# switchport trunk allowed vlan 10,20,30
+  </code></pre>
+
+  <h5 class="note-subsubtitle">3️⃣ Verifikasi</h5>
+  <pre class="note-codeblock"><code>
+Switch# show etherchannel summary
+Switch# show interfaces port-channel
+  </code></pre>
+
+  <p class="note-paragraph">
+    EtherChannel terbentuk secara otomatis jika mode auto/desirable cocok, dan trunk berjalan normal.
+  </p>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Link gigabit tergabung otomatis menjadi port-channel</li>
+    <li>Trunk VLAN berjalan melalui port-channel</li>
+    <li>Negosiasi PAgP berhasil tanpa konfigurasi statis</li>
+  </ul>
+</section>
+
+<!-- Lab 7 – EtherChannel LACP -->
+<section class="note-section">
+  <h3 class="note-title">Lab 7 – EtherChannel LACP 🔗⚡</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    LACP (Link Aggregation Control Protocol) adalah standar IEEE 802.3ad untuk negosiasi EtherChannel otomatis.
+  </p>
+  <p class="note-paragraph">
+    LACP memungkinkan switch dari vendor berbeda bisa membentuk EtherChannel.
+  </p>
+  <p class="note-paragraph">
+    Mode LACP:
+  </p>
+  <ul class="note-list">
+    <li><strong>Active</strong> → aktif mencoba membentuk EtherChannel.</li>
+    <li><strong>Passive</strong> → pasif menunggu partner membentuk EtherChannel.</li>
+  </ul>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Dua switch (Switch A & Switch B) ingin menggabungkan 4 link gigabit menjadi EtherChannel trunk.
+    Menggunakan LACP agar kompatibel dengan switch vendor lain dan negosiasi otomatis.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+
+  <h5 class="note-subsubtitle">1️⃣ Switch A (Active)</h5>
+  <pre class="note-codeblock"><code>
+Switch(config)# interface range gi0/1-4
+Switch(config-if-range)# channel-group 1 mode active
+Switch(config-if-range)# exit
+
+Switch(config)# interface port-channel 1
+Switch(config-if)# switchport mode trunk
+Switch(config-if)# switchport trunk allowed vlan 10,20,30
+  </code></pre>
+
+  <h5 class="note-subsubtitle">2️⃣ Switch B (Passive)</h5>
+  <pre class="note-codeblock"><code>
+Switch(config)# interface range gi0/1-4
+Switch(config-if-range)# channel-group 1 mode passive
+Switch(config-if-range)# exit
+
+Switch(config)# interface port-channel 1
+Switch(config-if)# switchport mode trunk
+Switch(config-if)# switchport trunk allowed vlan 10,20,30
+  </code></pre>
+
+  <h5 class="note-subsubtitle">3️⃣ Verifikasi</h5>
+  <pre class="note-codeblock"><code>
+Switch# show etherchannel summary
+Switch# show interfaces port-channel
+  </code></pre>
+
+  <p class="note-paragraph">
+    EtherChannel terbentuk secara otomatis, trunk berjalan, dan kompatibel dengan perangkat vendor lain.
+  </p>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Link gigabit tergabung menjadi port-channel secara otomatis</li>
+    <li>Trunk VLAN berjalan melalui port-channel</li>
+    <li>Negosiasi LACP berhasil dan kompatibel dengan vendor lain</li>
+  </ul>
+</section>
+
+<!-- Lab 8 – EtherChannel Layer 3 -->
+<section class="note-section">
+  <h3 class="note-title">Lab 8 – EtherChannel Layer 3 🌐🔗</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    EtherChannel tidak hanya untuk Layer 2 (trunk), tapi juga bisa dibuat sebagai Layer 3 interface.
+  </p>
+  <p class="note-paragraph">
+    Biasanya digunakan untuk routing antar switch atau uplink ke router dengan agregasi link.
+  </p>
+  <p class="note-paragraph">
+    Bedanya: port-channel diberi IP address, dan tidak ada mode trunk (default L3).
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Dua switch Cisco ingin menggabungkan 4 link gigabit menjadi satu port-channel Layer 3. Tujuannya: meningkatkan bandwidth untuk routing antar switch, sekaligus redundancy.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+
+  <h5 class="note-subsubtitle">1️⃣ Buat EtherChannel L3</h5>
+  <pre class="note-codeblock"><code>
+Switch(config)# interface range gi0/1-4
+Switch(config-if-range)# no switchport        # ubah ke Layer 3
+Switch(config-if-range)# channel-group 1 mode on
+  </code></pre>
+
+  <h5 class="note-subsubtitle">2️⃣ Konfigurasi Port-Channel L3</h5>
+  <pre class="note-codeblock"><code>
+Switch(config)# interface port-channel 1
+Switch(config-if)# ip address 192.168.1.1 255.255.255.0
+Switch(config-if)# no shutdown
+  </code></pre>
+
+  <h5 class="note-subsubtitle">3️⃣ Verifikasi</h5>
+  <pre class="note-codeblock"><code>
+Switch# show etherchannel summary
+Switch# show ip interface brief
+  </code></pre>
+
+  <p class="note-paragraph">
+    Sekarang port-channel 1 bisa dipakai untuk routing antar switch. Jika satu link fisik down, traffic tetap berjalan di link lain.
+  </p>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Link fisik tergabung menjadi port-channel Layer 3</li>
+    <li>Port-channel memiliki IP address dan bisa digunakan untuk routing</li>
+    <li>Redundancy aktif: jika satu link down, traffic tetap berjalan di link lain</li>
+    <li>Bandwidth gabungan meningkat sesuai jumlah link</li>
+  </ul>
+</section>
+
+<!-- Lab 9 – STP Tuning: PortFast -->
+<section class="note-section">
+  <h3 class="note-title">Lab 9 – STP Tuning: PortFast ⚡</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    STP (Spanning Tree Protocol) mencegah looping di jaringan Layer 2.
+  </p>
+  <p class="note-paragraph">
+    Biasanya, port STP butuh 30–50 detik untuk berpindah ke <strong>forwarding state</strong>.
+  </p>
+  <p class="note-paragraph">
+    <strong>PortFast</strong>: memaksa port langsung ke forwarding state saat switch start, cocok untuk port end-device seperti PC atau server.
+  </p>
+  <p class="note-paragraph">
+    <em>Catatan:</em> jangan aktifkan PortFast di port yang terhubung ke switch lain, bisa menyebabkan loop.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Port Fa0/10 terhubung ke PC di VLAN 10.  
+    Tanpa PortFast, PC harus menunggu beberapa detik sebelum bisa komunikasi.  
+    Dengan PortFast, port langsung forwarding saat switch up → boot & koneksi cepat.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+  <pre class="note-codeblock"><code>
+Switch(config)# interface fa0/10
+Switch(config-if)# spanning-tree portfast
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+Switch# show spanning-tree interface fa0/10
+  </code></pre>
+
+  <p class="note-paragraph">
+    Output akan menunjukkan <strong>PortFast Enabled</strong> dan port langsung berada di forwarding state.
+  </p>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Port end-device langsung forwarding saat switch up</li>
+    <li>Boot & koneksi perangkat lebih cepat</li>
+    <li>STP tetap mencegah loop di port lain</li>
+  </ul>
+</section>
+
+<!-- Lab 10 – STP Tuning: UplinkFast -->
+<section class="note-section">
+  <h3 class="note-title">Lab 10 – STP Tuning: UplinkFast ⚡🔄</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    UplinkFast digunakan pada switch akses (<em>access switch</em>) untuk mempercepat konvergensi STP ketika link uplink ke root bridge gagal.
+  </p>
+  <p class="note-paragraph">
+    Dengan UplinkFast, port yang menjadi cadangan (<em>backup root port</em>) segera menjadi root port, sehingga downtime minimal.
+  </p>
+  <p class="note-paragraph">
+    Hanya direkomendasikan untuk switch akses, jangan di core switch, karena bisa menyebabkan loop jika salah konfigurasi.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Switch akses memiliki 2 uplink ke distribution switch.  
+    Jika uplink utama putus, tanpa UplinkFast butuh 30–50 detik untuk STP memilih port baru → downtime.  
+    Dengan UplinkFast, port cadangan langsung forwarding → downtime minimal.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+  <pre class="note-codeblock"><code>
+Switch(config)# spanning-tree uplinkfast
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+Switch# show spanning-tree
+  </code></pre>
+
+  <p class="note-paragraph">
+    Perhatikan <strong>root port</strong> dan <strong>backup port</strong>, waktu failover lebih cepat dibanding default STP.
+  </p>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Switch akses cepat berkonvergensi saat uplink gagal</li>
+    <li>Downtime minimal, port cadangan langsung menjadi root port</li>
+    <li>STP tetap mencegah loop di jaringan lain</li>
+  </ul>
+</section>
+
+
+<!-- Lab 11 – STP Tuning: BPDU Guard -->
+<section class="note-section">
+  <h3 class="note-title">Lab 11 – STP Tuning: BPDU Guard 🛡️⚡</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    BPDU Guard adalah fitur proteksi STP untuk port yang terhubung ke end device.
+  </p>
+  <p class="note-paragraph">
+    Jika port yang di-enable BPDU Guard menerima BPDU (Bridge Protocol Data Unit), port akan <strong>shutdown otomatis</strong>.
+  </p>
+  <p class="note-paragraph">
+    Tujuan: mencegah switch tidak sah mengirim BPDU dan memengaruhi topologi STP.
+  </p>
+  <p class="note-paragraph">
+    Biasanya digabung dengan <strong>PortFast</strong>.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Port Fa0/10 terhubung ke PC. Kita aktifkan PortFast dan BPDU Guard.  
+    Jika seseorang menghubungkan switch lain ke port ini, port langsung shutdown → mencegah loop.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+  <pre class="note-codeblock"><code>
+Switch(config)# interface fa0/10
+Switch(config-if)# spanning-tree portfast
+Switch(config-if)# spanning-tree bpduguard enable
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+Switch# show spanning-tree interface fa0/10 detail
+Switch# show errdisable recovery
+  </code></pre>
+
+  <p class="note-paragraph">
+    Jika port menerima BPDU, status menjadi <strong>err-disabled</strong>, dan perlu recovery untuk mengaktifkan kembali.
+  </p>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Port end-device aman dari loop karena BPDU tidak sah</li>
+    <li>Port yang menerima BPDU otomatis shutdown</li>
+    <li>Digabungkan dengan PortFast untuk boot cepat tanpa risiko loop</li>
+  </ul>
+</section>
+
+<!-- Lab 12 – STP Tuning: BPDU Filter -->
+<section class="note-section">
+  <h3 class="note-title">Lab 12 – STP Tuning: BPDU Filter 🛡️🚫</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    BPDU Filter mencegah port mengirim dan/atau menerima BPDU.
+  </p>
+  <p class="note-paragraph">
+    Tujuan: membuat port seolah-olah tidak ikut STP, cocok untuk port end-device tertentu.
+  </p>
+  <p class="note-paragraph">
+    <strong>Perbedaan dengan BPDU Guard:</strong>
+  </p>
+  <ul class="note-list">
+    <li>BPDU Guard → shutdown port jika BPDU diterima.</li>
+    <li>BPDU Filter → port tidak mengirim BPDU, bisa tetap forwarding.</li>
+  </ul>
+  <p class="note-paragraph">
+    Bisa diaktifkan <em>globally</em> atau per interface.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Port Fa0/10 terhubung ke server yang tidak perlu ikut STP.  
+    Kita ingin port langsung forwarding dan tidak mengirim BPDU.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+
+  <h5 class="note-subsubtitle">1️⃣ Per Interface</h5>
+  <pre class="note-codeblock"><code>
+Switch(config)# interface fa0/10
+Switch(config-if)# spanning-tree bpdufilter enable
+  </code></pre>
+
+  <h5 class="note-subsubtitle">2️⃣ Global Mode (opsional)</h5>
+  <pre class="note-codeblock"><code>
+Switch(config)# spanning-tree portfast bpdufilter default
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+Switch# show spanning-tree interface fa0/10 detail
+  </code></pre>
+
+  <p class="note-paragraph">
+    Port akan langsung forwarding, dan BPDU tidak dikirim.
+  </p>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Port end-device langsung forwarding tanpa menunggu STP</li>
+    <li>BPDU tidak dikirim dari port tersebut</li>
+    <li>Port tetap aman dari loop karena tidak menerima BPDU</li>
+  </ul>
+</section>
+
+
+<!-- Lab 13 – STP Tuning: Root Guard -->
+<section class="note-section">
+  <h3 class="note-title">Lab 13 – STP Tuning: Root Guard 🛡️👑</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    Root Guard mencegah switch lain menjadi root bridge pada port tertentu.
+  </p>
+  <p class="note-paragraph">
+    Jika port menerima BPDU dari switch dengan priority lebih rendah, port akan masuk status <strong>root-inconsistent</strong> dan tetap <em>blocking</em>.
+  </p>
+  <p class="note-paragraph">
+    Tujuan: menjaga root bridge tetap di lokasi yang diinginkan (biasanya core/distribution switch).
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Switch core (Switch A) adalah root bridge.  
+    Port yang menghubungkan ke switch akses (Switch B) ingin tidak membiarkan Switch B mengambil alih root.  
+    Dengan Root Guard, jika Switch B mencoba menjadi root, port akan diblock sementara.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+  <pre class="note-codeblock"><code>
+Switch(config)# interface gi0/1
+Switch(config-if)# spanning-tree guard root
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+Switch# show spanning-tree inconsistentports
+  </code></pre>
+
+  <p class="note-paragraph">
+    Jika port menjadi <strong>root-inconsistent</strong>, STP tetap menjaga topologi jaringan stabil.
+  </p>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Root bridge tetap di switch core/distribution yang diinginkan</li>
+    <li>Port yang menerima BPDU root tidak sah menjadi root-inconsistent</li>
+    <li>STP tetap mencegah loop dan menjaga stabilitas topologi</li>
+  </ul>
+</section>
+
+<!-- Lab 14 – MSTP (Multiple Spanning Tree Protocol) -->
+<section class="note-section">
+  <h3 class="note-title">Lab 14 – MSTP (Multiple Spanning Tree Protocol) 🌐🕸️</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    MSTP (IEEE 802.1s) memungkinkan beberapa VLAN digabung ke dalam satu instance STP, sehingga lebih efisien daripada membuat STP terpisah untuk setiap VLAN.
+  </p>
+  <p class="note-paragraph">
+    Tujuan: mengurangi jumlah topologi STP, mempercepat konvergensi, dan mengoptimalkan penggunaan link.
+  </p>
+
+  <h4 class="note-subtitle">🏗️ Struktur MSTP</h4>
+  <ul class="note-list">
+    <li><strong>MST Region</strong> → kumpulan switch dengan konfigurasi MST sama.</li>
+    <li><strong>MST Instance (MSTI)</strong> → setiap instance bisa memetakan beberapa VLAN.</li>
+    <li><strong>CIST (Common and Internal Spanning Tree)</strong> → backbone antara region MST.</li>
+  </ul>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Kantor memiliki 6 VLAN: 10–15.  
+    Tujuan konfigurasi:
+  </p>
+  <ul class="note-list">
+    <li>VLAN 10–12 → MST Instance 1</li>
+    <li>VLAN 13–15 → MST Instance 2</li>
+  </ul>
+  <p class="note-paragraph">
+    Dengan MSTP, link cadangan bisa digunakan lebih optimal dibanding STP klasik.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi (Contoh Dasar)</h4>
+  <pre class="note-codeblock"><code>
+Switch(config)# spanning-tree mode mst
+Switch(config)# spanning-tree mst configuration
+Switch(config-mst)# name MST-Region1
+Switch(config-mst)# revision 1
+Switch(config-mst)# instance 1 vlan 10-12
+Switch(config-mst)# instance 2 vlan 13-15
+Switch(config-mst)# exit
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+Switch# show spanning-tree mst
+Switch# show spanning-tree mst detail
+  </code></pre>
+
+  <p class="note-paragraph">
+    Output menampilkan MST instance, VLAN mapping, dan root bridge per instance.
+  </p>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Beberapa VLAN tergabung ke MST Instance sesuai konfigurasi</li>
+    <li>Root bridge berbeda per instance jika diperlukan</li>
+    <li>Konvergensi lebih cepat dan link digunakan lebih optimal dibanding STP klasik</li>
+  </ul>
+</section>
+
+<!-- Lab 15 – RSTP (Rapid Spanning Tree Protocol) -->
+<section class="note-section">
+  <h3 class="note-title">Lab 15 – RSTP (Rapid Spanning Tree Protocol) ⚡🕸️</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    RSTP (IEEE 802.1w) adalah versi cepat STP dengan konvergensi lebih singkat (1–10 detik dibanding 30–50 detik STP klasik).
+  </p>
+  <p class="note-paragraph">
+    Mekanisme utama:
+  </p>
+  <ul class="note-list">
+    <li>Port roles: root, designated, alternate, backup</li>
+    <li>Port states diganti menjadi: discarding, learning, forwarding</li>
+    <li>Cocok untuk jaringan core dan access untuk mempercepat failover</li>
+  </ul>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Switch akses terhubung ke core switch.  
+    Jika uplink utama putus, port cadangan harus cepat forwarding tanpa menunggu timer STP lama.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+  <pre class="note-codeblock"><code>
+Switch(config)# spanning-tree mode rapid-pvst
+  </code></pre>
+
+  <h5 class="note-subsubtitle">Optional: Aktifkan PortFast pada Access Port</h5>
+  <pre class="note-codeblock"><code>
+Switch(config)# interface fa0/10
+Switch(config-if)# spanning-tree portfast
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+Switch# show spanning-tree
+Switch# show spanning-tree summary
+  </code></pre>
+
+  <p class="note-paragraph">
+    RSTP mempercepat failover dan konvergensi topologi jaringan.
+  </p>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Konvergensi STP lebih cepat dibanding STP klasik</li>
+    <li>Port cadangan cepat menjadi forwarding saat uplink gagal</li>
+    <li>Port roles dan states jelas, meminimalkan downtime</li>
+  </ul>
+</section>
+
+<!-- Lab 16 – Port Security: Violation Default -->
+<section class="note-section">
+  <h3 class="note-title">Lab 16 – Port Security: Violation Default 🔒</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    Port Security membatasi akses ke port switch berdasarkan MAC address.
+  </p>
+  <p class="note-paragraph">
+    <strong>Violation Default:</strong> jika ada perangkat tidak sah, port otomatis <strong>shutdown</strong>.
+  </p>
+  <p class="note-paragraph">
+    Tujuan: melindungi jaringan dari perangkat tidak dikenal.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Port Fa0/10 hanya boleh menerima 1 MAC address (PC HR).  
+    Jika PC lain atau switch lain terhubung → port shutdown otomatis.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+  <pre class="note-codeblock"><code>
+Switch(config)# interface fa0/10
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport port-security
+Switch(config-if)# switchport port-security maximum 1
+Switch(config-if)# switchport port-security violation shutdown
+Switch(config-if)# switchport port-security mac-address sticky
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+Switch# show port-security interface fa0/10
+Switch# show running-config | include port-security
+  </code></pre>
+
+  <p class="note-paragraph">
+    Jika terjadi violation, status port akan menjadi <strong>err-disabled</strong>.
+  </p>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Port hanya menerima MAC address yang diizinkan</li>
+    <li>Perangkat tidak sah menyebabkan port shutdown otomatis</li>
+    <li>Status port err-disabled saat terjadi violation</li>
+    <li>Keamanan jaringan meningkat dengan kontrol akses port</li>
+  </ul>
+</section>
+
+<!-- Lab 17 – Port Security: Violation Recovery -->
+<section class="note-section">
+  <h3 class="note-title">Lab 17 – Port Security: Violation Recovery ⏱️🔒</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    Setelah port shutdown akibat pelanggaran (<em>violation</em>), port perlu direcovery agar aktif kembali.
+  </p>
+  <p class="note-paragraph">
+    Recovery bisa dilakukan:
+  </p>
+  <ul class="note-list">
+    <li><strong>Manual:</strong> shutdown → no shutdown</li>
+    <li><strong>Automatic:</strong> menggunakan <em>errdisable recovery timer</em></li>
+  </ul>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Port Fa0/10 shutdown karena MAC tidak sah.  
+    Tujuan: port otomatis aktif kembali setelah beberapa detik tanpa harus restart manual.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+  <h5 class="note-subsubtitle">1️⃣ Aktifkan Recovery Otomatis</h5>
+  <pre class="note-codeblock"><code>
+Switch(config)# errdisable recovery cause psecure-violation
+Switch(config)# errdisable recovery interval 60   # recovery tiap 60 detik
+  </code></pre>
+
+  <h5 class="note-subsubtitle">2️⃣ Verifikasi</h5>
+  <pre class="note-codeblock"><code>
+Switch# show errdisable recovery
+Switch# show port-security interface fa0/10
+  </code></pre>
+
+  <p class="note-paragraph">
+    Port akan kembali <strong>active</strong> setelah timer, jika MAC sesuai konfigurasi.
+  </p>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Port yang shutdown akibat violation bisa recovery otomatis</li>
+    <li>Downtime port minimal tanpa intervensi manual</li>
+    <li>Port tetap aman karena hanya MAC yang sesuai diizinkan</li>
+  </ul>
+</section>
+
+
+<!-- Lab 18 – Port Security: Violation Action -->
+<section class="note-section">
+  <h3 class="note-title">Lab 18 – Port Security: Violation Action ⚠️🔒</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    Port Security Violation Action menentukan apa yang terjadi saat MAC address tidak sah muncul di port.
+  </p>
+  <p class="note-paragraph">
+    Tipe aksi:
+  </p>
+  <ul class="note-list">
+    <li><strong>Protect:</strong> drop traffic yang tidak sah, port tetap aktif</li>
+    <li><strong>Restrict:</strong> drop traffic + log violation, port tetap aktif</li>
+    <li><strong>Shutdown (default):</strong> port menjadi <em>err-disabled</em></li>
+  </ul>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Port Fa0/10 hanya boleh menerima 1 MAC address (PC HR).  
+    Jika MAC lain muncul, kita ingin port tetap aktif, hanya drop traffic ilegal (Protect mode).
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+  <pre class="note-codeblock"><code>
+Switch(config)# interface fa0/10
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport port-security
+Switch(config-if)# switchport port-security maximum 1
+Switch(config-if)# switchport port-security violation protect
+Switch(config-if)# switchport port-security mac-address sticky
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+Switch# show port-security interface fa0/10
+Switch# show port-security
+  </code></pre>
+
+  <p class="note-paragraph">
+    Port tetap aktif, MAC tidak sah tidak bisa mengirim traffic, log violation dicatat jika mode <strong>Restrict</strong>.
+  </p>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Port aktif meski ada MAC tidak sah</li>
+    <li>Traffic ilegal diblok otomatis sesuai mode (Protect/Restrict)</li>
+    <li>Log violation dicatat jika mode Restrict</li>
+    <li>Jaringan tetap aman tanpa mematikan port secara otomatis (Protect/Restrict)</li>
+  </ul>
+</section>
+
+
+<!-- Lab 19 – HSRP: Konfigurasi Dasar -->
+<section class="note-section">
+  <h3 class="note-title">Lab 19 – HSRP: Konfigurasi Dasar 🔄🛡️</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    HSRP (Hot Standby Router Protocol) adalah protokol Cisco untuk redundansi gateway.
+  </p>
+  <ul class="note-list">
+    <li><strong>Active router:</strong> menangani traffic</li>
+    <li><strong>Standby router:</strong> mengambil alih jika active down</li>
+  </ul>
+  <p class="note-paragraph">
+    Tujuan: gateway IP virtual tetap tersedia, mencegah downtime jaringan.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    Jaringan VLAN 10 memiliki 2 router: R1 dan R2.  
+    Virtual IP <strong>192.168.10.1</strong> digunakan sebagai default gateway.  
+    R1 sebagai <em>active</em>, R2 sebagai <em>standby</em>.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+  <h5 class="note-subsubtitle">Router R1 (Active)</h5>
+  <pre class="note-codeblock"><code>
+R1(config)# interface gi0/0
+R1(config-if)# ip address 192.168.10.2 255.255.255.0
+R1(config-if)# standby 1 ip 192.168.10.1
+R1(config-if)# standby 1 priority 110
+R1(config-if)# standby 1 preempt
+  </code></pre>
+
+  <h5 class="note-subsubtitle">Router R2 (Standby)</h5>
+  <pre class="note-codeblock"><code>
+R2(config)# interface gi0/0
+R2(config-if)# ip address 192.168.10.3 255.255.255.0
+R2(config-if)# standby 1 ip 192.168.10.1
+R2(config-if)# standby 1 priority 100
+R2(config-if)# standby 1 preempt
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+R1# show standby
+R2# show standby
+  </code></pre>
+
+  <p class="note-paragraph">
+    Virtual IP <strong>192.168.10.1</strong> tetap aktif.  
+    Jika R1 down → R2 otomatis mengambil alih.
+  </p>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Virtual IP selalu tersedia sebagai default gateway</li>
+    <li>Failover terjadi otomatis jika router active down</li>
+    <li>Downtime jaringan minimal</li>
+  </ul>
+</section>
+
+<!-- Lab 20 – HSRP: Track Route -->
+<section class="note-section">
+  <h3 class="note-title">Lab 20 – HSRP: Track Route 🛰️🔄</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    HSRP Tracking memungkinkan menurunkan <strong>priority</strong> router HSRP jika link tertentu down.
+  </p>
+  <p class="note-paragraph">
+    Router dengan priority lebih tinggi tetap active, tapi jika link down, priority turun → standby router mengambil alih.
+  </p>
+  <p class="note-paragraph">
+    Tujuan: failover cerdas berdasarkan status link, bukan hanya router aktif atau mati.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    R1 dan R2 sebagai HSRP routers untuk VLAN 10 (Virtual IP <strong>192.168.10.1</strong>).  
+    R1 memiliki link ke internet via gi0/1.  
+    Jika link gi0/1 down → R1 priority turun → R2 menjadi active.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+  <h5 class="note-subsubtitle">Router R1</h5>
+  <pre class="note-codeblock"><code>
+R1(config)# interface gi0/0
+R1(config-if)# standby 1 ip 192.168.10.1
+R1(config-if)# standby 1 priority 110
+R1(config-if)# standby 1 preempt
+R1(config-if)# standby 1 track gi0/1 20
+  </code></pre>
+
+  <h5 class="note-subsubtitle">Router R2</h5>
+  <pre class="note-codeblock"><code>
+R2(config)# interface gi0/0
+R2(config-if)# standby 1 ip 192.168.10.1
+R2(config-if)# standby 1 priority 100
+R2(config-if)# standby 1 preempt
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+R1# show standby
+R2# show standby
+  </code></pre>
+
+  <p class="note-paragraph">
+    Jika gi0/1 di R1 down → priority R1 turun 20 → R2 mengambil alih sebagai active.
+  </p>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Failover HSRP berbasis status link, bukan hanya router mati</li>
+    <li>Router standby otomatis mengambil alih jika priority active turun</li>
+    <li>Virtual IP selalu tersedia, downtime minimal</li>
+  </ul>
+</section>
+
+
+<!-- Lab 21 – HSRP: With IP SLA -->
+<section class="note-section">
+  <h3 class="note-title">Lab 21 – HSRP: With IP SLA 🌐🔄</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    IP SLA memonitor ketersediaan jalur atau host secara real-time.  
+    HSRP dapat digabung dengan IP SLA untuk failover otomatis jika jalur ke target down, bukan hanya interface down.
+  </p>
+  <p class="note-paragraph">
+    Tujuan: gateway tetap tersedia berdasarkan status konektivitas, lebih cerdas daripada hanya track interface.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    R1 dan R2 sebagai HSRP routers untuk VLAN 10 (Virtual IP <strong>192.168.10.1</strong>).  
+    Target monitoring: <strong>8.8.8.8</strong>.  
+    Jika R1 tidak bisa reach target → priority turun → R2 menjadi active.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+  <h5 class="note-subsubtitle">1️⃣ Konfigurasi IP SLA di R1</h5>
+  <pre class="note-codeblock"><code>
+R1(config)# ip sla 1
+R1(config-ip-sla)# icmp-echo 8.8.8.8
+R1(config-ip-sla)# frequency 10
+R1(config-ip-sla)# exit
+R1(config)# ip sla schedule 1 life forever start-time now
+  </code></pre>
+
+  <h5 class="note-subsubtitle">2️⃣ Integrasi dengan HSRP</h5>
+  <pre class="note-codeblock"><code>
+R1(config)# track 1 ip sla 1 reachability
+R1(config)# interface gi0/0
+R1(config-if)# standby 1 ip 192.168.10.1
+R1(config-if)# standby 1 priority 110
+R1(config-if)# standby 1 preempt
+R1(config-if)# standby 1 track 1 20
+  </code></pre>
+
+  <h5 class="note-subsubtitle">3️⃣ Router R2</h5>
+  <pre class="note-codeblock"><code>
+R2(config)# interface gi0/0
+R2(config-if)# standby 1 ip 192.168.10.1
+R2(config-if)# standby 1 priority 100
+R2(config-if)# standby 1 preempt
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+R1# show standby
+R2# show standby
+  </code></pre>
+
+  <p class="note-paragraph">
+    Jika R1 tidak bisa ping <strong>8.8.8.8</strong>, priority turun → R2 menjadi active.
+  </p>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Failover HSRP berbasis status konektivitas (IP SLA)</li>
+    <li>Router standby otomatis mengambil alih jika target unreachable</li>
+    <li>Virtual IP selalu tersedia, downtime minimal</li>
+  </ul>
+</section>
+
+<!-- Lab 22 – HSRP: Load Balancing -->
+<section class="note-section">
+  <h3 class="note-title">Lab 22 – HSRP: Load Balancing ⚖️🔄</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    Secara default, HSRP memiliki 1 active router per group, sehingga load tidak terbagi.  
+    Load Balancing dilakukan dengan membuat beberapa HSRP group, masing-masing dengan virtual IP berbeda.
+  </p>
+  <p class="note-paragraph">
+    Tujuan: membagi trafik antar router untuk efisiensi bandwidth.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    VLAN 10 memiliki dua router: R1 dan R2.  
+    Kita buat 2 HSRP group:
+  </p>
+  <ul class="note-list">
+    <li>Group 1 → Virtual IP <strong>192.168.10.1</strong>, R1 active</li>
+    <li>Group 2 → Virtual IP <strong>192.168.10.2</strong>, R2 active</li>
+  </ul>
+  <p class="note-paragraph">
+    PC VLAN 10 bisa menggunakan salah satu gateway untuk membagi beban.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+  <h5 class="note-subsubtitle">Router R1</h5>
+  <pre class="note-codeblock"><code>
+R1(config)# interface gi0/0
+R1(config-if)# standby 1 ip 192.168.10.1
+R1(config-if)# standby 1 priority 110
+R1(config-if)# standby 1 preempt
+
+R1(config-if)# standby 2 ip 192.168.10.2
+R1(config-if)# standby 2 priority 90
+R1(config-if)# standby 2 preempt
+  </code></pre>
+
+  <h5 class="note-subsubtitle">Router R2</h5>
+  <pre class="note-codeblock"><code>
+R2(config)# interface gi0/0
+R2(config-if)# standby 1 ip 192.168.10.1
+R2(config-if)# standby 1 priority 90
+R2(config-if)# standby 1 preempt
+
+R2(config-if)# standby 2 ip 192.168.10.2
+R2(config-if)# standby 2 priority 110
+R2(config-if)# standby 2 preempt
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+R1# show standby
+R2# show standby
+  </code></pre>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Gateway <strong>192.168.10.1</strong> → R1 active</li>
+    <li>Gateway <strong>192.168.10.2</strong> → R2 active</li>
+    <li>Traffic load terbagi antar router, efisiensi bandwidth meningkat</li>
+  </ul>
+</section>
+
+
+<!-- Lab 23 – VRRP: Konfigurasi Dasar -->
+<section class="note-section">
+  <h3 class="note-title">Lab 23 – VRRP: Konfigurasi Dasar 🖧🔄</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    VRRP adalah protokol standar (IEEE 3768) untuk gateway redundancy, mirip HSRP.
+  </p>
+  <p class="note-paragraph">
+    Terdiri dari:
+  </p>
+  <ul class="note-list">
+    <li><strong>Master router</strong> → menangani traffic</li>
+    <li><strong>Backup router</strong> → standby jika master down</li>
+  </ul>
+  <p class="note-paragraph">
+    Tujuan: virtual IP tetap aktif meski master router gagal.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    VLAN 10 memiliki dua router: R1 dan R2.  
+    Virtual IP <strong>192.168.10.1</strong> sebagai default gateway.  
+    R1 menjadi master, R2 sebagai backup.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+  <h5 class="note-subsubtitle">Router R1 (Master)</h5>
+  <pre class="note-codeblock"><code>
+R1(config)# interface gi0/0
+R1(config-if)# ip address 192.168.10.2 255.255.255.0
+R1(config-if)# vrrp 1 ip 192.168.10.1
+R1(config-if)# vrrp 1 priority 120
+R1(config-if)# vrrp 1 preempt
+  </code></pre>
+
+  <h5 class="note-subsubtitle">Router R2 (Backup)</h5>
+  <pre class="note-codeblock"><code>
+R2(config)# interface gi0/0
+R2(config-if)# ip address 192.168.10.3 255.255.255.0
+R2(config-if)# vrrp 1 ip 192.168.10.1
+R2(config-if)# vrrp 1 priority 100
+R2(config-if)# vrrp 1 preempt
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+R1# show vrrp
+R2# show vrrp
+  </code></pre>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Virtual IP <strong>192.168.10.1</strong> tetap aktif</li>
+    <li>Jika R1 down → R2 otomatis menjadi master</li>
+    <li>Redundansi gateway berjalan, downtime minimal</li>
+  </ul>
+</section>
+
+<!-- Lab 24 – VRRP: Track Route -->
+<section class="note-section">
+  <h3 class="note-title">Lab 24 – VRRP: Track Route 🛰️🔄</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    VRRP Tracking memungkinkan router menurunkan priority jika link tertentu atau jalur ke host tertentu tidak tersedia.  
+    Router backup bisa mengambil alih jika master kehilangan konektivitas ke jalur penting.
+  </p>
+  <p class="note-paragraph">
+    Tujuan: failover berbasis kondisi jalur, bukan hanya status interface.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    R1 dan R2 sebagai VRRP routers untuk VLAN 10 (Virtual IP <strong>192.168.10.1</strong>).  
+    R1 memiliki link ke Internet via gi0/1.  
+    Jika R1 tidak bisa reach target (misal 8.8.8.8) → priority turun → R2 menjadi master.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+  <h5 class="note-subsubtitle">Router R1</h5>
+  <pre class="note-codeblock"><code>
+R1(config)# ip sla 1
+R1(config-ip-sla)# icmp-echo 8.8.8.8
+R1(config-ip-sla)# frequency 10
+R1(config-ip-sla)# exit
+R1(config)# ip sla schedule 1 life forever start-time now
+
+R1(config)# track 1 ip sla 1 reachability
+
+R1(config)# interface gi0/0
+R1(config-if)# ip address 192.168.10.2 255.255.255.0
+R1(config-if)# vrrp 1 ip 192.168.10.1
+R1(config-if)# vrrp 1 priority 120
+R1(config-if)# vrrp 1 preempt
+R1(config-if)# vrrp 1 track 1 decrement 20
+  </code></pre>
+
+  <h5 class="note-subsubtitle">Router R2</h5>
+  <pre class="note-codeblock"><code>
+R2(config)# interface gi0/0
+R2(config-if)# ip address 192.168.10.3 255.255.255.0
+R2(config-if)# vrrp 1 ip 192.168.10.1
+R2(config-if)# vrrp 1 priority 100
+R2(config-if)# vrrp 1 preempt
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+R1# show vrrp
+R2# show vrrp
+  </code></pre>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Jika R1 tidak bisa ping 8.8.8.8 → priority turun</li>
+    <li>R2 otomatis menjadi master</li>
+    <li>Failover berbasis jalur berjalan otomatis, virtual IP tetap aktif</li>
+  </ul>
+</section>
+
+
+<!-- Lab 25 – VRRP: With IP SLA -->
+<section class="note-section">
+  <h3 class="note-title">Lab 25 – VRRP: With IP SLA 🛰️📡</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    Integrasi VRRP dengan IP SLA memungkinkan failover berbasis status jalur ke target host.  
+    Lebih cerdas dibanding hanya track interface, karena router backup mengambil alih jika master kehilangan konektivitas ke target penting.
+  </p>
+  <p class="note-paragraph">
+    Tujuan: gateway virtual selalu tersedia jika jalur kritikal down.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    VLAN 10 menggunakan VRRP dengan virtual IP <strong>192.168.10.1</strong>.  
+    R1 sebagai master, R2 sebagai backup.  
+    Target monitoring: <strong>8.8.8.8</strong>.  
+    Jika R1 tidak bisa ping target → R2 menjadi master.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+  <h5 class="note-subsubtitle">Router R1</h5>
+  <pre class="note-codeblock"><code>
+R1(config)# ip sla 1
+R1(config-ip-sla)# icmp-echo 8.8.8.8
+R1(config-ip-sla)# frequency 10
+R1(config-ip-sla)# exit
+R1(config)# ip sla schedule 1 life forever start-time now
+
+R1(config)# track 1 ip sla 1 reachability
+
+R1(config)# interface gi0/0
+R1(config-if)# ip address 192.168.10.2 255.255.255.0
+R1(config-if)# vrrp 1 ip 192.168.10.1
+R1(config-if)# vrrp 1 priority 120
+R1(config-if)# vrrp 1 preempt
+R1(config-if)# vrrp 1 track 1 decrement 20
+  </code></pre>
+
+  <h5 class="note-subsubtitle">Router R2</h5>
+  <pre class="note-codeblock"><code>
+R2(config)# interface gi0/0
+R2(config-if)# ip address 192.168.10.3 255.255.255.0
+R2(config-if)# vrrp 1 ip 192.168.10.1
+R2(config-if)# vrrp 1 priority 100
+R2(config-if)# vrrp 1 preempt
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+R1# show vrrp
+R2# show vrrp
+  </code></pre>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Jika R1 tidak bisa reach target → priority turun</li>
+    <li>R2 otomatis menjadi master</li>
+    <li>Failover berbasis jalur berjalan otomatis, virtual IP tetap aktif</li>
+  </ul>
+</section>
+
+<!-- Lab 26 – VRRP: Load Balancing -->
+<section class="note-section">
+  <h3 class="note-title">Lab 26 – VRRP: Load Balancing ⚖️</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    Secara default, VRRP memiliki 1 master per virtual IP, sehingga load tidak terbagi.  
+    Load balancing dilakukan dengan membuat beberapa VRRP group, masing-masing dengan virtual IP berbeda.
+  </p>
+  <p class="note-paragraph">
+    Tujuan: membagi trafik antar router untuk efisiensi bandwidth.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    VLAN 10 memiliki dua router: R1 dan R2.  
+    Kita buat 2 VRRP group:
+  </p>
+  <ul class="note-list">
+    <li>Group 1 → Virtual IP 192.168.10.1, R1 master</li>
+    <li>Group 2 → Virtual IP 192.168.10.2, R2 master</li>
+  </ul>
+  <p class="note-paragraph">
+    PC VLAN 10 bisa memilih salah satu gateway → trafik terbagi.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+  <h5 class="note-subsubtitle">Router R1</h5>
+  <pre class="note-codeblock"><code>
+R1(config)# interface gi0/0
+R1(config-if)# vrrp 1 ip 192.168.10.1
+R1(config-if)# vrrp 1 priority 120
+R1(config-if)# vrrp 1 preempt
+
+R1(config-if)# vrrp 2 ip 192.168.10.2
+R1(config-if)# vrrp 2 priority 100
+R1(config-if)# vrrp 2 preempt
+  </code></pre>
+
+  <h5 class="note-subsubtitle">Router R2</h5>
+  <pre class="note-codeblock"><code>
+R2(config)# interface gi0/0
+R2(config-if)# vrrp 1 ip 192.168.10.1
+R2(config-if)# vrrp 1 priority 100
+R2(config-if)# vrrp 1 preempt
+
+R2(config-if)# vrrp 2 ip 192.168.10.2
+R2(config-if)# vrrp 2 priority 120
+R2(config-if)# vrrp 2 preempt
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+R1# show vrrp
+R2# show vrrp
+  </code></pre>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Gateway 192.168.10.1 → R1 master</li>
+    <li>Gateway 192.168.10.2 → R2 master</li>
+    <li>Load trafik terbagi antar router</li>
+  </ul>
+</section>
+
+
+<!-- Lab 27 – GLBP: Konfigurasi Dasar -->
+<section class="note-section">
+  <h3 class="note-title">Lab 27 – GLBP: Konfigurasi Dasar ⚡</h3>
+
+  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+  <p class="note-paragraph">
+    GLBP adalah protokol Cisco untuk redundansi gateway sekaligus load balancing.
+  </p>
+  <ul class="note-list">
+    <li><strong>Active Virtual Gateway (AVG)</strong> → memilih gateway utama.</li>
+    <li><strong>Active Virtual Forwarder (AVF)</strong> → masing-masing router meng-handle sebagian trafik.</li>
+  </ul>
+  <p class="note-paragraph">
+    Tujuan: redundansi + membagi beban trafik antar router secara otomatis.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+  <p class="note-paragraph">
+    VLAN 10 memiliki 2 router: R1 dan R2.  
+    Virtual IP 192.168.10.1 digunakan sebagai gateway.  
+    Traffic dari PC akan dibagi otomatis antara R1 dan R2 → efisiensi bandwidth.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+  <h5 class="note-subsubtitle">Router R1</h5>
+  <pre class="note-codeblock"><code>
+R1(config)# interface gi0/0
+R1(config-if)# ip address 192.168.10.2 255.255.255.0
+R1(config-if)# glbp 1 ip 192.168.10.1
+R1(config-if)# glbp 1 priority 120
+R1(config-if)# glbp 1 preempt
+  </code></pre>
+
+  <h5 class="note-subsubtitle">Router R2</h5>
+  <pre class="note-codeblock"><code>
+R2(config)# interface gi0/0
+R2(config-if)# ip address 192.168.10.3 255.255.255.0
+R2(config-if)# glbp 1 ip 192.168.10.1
+R2(config-if)# glbp 1 priority 100
+R2(config-if)# glbp 1 preempt
+  </code></pre>
+
+  <h4 class="note-subtitle">🔍 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+R1# show glbp
+R2# show glbp
+  </code></pre>
+
+  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+  <ul class="note-list">
+    <li>Traffic dari PC VLAN 10 dibagi antara R1 dan R2 berdasarkan AVF</li>
+    <li>Jika AVG down → router lain mengambil alih</li>
+    <li>Redundansi + load balancing otomatis</li>
+  </ul>
+</section>
+    <hr class="note-divider" />
+  </main>
+
+  <script>
+    document.querySelectorAll('.note-image').forEach(img => {
+      img.addEventListener('click', () => {
+        img.classList.toggle('expanded');
+      });
+    });
+  </script>
+</body>
+</html>

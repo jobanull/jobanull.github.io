@@ -463,6 +463,1371 @@ inet.0: 7 destinations, 8 routes (7 active, 0 holddown, 0 hidden)
     </ul>
 
     <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+    <!-- iBGP Peering -->
+<section class="note-section">
+  <h3 class="note-title">📌 Konsep iBGP Peering</h3>
+
+  <h4 class="note-subtitle">Jenis BGP</h4>
+  <ul class="note-list">
+    <li><strong>eBGP (External BGP)</strong> → antar AS (AS berbeda).</li>
+    <li><strong>iBGP (Internal BGP)</strong> → dalam 1 AS (AS yang sama).</li>
+  </ul>
+
+  <p class="note-paragraph">
+    <strong>Tujuan iBGP:</strong> menyebarkan informasi BGP ke semua router dalam AS yang sama.  
+    Biasanya dipakai di ISP atau enterprise besar dengan banyak router dalam 1 Autonomous System.
+  </p>
+
+  <h4 class="note-subtitle">🔑 Karakteristik iBGP</h4>
+  <ul class="note-list">
+    <li><strong>AS Number Sama</strong> → iBGP session hanya bisa terbentuk antar router dengan AS number sama.</li>
+    <li><strong>Tidak Mengubah Next-Hop</strong> → berbeda dengan eBGP, pada iBGP nilai Next-Hop default tidak berubah.
+      <br>👉 Solusi: pakai <code>next-hop-self</code> di edge router agar internal router bisa reach next-hop.</li>
+    <li><strong>Full Mesh Requirement (RFC 4271)</strong> → semua iBGP router harus saling terhubung (full-mesh), jika tidak → route bisa hilang (blackhole).
+      <br>👉 Solusi skala besar: Route Reflector atau Confederation.</li>
+    <li><strong>Split-Horizon Rule</strong> → route yang diterima dari iBGP tidak akan diiklankan ke iBGP lain, hanya boleh ke eBGP peer.</li>
+  </ul>
+
+  <h4 class="note-subtitle">🖥️ Contoh Topologi Dasar</h4>
+  <pre class="note-codeblock"><code>
+R1 --- R2 --- R3
+   (AS 65001)
+
+Full-mesh iBGP:
+- R1 ↔ R2
+- R2 ↔ R3
+- R1 ↔ R3
+  </code></pre>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi Dasar iBGP (Cisco IOS)</h4>
+  <p class="note-paragraph">
+    Misal semua router ada di <strong>AS 65001</strong>:
+  </p>
+  <ul class="note-list">
+    <li>R1 (Loopback0: 1.1.1.1)</li>
+    <li>R2 (Loopback0: 2.2.2.2)</li>
+    <li>R3 (Loopback0: 3.3.3.3)</li>
+  </ul>
+
+  <pre class="note-codeblock"><code>
+# R1
+router bgp 65001
+  neighbor 2.2.2.2 remote-as 65001
+  neighbor 2.2.2.2 update-source loopback0
+  neighbor 3.3.3.3 remote-as 65001
+  neighbor 3.3.3.3 update-source loopback0
+
+# R2
+router bgp 65001
+  neighbor 1.1.1.1 remote-as 65001
+  neighbor 1.1.1.1 update-source loopback0
+  neighbor 3.3.3.3 remote-as 65001
+  neighbor 3.3.3.3 update-source loopback0
+
+# R3
+router bgp 65001
+  neighbor 1.1.1.1 remote-as 65001
+  neighbor 1.1.1.1 update-source loopback0
+  neighbor 2.2.2.2 remote-as 65001
+  neighbor 2.2.2.2 update-source loopback0
+  </code></pre>
+
+  <h4 class="note-subtitle">🔎 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+show ip bgp summary
+show ip bgp
+show ip route bgp
+  </code></pre>
+
+  <h4 class="note-subtitle">📝 Inti dari Lab iBGP Peering</h4>
+  <ul class="note-list">
+    <li>AS number sama.</li>
+    <li>Wajib full-mesh (tanpa RR).</li>
+    <li>Tidak mengubah Next-Hop.</li>
+    <li>Route iBGP tidak diteruskan ke iBGP lain.</li>
+  </ul>
+</section>
+
+<!-- iBGP Peering via Loopback -->
+<section class="note-section">
+  <h3 class="note-title">📌 Kenapa iBGP pakai Loopback?</h3>
+
+  <p class="note-paragraph">
+    Kalau peering iBGP dibuat langsung pakai <strong>IP interface fisik</strong>, maka kalau link itu down → session BGP ikut mati.  
+    Dengan <strong>Loopback Interface</strong>:
+  </p>
+  <ul class="note-list">
+    <li>Peering lebih stabil (selama masih ada jalur ke loopback).</li>
+    <li>Bisa punya redundansi link (contoh: R1–R2 ada 2 link, tapi peering tetap ke loopback).</li>
+    <li>Lebih scalable dan reliable, terutama di ISP.</li>
+  </ul>
+
+  <h4 class="note-subtitle">🔑 Hal Penting dalam iBGP Loopback</h4>
+  <ul class="note-list">
+    <li>Gunakan <strong>IP Loopback</strong> sebagai alamat neighbor.</li>
+    <li>Pastikan <strong>routing ke Loopback</strong> ada (bisa lewat static route, OSPF, EIGRP, dll).</li>
+    <li>Gunakan <code>update-source loopback0</code> karena default-nya BGP pakai IP interface keluar.</li>
+  </ul>
+
+  <h4 class="note-subtitle">🖥️ Contoh Topologi</h4>
+  <pre class="note-codeblock"><code>
+R1 -------- R2
+(AS 65001)  (AS 65001)
+
+R1 Loopback0: 1.1.1.1
+R2 Loopback0: 2.2.2.2
+  </code></pre>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi iBGP Peering via Loopback</h4>
+  <pre class="note-codeblock"><code>
+# R1
+interface loopback0
+  ip address 1.1.1.1 255.255.255.255
+
+router bgp 65001
+  neighbor 2.2.2.2 remote-as 65001
+  neighbor 2.2.2.2 update-source loopback0
+
+# R2
+interface loopback0
+  ip address 2.2.2.2 255.255.255.255
+
+router bgp 65001
+  neighbor 1.1.1.1 remote-as 65001
+  neighbor 1.1.1.1 update-source loopback0
+  </code></pre>
+
+  <h4 class="note-subtitle">🔎 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+# Cek tetangga BGP
+show ip bgp summary   → Status harus Established
+
+# Pastikan loopback reachable
+ping 2.2.2.2 source 1.1.1.1
+ping 1.1.1.1 source 2.2.2.2
+
+# Cek tabel BGP
+show ip bgp
+  </code></pre>
+
+  <h4 class="note-subtitle">📝 Inti dari Lab iBGP via Loopback</h4>
+  <ul class="note-list">
+    <li>Peering lebih stabil (tidak tergantung satu link).</li>
+    <li>Harus ada routing ke loopback antar router.</li>
+    <li>Gunakan <code>update-source loopback0</code> di konfigurasi.</li>
+  </ul>
+</section>
+
+
+<!-- eBGP Peering -->
+<section class="note-section">
+  <h3 class="note-title">eBGP Peering 🚀</h3>
+
+  <h4 class="note-subtitle">📌 Konsep eBGP Peering</h4>
+  <p class="note-paragraph">
+    <strong>eBGP (External BGP)</strong> = BGP antar <strong>AS berbeda</strong>.  
+    Biasanya dipakai oleh ISP untuk interkoneksi, atau perusahaan yang terhubung ke ISP.
+  </p>
+  <pre class="note-codeblock"><code>
+Contoh:
+R1 = AS 65001
+R2 = AS 65002
+
+Kalau mereka bikin session BGP → itu eBGP.
+  </code></pre>
+
+  <h4 class="note-subtitle">🔑 Karakteristik eBGP</h4>
+  <ul class="note-list">
+    <li><strong>AS Number Berbeda</strong> → router harus punya AS berbeda.</li>
+    <li><strong>TTL Default = 1</strong> → diasumsikan direct connect.  
+        👉 Kalau pakai loopback → tambahkan <code>ebgp-multihop</code>.</li>
+    <li><strong>Next-Hop Behavior</strong> → prefix dari eBGP peer akan mengganti next-hop jadi IP eBGP tetangga.</li>
+    <li><strong>Prefix Harus Diiklankan</strong> → tidak otomatis masuk BGP.  
+        Harus diinject via:
+      <ul>
+        <li><code>network</code> statement (prefix harus ada di routing table).</li>
+        <li><code>redistribute</code> dari IGP atau static.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4 class="note-subtitle">🖥️ Contoh Topologi</h4>
+  <pre class="note-codeblock"><code>
+R1 (AS 65001) -------- R2 (AS 65002)
+
+R1 Loopback0: 1.1.1.1
+R2 Loopback0: 2.2.2.2
+
+Koneksi fisik:
+R1 Gi0/0 = 192.168.12.1/24
+R2 Gi0/0 = 192.168.12.2/24
+  </code></pre>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi eBGP Peering</h4>
+  <pre class="note-codeblock"><code>
+# R1 (AS 65001)
+router bgp 65001
+  neighbor 192.168.12.2 remote-as 65002
+  network 1.1.1.1 mask 255.255.255.255
+
+# R2 (AS 65002)
+router bgp 65002
+  neighbor 192.168.12.1 remote-as 65001
+  network 2.2.2.2 mask 255.255.255.255
+  </code></pre>
+  <p class="note-paragraph">
+    Catatan: Pastikan loopback masing-masing di-advertise agar bisa terlihat lewat BGP.
+  </p>
+
+  <h4 class="note-subtitle">🔎 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+# Cek session BGP
+show ip bgp summary   → Status harus Established
+
+# Cek tabel BGP
+show ip bgp
+  → Harus terlihat prefix 1.1.1.1 (dari R1) di R2,
+    dan prefix 2.2.2.2 (dari R2) di R1.
+
+# Cek routing table
+show ip route bgp
+  </code></pre>
+
+  <h4 class="note-subtitle">📝 Inti dari Lab eBGP Peering</h4>
+  <ul class="note-list">
+    <li>AS number harus berbeda.</li>
+    <li>Default TTL = 1 (direct connect, kecuali pakai <code>ebgp-multihop</code>).</li>
+    <li>Next-hop berubah ke IP tetangga eBGP.</li>
+    <li>Prefix harus diinject (network / redistribute), tidak otomatis.</li>
+  </ul>
+</section>
+
+
+<!-- BGP Next-Hop-Self -->
+<section class="note-section">
+  <h3 class="note-title">BGP Next-Hop-Self 🚀</h3>
+
+  <h4 class="note-subtitle">📌 Permasalahan Next-Hop di BGP</h4>
+  <p class="note-paragraph">
+    Pada <strong>eBGP → iBGP</strong>, router eBGP tidak otomatis mengubah Next-Hop ketika meneruskan route ke iBGP.  
+    Akibatnya: router iBGP lain bisa menerima prefix, tapi tidak tahu bagaimana mencapai next-hop (alias blackhole).
+  </p>
+
+  <h4 class="note-subtitle">🔎 Contoh Kasus</h4>
+  <pre class="note-codeblock"><code>
+   (AS 65001)                (AS 65002)
+R1 -------- R2 -------- R3
+
+R1 & R2: iBGP (AS 65001)
+R2 & R3: eBGP (AS 65001 ↔ 65002)
+
+👉 R3 advertise prefix 3.3.3.3/32 ke R2
+👉 R2 kirim prefix itu ke R1 (via iBGP)
+  </code></pre>
+
+  <p class="note-paragraph">
+    <strong>Masalah:</strong><br>
+    - Di R1, prefix <code>3.3.3.3/32</code> muncul di tabel BGP.  
+    - Tapi <strong>Next-Hop = IP R3</strong> (misal 192.168.23.3).  
+    - Jika R1 tidak tahu route ke 192.168.23.3 → tidak bisa ping 3.3.3.3.
+  </p>
+
+  <h4 class="note-subtitle">🔑 Solusi: next-hop-self</h4>
+  <p class="note-paragraph">
+    Dengan perintah <code>next-hop-self</code>, R2 akan mengganti Next-Hop dari R3 menjadi dirinya sendiri sebelum mengirim ke iBGP peer (R1).  
+    👉 Hasilnya: R1 tahu jalur ke prefix 3.3.3.3 via R2.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+  <pre class="note-codeblock"><code>
+# Di R2 (AS 65001)
+router bgp 65001
+  neighbor 1.1.1.1 remote-as 65001
+  neighbor 1.1.1.1 update-source loopback0
+  neighbor 1.1.1.1 next-hop-self
+  </code></pre>
+
+  <h4 class="note-subtitle">🔎 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+# Cek tabel BGP di R1
+show ip bgp
+  → Prefix 3.3.3.3 harus ada
+  → Next-Hop = IP R2 (bukan IP R3)
+
+# Cek routing table
+show ip route bgp
+  → Ada route ke 3.3.3.3 via R2
+
+# Ping test
+ping 3.3.3.3
+  → Harus sukses
+  </code></pre>
+
+  <h4 class="note-subtitle">📝 Inti dari Lab BGP Next-Hop-Self</h4>
+  <ul class="note-list">
+    <li>Tanpa <code>next-hop-self</code>, router iBGP tahu prefix tapi tidak bisa reach.</li>
+    <li>Dengan <code>next-hop-self</code>, Next-Hop diganti jadi IP router iBGP peer.</li>
+    <li><strong>Best practice:</strong> selalu aktifkan <code>next-hop-self</code> di iBGP edge yang menerima route dari eBGP.</li>
+  </ul>
+</section>
+
+
+<!-- BGP Authentication -->
+<section class="note-section">
+  <h3 class="note-title">BGP Authentication 🔐</h3>
+
+  <h4 class="note-subtitle">📌 Konsep BGP Authentication</h4>
+  <p class="note-paragraph">
+    BGP mendukung <strong>MD5 Authentication</strong> untuk mengamankan sesi antar peer.  
+    Tujuannya:
+  </p>
+  <ul class="note-list">
+    <li>Mencegah <em>unauthorized router</em> membuat peering BGP palsu.</li>
+    <li>Menghindari serangan reset (TCP RST injection) yang bisa memutuskan session.</li>
+  </ul>
+  <p class="note-paragraph">
+    <strong>Mekanisme:</strong> setiap update BGP dibungkus dengan MD5 hash yang dibuat dari shared secret key.  
+    Jika key berbeda → BGP session tidak akan terbentuk (status <em>Idle</em>).
+  </p>
+
+  <h4 class="note-subtitle">🔑 Aturan BGP Authentication</h4>
+  <ul class="note-list">
+    <li>Key harus sama persis di kedua router.</li>
+    <li>Key length max 80 karakter (Cisco).</li>
+    <li>Kalau session sudah established lalu key diganti → session langsung putus.</li>
+  </ul>
+
+  <h4 class="note-subtitle">🖥️ Contoh Topologi</h4>
+  <pre class="note-codeblock"><code>
+R1 (AS 65001) -------- R2 (AS 65002)
+  </code></pre>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi BGP Authentication</h4>
+  <pre class="note-codeblock"><code>
+# R1 (AS 65001)
+router bgp 65001
+  neighbor 192.168.12.2 remote-as 65002
+  neighbor 192.168.12.2 password BGPkey123
+
+# R2 (AS 65002)
+router bgp 65002
+  neighbor 192.168.12.1 remote-as 65001
+  neighbor 192.168.12.1 password BGPkey123
+  </code></pre>
+  <p class="note-paragraph">
+    Catatan: <strong>Password harus sama</strong> (case-sensitive).
+  </p>
+
+  <h4 class="note-subtitle">🔎 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+# Cek status BGP session
+show ip bgp summary
+  → Harus Established
+
+# Kalau salah → status tetap Idle/Active
+
+# Cek log error (jika password beda)
+%TCP-6-BADAUTH: Invalid MD5 digest from 192.168.12.1
+  </code></pre>
+
+  <h4 class="note-subtitle">📝 Inti dari Lab BGP Authentication</h4>
+  <ul class="note-list">
+    <li>Autentikasi hanya melindungi <em>sesi BGP</em>, bukan isi update routing.</li>
+    <li>Gunakan <code>neighbor &lt;ip&gt; password &lt;key&gt;</code> di kedua sisi.</li>
+    <li>Kalau key berbeda → BGP tidak akan jalan.</li>
+  </ul>
+</section>
+
+<!-- BGP Route Reflector -->
+<section class="note-section">
+  <h3 class="note-title">BGP Route Reflector (RR) 🚀</h3>
+
+  <h4 class="note-subtitle">📌 Masalah Full-Mesh iBGP</h4>
+  <p class="note-paragraph">
+    Aturan iBGP: route dari iBGP tidak boleh diteruskan ke iBGP lain (<em>iBGP split-horizon rule</em>).  
+    Akibatnya, harus <strong>full-mesh iBGP</strong> → semua router iBGP harus saling peering.
+  </p>
+  <ul class="note-list">
+    <li>4 router dalam 1 AS → butuh 6 peering.</li>
+    <li>10 router → butuh 45 peering 😱</li>
+  </ul>
+  <p class="note-paragraph"><strong>Solusi → Route Reflector (RR)</strong></p>
+
+  <h4 class="note-subtitle">📌 Konsep Route Reflector</h4>
+  <p class="note-paragraph">
+    RR adalah router iBGP yang boleh “memantulkan” (reflect) route iBGP ke iBGP lain.  
+    Dengan RR:
+  </p>
+  <ul class="note-list">
+    <li>Router lain (client) cukup peering ke RR.</li>
+    <li>Tidak perlu full-mesh lagi.</li>
+  </ul>
+
+  <h4 class="note-subtitle">🔑 Aturan Route Reflector</h4>
+  <ul class="note-list">
+    <li><strong>Client ↔ RR</strong> → route dari client bisa diteruskan RR ke client lain.</li>
+    <li><strong>Non-client ↔ RR</strong> → route juga diteruskan ke non-client.</li>
+    <li><strong>Client ↔ Client</strong> → tidak perlu peering langsung, cukup lewat RR.</li>
+    <li><strong>Cluster-ID</strong> → default = Router-ID.  
+        Jika ada lebih dari 1 RR dalam cluster, cluster ID harus sama.</li>
+  </ul>
+
+  <h4 class="note-subtitle">🖥️ Contoh Topologi</h4>
+  <pre class="note-codeblock"><code>
+       (AS 65001)
+        R1 (RR)
+       /    \
+   (client)  (client)
+     R2        R3
+  </code></pre>
+  <p class="note-paragraph">
+    Tanpa RR → R2 &amp; R3 harus iBGP peering langsung.  
+    Dengan RR → cukup R2 ↔ R1 dan R3 ↔ R1.
+  </p>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi Route Reflector</h4>
+  <pre class="note-codeblock"><code>
+# R1 (RR)
+router bgp 65001
+  neighbor 2.2.2.2 remote-as 65001
+  neighbor 2.2.2.2 update-source loopback0
+  neighbor 2.2.2.2 route-reflector-client
+
+  neighbor 3.3.3.3 remote-as 65001
+  neighbor 3.3.3.3 update-source loopback0
+  neighbor 3.3.3.3 route-reflector-client
+
+# R2 (Client)
+router bgp 65001
+  neighbor 1.1.1.1 remote-as 65001
+  neighbor 1.1.1.1 update-source loopback0
+
+# R3 (Client)
+router bgp 65001
+  neighbor 1.1.1.1 remote-as 65001
+  neighbor 1.1.1.1 update-source loopback0
+  </code></pre>
+
+  <h4 class="note-subtitle">🔎 Verifikasi</h4>
+  <pre class="note-codeblock"><code>
+# Cek tetangga
+show ip bgp summary
+
+# Cek tabel BGP di client
+show ip bgp
+  → R2 harus bisa lihat prefix dari R3, walau tidak peering langsung
+  </code></pre>
+
+  <h4 class="note-subtitle">📝 Inti dari Lab BGP Route Reflector</h4>
+  <ul class="note-list">
+    <li>Mengatasi masalah full-mesh iBGP.</li>
+    <li>Router RR bisa meneruskan route antar client.</li>
+    <li>Konfigurasi sederhana: <code>neighbor X.X.X.X route-reflector-client</code>.</li>
+    <li>Skala besar: gunakan beberapa RR untuk redundancy.</li>
+  </ul>
+</section>
+
+<!-- BGP Attribute – Origin -->
+<section class="note-section">
+  <h3 class="note-title">BGP Attribute – Origin 🚀</h3>
+
+  <h4 class="note-subtitle">📌 Konsep Origin Attribute</h4>
+  <p class="note-paragraph">
+    Origin adalah salah satu BGP <em>Path Attribute</em> (wajib) yang menunjukkan asal mula prefix.
+  </p>
+  <p class="note-paragraph">Ada 3 jenis nilai Origin:</p>
+  <ul class="note-list">
+    <li><strong>IGP (i)</strong> → Prefix di-inject ke BGP dengan perintah <code>network</code>.  
+      Ditandai dengan huruf <code>i</code> di output <code>show ip bgp</code>.</li>
+    <li><strong>EGP (e)</strong> → Prefix berasal dari protokol EGP (sudah jarang digunakan).  
+      Ditandai dengan huruf <code>e</code>.</li>
+    <li><strong>Incomplete (?)</strong> → Prefix dimasukkan ke BGP melalui <em>redistribution</em> (static, connected, OSPF, EIGRP, dll).  
+      Asal jalurnya tidak jelas → ditandai dengan <code>?</code>.</li>
+  </ul>
+
+  <h4 class="note-subtitle">🔑 Urutan Preferensi Origin</h4>
+  <ul class="note-list">
+    <li><strong>IGP (i)</strong> lebih disukai dibanding <strong>EGP (e)</strong>.</li>
+    <li><strong>EGP (e)</strong> lebih disukai dibanding <strong>Incomplete (?)</strong>.</li>
+  </ul>
+  <p class="note-paragraph"><strong>Sehingga: IGP (i) > EGP (e) > Incomplete (?)</strong></p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Topologi</h4>
+  <pre class="note-codeblock"><code>
+R1 (AS 65001) -------- R2 (AS 65002)
+
+R1 advertise prefix 1.1.1.1/32 via network.
+R1 advertise prefix 2.2.2.2/32 via redistribute static.
+  </code></pre>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi Origin</h4>
+  <pre class="note-codeblock"><code>
+# Di R1
+router bgp 65001
+  network 1.1.1.1 mask 255.255.255.255   ! → Origin IGP (i)
+  redistribute static                     ! → Origin Incomplete (?)
+
+# Static route (supaya bisa di-redistribute)
+ip route 2.2.2.2 255.255.255.255 Null0
+  </code></pre>
+
+  <h4 class="note-subtitle">🔎 Verifikasi Origin</h4>
+  <pre class="note-codeblock"><code>
+# Di R2
+show ip bgp
+
+   Network          Next Hop        Metric LocPrf Weight Path
+*> 1.1.1.1/32       192.168.12.1         0             0 65001 i
+*> 2.2.2.2/32       192.168.12.1         0             0 65001 ?
+  </code></pre>
+
+  <p class="note-paragraph">👉 Terlihat:</p>
+  <ul class="note-list">
+    <li><code>1.1.1.1/32</code> punya Origin <strong>i (IGP)</strong>.</li>
+    <li><code>2.2.2.2/32</code> punya Origin <strong>? (Incomplete)</strong>.</li>
+  </ul>
+
+  <h4 class="note-subtitle">📝 Inti dari Lab Origin Attribute</h4>
+  <ul class="note-list">
+    <li>Origin = menunjukkan cara prefix masuk ke BGP.</li>
+    <li>Nilainya: <code>i</code>, <code>e</code>, atau <code>?</code>.</li>
+    <li>Urutan preferensi: <strong>IGP > EGP > Incomplete</strong>.</li>
+  </ul>
+</section>
+
+
+<!-- BGP Attribute – Community -->
+<section class="note-section">
+  <h3 class="note-title">BGP Attribute – Community 🚀</h3>
+
+  <h4 class="note-subtitle">📌 Konsep BGP Community</h4>
+  <p class="note-paragraph">
+    Community adalah <strong>tag 32-bit</strong> yang bisa ditempelkan ke prefix.  
+    Digunakan untuk <em>grouping prefix</em> → sehingga mudah diproses oleh router lain 
+    (misalnya untuk filtering atau policy).
+  </p>
+  <p class="note-paragraph"><strong>Format:</strong> <code>&lt;AS Number&gt;:&lt;value&gt;</code></p>
+  <p class="note-paragraph">Contoh: <code>65001:100</code>, <code>65001:200</code></p>
+  <p class="note-paragraph">
+    Default format: <code>0–65535:16-bit</code> → total 32-bit (sebelum ada extended community di MPLS/VPN).
+  </p>
+
+  <h4 class="note-subtitle">🔑 Jenis Community</h4>
+  <ul class="note-list">
+    <li><strong>Well-known Communities</strong> (universal, sudah didefinisikan):
+      <ul>
+        <li><code>no-export</code> → prefix tidak di-export ke eBGP.</li>
+        <li><code>no-advertise</code> → prefix tidak diiklankan ke peer manapun.</li>
+        <li><code>internet</code> → prefix boleh diiklankan ke semua BGP peer.</li>
+        <li><code>local-AS</code> → prefix tidak diiklankan keluar confederation.</li>
+      </ul>
+    </li>
+    <li><strong>Custom Community</strong> → ditentukan operator.  
+      <br>Contoh: <code>65001:100</code> artinya route diberi tag khusus untuk policy tertentu.
+    </li>
+  </ul>
+
+  <h4 class="note-subtitle">📌 Use Case Community</h4>
+  <ul class="note-list">
+    <li>ISP menandai prefix customer dengan community tertentu.</li>
+    <li>Bisa digunakan untuk:
+      <ul>
+        <li>Filtering (misalnya hanya advertise ke ISP tertentu).</li>
+        <li>Policy routing (misalnya set LocalPref berbeda).</li>
+        <li>Traffic engineering.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4 class="note-subtitle">🖥️ Contoh Topologi</h4>
+  <pre class="note-codeblock"><code>
+R1 (AS 65001) ---- R2 (AS 65002)
+
+R1 advertise 1.1.1.1/32 dengan community 65001:100.
+R2 bisa match community dan buat policy tertentu.
+  </code></pre>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi BGP Community</h4>
+  <pre class="note-codeblock"><code>
+# R1
+ip prefix-list LOOP permit 1.1.1.1/32
+
+route-map TAG_COMMUNITY permit 10
+  match ip address prefix-list LOOP
+  set community 65001:100
+
+router bgp 65001
+  neighbor 192.168.12.2 remote-as 65002
+  neighbor 192.168.12.2 route-map TAG_COMMUNITY out
+
+# R2 (verifikasi)
+router bgp 65002
+  neighbor 192.168.12.1 remote-as 65001
+  </code></pre>
+
+  <h4 class="note-subtitle">🔎 Verifikasi Community</h4>
+  <pre class="note-codeblock"><code>
+# Cek tabel BGP di R2
+show ip bgp
+  → Output akan ada keterangan Community: 65001:100
+
+# Cek detail prefix
+show ip bgp 1.1.1.1
+  → Akan muncul info community
+  </code></pre>
+
+  <h4 class="note-subtitle">📝 Inti dari Lab BGP Community</h4>
+  <ul class="note-list">
+    <li>Community = tag 32-bit untuk grouping prefix.</li>
+    <li>Ada well-known (no-export, no-advertise, internet, local-AS).</li>
+    <li>Bisa dipakai untuk filtering, policy control, traffic engineering.</li>
+    <li>Diset pakai <code>route-map</code> + <code>set community</code>.</li>
+  </ul>
+</section>
+
+
+<!-- BGP Attribute – Community List -->
+<section class="note-section">
+  <h3 class="note-title">BGP Attribute – Community List 🚀</h3>
+
+  <h4 class="note-subtitle">📌 Konsep Community List</h4>
+  <p class="note-paragraph">
+    Kalau di <strong>Lab 8</strong> kita sudah belajar cara menempelkan community ke prefix, 
+    maka <strong>Community List</strong> digunakan untuk:
+  </p>
+  <ul class="note-list">
+    <li>Memfilter prefix berdasarkan community.</li>
+    <li>Mengubah policy sesuai community tertentu.</li>
+  </ul>
+  <p class="note-paragraph">
+    Community-list fungsinya mirip ACL/prefix-list, tapi khusus untuk attribute community.
+  </p>
+
+  <h4 class="note-subtitle">🔑 Jenis Community List</h4>
+  <ul class="note-list">
+    <li><strong>Standard Community List</strong> → Match satu value community saja.
+      <br>Contoh: <code>ip community-list 1 permit 65001:100</code>
+    </li>
+    <li><strong>Expanded Community List</strong> → Bisa pakai regex untuk match beberapa value.
+      <br>Contoh: <code>ip community-list expanded ISP-TEST permit 65001:*</code>
+    </li>
+  </ul>
+
+  <h4 class="note-subtitle">🖥️ Contoh Topologi</h4>
+  <pre class="note-codeblock"><code>
+R1 (AS 65001) -------- R2 (AS 65002)
+
+R1 advertise prefix 1.1.1.1/32 dengan community 65001:100.
+R2 akan filter prefix: hanya terima route dengan community 65001:100.
+  </code></pre>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi Community List</h4>
+  <pre class="note-codeblock"><code>
+# R1: Tambahkan Community
+ip prefix-list LOOP permit 1.1.1.1/32
+
+route-map TAG_COMM permit 10
+  match ip address prefix-list LOOP
+  set community 65001:100
+
+router bgp 65001
+  neighbor 192.168.12.2 remote-as 65002
+  neighbor 192.168.12.2 route-map TAG_COMM out
+
+
+# R2: Filter dengan Community List
+ip community-list standard ONLY-100 permit 65001:100
+
+route-map FILTER_COMM permit 10
+  match community ONLY-100
+
+route-map FILTER_COMM deny 20
+
+router bgp 65002
+  neighbor 192.168.12.1 remote-as 65001
+  neighbor 192.168.12.1 route-map FILTER_COMM in
+  </code></pre>
+
+  <h4 class="note-subtitle">🔎 Verifikasi Community List</h4>
+  <pre class="note-codeblock"><code>
+# Cek tabel BGP di R2
+show ip bgp
+  → Hanya prefix dengan community 65001:100 yang muncul.
+
+# Cek detail community yang masuk
+show ip bgp community 65001:100
+  → Jika prefix lain dikirim tanpa community → tidak akan masuk.
+  </code></pre>
+
+  <h4 class="note-subtitle">📝 Inti dari Lab Community List</h4>
+  <ul class="note-list">
+    <li>Community List = ACL khusus untuk community.</li>
+    <li>Bisa standard (match satu value) atau expanded (regex).</li>
+    <li>Digunakan dalam route-map untuk filtering atau policy control.</li>
+  </ul>
+</section>
+
+
+<!-- BGP Attribute – Aggregator -->
+<section class="note-section">
+  <h3 class="note-title">BGP Attribute – Aggregator 🚀</h3>
+
+  <h4 class="note-subtitle">📌 Konsep BGP Aggregator Attribute</h4>
+  <p class="note-paragraph">
+    <strong>Aggregator</strong> adalah salah satu BGP Path Attribute yang muncul ketika 
+    summarization (<code>aggregate-address</code>) dilakukan di BGP.
+  </p>
+  <ul class="note-list">
+    <li>Mencatat siapa yang melakukan summarization.</li>
+    <li>Menyimpan <strong>AS Number</strong> dan <strong>Router-ID</strong> dari router pembuat summary.</li>
+    <li>Memudahkan troubleshooting untuk melacak asal prefix yang disummarize.</li>
+  </ul>
+
+  <h4 class="note-subtitle">🔑 Karakteristik Aggregator</h4>
+  <ul class="note-list">
+    <li>Muncul otomatis saat melakukan <code>aggregate-address</code>.</li>
+    <li>Tampil di tabel BGP sebagai <code>AGGREGATOR: &lt;ASN&gt;, &lt;Router-ID&gt;</code>.</li>
+    <li>Opsi tambahan:
+      <ul>
+        <li><code>as-set</code> → mempertahankan informasi AS-Path di dalam summary.</li>
+        <li><code>summary-only</code> → hanya advertise summary, prefix detail tidak ikut.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4 class="note-subtitle">🖥️ Contoh Topologi</h4>
+  <pre class="note-codeblock"><code>
+R1 (AS 65001) -------- R2 (AS 65002)
+
+Prefix di R1:
+10.10.1.0/24
+10.10.2.0/24
+10.10.3.0/24
+
+Mau di-advertise ke R2 sebagai summary: 10.10.0.0/16
+  </code></pre>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi BGP Aggregator</h4>
+  <pre class="note-codeblock"><code>
+# R1
+router bgp 65001
+  network 10.10.1.0 mask 255.255.255.0
+  network 10.10.2.0 mask 255.255.255.0
+  network 10.10.3.0 mask 255.255.255.0
+
+  aggregate-address 10.10.0.0 255.255.0.0 summary-only
+  </code></pre>
+
+  <h4 class="note-subtitle">🔎 Verifikasi Aggregator</h4>
+  <pre class="note-codeblock"><code>
+# R2
+show ip bgp
+
+Output contoh:
+   Network          Next Hop        Path
+*> 10.10.0.0/16     192.168.12.1    65001
+     Aggregator: 65001, 1.1.1.1
+  </code></pre>
+
+  <p class="note-paragraph">
+    👉 <strong>Aggregator: 65001, 1.1.1.1</strong><br>
+    65001 = AS Number R1 <br>
+    1.1.1.1 = Router-ID R1
+  </p>
+
+  <h4 class="note-subtitle">📝 Inti dari Lab BGP Aggregator</h4>
+  <ul class="note-list">
+    <li>Aggregator attribute muncul saat summary dibuat.</li>
+    <li>Menunjukkan AS & Router-ID yang membuat summary.</li>
+    <li>Membantu troubleshooting untuk tahu siapa yang melakukan summarization.</li>
+  </ul>
+</section>
+
+
+<!-- BGP Attribute – Weight -->
+<section class="note-section">
+  <h3 class="note-title">BGP Attribute – Weight 🚀</h3>
+
+  <h4 class="note-subtitle">📌 Konsep Weight Attribute</h4>
+  <p class="note-paragraph">
+    <strong>Weight</strong> adalah BGP Path Attribute khusus Cisco (tidak standar RFC) yang digunakan untuk menentukan preferensi jalur keluar (outbound).  
+    Semakin besar nilai Weight → semakin diprioritaskan.
+  </p>
+  <ul class="note-list">
+    <li>Hanya berlaku lokal di router (tidak di-advertise ke neighbor).</li>
+    <li>Default value:
+      <ul>
+        <li>0 → route yang dipelajari dari neighbor</li>
+        <li>32768 → route yang berasal dari router sendiri</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4 class="note-subtitle">🔑 Urutan Keputusan BGP (terkait Weight)</h4>
+  <p class="note-paragraph">
+    Dalam BGP path selection, Weight diperiksa paling pertama (sebelum Local Preference).  
+    Jadi jika ada beberapa jalur, router akan memilih route dengan Weight tertinggi.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Topologi</h4>
+  <pre class="note-codeblock"><code>
+          +--- R2 (AS 65002) ---+
+R1 (AS 65001)                   R3 (AS 65003)
+          +--- R4 (AS 65004) ---+
+
+R1 punya 2 upstream ISP (R2 dan R4)
+Mau prefer keluar lewat R2 dibanding R4 → set Weight lebih tinggi ke R2
+  </code></pre>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi Weight</h4>
+  <pre class="note-codeblock"><code>
+# R1
+router bgp 65001
+  neighbor 192.168.12.2 remote-as 65002
+  neighbor 192.168.14.4 remote-as 65004
+
+  # Set weight langsung
+  neighbor 192.168.12.2 weight 200
+  neighbor 192.168.14.4 weight 100
+
+# Atau pakai route-map (lebih fleksibel)
+route-map PREF_R2 permit 10
+  set weight 200
+
+route-map PREF_R4 permit 10
+  set weight 100
+
+router bgp 65001
+  neighbor 192.168.12.2 route-map PREF_R2 in
+  neighbor 192.168.14.4 route-map PREF_R4 in
+  </code></pre>
+
+  <h4 class="note-subtitle">🔎 Verifikasi Weight</h4>
+  <pre class="note-codeblock"><code>
+# Cek tabel BGP di R1
+show ip bgp
+
+Output contoh:
+   Network          Next Hop        Weight  Path
+*> 0.0.0.0          192.168.12.2    200     65002
+*  0.0.0.0          192.168.14.4    100     65004
+
+# R1 memilih jalur lewat R2 karena Weight lebih tinggi (200)
+  </code></pre>
+
+  <h4 class="note-subtitle">📝 Inti dari Lab Weight</h4>
+  <ul class="note-list">
+    <li>Cisco-only attribute, tidak di-share ke router lain.</li>
+    <li>Default: 32768 (self-originated), 0 (learned).</li>
+    <li>Weight lebih tinggi = jalur lebih disukai.</li>
+    <li>Biasanya dipakai di edge router untuk mengontrol outbound traffic.</li>
+  </ul>
+</section>
+
+
+<!-- BGP Attribute – Local Preference -->
+<section class="note-section">
+  <h3 class="note-title">BGP Attribute – Local Preference 🚀</h3>
+
+  <h4 class="note-subtitle">📌 Konsep Local Preference (LocPref)</h4>
+  <p class="note-paragraph">
+    <strong>Local Preference (LP)</strong> adalah BGP Path Attribute standar (bukan Cisco-only) yang digunakan untuk menentukan jalur keluar (outbound) dalam satu AS.  
+    Semakin tinggi nilai Local Preference → semakin diprioritaskan.
+  </p>
+  <ul class="note-list">
+    <li>Default value = 100.</li>
+    <li>Berlaku <strong>AS-wide</strong> → disebarkan ke semua iBGP peer.</li>
+    <li>Beda dengan Weight:
+      <ul>
+        <li>Weight hanya lokal di 1 router.</li>
+        <li>Local Preference berlaku di seluruh AS.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4 class="note-subtitle">🔑 Posisi Local Preference dalam Path Selection</h4>
+  <p class="note-paragraph">
+    Urutan awal BGP path selection:
+    <ol>
+      <li>Weight (Cisco only)</li>
+      <li>Local Preference (standar, disebarkan dalam 1 AS)</li>
+    </ol>
+    Jadi jalur dengan Local Preference lebih tinggi akan dipilih oleh semua router di AS.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Topologi</h4>
+  <pre class="note-codeblock"><code>
+              +--- R2 (ISP-A) ---+
+R1 --- R3 --- R4 (AS 65001)      Internet
+              +--- R5 (ISP-B) ---+
+
+AS 65001 punya dua jalur ke Internet:
+ISP-A via R2, ISP-B via R5
+
+Mau prefer semua router keluar via ISP-A → set Local Pref lebih tinggi untuk R2
+  </code></pre>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi Local Preference</h4>
+  <pre class="note-codeblock"><code>
+# Di R4 (edge router)
+route-map SET-LP permit 10
+  set local-preference 200   # lebih tinggi dari default 100
+
+router bgp 65001
+  neighbor 192.168.24.2 remote-as 65002
+  neighbor 192.168.45.5 remote-as 65003
+
+  # Set Local Pref untuk ISP-A
+  neighbor 192.168.24.2 route-map SET-LP in
+  </code></pre>
+
+  <h4 class="note-subtitle">🔎 Verifikasi Local Preference</h4>
+  <pre class="note-codeblock"><code>
+# Cek di R1 atau R3 (router dalam AS 65001)
+show ip bgp
+
+Output contoh:
+   Network          Next Hop        LocPrf  Path
+*> 0.0.0.0          192.168.24.2    200     65002
+*  0.0.0.0          192.168.45.5    100     65003
+
+# Jalur via R2 (ISP-A) dipilih karena Local Pref lebih tinggi
+  </code></pre>
+
+  <h4 class="note-subtitle">📝 Inti dari Lab Local Preference</h4>
+  <ul class="note-list">
+    <li>Digunakan untuk memilih jalur keluar (outbound) seluruh AS.</li>
+    <li>Default = 100, semakin besar → semakin disukai.</li>
+    <li>Berlaku AS-wide, berbeda dengan Weight yang hanya lokal.</li>
+    <li>Biasanya dipakai di ISP/Enterprise multi-homing untuk menentukan jalur utama ke Internet.</li>
+  </ul>
+</section>
+
+
+<!-- BGP Attribute – MED -->
+<section class="note-section">
+  <h3 class="note-title">BGP Attribute – MED (Multi Exit Discriminator) 🚀</h3>
+
+  <h4 class="note-subtitle">📌 Konsep MED</h4>
+  <p class="note-paragraph">
+    <strong>MED</strong> adalah BGP Path Attribute standar yang digunakan untuk mempengaruhi jalur masuk (<em>inbound traffic</em>) dari AS tetangga.  
+    Semakin kecil nilai MED → semakin diprioritaskan oleh AS tetangga.  
+    Default value = 0 (paling disukai).
+  </p>
+  <ul class="note-list">
+    <li>Biasanya dipakai jika ada lebih dari satu link antar 2 AS.</li>
+    <li>Hanya disebarkan ke <strong>eBGP neighbor</strong>, tidak ke iBGP full-mesh.</li>
+    <li>Sifatnya “optional non-transitive” → bisa diabaikan oleh router tetangga.</li>
+  </ul>
+
+  <h4 class="note-subtitle">🔑 Fungsi MED</h4>
+  <p class="note-paragraph">
+    Memberi “saran” ke AS tetangga tentang link mana yang sebaiknya digunakan untuk masuk ke AS kita.  
+    Contoh: jika punya 2 link ke ISP yang sama, MED bisa mengatur jalur inbound yang diprioritaskan.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Topologi</h4>
+  <pre class="note-codeblock"><code>
+             +--- R2 (AS 65002) ---+
+R1 (AS 65001)                       Internet
+             +--- R3 (AS 65002) ---+
+
+AS 65001 terhubung ke AS 65002 via 2 link (R2 & R3)
+Mau traffic masuk ke prefix 1.1.1.1/32 lebih disukai lewat R2
+  </code></pre>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi MED</h4>
+  <pre class="note-codeblock"><code>
+# Di R1 (AS 65001)
+ip prefix-list LOOP permit 1.1.1.1/32
+
+route-map SET-MED-R2 permit 10
+  match ip address prefix-list LOOP
+  set metric 50       # MED 50 ke R2 (lebih disukai)
+
+route-map SET-MED-R3 permit 10
+  match ip address prefix-list LOOP
+  set metric 200      # MED 200 ke R3 (kurang disukai)
+
+router bgp 65001
+  neighbor 192.168.12.2 remote-as 65002
+  neighbor 192.168.13.3 remote-as 65002
+
+  neighbor 192.168.12.2 route-map SET-MED-R2 out
+  neighbor 192.168.13.3 route-map SET-MED-R3 out
+  </code></pre>
+
+  <h4 class="note-subtitle">🔎 Verifikasi MED</h4>
+  <pre class="note-codeblock"><code>
+# Di AS 65002 (R2/R3)
+show ip bgp
+
+Output contoh:
+   Network          Next Hop        Metric  Path
+*> 1.1.1.1/32       192.168.12.1    50      65001
+*  1.1.1.1/32       192.168.13.1    200     65001
+
+# Jalur lewat R2 lebih disukai karena MED lebih kecil (50 vs 200)
+  </code></pre>
+
+  <h4 class="note-subtitle">📝 Inti dari Lab MED</h4>
+  <ul class="note-list">
+    <li>MED = atribut untuk mempengaruhi <em>inbound traffic</em>.</li>
+    <li>Semakin kecil MED → semakin disukai.</li>
+    <li>Default MED = 0.</li>
+    <li>Biasanya dipakai jika ada multi-link antar 2 AS yang sama.</li>
+  </ul>
+</section>
+
+
+<!-- BGP Attribute – AS Path Prepend -->
+<section class="note-section">
+  <h3 class="note-title">BGP Attribute – AS Path Prepend 🚀</h3>
+
+  <h4 class="note-subtitle">📌 Konsep AS Path Prepend</h4>
+  <p class="note-paragraph">
+    <strong>AS Path</strong> adalah atribut BGP yang berisi daftar AS yang dilewati suatu prefix.  
+    Semakin pendek AS Path → semakin disukai.  
+    <strong>AS Path Prepend</strong> adalah teknik untuk membuat jalur tertentu <em>kurang disukai</em> dengan menambahkan AS Number sendiri beberapa kali ke AS Path.
+  </p>
+  <ul class="note-list">
+    <li>Biasanya digunakan untuk <strong>inbound traffic engineering</strong>.</li>
+    <li>Membuat jalur alternatif tetap ada tapi dianggap kurang menarik karena AS Path lebih panjang.</li>
+  </ul>
+
+  <h4 class="note-subtitle">🔑 Kapan Dipakai?</h4>
+  <p class="note-paragraph">
+    Cocok untuk multi-homing ke beberapa ISP.  
+    Contohnya: ingin traffic inbound lebih memilih satu ISP, sedangkan ISP lain sebagai backup.
+  </p>
+
+  <h4 class="note-subtitle">🖥️ Contoh Topologi</h4>
+  <pre class="note-codeblock"><code>
+                +--- ISP-A (AS 65010)
+R1 (AS 65001)---+
+                +--- ISP-B (AS 65020)
+
+Prefix 1.1.1.1/32 di-advertise ke dua ISP
+Mau traffic inbound lebih memilih ISP-A (jalur utama), ISP-B sebagai backup
+  </code></pre>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi AS Path Prepend</h4>
+  <pre class="note-codeblock"><code>
+# Di R1
+ip prefix-list LOOP permit 1.1.1.1/32
+
+# Advertise ke ISP-A tanpa prepend (jalur utama)
+route-map NO-PREPEND permit 10
+  match ip address prefix-list LOOP
+
+# Advertise ke ISP-B dengan prepend 3x (jalur backup)
+route-map PREPEND-ISP-B permit 10
+  match ip address prefix-list LOOP
+  set as-path prepend 65001 65001 65001
+
+router bgp 65001
+  neighbor 192.168.10.1 remote-as 65010
+  neighbor 192.168.20.1 remote-as 65020
+
+  neighbor 192.168.10.1 route-map NO-PREPEND out
+  neighbor 192.168.20.1 route-map PREPEND-ISP-B out
+  </code></pre>
+
+  <h4 class="note-subtitle">🔎 Verifikasi AS Path Prepend</h4>
+  <pre class="note-codeblock"><code>
+# Di sisi ISP (ISP-A atau ISP-B)
+show ip bgp
+
+Output contoh:
+   Network        Next Hop        Path
+*> 1.1.1.1/32     192.168.10.2    65001
+*  1.1.1.1/32     192.168.20.2    65001 65001 65001 65001
+
+# Jalur via ISP-A lebih disukai (AS Path lebih pendek)
+# Jalur via ISP-B jadi backup (AS Path lebih panjang karena prepend)
+  </code></pre>
+
+  <h4 class="note-subtitle">📝 Inti dari Lab AS Path Prepend</h4>
+  <ul class="note-list">
+    <li>Menambah panjang AS Path supaya jalur tertentu kurang menarik.</li>
+    <li>Digunakan untuk inbound traffic engineering pada multi-homing.</li>
+    <li>Tidak menghapus jalur, hanya membuat jalur alternatif kurang dipilih.</li>
+  </ul>
+</section>
+
+
+<!-- BGP Dual-Homing – ISP Sama -->
+<section class="note-section">
+  <h3 class="note-title">BGP Dual-Homing – ISP Sama 🚀</h3>
+
+  <h4 class="note-subtitle">📌 Konsep Dual-Homing ke ISP yang Sama</h4>
+  <p class="note-paragraph">
+    <strong>Dual-homing</strong> = sebuah AS terhubung ke satu ISP melalui 2 link/fisik berbeda.  
+    Tujuan:
+  </p>
+  <ul class="note-list">
+    <li>Redundansi (backup link)</li>
+    <li>Load balancing (jika ingin trafik dibagi)</li>
+  </ul>
+  <p class="note-paragraph">
+    Karena masih satu ISP, AS Path sama → AS Path Prepend tidak efektif.  
+    Yang bisa dipakai:
+  </p>
+  <ul class="note-list">
+    <li><strong>Local Preference (LP)</strong> → mempengaruhi jalur keluar (outbound)</li>
+    <li><strong>Weight</strong> → mempengaruhi preferensi lokal di router tertentu</li>
+    <li><strong>MED</strong> → mempengaruhi jalur masuk (inbound) dari ISP</li>
+  </ul>
+
+  <h4 class="note-subtitle">🔑 Strategi Dual-Homing ISP Sama</h4>
+  <ul class="note-list">
+    <li>Outbound Traffic → gunakan LP atau Weight untuk menentukan jalur utama</li>
+    <li>Inbound Traffic → gunakan MED untuk “menyarankan” ISP memilih jalur tertentu</li>
+    <li>Redundancy → jika jalur utama down, traffic pindah ke jalur backup</li>
+  </ul>
+
+  <h4 class="note-subtitle">🖥️ Contoh Topologi</h4>
+  <pre class="note-codeblock"><code>
+          +--- ISP (AS 65010)
+R1 (AS 65001)---+
+          +--- ISP (AS 65010)
+
+R1 terhubung ke ISP melalui 2 interface:
+R1-Gi0/0 → ISP-Gi0/0 (jalur utama)
+R1-Gi0/1 → ISP-Gi0/1 (jalur backup)
+Jalur keluar via Gi0/0, jalur masuk via MED 50
+  </code></pre>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi Dasar</h4>
+  <pre class="note-codeblock"><code>
+# Prefix yang di-advertise
+ip prefix-list LOOP permit 1.1.1.0/24
+
+# Route-map outbound (Local Preference)
+route-map SET-LP permit 10
+  match ip address prefix-list LOOP
+  set local-preference 200    ! Jalur utama
+route-map SET-LP-BK permit 10
+  match ip address prefix-list LOOP
+  set local-preference 100    ! Jalur backup
+
+router bgp 65001
+  neighbor 192.168.10.1 remote-as 65010
+  neighbor 192.168.10.1 route-map SET-LP out
+  neighbor 192.168.20.1 remote-as 65010
+  neighbor 192.168.20.1 route-map SET-LP-BK out
+
+# Route-map inbound (MED)
+route-map SET-MED permit 10
+  match ip address prefix-list LOOP
+  set metric 50
+router bgp 65001
+  neighbor 192.168.10.1 route-map SET-MED out
+  neighbor 192.168.20.1 route-map SET-MED out
+  </code></pre>
+
+  <h4 class="note-subtitle">🔎 Verifikasi</h4>
+  <ul class="note-list">
+    <li>Cek BGP table: <code>show ip bgp</code> → jalur dengan LP lebih tinggi dipilih untuk outbound</li>
+    <li>Cek MED di sisi ISP: <code>show ip bgp 1.1.1.0</code> → MED lebih rendah lebih disukai untuk inbound</li>
+    <li>Failover test: matikan jalur utama → traffic pindah ke backup</li>
+  </ul>
+
+  <h4 class="note-subtitle">📝 Inti dari Lab Dual-Homing ISP Sama</h4>
+  <ul class="note-list">
+    <li>Dual-homing → 2 link ke satu ISP</li>
+    <li>Outbound: kontrol dengan LP / Weight</li>
+    <li>Inbound: kontrol dengan MED</li>
+    <li>Redundansi otomatis dan traffic bisa diatur tanpa AS Path prepend</li>
+  </ul>
+</section>
+
+<!-- BGP Multihoming – 2 ISP Berbeda -->
+<section class="note-section">
+  <h3 class="note-title">BGP Multihoming – 2 ISP Berbeda 🚀</h3>
+
+  <h4 class="note-subtitle">📌 Konsep Multihoming ke 2 ISP Berbeda</h4>
+  <p class="note-paragraph">
+    <strong>Multihoming</strong> = sebuah AS terhubung ke dua ISP berbeda (AS berbeda).  
+    Tujuan:
+  </p>
+  <ul class="note-list">
+    <li>Redundansi total</li>
+    <li>Optimasi outbound dan inbound traffic</li>
+  </ul>
+  <p class="note-paragraph">
+    Perbedaan utama dengan dual-homing ISP sama: AS Path berbeda → bisa dipakai untuk inbound traffic engineering.  
+    Bisa pakai AS Path Prepend, MED, Local Preference.
+  </p>
+
+  <h4 class="note-subtitle">🔑 Strategi Multihoming</h4>
+  <ul class="note-list">
+    <li>Outbound Traffic → gunakan Local Preference (LP) AS-wide, Weight untuk preferensi lokal</li>
+    <li>Inbound Traffic → gunakan AS Path Prepend untuk jalur kurang disukai, MED jika ISP mendukung</li>
+    <li>Bisa kombinasi: prepend + MED untuk kontrol granular</li>
+    <li>Redundancy → jika jalur utama down, traffic pindah ke ISP kedua</li>
+  </ul>
+
+  <h4 class="note-subtitle">🖥️ Contoh Topologi</h4>
+  <pre class="note-codeblock"><code>
+          ISP-A (AS 65010)
+         /
+R1 (AS 65001) --- Internet
+         \
+          ISP-B (AS 65020)
+
+R1 punya 2 uplink:
+Gi0/0 → ISP-A (jalur utama outbound & inbound)
+Gi0/1 → ISP-B (backup)
+  </code></pre>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi Multihoming</h4>
+  <pre class="note-codeblock"><code>
+# Outbound – Local Preference
+ip prefix-list LOOP permit 1.1.1.0/24
+
+route-map SET-LP-ISP-A permit 10
+  match ip address prefix-list LOOP
+  set local-preference 200
+
+route-map SET-LP-ISP-B permit 10
+  match ip address prefix-list LOOP
+  set local-preference 100
+
+router bgp 65001
+  neighbor 192.168.10.1 remote-as 65010
+  neighbor 192.168.10.1 route-map SET-LP-ISP-A out
+  neighbor 192.168.20.1 remote-as 65020
+  neighbor 192.168.20.1 route-map SET-LP-ISP-B out
+
+# Inbound – AS Path Prepend
+route-map PREPEND-ISP-B permit 10
+  match ip address prefix-list LOOP
+  set as-path prepend 65001 65001 65001
+
+router bgp 65001
+  neighbor 192.168.20.1 route-map PREPEND-ISP-B out
+
+# MED (optional)
+route-map SET-MED-ISP-A permit 10
+  match ip address prefix-list LOOP
+  set metric 50
+
+router bgp 65001
+  neighbor 192.168.10.1 route-map SET-MED-ISP-A out
+  </code></pre>
+
+  <h4 class="note-subtitle">🔎 Verifikasi</h4>
+  <ul class="note-list">
+    <li>Cek BGP table di R1: <code>show ip bgp</code> → outbound traffic pilih jalur LP tertinggi (ISP-A)</li>
+    <li>Cek sisi ISP: <code>show ip bgp 1.1.1.0</code> → jalur dengan AS Path lebih pendek / MED lebih rendah lebih disukai untuk inbound</li>
+    <li>Failover test: matikan link ISP-A → traffic pindah ke ISP-B</li>
+  </ul>
+
+  <h4 class="note-subtitle">📝 Inti dari Lab BGP Multihoming 2 ISP</h4>
+  <ul class="note-list">
+    <li>Multihoming → 2 ISP berbeda → AS Path berbeda → fleksibel untuk inbound traffic</li>
+    <li>Outbound: kontrol via Local Preference / Weight</li>
+    <li>Inbound: kontrol via AS Path Prepend + MED</li>
+    <li>Redundansi + traffic engineering maksimal</li>
+  </ul>
+</section>
+
+<!-- BGP Filtering -->
+<section class="note-section">
+  <h3 class="note-title">BGP Filtering 🚦</h3>
+
+  <h4 class="note-subtitle">📌 Konsep BGP Filtering</h4>
+  <p class="note-paragraph">
+    BGP Filtering digunakan untuk mengontrol prefix yang dikirim atau diterima dari BGP peer.  
+    Tujuan:
+  </p>
+  <ul class="note-list">
+    <li>Hindari menerima prefix yang tidak diinginkan</li>
+    <li>Hindari mengiklankan prefix tertentu ke peer</li>
+    <li>Mengoptimalkan routing policy</li>
+  </ul>
+  <p class="note-paragraph">
+    Filtering bisa dilakukan dengan:
+  </p>
+  <ul class="note-list">
+    <li>Prefix-List → filter berdasarkan alamat IP/prefix</li>
+    <li>Route-Map → lebih fleksibel, bisa gabungkan prefix-list + community + set attribute</li>
+    <li>Community List → filter berdasarkan community tag</li>
+    <li>AS Path Access List → filter berdasarkan AS Path</li>
+  </ul>
+
+  <h4 class="note-subtitle">🔑 Jenis Filtering</h4>
+  <ul class="note-list">
+    <li>Inbound Filtering → prefix yang diterima dari peer</li>
+    <li>Outbound Filtering → prefix yang dikirim ke peer</li>
+  </ul>
+
+  <h4 class="note-subtitle">🖥️ Contoh Topologi</h4>
+  <pre class="note-codeblock"><code>
+R1 (AS 65001) -------- R2 (AS 65002)
+
+R2 advertise prefix:
+10.10.1.0/24
+10.10.2.0/24
+10.10.3.0/24
+
+Tujuan: R1 hanya menerima 10.10.1.0/24 dan 10.10.3.0/24
+  </code></pre>
+
+  <h4 class="note-subtitle">⚙️ Konfigurasi Filtering</h4>
+  <pre class="note-codeblock"><code>
+# 1️⃣ Prefix-List
+ip prefix-list ALLOW permit 10.10.1.0/24
+ip prefix-list ALLOW permit 10.10.3.0/24
+
+# 2️⃣ Route-Map
+route-map FILTER-IN permit 10
+  match ip address prefix-list ALLOW
+
+# 3️⃣ Terapkan ke neighbor
+router bgp 65001
+  neighbor 192.168.12.2 remote-as 65002
+  neighbor 192.168.12.2 route-map FILTER-IN in
+  </code></pre>
+
+  <h4 class="note-subtitle">🔎 Verifikasi</h4>
+  <ul class="note-list">
+    <li>Cek BGP table: <code>show ip bgp</code> → hanya 10.10.1.0/24 & 10.10.3.0/24 muncul</li>
+    <li>Cek prefix-list: <code>show ip prefix-list</code></li>
+    <li>Cek route-map: <code>show route-map</code></li>
+  </ul>
+
+  <h4 class="note-subtitle">📌 Advanced Filtering</h4>
+  <pre class="note-codeblock"><code>
+# Community-based filtering
+ip community-list standard BLOCK-100 permit 65002:100
+route-map BLOCK_COMM deny 10
+  match community BLOCK-100
+route-map BLOCK_COMM permit 20
+
+# AS Path filtering
+ip as-path access-list 10 deny _65003_
+route-map BLOCK-AS deny 10
+  match as-path 10
+route-map BLOCK-AS permit 20
+  </code></pre>
+
+  <h4 class="note-subtitle">📝 Inti dari Lab BGP Filtering</h4>
+  <ul class="note-list">
+    <li>BGP filtering = kontrol prefix yang masuk/keluar</li>
+    <li>Bisa pakai: prefix-list, route-map, community-list, AS path</li>
+    <li>Filtering penting untuk security, policy, dan traffic optimization</li>
+    <li>Terapkan inbound/outbound sesuai tujuan</li>
+  </ul>
+</section>
+
+    <hr class="note-divider" />
+
+
 
   </main>
 
