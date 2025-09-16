@@ -103,3 +103,50 @@
       border: none;
       border-top: 1px solid #ddd;
     }
+
+    
+    .note-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  margin: 1rem 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.note-card-header {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: #007aff22;
+}
+
+.note-title {
+  margin: 0;
+  /* font-size: 1.4rem; */
+  flex: 1; /* judul mengisi ruang */
+}
+
+.toggle-btn {
+  font-size: 1.2rem;
+  margin-left: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+/* Konten collapse/expand */
+.note-card-content {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 1.5rem;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+}
+
+.note-card.expanded .note-card-content {
+  max-height: 1000px; /* cukup besar supaya bisa menampung konten */
+  padding: 1rem 1.5rem;
+}
+
+.note-card.expanded .toggle-btn {
+  transform: rotate(180deg);
+}

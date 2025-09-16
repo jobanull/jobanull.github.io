@@ -76,32 +76,3 @@ set name=R.SQ                                                         # Nama rou
 </body>
 </html>
 
-
-
-/ip address
-add address=192.168.1.1/24 interface=ether2 network=192.168.1.0     
-add address=192.168.1.1/24 interface=ether3 network=192.168.1.0    
-
-/ip dhcp-client
-add disabled=no interface=ether1                                   
-
-/ip firewall mangle
-add action=mark-connection chain=prerouting in-interface=ether3 \
-    new-connection-mark=con-vrf passthrough=yes                    
-add action=mark-routing chain=prerouting connection-mark=con-vrf \
-    in-interface=ether1 new-routing-mark=vrf1 passthrough=yes       
-add action=mark-routing chain=output connection-mark=con-vrf \
-    disabled=yes new-routing-mark=vrf1 passthrough=yes             
-
-/ip firewall nat
-add action=masquerade chain=srcnat out-interface=ether1            
-
-/ip route
-add distance=1 gateway=192.168.190.1@main routing-mark=vrf1        
-
-/ip route vrf
-add interfaces=ether3 routing-mark=vrf1                             
-
-/system identity
-set name=R.VRF                                                      
-    

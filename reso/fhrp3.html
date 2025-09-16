@@ -19,9 +19,9 @@
 
     <h3 class="note-subtitle">Fungsi VRRP</h3>
     <ul class="note-list">
-      <li><strong>Redundansi</strong> – Menjamin gateway tetap aktif meskipun salah satu router mati.</li>
-      <li><strong>Failover Otomatis</strong> – Perpindahan ke router cadangan terjadi secara otomatis.</li>
-      <li><strong>Reliabilitas</strong> – Meningkatkan ketersediaan layanan jaringan.</li>
+      <li><strong>Redundansi</strong> - Menjamin gateway tetap aktif meskipun salah satu router mati.</li>
+      <li><strong>Failover Otomatis</strong> - Perpindahan ke router cadangan terjadi secara otomatis.</li>
+      <li><strong>Reliabilitas</strong> - Meningkatkan ketersediaan layanan jaringan.</li>
     </ul>
 
     <h3 class="note-subtitle">Cara Kerja VRRP</h3>
@@ -34,9 +34,9 @@
 
     <h3 class="note-subtitle">Parameter Penting</h3>
     <ul class="note-list">
-      <li><strong>Virtual IP</strong> – IP gateway yang digunakan oleh klien.</li>
-      <li><strong>Priority</strong> – Menentukan urutan router yang akan menjadi Master.</li>
-      <li><strong>Advertisement Interval</strong> – Waktu antar pengiriman iklan status dari Master.</li>
+      <li><strong>Virtual IP</strong> - IP gateway yang digunakan oleh klien.</li>
+      <li><strong>Priority</strong> - Menentukan urutan router yang akan menjadi Master.</li>
+      <li><strong>Advertisement Interval</strong> - Waktu antar pengiriman iklan status dari Master.</li>
     </ul>
 
     <h3 class="note-subtitle">CONTOH KASUS</h3>
@@ -135,9 +135,23 @@ set name=R.VRRP2
   </main>
 
   <script>
+document.querySelectorAll('.note-card').forEach(card => {
+  const header = card.querySelector('.note-card-header');
+  const content = card.querySelector('.note-card-content');
+
+  header.addEventListener('click', () => {
+    card.classList.toggle('expanded');
+  });
+});
+</script>
+
+  <script>
     document.querySelectorAll('.note-image').forEach(img => {
       img.addEventListener('click', () => img.classList.toggle('expanded'));
     });
   </script>
+
+
+
 </body>
 </html>
