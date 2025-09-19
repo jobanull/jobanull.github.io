@@ -469,7 +469,7 @@ inet.0: 7 destinations, 8 routes (7 active, 0 holddown, 0 hidden)
     <!-- iBGP Peering -->
 <div class="note-card">
   <div class="note-card-header">
-    <h2 class="note-title">📌 Konsep iBGP Peering</h2>
+    <h2 class="note-title">📌 iBGP Peering</h2>
     <span class="toggle-btn">&#9660;</span>
   </div>
   <div class="note-card-content">
@@ -562,13 +562,15 @@ show ip route bgp
 <!-- iBGP Loopback -->
 <div class="note-card">
   <div class="note-card-header">
-    <h2 class="note-title">📌 Kenapa iBGP pakai Loopback?</h2>
+    <h2 class="note-title">📌 iBGP via Loopback</h2>
     <span class="toggle-btn">&#9660;</span>
   </div>
   <div class="note-card-content">
     <section class="note-section">
 
       <p class="note-paragraph">
+        Kenapa iBGP pakai loopback?
+        
         Kalau peering iBGP dibuat langsung pakai <strong>IP interface fisik</strong>, maka kalau link itu down → session BGP ikut mati.  
         Dengan <strong>Loopback Interface</strong>:
       </p>
@@ -1169,8 +1171,7 @@ show ip bgp 1.1.1.1
 
       <h4 class="note-subtitle">📌 Konsep Community List</h4>
       <p class="note-paragraph">
-        Kalau di <strong>Lab 8</strong> kita sudah belajar cara menempelkan community ke prefix, 
-        maka <strong>Community List</strong> digunakan untuk:
+        <strong>Community List</strong> digunakan untuk:
       </p>
       <ul class="note-list">
         <li>Memfilter prefix berdasarkan community.</li>
