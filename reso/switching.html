@@ -77,44 +77,43 @@ event manager applet SHOW_IP
     <hr class="note-divider" />
     <hr class="note-divider" />
 
-    
-
-
-
-
-
 <!-- Lab 1 - VLAN dan Trunk -->
-<section class="note-section">
-  <h3 class="note-title">Lab 1 - VLAN dan Trunk 🖧</h3>
+<div class="note-card">
+  <div class="note-card-header">
+    <h2 class="note-title">🖧 Lab 1 - VLAN dan Trunk</h2>
+    <span class="toggle-btn">&#9660;</span>
+  </div>
+  <div class="note-card-content">
+    <section class="note-section">
 
-  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
-  <p class="note-paragraph">
-    VLAN (Virtual LAN) adalah cara memisahkan jaringan secara logis di Layer 2, walau perangkat tetap terhubung ke switch yang sama.
-  </p>
-  <p class="note-paragraph">
-    Tujuan: segmentasi jaringan, keamanan, efisiensi broadcast.
-  </p>
-  <p class="note-paragraph">
-    Trunking memungkinkan satu link switch membawa traffic beberapa VLAN sekaligus. Standar yang umum: IEEE 802.1Q. Setiap frame diberi tag VLAN supaya switch tujuan bisa mengenali VLAN-nya.
-  </p>
+      <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+      <p class="note-paragraph">
+        VLAN (Virtual LAN) memisahkan jaringan secara logis di Layer 2, walau perangkat tetap terhubung ke switch yang sama.
+      </p>
+      <p class="note-paragraph">
+        Tujuan: segmentasi jaringan, keamanan, efisiensi broadcast.
+      </p>
+      <p class="note-paragraph">
+        Trunking memungkinkan satu link switch membawa traffic beberapa VLAN sekaligus. Standar umum: IEEE 802.1Q. Setiap frame diberi tag VLAN supaya switch tujuan mengenali VLAN-nya.
+      </p>
 
-  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
-  <p class="note-paragraph">
-    Sebuah kantor memiliki 3 departemen: HR, Finance, IT. Tiap departemen perlu VLAN berbeda:
-  </p>
-  <ul class="note-list">
-    <li>VLAN 10 → HR</li>
-    <li>VLAN 20 → Finance</li>
-    <li>VLAN 30 → IT</li>
-  </ul>
-  <p class="note-paragraph">
-    Traffic antar switch tetap harus bisa membawa semua VLAN → perlu trunk link.
-  </p>
+      <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+      <p class="note-paragraph">
+        Kantor memiliki 3 departemen: HR, Finance, IT. Tiap departemen punya VLAN berbeda:
+      </p>
+      <ul class="note-list">
+        <li>VLAN 10 → HR</li>
+        <li>VLAN 20 → Finance</li>
+        <li>VLAN 30 → IT</li>
+      </ul>
+      <p class="note-paragraph">
+        Traffic antar switch tetap harus bisa membawa semua VLAN → perlu trunk link.
+      </p>
 
-  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+      <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
 
-  <h5 class="note-subsubtitle">Step 1 - Buat VLAN</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">Step 1 - Buat VLAN</h5>
+      <pre class="note-codeblock"><code>
 Switch(config)# vlan 10
 Switch(config-vlan)# name HR
 Switch(config-vlan)# exit
@@ -126,10 +125,10 @@ Switch(config-vlan)# exit
 Switch(config)# vlan 30
 Switch(config-vlan)# name IT
 Switch(config-vlan)# exit
-  </code></pre>
+      </code></pre>
 
-  <h5 class="note-subsubtitle">Step 2 - Assign VLAN ke port</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">Step 2 - Assign VLAN ke port</h5>
+      <pre class="note-codeblock"><code>
 Switch(config)# interface range fa0/1-5
 Switch(config-if-range)# switchport mode access
 Switch(config-if-range)# switchport access vlan 10
@@ -141,57 +140,62 @@ Switch(config-if-range)# switchport access vlan 20
 Switch(config)# interface range fa0/11-15
 Switch(config-if-range)# switchport mode access
 Switch(config-if-range)# switchport access vlan 30
-  </code></pre>
+      </code></pre>
 
-  <h5 class="note-subsubtitle">Step 3 - Konfigurasi Trunk (antar switch)</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">Step 3 - Konfigurasi Trunk (antar switch)</h5>
+      <pre class="note-codeblock"><code>
 Switch(config)# interface gi0/1
 Switch(config-if)# switchport mode trunk
 Switch(config-if)# switchport trunk allowed vlan 10,20,30
-  </code></pre>
+      </code></pre>
 
-  <h5 class="note-subsubtitle">Step 4 - Verifikasi</h5>
-  <ul class="note-list">
-    <li>Cek VLAN: <code>show vlan brief</code></li>
-    <li>Cek trunk: <code>show interfaces trunk</code></li>
-  </ul>
+      <h5 class="note-subsubtitle">Step 4 - Verifikasi</h5>
+      <ul class="note-list">
+        <li>Cek VLAN: <code>show vlan brief</code></li>
+        <li>Cek trunk: <code>show interfaces trunk</code></li>
+      </ul>
 
-  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
-  <ul class="note-list">
-    <li>Port sudah tergabung sesuai VLAN masing-masing departemen</li>
-    <li>Trunk antar switch bisa membawa traffic semua VLAN</li>
-    <li>Segmentasi jaringan berjalan sesuai rencana</li>
-  </ul>
-</section>
+      <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+      <ul class="note-list">
+        <li>Port tergabung sesuai VLAN masing-masing departemen</li>
+        <li>Trunk antar switch bisa membawa traffic semua VLAN</li>
+        <li>Segmentasi jaringan berjalan sesuai rencana</li>
+      </ul>
+
+    </section>
+  </div>
+</div>
 
 <!-- Lab 2 - InterVLAN Routing -->
-<section class="note-section">
-  <h3 class="note-title">Lab 2 - InterVLAN Routing 🔀</h3>
+<div class="note-card">
+  <div class="note-card-header">
+    <h2 class="note-title">🔀 Lab 2 - InterVLAN Routing</h2>
+    <span class="toggle-btn">&#9660;</span>
+  </div>
+  <div class="note-card-content">
+    <section class="note-section">
 
-  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
-  <p class="note-paragraph">
-    Masalah: VLAN memisahkan jaringan di Layer 2, sehingga perangkat di VLAN berbeda tidak bisa saling berkomunikasi secara langsung.
-  </p>
-  <p class="note-paragraph">
-    Solusi: InterVLAN Routing menggunakan perangkat Layer 3 (Router atau Layer 3 Switch) untuk menghubungkan VLAN berbeda.
-  </p>
-  <p class="note-paragraph">
-    Metode umum:
-  </p>
-  <ul class="note-list">
-    <li>Router-on-a-stick: Router memiliki sub-interface untuk tiap VLAN, biasanya melalui trunk link.</li>
-    <li>Layer 3 Switch: Switch memiliki SVI (Switch Virtual Interface) untuk tiap VLAN, bisa routing langsung tanpa router tambahan.</li>
-  </ul>
+      <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+      <p class="note-paragraph">
+        VLAN memisahkan jaringan di Layer 2, sehingga perangkat di VLAN berbeda tidak bisa saling berkomunikasi.
+      </p>
+      <p class="note-paragraph">
+        Solusi: InterVLAN Routing menggunakan perangkat Layer 3 (Router atau Layer 3 Switch) untuk menghubungkan VLAN berbeda.
+      </p>
+      <ul class="note-list">
+        <li>Router-on-a-stick: Router memiliki sub-interface untuk tiap VLAN melalui trunk link.</li>
+        <li>Layer 3 Switch: Switch memiliki SVI (Switch Virtual Interface) untuk tiap VLAN, bisa routing langsung tanpa router tambahan.</li>
+      </ul>
 
-  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
-  <p class="note-paragraph">
-    Kantor sama seperti Lab 1: HR (VLAN 10), Finance (VLAN 20), IT (VLAN 30). Tujuannya: PC di HR bisa mengakses PC di Finance dan IT, tapi tetap menjaga segmentasi VLAN.
-  </p>
+      <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+      <p class="note-paragraph">
+        Kantor sama seperti Lab 1: HR (VLAN 10), Finance (VLAN 20), IT (VLAN 30). Tujuannya: PC di HR bisa mengakses PC di Finance dan IT, tetap menjaga segmentasi VLAN.
+      </p>
 
-  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+      <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
 
-  <h5 class="note-subsubtitle">1️⃣ Router-on-a-Stick</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">1️⃣ Router-on-a-Stick</h5>
+      <pre class="note-codeblock"><code>
 Router(config)# interface gi0/0.10
 Router(config-subif)# encapsulation dot1Q 10
 Router(config-subif)# ip address 192.168.10.1 255.255.255.0
@@ -203,19 +207,19 @@ Router(config-subif)# ip address 192.168.20.1 255.255.255.0
 Router(config)# interface gi0/0.30
 Router(config-subif)# encapsulation dot1Q 30
 Router(config-subif)# ip address 192.168.30.1 255.255.255.0
-  </code></pre>
+      </code></pre>
 
-  <p class="note-paragraph">
-    Pastikan trunk antara switch dan router:
-  </p>
-  <pre class="note-codeblock"><code>
+      <p class="note-paragraph">
+        Pastikan trunk antara switch dan router:
+      </p>
+      <pre class="note-codeblock"><code>
 Switch(config)# interface gi0/1
 Switch(config-if)# switchport mode trunk
 Switch(config-if)# switchport trunk allowed vlan 10,20,30
-  </code></pre>
+      </code></pre>
 
-  <h5 class="note-subsubtitle">2️⃣ Layer 3 Switch (SVI)</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">2️⃣ Layer 3 Switch (SVI)</h5>
+      <pre class="note-codeblock"><code>
 Switch(config)# interface vlan 10
 Switch(config-if)# ip address 192.168.10.1 255.255.255.0
 Switch(config-if)# no shutdown
@@ -229,212 +233,243 @@ Switch(config-if)# ip address 192.168.30.1 255.255.255.0
 Switch(config-if)# no shutdown
 
 Switch(config)# ip routing
-  </code></pre>
+      </code></pre>
 
-  <h5 class="note-subsubtitle">🔍 Verifikasi</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">🔍 Verifikasi</h5>
+      <pre class="note-codeblock"><code>
 Switch# ping 192.168.20.1   # dari VLAN 10 ke VLAN 20
 Switch# ping 192.168.30.1   # dari VLAN 10 ke VLAN 30
-  </code></pre>
+      </code></pre>
 
-  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
-  <ul class="note-list">
-    <li>Perangkat di VLAN berbeda bisa saling berkomunikasi</li>
-    <li>Segmentasi VLAN tetap terjaga</li>
-    <li>Router-on-a-stick atau Layer 3 Switch berfungsi sebagai gateway antar VLAN</li>
-  </ul>
-</section>
+      <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+      <ul class="note-list">
+        <li>Perangkat di VLAN berbeda bisa saling berkomunikasi</li>
+        <li>Segmentasi VLAN tetap terjaga</li>
+        <li>Router-on-a-stick atau Layer 3 Switch berfungsi sebagai gateway antar VLAN</li>
+      </ul>
+
+    </section>
+  </div>
+</div>
+
 
 <!-- Lab 3 - SPAN (Switch Port Analyzer) -->
-<section class="note-section">
-  <h3 class="note-title">Lab 3 - SPAN (Switch Port Analyzer) 🔍</h3>
+<div class="note-card">
+  <div class="note-card-header">
+    <h2 class="note-title">🔍 Lab 3 - SPAN (Switch Port Analyzer)</h2>
+    <span class="toggle-btn">&#9660;</span>
+  </div>
+  <div class="note-card-content">
+    <section class="note-section">
 
-  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
-  <p class="note-paragraph">
-    SPAN digunakan untuk memantau traffic di satu atau beberapa port switch tanpa mengganggu aliran data normal.
-  </p>
-  <p class="note-paragraph">
-    Traffic dari <strong>source port</strong> akan dicopy ke <strong>destination port</strong>, yang biasanya terhubung ke perangkat monitoring seperti Wireshark atau IDS.
-  </p>
-  <p class="note-paragraph">
-    SPAN bersifat <em>lokal</em>, artinya hanya memonitor port di switch yang sama.
-  </p>
+      <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+      <p class="note-paragraph">
+        SPAN digunakan untuk memantau traffic di satu atau beberapa port switch tanpa mengganggu aliran data normal.
+      </p>
+      <p class="note-paragraph">
+        Traffic dari <strong>source port</strong> akan dicopy ke <strong>destination port</strong>, biasanya terhubung ke perangkat monitoring seperti Wireshark atau IDS.
+      </p>
+      <p class="note-paragraph">
+        SPAN bersifat <em>lokal</em>, artinya hanya memonitor port di switch yang sama.
+      </p>
 
-  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
-  <p class="note-paragraph">
-    IT ingin memantau semua traffic yang masuk ke server VLAN 20 untuk analisis keamanan.
-  </p>
-  <p class="note-paragraph">
-    Server terhubung ke port Fa0/10, dan kita ingin copy traffic ke port Fa0/20 yang terhubung ke laptop Wireshark.
-  </p>
+      <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+      <p class="note-paragraph">
+        IT ingin memantau semua traffic yang masuk ke server VLAN 20 untuk analisis keamanan.  
+        Server terhubung ke port Fa0/10, dan kita ingin copy traffic ke port Fa0/20 yang terhubung ke laptop Wireshark.
+      </p>
 
-  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
-  <pre class="note-codeblock"><code>
+      <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+      <pre class="note-codeblock"><code>
 Switch(config)# monitor session 1 source interface fa0/10
 Switch(config)# monitor session 1 destination interface fa0/20
-  </code></pre>
+      </code></pre>
 
-  <h4 class="note-subtitle">🔍 Verifikasi</h4>
-  <pre class="note-codeblock"><code>
+      <h4 class="note-subtitle">🔍 Verifikasi</h4>
+      <pre class="note-codeblock"><code>
 Switch# show monitor
-  </code></pre>
+      </code></pre>
+      <p class="note-paragraph">
+        Sekarang semua traffic dari Fa0/10 akan dicopy ke Fa0/20 dan bisa di-capture di Wireshark.
+      </p>
 
-  <p class="note-paragraph">
-    Sekarang semua traffic dari Fa0/10 akan dicopy ke Fa0/20 dan bisa di-capture di Wireshark.
-  </p>
+      <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+      <ul class="note-list">
+        <li>Port source dapat dimonitor tanpa mengganggu aliran data normal</li>
+        <li>Port destination menerima salinan traffic untuk analisis</li>
+        <li>Monitoring lokal berjalan efektif menggunakan SPAN</li>
+      </ul>
 
-  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
-  <ul class="note-list">
-    <li>Port source dapat dimonitor tanpa mengganggu aliran data normal</li>
-    <li>Port destination menerima salinan traffic untuk analisis</li>
-    <li>Monitoring lokal berjalan efektif menggunakan SPAN</li>
-  </ul>
-</section>
+    </section>
+  </div>
+</div>
+
 
 <!-- Lab 4 - RSPAN (Remote SPAN) -->
-<section class="note-section">
-  <h3 class="note-title">Lab 4 - RSPAN (Remote SPAN) 🌐</h3>
+<div class="note-card">
+  <div class="note-card-header">
+    <h2 class="note-title">🌐 Lab 4 - RSPAN (Remote SPAN)</h2>
+    <span class="toggle-btn">&#9660;</span>
+  </div>
+  <div class="note-card-content">
+    <section class="note-section">
 
-  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
-  <p class="note-paragraph">
-    RSPAN adalah pengembangan SPAN yang memungkinkan monitoring traffic dari switch lain melalui jaringan.
-  </p>
-  <p class="note-paragraph">
-    Traffic dari <strong>source port</strong> dikirim melalui VLAN khusus RSPAN ke switch lain, lalu dicapture di <strong>destination port</strong>.
-  </p>
-  <p class="note-paragraph">
-    Membutuhkan <strong>RSPAN VLAN</strong> khusus yang dikonfigurasi di semua switch yang terlibat.
-  </p>
+      <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+      <p class="note-paragraph">
+        RSPAN adalah pengembangan SPAN yang memungkinkan monitoring traffic dari switch lain melalui jaringan.
+      </p>
+      <p class="note-paragraph">
+        Traffic dari <strong>source port</strong> dikirim melalui VLAN khusus RSPAN ke switch lain, lalu dicapture di <strong>destination port</strong>.
+      </p>
+      <p class="note-paragraph">
+        Membutuhkan <strong>RSPAN VLAN</strong> khusus yang dikonfigurasi di semua switch yang terlibat.
+      </p>
 
-  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
-  <p class="note-paragraph">
-    Perusahaan memiliki 2 switch: Switch A dan Switch B. Server VLAN 20 di Switch A ingin dipantau dari Switch B, tempat analyzer Wireshark terhubung.
-  </p>
-  <p class="note-paragraph">
-    Solusi: buat RSPAN VLAN 999, traffic dari server di Switch A dikirim ke Switch B melalui VLAN ini.
-  </p>
+      <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+      <p class="note-paragraph">
+        Perusahaan memiliki 2 switch: Switch A dan Switch B. Server VLAN 20 di Switch A ingin dipantau dari Switch B, tempat analyzer Wireshark terhubung.
+      </p>
+      <p class="note-paragraph">
+        Solusi: buat RSPAN VLAN 999, traffic dari server di Switch A dikirim ke Switch B melalui VLAN ini.
+      </p>
 
-  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+      <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
 
-  <h5 class="note-subsubtitle">1️⃣ Buat RSPAN VLAN</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">1️⃣ Buat RSPAN VLAN</h5>
+      <pre class="note-codeblock"><code>
 Switch(config)# vlan 999
 Switch(config-vlan)# remote-span
 Switch(config-vlan)# exit
-  </code></pre>
+      </code></pre>
 
-  <h5 class="note-subsubtitle">2️⃣ Konfigurasi Source Port (Switch A)</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">2️⃣ Konfigurasi Source Port (Switch A)</h5>
+      <pre class="note-codeblock"><code>
 Switch(config)# monitor session 1 source interface fa0/10
 Switch(config)# monitor session 1 destination remote vlan 999
-  </code></pre>
+      </code></pre>
 
-  <h5 class="note-subsubtitle">3️⃣ Konfigurasi Destination Port (Switch B)</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">3️⃣ Konfigurasi Destination Port (Switch B)</h5>
+      <pre class="note-codeblock"><code>
 Switch(config)# monitor session 1 source remote vlan 999
 Switch(config)# monitor session 1 destination interface fa0/20
-  </code></pre>
+      </code></pre>
 
-  <h4 class="note-subtitle">🔍 Verifikasi</h4>
-  <pre class="note-codeblock"><code>
+      <h4 class="note-subtitle">🔍 Verifikasi</h4>
+      <pre class="note-codeblock"><code>
 Switch# show monitor
-  </code></pre>
+      </code></pre>
+      <p class="note-paragraph">
+        Sekarang traffic dari server Switch A bisa dipantau di Switch B melalui port Wireshark.
+      </p>
 
-  <p class="note-paragraph">
-    Sekarang traffic dari server Switch A bisa dipantau di Switch B melalui port Wireshark.
-  </p>
+      <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+      <ul class="note-list">
+        <li>Traffic dari switch remote dapat dimonitor tanpa mengganggu operasional normal</li>
+        <li>RSPAN VLAN berhasil menghubungkan source dan destination antar switch</li>
+        <li>Monitoring terpusat di Switch B melalui port Wireshark</li>
+      </ul>
 
-  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
-  <ul class="note-list">
-    <li>Traffic dari switch remote dapat dimonitor tanpa mengganggu operasional normal</li>
-    <li>RSPAN VLAN berhasil menghubungkan source dan destination antar switch</li>
-    <li>Monitoring terpusat di Switch B melalui port Wireshark</li>
-  </ul>
-</section>
+    </section>
+  </div>
+</div>
+
 
 <!-- Lab 5 - EtherChannel Mode On -->
-<section class="note-section">
-  <h3 class="note-title">Lab 5 - EtherChannel Mode On 🔗</h3>
+<div class="note-card">
+  <div class="note-card-header">
+    <h2 class="note-title">🔗 Lab 5 - EtherChannel Mode On</h2>
+    <span class="toggle-btn">&#9660;</span>
+  </div>
+  <div class="note-card-content">
+    <section class="note-section">
 
-  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
-  <p class="note-paragraph">
-    EtherChannel adalah teknik menggabungkan beberapa link fisik menjadi satu link logis untuk meningkatkan bandwidth dan redundansi.
-  </p>
-  <p class="note-paragraph">
-    <strong>Mode On</strong> → membuat EtherChannel <em>static</em>, tanpa negosiasi protokol PAgP atau LACP.
-  </p>
-  <p class="note-paragraph">
-    Biasanya digunakan untuk menghubungkan switch ke switch atau switch ke server dengan multiple NIC.
-  </p>
+      <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+      <p class="note-paragraph">
+        EtherChannel adalah teknik menggabungkan beberapa link fisik menjadi satu link logis untuk meningkatkan bandwidth dan redundansi.
+      </p>
+      <p class="note-paragraph">
+        <strong>Mode On</strong> → membuat EtherChannel <em>static</em>, tanpa negosiasi protokol PAgP atau LACP.
+      </p>
+      <p class="note-paragraph">
+        Biasanya digunakan untuk menghubungkan switch ke switch atau switch ke server dengan multiple NIC.
+      </p>
 
-  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
-  <p class="note-paragraph">
-    Dua switch (Switch A dan Switch B) memiliki 4 kabel gigabit. Tujuannya: gabungkan 4 link menjadi 1 logical link agar bandwidth 4 Gbps dan failover otomatis jika salah satu kabel putus.
-  </p>
+      <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+      <p class="note-paragraph">
+        Dua switch (Switch A dan Switch B) memiliki 4 kabel gigabit. Tujuannya: gabungkan 4 link menjadi 1 logical link agar bandwidth 4 Gbps dan failover otomatis jika salah satu kabel putus.
+      </p>
 
-  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+      <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
 
-  <h5 class="note-subsubtitle">1️⃣ Pilih port untuk digabung</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">1️⃣ Pilih port untuk digabung</h5>
+      <pre class="note-codeblock"><code>
 Switch(config)# interface range gi0/1-4
 Switch(config-if-range)# channel-group 1 mode on
-  </code></pre>
+      </code></pre>
 
-  <h5 class="note-subsubtitle">2️⃣ Buat Port-Channel</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">2️⃣ Buat Port-Channel</h5>
+      <pre class="note-codeblock"><code>
 Switch(config)# interface port-channel 1
 Switch(config-if)# switchport mode trunk   # jika membawa VLAN
 Switch(config-if)# switchport trunk allowed vlan 10,20,30
-  </code></pre>
+      </code></pre>
 
-  <h5 class="note-subsubtitle">3️⃣ Verifikasi</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">3️⃣ Verifikasi</h5>
+      <pre class="note-codeblock"><code>
 Switch# show etherchannel summary
 Switch# show interfaces port-channel
-  </code></pre>
+      </code></pre>
+      <p class="note-paragraph">
+        Output menunjukkan port-channel terbentuk, member aktif, dan trunk berjalan.
+      </p>
 
-  <p class="note-paragraph">
-    Output menunjukkan port-channel terbentuk, member aktif, dan trunk berjalan.
-  </p>
+      <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+      <ul class="note-list">
+        <li>Beberapa link fisik tergabung menjadi satu port-channel logis</li>
+        <li>Bandwidth gabungan meningkat sesuai jumlah link</li>
+        <li>Failover otomatis jika salah satu link putus</li>
+        <li>Trunk berjalan normal jika EtherChannel membawa VLAN</li>
+      </ul>
 
-  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
-  <ul class="note-list">
-    <li>Beberapa link fisik tergabung menjadi satu port-channel logis</li>
-    <li>Bandwidth gabungan meningkat sesuai jumlah link</li>
-    <li>Failover otomatis jika salah satu link putus</li>
-    <li>Trunk berjalan normal jika EtherChannel membawa VLAN</li>
-  </ul>
-</section>
+    </section>
+  </div>
+</div>
+
 
 <!-- Lab 6 - EtherChannel PAgP -->
-<section class="note-section">
-  <h3 class="note-title">Lab 6 - EtherChannel PAgP 🔗🤝</h3>
+<div class="note-card">
+  <div class="note-card-header">
+    <h2 class="note-title">🔗🤝 Lab 6 - EtherChannel PAgP</h2>
+    <span class="toggle-btn">&#9660;</span>
+  </div>
+  <div class="note-card-content">
+    <section class="note-section">
 
-  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
-  <p class="note-paragraph">
-    PAgP (Port Aggregation Protocol) adalah protokol Cisco proprietary untuk negosiasi EtherChannel secara otomatis.
-  </p>
-  <p class="note-paragraph">
-    PAgP memastikan link yang compatible bisa digabung tanpa konfigurasi statis.
-  </p>
-  <p class="note-paragraph">
-    Mode PAgP:
-  </p>
-  <ul class="note-list">
-    <li><strong>Auto</strong> → pasif, menunggu partner memulai.</li>
-    <li><strong>Desirable</strong> → aktif mencoba membuat EtherChannel.</li>
-  </ul>
+      <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+      <p class="note-paragraph">
+        PAgP (Port Aggregation Protocol) adalah protokol Cisco proprietary untuk negosiasi EtherChannel secara otomatis.
+      </p>
+      <p class="note-paragraph">
+        PAgP memastikan link yang compatible bisa digabung tanpa konfigurasi statis.
+      </p>
+      <p class="note-paragraph">
+        Mode PAgP:
+      </p>
+      <ul class="note-list">
+        <li><strong>Auto</strong> → pasif, menunggu partner memulai.</li>
+        <li><strong>Desirable</strong> → aktif mencoba membuat EtherChannel.</li>
+      </ul>
 
-  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
-  <p class="note-paragraph">
-    Dua switch Cisco (Switch A dan Switch B) ingin membuat 4 link gigabit trunk menjadi satu EtherChannel secara otomatis.
-    Menggunakan PAgP agar negosiasi otomatis, tidak perlu konfigurasi statis.
-  </p>
+      <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+      <p class="note-paragraph">
+        Dua switch Cisco (Switch A dan Switch B) ingin membuat 4 link gigabit trunk menjadi satu EtherChannel secara otomatis.
+        Menggunakan PAgP agar negosiasi otomatis, tidak perlu konfigurasi statis.
+      </p>
 
-  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+      <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
 
-  <h5 class="note-subsubtitle">1️⃣ Konfigurasi PAgP di Switch A</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">1️⃣ Konfigurasi PAgP di Switch A</h5>
+      <pre class="note-codeblock"><code>
 Switch(config)# interface range gi0/1-4
 Switch(config-if-range)# channel-group 1 mode desirable
 Switch(config-if-range)# exit
@@ -442,10 +477,10 @@ Switch(config-if-range)# exit
 Switch(config)# interface port-channel 1
 Switch(config-if)# switchport mode trunk
 Switch(config-if)# switchport trunk allowed vlan 10,20,30
-  </code></pre>
+      </code></pre>
 
-  <h5 class="note-subsubtitle">2️⃣ Konfigurasi PAgP di Switch B</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">2️⃣ Konfigurasi PAgP di Switch B</h5>
+      <pre class="note-codeblock"><code>
 Switch(config)# interface range gi0/1-4
 Switch(config-if-range)# channel-group 1 mode auto
 Switch(config-if-range)# exit
@@ -453,55 +488,63 @@ Switch(config-if-range)# exit
 Switch(config)# interface port-channel 1
 Switch(config-if)# switchport mode trunk
 Switch(config-if)# switchport trunk allowed vlan 10,20,30
-  </code></pre>
+      </code></pre>
 
-  <h5 class="note-subsubtitle">3️⃣ Verifikasi</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">3️⃣ Verifikasi</h5>
+      <pre class="note-codeblock"><code>
 Switch# show etherchannel summary
 Switch# show interfaces port-channel
-  </code></pre>
+      </code></pre>
+      <p class="note-paragraph">
+        EtherChannel terbentuk secara otomatis jika mode auto/desirable cocok, dan trunk berjalan normal.
+      </p>
 
-  <p class="note-paragraph">
-    EtherChannel terbentuk secara otomatis jika mode auto/desirable cocok, dan trunk berjalan normal.
-  </p>
+      <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+      <ul class="note-list">
+        <li>Link gigabit tergabung otomatis menjadi port-channel</li>
+        <li>Trunk VLAN berjalan melalui port-channel</li>
+        <li>Negosiasi PAgP berhasil tanpa konfigurasi statis</li>
+      </ul>
 
-  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
-  <ul class="note-list">
-    <li>Link gigabit tergabung otomatis menjadi port-channel</li>
-    <li>Trunk VLAN berjalan melalui port-channel</li>
-    <li>Negosiasi PAgP berhasil tanpa konfigurasi statis</li>
-  </ul>
-</section>
+    </section>
+  </div>
+</div>
+
 
 <!-- Lab 7 - EtherChannel LACP -->
-<section class="note-section">
-  <h3 class="note-title">Lab 7 - EtherChannel LACP 🔗⚡</h3>
+<div class="note-card">
+  <div class="note-card-header">
+    <h2 class="note-title">🔗⚡ Lab 7 - EtherChannel LACP</h2>
+    <span class="toggle-btn">&#9660;</span>
+  </div>
+  <div class="note-card-content">
+    <section class="note-section">
 
-  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
-  <p class="note-paragraph">
-    LACP (Link Aggregation Control Protocol) adalah standar IEEE 802.3ad untuk negosiasi EtherChannel otomatis.
-  </p>
-  <p class="note-paragraph">
-    LACP memungkinkan switch dari vendor berbeda bisa membentuk EtherChannel.
-  </p>
-  <p class="note-paragraph">
-    Mode LACP:
-  </p>
-  <ul class="note-list">
-    <li><strong>Active</strong> → aktif mencoba membentuk EtherChannel.</li>
-    <li><strong>Passive</strong> → pasif menunggu partner membentuk EtherChannel.</li>
-  </ul>
+      <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+      <p class="note-paragraph">
+        LACP (Link Aggregation Control Protocol) adalah standar IEEE 802.3ad untuk negosiasi EtherChannel otomatis.
+      </p>
+      <p class="note-paragraph">
+        LACP memungkinkan switch dari vendor berbeda bisa membentuk EtherChannel.
+      </p>
+      <p class="note-paragraph">
+        Mode LACP:
+      </p>
+      <ul class="note-list">
+        <li><strong>Active</strong> → aktif mencoba membentuk EtherChannel.</li>
+        <li><strong>Passive</strong> → pasif menunggu partner membentuk EtherChannel.</li>
+      </ul>
 
-  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
-  <p class="note-paragraph">
-    Dua switch (Switch A & Switch B) ingin menggabungkan 4 link gigabit menjadi EtherChannel trunk.
-    Menggunakan LACP agar kompatibel dengan switch vendor lain dan negosiasi otomatis.
-  </p>
+      <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+      <p class="note-paragraph">
+        Dua switch (Switch A & Switch B) ingin menggabungkan 4 link gigabit menjadi EtherChannel trunk.
+        Menggunakan LACP agar kompatibel dengan switch vendor lain dan negosiasi otomatis.
+      </p>
 
-  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+      <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
 
-  <h5 class="note-subsubtitle">1️⃣ Switch A (Active)</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">1️⃣ Switch A (Active)</h5>
+      <pre class="note-codeblock"><code>
 Switch(config)# interface range gi0/1-4
 Switch(config-if-range)# channel-group 1 mode active
 Switch(config-if-range)# exit
@@ -509,10 +552,10 @@ Switch(config-if-range)# exit
 Switch(config)# interface port-channel 1
 Switch(config-if)# switchport mode trunk
 Switch(config-if)# switchport trunk allowed vlan 10,20,30
-  </code></pre>
+      </code></pre>
 
-  <h5 class="note-subsubtitle">2️⃣ Switch B (Passive)</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">2️⃣ Switch B (Passive)</h5>
+      <pre class="note-codeblock"><code>
 Switch(config)# interface range gi0/1-4
 Switch(config-if-range)# channel-group 1 mode passive
 Switch(config-if-range)# exit
@@ -520,172 +563,201 @@ Switch(config-if-range)# exit
 Switch(config)# interface port-channel 1
 Switch(config-if)# switchport mode trunk
 Switch(config-if)# switchport trunk allowed vlan 10,20,30
-  </code></pre>
+      </code></pre>
 
-  <h5 class="note-subsubtitle">3️⃣ Verifikasi</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">3️⃣ Verifikasi</h5>
+      <pre class="note-codeblock"><code>
 Switch# show etherchannel summary
 Switch# show interfaces port-channel
-  </code></pre>
+      </code></pre>
+      <p class="note-paragraph">
+        EtherChannel terbentuk secara otomatis, trunk berjalan, dan kompatibel dengan perangkat vendor lain.
+      </p>
 
-  <p class="note-paragraph">
-    EtherChannel terbentuk secara otomatis, trunk berjalan, dan kompatibel dengan perangkat vendor lain.
-  </p>
+      <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+      <ul class="note-list">
+        <li>Link gigabit tergabung menjadi port-channel secara otomatis</li>
+        <li>Trunk VLAN berjalan melalui port-channel</li>
+        <li>Negosiasi LACP berhasil dan kompatibel dengan vendor lain</li>
+      </ul>
 
-  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
-  <ul class="note-list">
-    <li>Link gigabit tergabung menjadi port-channel secara otomatis</li>
-    <li>Trunk VLAN berjalan melalui port-channel</li>
-    <li>Negosiasi LACP berhasil dan kompatibel dengan vendor lain</li>
-  </ul>
-</section>
+    </section>
+  </div>
+</div>
+
 
 <!-- Lab 8 - EtherChannel Layer 3 -->
-<section class="note-section">
-  <h3 class="note-title">Lab 8 - EtherChannel Layer 3 🌐🔗</h3>
+<div class="note-card">
+  <div class="note-card-header">
+    <h2 class="note-title">🌐🔗 Lab 8 - EtherChannel Layer 3</h2>
+    <span class="toggle-btn">&#9660;</span>
+  </div>
+  <div class="note-card-content">
+    <section class="note-section">
 
-  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
-  <p class="note-paragraph">
-    EtherChannel tidak hanya untuk Layer 2 (trunk), tapi juga bisa dibuat sebagai Layer 3 interface.
-  </p>
-  <p class="note-paragraph">
-    Biasanya digunakan untuk routing antar switch atau uplink ke router dengan agregasi link.
-  </p>
-  <p class="note-paragraph">
-    Bedanya: port-channel diberi IP address, dan tidak ada mode trunk (default L3).
-  </p>
+      <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+      <p class="note-paragraph">
+        EtherChannel tidak hanya untuk Layer 2 (trunk), tapi juga bisa dibuat sebagai Layer 3 interface.
+      </p>
+      <p class="note-paragraph">
+        Biasanya digunakan untuk routing antar switch atau uplink ke router dengan agregasi link.
+      </p>
+      <p class="note-paragraph">
+        Bedanya: port-channel diberi IP address, dan tidak ada mode trunk (default L3).
+      </p>
 
-  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
-  <p class="note-paragraph">
-    Dua switch Cisco ingin menggabungkan 4 link gigabit menjadi satu port-channel Layer 3. Tujuannya: meningkatkan bandwidth untuk routing antar switch, sekaligus redundancy.
-  </p>
+      <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+      <p class="note-paragraph">
+        Dua switch Cisco ingin menggabungkan 4 link gigabit menjadi satu port-channel Layer 3. Tujuannya: meningkatkan bandwidth untuk routing antar switch, sekaligus redundancy.
+      </p>
 
-  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+      <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
 
-  <h5 class="note-subsubtitle">1️⃣ Buat EtherChannel L3</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">1️⃣ Buat EtherChannel L3</h5>
+      <pre class="note-codeblock"><code>
 Switch(config)# interface range gi0/1-4
 Switch(config-if-range)# no switchport        # ubah ke Layer 3
 Switch(config-if-range)# channel-group 1 mode on
-  </code></pre>
+      </code></pre>
 
-  <h5 class="note-subsubtitle">2️⃣ Konfigurasi Port-Channel L3</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">2️⃣ Konfigurasi Port-Channel L3</h5>
+      <pre class="note-codeblock"><code>
 Switch(config)# interface port-channel 1
 Switch(config-if)# ip address 192.168.1.1 255.255.255.0
 Switch(config-if)# no shutdown
-  </code></pre>
+      </code></pre>
 
-  <h5 class="note-subsubtitle">3️⃣ Verifikasi</h5>
-  <pre class="note-codeblock"><code>
+      <h5 class="note-subsubtitle">3️⃣ Verifikasi</h5>
+      <pre class="note-codeblock"><code>
 Switch# show etherchannel summary
 Switch# show ip interface brief
-  </code></pre>
+      </code></pre>
 
-  <p class="note-paragraph">
-    Sekarang port-channel 1 bisa dipakai untuk routing antar switch. Jika satu link fisik down, traffic tetap berjalan di link lain.
-  </p>
+      <p class="note-paragraph">
+        Sekarang port-channel 1 bisa dipakai untuk routing antar switch. Jika satu link fisik down, traffic tetap berjalan di link lain.
+      </p>
 
-  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
-  <ul class="note-list">
-    <li>Link fisik tergabung menjadi port-channel Layer 3</li>
-    <li>Port-channel memiliki IP address dan bisa digunakan untuk routing</li>
-    <li>Redundancy aktif: jika satu link down, traffic tetap berjalan di link lain</li>
-    <li>Bandwidth gabungan meningkat sesuai jumlah link</li>
-  </ul>
-</section>
+      <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+      <ul class="note-list">
+        <li>Link fisik tergabung menjadi port-channel Layer 3</li>
+        <li>Port-channel memiliki IP address dan bisa digunakan untuk routing</li>
+        <li>Redundancy aktif: jika satu link down, traffic tetap berjalan di link lain</li>
+        <li>Bandwidth gabungan meningkat sesuai jumlah link</li>
+      </ul>
+
+    </section>
+  </div>
+</div>
+
 
 <!-- Lab 9 - STP Tuning: PortFast -->
-<section class="note-section">
-  <h3 class="note-title">Lab 9 - STP Tuning: PortFast ⚡</h3>
+<div class="note-card">
+  <div class="note-card-header">
+    <h2 class="note-title">⚡ Lab 9 - STP Tuning: PortFast</h2>
+    <span class="toggle-btn">&#9660;</span>
+  </div>
+  <div class="note-card-content">
+    <section class="note-section">
 
-  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
-  <p class="note-paragraph">
-    STP (Spanning Tree Protocol) mencegah looping di jaringan Layer 2.
-  </p>
-  <p class="note-paragraph">
-    Biasanya, port STP butuh 30-50 detik untuk berpindah ke <strong>forwarding state</strong>.
-  </p>
-  <p class="note-paragraph">
-    <strong>PortFast</strong>: memaksa port langsung ke forwarding state saat switch start, cocok untuk port end-device seperti PC atau server.
-  </p>
-  <p class="note-paragraph">
-    <em>Catatan:</em> jangan aktifkan PortFast di port yang terhubung ke switch lain, bisa menyebabkan loop.
-  </p>
+      <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+      <p class="note-paragraph">
+        STP (Spanning Tree Protocol) mencegah looping di jaringan Layer 2.
+      </p>
+      <p class="note-paragraph">
+        Biasanya, port STP butuh 30-50 detik untuk berpindah ke <strong>forwarding state</strong>.
+      </p>
+      <p class="note-paragraph">
+        <strong>PortFast</strong>: memaksa port langsung ke forwarding state saat switch start, cocok untuk port end-device seperti PC atau server.
+      </p>
+      <p class="note-paragraph">
+        <em>Catatan:</em> jangan aktifkan PortFast di port yang terhubung ke switch lain, bisa menyebabkan loop.
+      </p>
 
-  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
-  <p class="note-paragraph">
-    Port Fa0/10 terhubung ke PC di VLAN 10.  
-    Tanpa PortFast, PC harus menunggu beberapa detik sebelum bisa komunikasi.  
-    Dengan PortFast, port langsung forwarding saat switch up → boot & koneksi cepat.
-  </p>
+      <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+      <p class="note-paragraph">
+        Port Fa0/10 terhubung ke PC di VLAN 10.  
+        Tanpa PortFast, PC harus menunggu beberapa detik sebelum bisa komunikasi.  
+        Dengan PortFast, port langsung forwarding saat switch up → boot & koneksi cepat.
+      </p>
 
-  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
-  <pre class="note-codeblock"><code>
+      <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+      <pre class="note-codeblock"><code>
 Switch(config)# interface fa0/10
 Switch(config-if)# spanning-tree portfast
-  </code></pre>
+      </code></pre>
 
-  <h4 class="note-subtitle">🔍 Verifikasi</h4>
-  <pre class="note-codeblock"><code>
+      <h4 class="note-subtitle">🔍 Verifikasi</h4>
+      <pre class="note-codeblock"><code>
 Switch# show spanning-tree interface fa0/10
-  </code></pre>
+      </code></pre>
 
-  <p class="note-paragraph">
-    Output akan menunjukkan <strong>PortFast Enabled</strong> dan port langsung berada di forwarding state.
-  </p>
+      <p class="note-paragraph">
+        Output akan menunjukkan <strong>PortFast Enabled</strong> dan port langsung berada di forwarding state.
+      </p>
 
-  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
-  <ul class="note-list">
-    <li>Port end-device langsung forwarding saat switch up</li>
-    <li>Boot & koneksi perangkat lebih cepat</li>
-    <li>STP tetap mencegah loop di port lain</li>
-  </ul>
-</section>
+      <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+      <ul class="note-list">
+        <li>Port end-device langsung forwarding saat switch up</li>
+        <li>Boot & koneksi perangkat lebih cepat</li>
+        <li>STP tetap mencegah loop di port lain</li>
+      </ul>
+
+    </section>
+  </div>
+</div>
+
 
 <!-- Lab 10 - STP Tuning: UplinkFast -->
-<section class="note-section">
-  <h3 class="note-title">Lab 10 - STP Tuning: UplinkFast ⚡🔄</h3>
+<div class="note-card">
+  <div class="note-card-header">
+    <h2 class="note-title">⚡ Lab 10 - STP Tuning: UplinkFast</h2>
+    <span class="toggle-btn">&#9660;</span>
+  </div>
+  <div class="note-card-content">
+    <section class="note-section">
 
-  <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
-  <p class="note-paragraph">
-    UplinkFast digunakan pada switch akses (<em>access switch</em>) untuk mempercepat konvergensi STP ketika link uplink ke root bridge gagal.
-  </p>
-  <p class="note-paragraph">
-    Dengan UplinkFast, port yang menjadi cadangan (<em>backup root port</em>) segera menjadi root port, sehingga downtime minimal.
-  </p>
-  <p class="note-paragraph">
-    Hanya direkomendasikan untuk switch akses, jangan di core switch, karena bisa menyebabkan loop jika salah konfigurasi.
-  </p>
+      <h4 class="note-subtitle">📌 Penjelasan Singkat</h4>
+      <p class="note-paragraph">
+        UplinkFast digunakan pada switch akses (<em>access switch</em>) untuk mempercepat konvergensi STP ketika link uplink ke root bridge gagal.
+      </p>
+      <p class="note-paragraph">
+        Dengan UplinkFast, port yang menjadi cadangan (<em>backup root port</em>) segera menjadi root port, sehingga downtime minimal.
+      </p>
+      <p class="note-paragraph">
+        Hanya direkomendasikan untuk switch akses, jangan di core switch, karena bisa menyebabkan loop jika salah konfigurasi.
+      </p>
 
-  <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
-  <p class="note-paragraph">
-    Switch akses memiliki 2 uplink ke distribution switch.  
-    Jika uplink utama putus, tanpa UplinkFast butuh 30-50 detik untuk STP memilih port baru → downtime.  
-    Dengan UplinkFast, port cadangan langsung forwarding → downtime minimal.
-  </p>
+      <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+      <p class="note-paragraph">
+        Switch akses memiliki 2 uplink ke distribution switch.  
+        Jika uplink utama putus, tanpa UplinkFast butuh 30-50 detik untuk STP memilih port baru → downtime.  
+        Dengan UplinkFast, port cadangan langsung forwarding → downtime minimal.
+      </p>
 
-  <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
-  <pre class="note-codeblock"><code>
+      <h4 class="note-subtitle">⚙️ Konfigurasi</h4>
+      <pre class="note-codeblock"><code>
 Switch(config)# spanning-tree uplinkfast
-  </code></pre>
+      </code></pre>
 
-  <h4 class="note-subtitle">🔍 Verifikasi</h4>
-  <pre class="note-codeblock"><code>
+      <h4 class="note-subtitle">🔍 Verifikasi</h4>
+      <pre class="note-codeblock"><code>
 Switch# show spanning-tree
-  </code></pre>
+      </code></pre>
 
-  <p class="note-paragraph">
-    Perhatikan <strong>root port</strong> dan <strong>backup port</strong>, waktu failover lebih cepat dibanding default STP.
-  </p>
+      <p class="note-paragraph">
+        Perhatikan <strong>root port</strong> dan <strong>backup port</strong>, waktu failover lebih cepat dibanding default STP.
+      </p>
 
-  <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
-  <ul class="note-list">
-    <li>Switch akses cepat berkonvergensi saat uplink gagal</li>
-    <li>Downtime minimal, port cadangan langsung menjadi root port</li>
-    <li>STP tetap mencegah loop di jaringan lain</li>
-  </ul>
-</section>
+      <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+      <ul class="note-list">
+        <li>Switch akses cepat berkonvergensi saat uplink gagal</li>
+        <li>Downtime minimal, port cadangan langsung menjadi root port</li>
+        <li>STP tetap mencegah loop di jaringan lain</li>
+      </ul>
+
+    </section>
+  </div>
+</div>
 
 
 <!-- Lab 11 - STP Tuning: BPDU Guard -->
