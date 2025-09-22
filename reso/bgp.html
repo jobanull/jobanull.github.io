@@ -466,7 +466,7 @@ inet.0: 7 destinations, 8 routes (7 active, 0 holddown, 0 hidden)
     <hr class="note-divider" />
     <hr class="note-divider" />
 
-    <!-- iBGP Peering -->
+<!-- iBGP Peering (Lengkap dengan Loopback) -->
 <div class="note-card">
   <div class="note-card-header">
     <h2 class="note-title">📌 iBGP Peering</h2>
@@ -475,6 +475,7 @@ inet.0: 7 destinations, 8 routes (7 active, 0 holddown, 0 hidden)
   <div class="note-card-content">
     <section class="note-section">
 
+      <!-- Konsep Dasar iBGP -->
       <h4 class="note-subtitle">Jenis BGP</h4>
       <ul class="note-list">
         <li><strong>eBGP (External BGP)</strong> → antar AS (AS berbeda).</li>
@@ -483,13 +484,13 @@ inet.0: 7 destinations, 8 routes (7 active, 0 holddown, 0 hidden)
 
       <p class="note-paragraph">
         <strong>Tujuan iBGP:</strong> menyebarkan informasi BGP ke semua router dalam AS yang sama.  
-        Biasanya dipakai di ISP atau enterprise besar dengan banyak router dalam 1 Autonomous System.
+        Biasanya dipakai di ISP atau enterprise besar dengan banyak router dalam 1 AS.
       </p>
 
       <h4 class="note-subtitle">🔑 Karakteristik iBGP</h4>
       <ul class="note-list">
         <li><strong>AS Number Sama</strong> → iBGP session hanya bisa terbentuk antar router dengan AS number sama.</li>
-        <li><strong>Tidak Mengubah Next-Hop</strong> → berbeda dengan eBGP, pada iBGP nilai Next-Hop default tidak berubah.
+        <li><strong>Tidak Mengubah Next-Hop</strong> → berbeda dengan eBGP, Next-Hop default tidak berubah.
           <br>👉 Solusi: pakai <code>next-hop-self</code> di edge router agar internal router bisa reach next-hop.</li>
         <li><strong>Full Mesh Requirement (RFC 4271)</strong> → semua iBGP router harus saling terhubung (full-mesh), jika tidak → route bisa hilang (blackhole).
           <br>👉 Solusi skala besar: Route Reflector atau Confederation.</li>
@@ -507,10 +508,7 @@ Full-mesh iBGP:
 - R1 ↔ R3
       </code></pre>
 
-      <h4 class="note-subtitle">⚙️ Konfigurasi Dasar iBGP (Cisco IOS)</h4>
-      <p class="note-paragraph">
-        Misal semua router ada di <strong>AS 65001</strong>:
-      </p>
+      <h4 class="note-subtitle">⚙️ Konfigurasi Dasar iBGP</h4>
       <ul class="note-list">
         <li>R1 (Loopback0: 1.1.1.1)</li>
         <li>R2 (Loopback0: 2.2.2.2)</li>
@@ -547,7 +545,7 @@ show ip bgp
 show ip route bgp
       </code></pre>
 
-      <h4 class="note-subtitle">📝 Inti dari Lab iBGP Peering</h4>
+      <h4 class="note-subtitle">📝 Inti dari iBGP Peering</h4>
       <ul class="note-list">
         <li>AS number sama.</li>
         <li>Wajib full-mesh (tanpa RR).</li>
@@ -555,36 +553,24 @@ show ip route bgp
         <li>Route iBGP tidak diteruskan ke iBGP lain.</li>
       </ul>
 
-    </section>
-  </div>
-</div>
-
-<!-- iBGP Loopback -->
-<div class="note-card">
-  <div class="note-card-header">
-    <h2 class="note-title">📌 iBGP via Loopback</h2>
-    <span class="toggle-btn">&#9660;</span>
-  </div>
-  <div class="note-card-content">
-    <section class="note-section">
-
+      <!-- iBGP via Loopback -->
+      <h4 class="note-subtitle">📌 iBGP via Loopback</h4>
       <p class="note-paragraph">
-        Kenapa iBGP pakai loopback?
-        
-        Kalau peering iBGP dibuat langsung pakai <strong>IP interface fisik</strong>, maka kalau link itu down → session BGP ikut mati.  
+        Kenapa pakai loopback?  
+        Kalau peering pakai <strong>IP interface fisik</strong>, link down → session BGP ikut mati.  
         Dengan <strong>Loopback Interface</strong>:
       </p>
       <ul class="note-list">
         <li>Peering lebih stabil (selama masih ada jalur ke loopback).</li>
-        <li>Bisa punya redundansi link (contoh: R1-R2 ada 2 link, tapi peering tetap ke loopback).</li>
+        <li>Bisa punya redundansi link (contoh: R1-R2 ada 2 link, peering tetap ke loopback).</li>
         <li>Lebih scalable dan reliable, terutama di ISP.</li>
       </ul>
 
-      <h4 class="note-subtitle">🔑 Hal Penting dalam iBGP Loopback</h4>
+      <h4 class="note-subtitle">🔑 Hal Penting</h4>
       <ul class="note-list">
-        <li>Gunakan <strong>IP Loopback</strong> sebagai alamat neighbor.</li>
-        <li>Pastikan <strong>routing ke Loopback</strong> ada (bisa lewat static route, OSPF, EIGRP, dll).</li>
-        <li>Gunakan <code>update-source loopback0</code> karena default-nya BGP pakai IP interface keluar.</li>
+        <li>Gunakan <strong>IP Loopback</strong> sebagai neighbor.</li>
+        <li>Pastikan <strong>routing ke Loopback</strong> ada (static, OSPF, EIGRP, dll).</li>
+        <li>Gunakan <code>update-source loopback0</code> karena default BGP pakai IP interface keluar.</li>
       </ul>
 
       <h4 class="note-subtitle">🖥️ Contoh Topologi</h4>
@@ -596,7 +582,7 @@ R1 Loopback0: 1.1.1.1
 R2 Loopback0: 2.2.2.2
       </code></pre>
 
-      <h4 class="note-subtitle">⚙️ Konfigurasi iBGP Peering via Loopback</h4>
+      <h4 class="note-subtitle">⚙️ Konfigurasi via Loopback</h4>
       <pre class="note-codeblock"><code>
 # R1
 interface loopback0
@@ -617,27 +603,23 @@ router bgp 65001
 
       <h4 class="note-subtitle">🔎 Verifikasi</h4>
       <pre class="note-codeblock"><code>
-# Cek tetangga BGP
 show ip bgp summary   → Status harus Established
-
-# Pastikan loopback reachable
 ping 2.2.2.2 source 1.1.1.1
 ping 1.1.1.1 source 2.2.2.2
-
-# Cek tabel BGP
 show ip bgp
       </code></pre>
 
-      <h4 class="note-subtitle">📝 Inti dari Lab iBGP via Loopback</h4>
+      <h4 class="note-subtitle">📝 Inti iBGP via Loopback</h4>
       <ul class="note-list">
         <li>Peering lebih stabil (tidak tergantung satu link).</li>
         <li>Harus ada routing ke loopback antar router.</li>
-        <li>Gunakan <code>update-source loopback0</code> di konfigurasi.</li>
+        <li>Gunakan <code>update-source loopback0</code>.</li>
       </ul>
 
     </section>
   </div>
 </div>
+
 
 
 <!-- eBGP Peering -->
