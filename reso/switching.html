@@ -2,80 +2,82 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Embedded Event Manager (EEM)</title>
+  <title>Switching Overview</title>
   <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="note-container">
 
   <main class="note-main">
-    <h2 class="note-title text-center">Embedded Event Manager (EEM)</h2>
+    <h2 class="note-title text-center">Switching Overview</h2>
     <p class="note-paragraph">
-      EEM (Embedded Event Manager) adalah fitur bawaan Cisco IOS/IOS-XE/IOS-XR 
-      yang memungkinkan perangkat jaringan (router, switch, firewall) untuk 
-      melakukan <em>monitoring</em>, <em>otomatisasi</em>, dan <em>skripting</em> 
-      berdasarkan event tertentu tanpa harus menggunakan server manajemen eksternal.
+      Switching adalah proses pengiriman frame data di dalam jaringan lokal (LAN) menggunakan 
+      perangkat <em>switch</em>. Switch bekerja di layer 2 (Data Link) dari model OSI, namun 
+      beberapa switch juga mendukung layer 3 (routing). Tujuan utama switching adalah menghubungkan 
+      perangkat dalam jaringan secara efisien dengan meminimalkan collision dan meningkatkan throughput.
     </p>
 
-    <h3 class="note-subtitle">Fungsi Utama EEM</h3>
+    <h3 class="note-subtitle">Fungsi Utama Switch</h3>
     <ul class="note-list">
-      <li><strong>Monitoring</strong> - Mengawasi kondisi tertentu, misalnya interface down, CPU tinggi, syslog, atau SNMP trap.</li>
-      <li><strong>Automation</strong> - Menjalankan aksi otomatis seperti mengeksekusi perintah CLI, reset interface, atau kirim notifikasi.</li>
-      <li><strong>Scripting</strong> - Mendukung skrip sederhana dengan applet berbasis CLI atau skrip kompleks dengan TCL.</li>
+      <li><strong>Forwarding</strong> - Meneruskan frame ke port tujuan berdasarkan MAC address.</li>
+      <li><strong>Filtering</strong> - Menolak frame yang tidak perlu diteruskan untuk mengurangi traffic.</li>
+      <li><strong>Loop Prevention</strong> - Menggunakan protokol seperti STP/RSTP untuk mencegah loop.</li>
+      <li><strong>VLAN Segmentation</strong> - Memisahkan domain broadcast untuk keamanan dan efisiensi.</li>
     </ul>
 
-    <h3 class="note-subtitle">Komponen EEM</h3>
+    <h3 class="note-subtitle">Komponen Penting</h3>
     <ul class="note-list">
-      <li><strong>Event Detector</strong> - Pemicu event (timer, syslog, CLI, interface, SNMP).</li>
-      <li><strong>Action</strong> - Tindakan setelah event terdeteksi (jalankan perintah, kirim log, aktifkan ulang interface).</li>
-      <li><strong>Policy</strong> - Aturan yang menentukan hubungan event dan action (Applet atau TCL script).</li>
+      <li><strong>MAC Address Table</strong> - Menyimpan mapping antara MAC address dan port switch.</li>
+      <li><strong>VLAN</strong> - Virtual LAN untuk segmentasi jaringan.</li>
+      <li><strong>Trunk Port</strong> - Port yang membawa traffic beberapa VLAN antar switch.</li>
+      <li><strong>Access Port</strong> - Port yang hanya membawa satu VLAN.</li>
     </ul>
 
-    <h3 class="note-subtitle">Contoh Konfigurasi</h3>
-    <p class="note-subtitle">1. Monitoring interface down lalu kirim syslog</p>
+    <h3 class="note-subtitle">Contoh Konfigurasi Dasar</h3>
+    <p class="note-subtitle">1. Membuat VLAN dan Assign Port</p>
     <pre class="note-codeblock"><code>
-event manager applet IF_DOWN
- event syslog pattern "Interface GigabitEthernet0/0, changed state to administratively down"
- action 1.0 syslog msg "Warning: Gi0/0 down!"
+Switch> enable
+Switch# conf t
+Switch(config)# vlan 10
+Switch(config-vlan)# name Sales
+Switch(config-vlan)# exit
+Switch(config)# interface fa0/1
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 10
     </code></pre>
 
-    <p class="note-subtitle">2. Auto-restart interface jika link mati</p>
+    <p class="note-subtitle">2. Mengaktifkan Trunk Antar Switch</p>
     <pre class="note-codeblock"><code>
-event manager applet RESTART_IF
- event syslog pattern "Interface GigabitEthernet0/1, changed state to down"
- action 1.0 cli command "enable"
- action 2.0 cli command "conf t"
- action 3.0 cli command "interface Gi0/1"
- action 4.0 cli command "shutdown"
- action 5.0 wait 10
- action 6.0 cli command "no shutdown"
+Switch(config)# interface fa0/24
+Switch(config-if)# switchport mode trunk
+Switch(config-if)# switchport trunk allowed vlan 10,20
     </code></pre>
 
-    <p class="note-subtitle">3. Menjalankan perintah rutin tiap 5 menit</p>
+    <p class="note-subtitle">3. Mengecek MAC Address Table</p>
     <pre class="note-codeblock"><code>
-event manager applet SHOW_IP
- event timer watchdog time 300
- action 1.0 cli command "show ip interface brief"
+Switch# show mac address-table
     </code></pre>
 
     <h3 class="note-subtitle">Kegunaan di Dunia Nyata</h3>
     <ul class="note-list">
-      <li><strong>Auto-recovery</strong> - Memulihkan link secara otomatis saat down.</li>
-      <li><strong>Proactive monitoring</strong> - Memberikan alert/log tanpa perlu NMS eksternal.</li>
-      <li><strong>Scheduled task</strong> - Menjalankan perintah berkala (mirip cron di Linux).</li>
-      <li><strong>Integrasi</strong> - Bisa bekerja sama dengan syslog, SNMP, atau policy keamanan.</li>
+      <li><strong>Segregasi Jaringan</strong> - VLAN membantu membagi jaringan sesuai departemen.</li>
+      <li><strong>Efisiensi Traffic</strong> - Switch hanya meneruskan frame ke port tujuan, mengurangi broadcast.</li>
+      <li><strong>Redundansi dan Loop Prevention</strong> - STP/RSTP mencegah loop di jaringan.</li>
+      <li><strong>Integrasi dengan Routing</strong> - Layer 3 switch bisa menghubungkan VLAN berbeda tanpa router tambahan.</li>
     </ul>
 
     <h3 class="note-subtitle">Tips Praktis</h3>
     <ul class="note-list">
-      <li>Gunakan EEM untuk otomatisasi ringan, bukan pengganti penuh NMS.</li>
-      <li>Hati-hati dengan aksi otomatis seperti reload/shutdown, pastikan ada delay.</li>
-      <li>Dokumentasikan semua applet EEM agar mudah di-maintain oleh tim lain.</li>
+      <li>Gunakan VLAN untuk segmentasi yang jelas dan keamanan internal.</li>
+      <li>Trunking hanya di port yang benar-benar menghubungkan switch lain.</li>
+      <li>Selalu monitor MAC address table untuk troubleshooting koneksi.</li>
+      <li>Jangan lupa implementasikan STP untuk mencegah loop di jaringan yang kompleks.</li>
     </ul>
 
     <hr class="note-divider" />
     <hr class="note-divider" />
     <hr class="note-divider" />
+
 
 <!-- Lab 1 - VLAN dan Trunk -->
 <div class="note-card">
