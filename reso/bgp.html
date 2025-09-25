@@ -476,55 +476,65 @@ show ip bgp
 
 <h4 class="note-subtitle">P1R1</h4>
 <pre class="note-codeblock"><code>
+! ==========================
+! Interface Configuration
+! ==========================
 interface Loopback1
-ip address 1.1.1.1 255.255.255.255
-!
+ ip address 1.1.1.1 255.255.255.255
+
 interface Loopback10
-ip address 172.16.10.10 255.255.255.255
-!
+ ip address 172.16.10.10 255.255.255.255
+
 interface FastEthernet0/0
-ip address 10.10.10.1 255.255.255.252
-duplex half
-!
+ ip address 10.10.10.1 255.255.255.252
+ duplex half
+
 interface FastEthernet1/0
-no ip address
-shutdown
-duplex half
-!
+ no ip address
+ shutdown
+ duplex half
+
+! ==========================
+! BGP Configuration
+! ==========================
 router bgp 65001
-no synchronization
-bgp log-neighbor-changes
-network 1.1.1.1 mask 255.255.255.255
-network 172.16.10.10 mask 255.255.255.255
-neighbor 2.2.2.2 remote-as 65001
-neighbor 2.2.2.2 update-source Loopback1
-neighbor 3.3.3.3 remote-as 65001
-neighbor 3.3.3.3 update-source Loopback1
-no auto-summary
-!
+ no synchronization
+ bgp log-neighbor-changes
+ network 1.1.1.1 mask 255.255.255.255
+ network 172.16.10.10 mask 255.255.255.255
+ neighbor 2.2.2.2 remote-as 65001
+ neighbor 2.2.2.2 update-source Loopback1
+ neighbor 3.3.3.3 remote-as 65001
+ neighbor 3.3.3.3 update-source Loopback1
+ no auto-summary
+
+! ==========================
+! Static Routing
+! ==========================
 ip route 2.2.2.2 255.255.255.255 10.10.10.2
 ip route 3.3.3.3 255.255.255.255 10.10.10.2
 
-P1R1#sh ip bgp sum
-.
-.
-Neighbor V AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down State/PfxRcd
-2.2.2.2 4 65001 10 10 9 0 0 00:05:45 2
-3.3.3.3 4 65001 8 7 9 0 0 00:02:43 2
+! ==========================
+! BGP Verification
+! ==========================
+P1R1#show ip bgp summary
+Neighbor        V    AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down   State/PfxRcd
+2.2.2.2         4 65001     10     10      9    0    0 00:05:45   2
+3.3.3.3         4 65001      8      7      9    0    0 00:02:43   2
 
-P1R1#sh ip bgp
+P1R1#show ip bgp
 BGP table version is 9, local router ID is 1.1.1.1
 Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
-r RIB-failure, S Stale
-Origin codes: i - IGP, e - EGP, ? - incomplete
+               r RIB-failure, S Stale
+Origin codes:  i - IGP, e - EGP, ? - incomplete
 
-Network Next Hop Metric LocPrf Weight Path
-*> 1.1.1.1/32 0.0.0.0 0 32768 i
-r>i2.2.2.2/32 2.2.2.2 0 100 0 i
-r>i3.3.3.3/32 3.3.3.3 0 100 0 i
-*> 172.16.10.10/32 0.0.0.0 0 32768 i
-*>i172.16.20.20/32 2.2.2.2 0 100 0 i
-*>i172.16.30.30/32 3.3.3.3 0 100 0 i
+   Network          Next Hop        Metric LocPrf Weight Path
+*> 1.1.1.1/32       0.0.0.0              0     0  32768 i
+r>i2.2.2.2/32       2.2.2.2              0   100      0 i
+r>i3.3.3.3/32       3.3.3.3              0   100      0 i
+*> 172.16.10.10/32  0.0.0.0              0     0  32768 i
+*>i172.16.20.20/32  2.2.2.2              0   100      0 i
+*>i172.16.30.30/32  3.3.3.3              0   100      0 i
 </code></pre>
 
 <h4 class="note-subtitle">P1R2</h4>
