@@ -782,40 +782,50 @@ show ip route bgp
 
 <h4 class="note-subtitle">P1R1</h4>
 <pre class="note-codeblock"><code>
-
-!
-!
+! ==========================
+! Interface Configuration
+! ==========================
 interface Loopback1
-ip address 1.1.1.1 255.255.255.255
-!    
+ ip address 1.1.1.1 255.255.255.255
+
 interface Loopback10
-ip address 172.16.10.10 255.255.255.255
-!
+ ip address 172.16.10.10 255.255.255.255
+
 interface FastEthernet0/0
-ip address 10.10.10.1 255.255.255.252
-duplex half
-!
+ ip address 10.10.10.1 255.255.255.252
+ duplex half
+
 interface FastEthernet1/0
-no ip address
-shutdown
-duplex half
-!
+ no ip address
+ shutdown
+ duplex half
+
 interface FastEthernet2/0
-no ip address
-shutdown
-duplex half
-!
+ no ip address
+ shutdown
+ duplex half
+
+! ==========================
+! BGP Configuration
+! ==========================
 router bgp 65001
-no synchronization
-bgp log-neighbor-changes
-network 172.16.10.10 mask 255.255.255.255
-neighbor 2.2.2.2 remote-as 65002
-neighbor 2.2.2.2 ebgp-multihop 255
-neighbor 2.2.2.2 update-source Loopback1
-no auto-summary
-!
+ no synchronization
+ bgp log-neighbor-changes
+ network 172.16.10.10 mask 255.255.255.255
+ neighbor 2.2.2.2 remote-as 65002
+ neighbor 2.2.2.2 ebgp-multihop 255
+ neighbor 2.2.2.2 update-source Loopback1
+ no auto-summary
+
+! ==========================
+! Static Routing
+! ==========================
 ip route 2.2.2.2 255.255.255.255 10.10.10.2
-R4#sh ip bgp sum
+
+! ==========================
+! BGP Verification
+! ==========================
+R4#show ip bgp summary
 BGP router identifier 1.1.1.1, local AS number 65001
 BGP table version is 3, main routing table version 3
 2 network entries using 234 bytes of memory
@@ -827,82 +837,94 @@ BGP table version is 3, main routing table version 3
 BGP using 734 total bytes of memory
 BGP activity 2/0 prefixes, 2/0 paths, scan interval 60 secs
 
-Neighbor    V  AS MsgRcvd MsgSent  TblVer InQ OutQ Up/Down State/PfxRcd
-2.2.2.2     4 65002   19   19    3  0  0 00:15:56    1
-R4#sh ip bgp  
+Neighbor        V    AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down   State/PfxRcd
+2.2.2.2         4 65002     19     19      3    0    0 00:15:56   1
+
+R4#show ip bgp
 BGP table version is 3, local router ID is 1.1.1.1
 Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
-       r RIB-failure, S Stale
-Origin codes: i - IGP, e - EGP, ? - incomplete
+               r RIB-failure, S Stale
+Origin codes:  i - IGP, e - EGP, ? - incomplete
 
- Network     Next Hop      Metric LocPrf Weight Path
-*> 172.16.10.10/32 0.0.0.0         0     32768 i
-*> 172.16.20.20/32 2.2.2.2         0       0 65002 i
-R4#sh ip route bgp
-  172.16.0.0/32 is subnetted, 2 subnets
-B    172.16.20.20 [20/0] via 2.2.2.2, 00:01:27
+   Network          Next Hop        Metric LocPrf Weight Path
+*> 172.16.10.10/32  0.0.0.0              0     0  32768 i
+*> 172.16.20.20/32  2.2.2.2              0     0      0 65002 i
 
+R4#show ip route bgp
+     172.16.0.0/32 is subnetted, 2 subnets
+B       172.16.20.20 [20/0] via 2.2.2.2, 00:01:27
 
-R4#s ip route
+! ==========================
+! IP Routing Table
+! ==========================
+R4#show ip route
 Codes: C - connected, S - static, R - RIP, M - mobile, B - BGP
-   D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
-   N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-   E1 - OSPF external type 1, E2 - OSPF external type 2
-   i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
-   ia - IS-IS inter area, * - candidate default, U - per-user static route
-   o - ODR, P - periodic downloaded static route
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route
 
 Gateway of last resort is not set
 
-  1.0.0.0/32 is subnetted, 1 subnets
-C    1.1.1.1 is directly connected, Loopback1
-  2.0.0.0/32 is subnetted, 1 subnets
-S    2.2.2.2 [1/0] via 10.10.10.2
-  172.16.0.0/32 is subnetted, 2 subnets
-B    172.16.20.20 [20/0] via 2.2.2.2, 00:00:31
-C    172.16.10.10 is directly connected, Loopback10
-  10.0.0.0/30 is subnetted, 1 subnets
-C    10.10.10.0 is directly connected, FastEthernet0/0
-R4#
+     1.0.0.0/32 is subnetted, 1 subnets
+C       1.1.1.1 is directly connected, Loopback1
+     2.0.0.0/32 is subnetted, 1 subnets
+S       2.2.2.2 [1/0] via 10.10.10.2
+     172.16.0.0/32 is subnetted, 2 subnets
+B       172.16.20.20 [20/0] via 2.2.2.2, 00:00:31
+C       172.16.10.10 is directly connected, Loopback10
+     10.0.0.0/30 is subnetted, 1 subnets
+C       10.10.10.0 is directly connected, FastEthernet0/0
+
 </code></pre>
 
 <h4 class="note-subtitle">P1R2</h4>
 <pre class="note-codeblock"><code>
-
-
-
-!
-!
+! ==========================
+! Interface Configuration
+! ==========================
 interface Loopback2
-ip address 2.2.2.2 255.255.255.255
-!    
+ ip address 2.2.2.2 255.255.255.255
+!
 interface Loopback20
-ip address 172.16.20.20 255.255.255.255
+ ip address 172.16.20.20 255.255.255.255
 !
 interface FastEthernet0/0
-ip address 10.10.10.2 255.255.255.252
-duplex half
+ ip address 10.10.10.2 255.255.255.252
+ duplex half
 !
 interface FastEthernet1/0
-ip address 11.11.11.1 255.255.255.252
-duplex half
+ ip address 11.11.11.1 255.255.255.252
+ duplex half
 !
 interface FastEthernet2/0
-no ip address
-shutdown
-duplex half
-!
+ no ip address
+ shutdown
+ duplex half
+
+! ==========================
+! BGP Configuration
+! ==========================
 router bgp 65002
-no synchronization
-bgp log-neighbor-changes
-network 172.16.20.20 mask 255.255.255.255
-neighbor 1.1.1.1 remote-as 65001
-neighbor 1.1.1.1 ebgp-multihop 255
-neighbor 1.1.1.1 update-source Loopback2
-no auto-summary
-!
+ no synchronization
+ bgp log-neighbor-changes
+ network 172.16.20.20 mask 255.255.255.255
+ neighbor 1.1.1.1 remote-as 65001
+ neighbor 1.1.1.1 ebgp-multihop 255
+ neighbor 1.1.1.1 update-source Loopback2
+ no auto-summary
+
+! ==========================
+! Static Routing
+! ==========================
 ip route 1.1.1.1 255.255.255.255 10.10.10.1
-R5#sh ip bgp sum
+
+! ==========================
+! BGP Verification
+! ==========================
+R5#show ip bgp summary
 BGP router identifier 2.2.2.2, local AS number 65002
 BGP table version is 3, main routing table version 3
 2 network entries using 234 bytes of memory
@@ -914,43 +936,46 @@ BGP table version is 3, main routing table version 3
 BGP using 734 total bytes of memory
 BGP activity 2/0 prefixes, 2/0 paths, scan interval 60 secs
 
-Neighbor    V  AS MsgRcvd MsgSent  TblVer InQ OutQ Up/Down State/PfxRcd
-1.1.1.1     4 65001   20   20    3  0  0 00:16:30    1
-R5#sh ip bgp  
+Neighbor        V   AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down State/PfxRcd
+1.1.1.1         4 65001     20     20      3   0   0 00:16:30          1
+
+R5#show ip bgp
 BGP table version is 3, local router ID is 2.2.2.2
 Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
-       r RIB-failure, S Stale
+              r RIB-failure, S Stale
 Origin codes: i - IGP, e - EGP, ? - incomplete
 
- Network     Next Hop      Metric LocPrf Weight Path
-*> 172.16.10.10/32 1.1.1.1         0       0 65001 i
-*> 172.16.20.20/32 0.0.0.0         0     32768 i
+   Network          Next Hop      Metric LocPrf Weight Path
+*> 172.16.10.10/32  1.1.1.1            0             0 65001 i
+*> 172.16.20.20/32  0.0.0.0            0         32768 i
 
-R5#sh ip route bgp
-  172.16.0.0/32 is subnetted, 2 subnets
-B    172.16.10.10 [20/0] via 1.1.1.1, 00:01:27
+R5#show ip route bgp
+     172.16.0.0/32 is subnetted, 2 subnets
+B       172.16.10.10 [20/0] via 1.1.1.1, 00:01:27
 
-R5#sh ip route
+! ==========================
+! IP Routing Table
+! ==========================
+R5#show ip route
 Codes: C - connected, S - static, R - RIP, M - mobile, B - BGP
-   D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
-   N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-   E1 - OSPF external type 1, E2 - OSPF external type 2
-   i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
-   ia - IS-IS inter area, * - candidate default, U - per-user static route
-   o - ODR, P - periodic downloaded static route
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route
 
 Gateway of last resort is not set
 
   1.0.0.0/32 is subnetted, 1 subnets
-S    1.1.1.1 [1/0] via 10.10.10.1
+S       1.1.1.1 [1/0] via 10.10.10.1
   2.0.0.0/32 is subnetted, 1 subnets
-C    2.2.2.2 is directly connected, Loopback2
+C       2.2.2.2 is directly connected, Loopback2
   172.16.0.0/32 is subnetted, 2 subnets
-C    172.16.20.20 is directly connected, Loopback20
-B    172.16.10.10 [20/0] via 1.1.1.1, 00:00:27
+C       172.16.20.20 is directly connected, Loopback20
+B       172.16.10.10 [20/0] via 1.1.1.1, 00:00:27
   10.0.0.0/30 is subnetted, 1 subnets
-C    10.10.10.0 is directly connected, FastEthernet0/0
-
+C       10.10.10.0 is directly connected, FastEthernet0/0
 </code></pre>
 
     </section>
@@ -1111,43 +1136,52 @@ show ip bgp summary
 
 <h4 class="note-subtitle">P1R1</h4>
 <pre class="note-codeblock"><code>
-
-!
-!
+! ==========================
+! Interface Configuration
+! ==========================
 interface Loopback1
-ip address 1.1.1.1 255.255.255.255
-!    
+ ip address 1.1.1.1 255.255.255.255
+!
 interface Loopback10
-ip address 172.16.10.10 255.255.255.255
+ ip address 172.16.10.10 255.255.255.255
 !
 interface FastEthernet0/0
-ip address 10.10.10.1 255.255.255.252
-duplex half
+ ip address 10.10.10.1 255.255.255.252
+ duplex half
 !
 interface FastEthernet1/0
-no ip address
-shutdown
-duplex half
+ no ip address
+ shutdown
+ duplex half
 !
 interface FastEthernet2/0
-no ip address
-shutdown
-duplex half
-!
+ no ip address
+ shutdown
+ duplex half
+
+! ==========================
+! BGP Configuration
+! ==========================
 router bgp 65001
-no synchronization
-bgp log-neighbor-changes
-network 172.16.10.10 mask 255.255.255.255
-neighbor 2.2.2.2 remote-as 65002
-neighbor 2.2.2.2 password admin213
-neighbor 2.2.2.2 ebgp-multihop 2
-neighbor 2.2.2.2 update-source Loopback1
-neighbor 2.2.2.2 fall-over
-no auto-summary
-!
+ no synchronization
+ bgp log-neighbor-changes
+ network 172.16.10.10 mask 255.255.255.255
+ neighbor 2.2.2.2 remote-as 65002
+ neighbor 2.2.2.2 password admin213
+ neighbor 2.2.2.2 ebgp-multihop 2
+ neighbor 2.2.2.2 update-source Loopback1
+ neighbor 2.2.2.2 fall-over
+ no auto-summary
+
+! ==========================
+! Static Routing
+! ==========================
 ip route 2.2.2.2 255.255.255.255 10.10.10.2
 
-R6#show ip bgp sum
+! ==========================
+! BGP Verification
+! ==========================
+R6#show ip bgp summary
 BGP router identifier 172.16.10.10, local AS number 65001
 BGP table version is 3, main routing table version 3
 2 network entries using 234 bytes of memory
@@ -1159,104 +1193,108 @@ BGP table version is 3, main routing table version 3
 BGP using 734 total bytes of memory
 BGP activity 2/0 prefixes, 2/0 paths, scan interval 60 secs
 
-Neighbor    V  AS MsgRcvd MsgSent  TblVer InQ OutQ Up/Down State/PfxRcd
-2.2.2.2     4 65002    4    4    3  0  0 00:00:50    1
-R6#sh ip route
+Neighbor        V   AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down State/PfxRcd
+2.2.2.2         4 65002      4      4      3   0   0 00:00:50          1
+
+! ==========================
+! IP Routing Table
+! ==========================
+R6#show ip route
 Codes: C - connected, S - static, R - RIP, M - mobile, B - BGP
-   D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
-   N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-   E1 - OSPF external type 1, E2 - OSPF external type 2
-   i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
-   ia - IS-IS inter area, * - candidate default, U - per-user static route
-   o - ODR, P - periodic downloaded static route
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route
 
 Gateway of last resort is not set
 
   1.0.0.0/32 is subnetted, 1 subnets
-C    1.1.1.1 is directly connected, Loopback1
+C       1.1.1.1 is directly connected, Loopback1
   2.0.0.0/32 is subnetted, 1 subnets
-S    2.2.2.2 [1/0] via 10.10.10.2
+S       2.2.2.2 [1/0] via 10.10.10.2
   172.16.0.0/32 is subnetted, 2 subnets
-B    172.16.20.20 [20/0] via 2.2.2.2, 00:00:35
-C    172.16.10.10 is directly connected, Loopback10
+B       172.16.20.20 [20/0] via 2.2.2.2, 00:00:35
+C       172.16.10.10 is directly connected, Loopback10
   10.0.0.0/30 is subnetted, 1 subnets
-C    10.10.10.0 is directly connected, FastEthernet0/0
-
+C       10.10.10.0 is directly connected, FastEthernet0/0
 </code></pre>
 
 <h4 class="note-subtitle">P1R2</h4>
 <pre class="note-codeblock"><code>
-!
-!
-!
+! ==========================
+! Interface Configuration
+! ==========================
 interface Loopback2
-ip address 2.2.2.2 255.255.255.255
-!    
+ ip address 2.2.2.2 255.255.255.255
+!
 interface Loopback20
-ip address 172.16.20.20 255.255.255.255
+ ip address 172.16.20.20 255.255.255.255
 !
 interface FastEthernet0/0
-ip address 10.10.10.2 255.255.255.252
-duplex half
+ ip address 10.10.10.2 255.255.255.252
+ duplex half
 !
 interface FastEthernet1/0
-ip address 11.11.11.1 255.255.255.252
-duplex half
+ ip address 11.11.11.1 255.255.255.252
+ duplex half
 !
 interface FastEthernet2/0
-no ip address
-shutdown
-duplex half
-!
+ no ip address
+ shutdown
+ duplex half
+
+! ==========================
+! BGP Configuration
+! ==========================
 router bgp 65002
-no synchronization
-bgp log-neighbor-changes
-network 172.16.20.20 mask 255.255.255.255
-neighbor 1.1.1.1 remote-as 65001
-neighbor 1.1.1.1 password admin213
-neighbor 1.1.1.1 ebgp-multihop 2
-neighbor 1.1.1.1 update-source Loopback2
-neighbor 1.1.1.1 fall-over
-no auto-summary
-!
+ no synchronization
+ bgp log-neighbor-changes
+ network 172.16.20.20 mask 255.255.255.255
+ neighbor 1.1.1.1 remote-as 65001
+ neighbor 1.1.1.1 password admin213
+ neighbor 1.1.1.1 ebgp-multihop 2
+ neighbor 1.1.1.1 update-source Loopback2
+ neighbor 1.1.1.1 fall-over
+ no auto-summary
+
+! ==========================
+! Static Routing
+! ==========================
 ip route 1.1.1.1 255.255.255.255 10.10.10.1
-!
 
-R7#sh ip route
-Codes: C - connected, S - static, R - RIP, M - mobile, B - BGP
-   D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
-   N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-   E1 - OSPF external type 1, E2 - OSPF external type 2
-   i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
-   ia - IS-IS inter area, * - candidate default, U - per-user static route
-   o - ODR, P - periodic downloaded static route
-
+! ==========================
+! Routing Table Verification
+! ==========================
+R7#show ip route
 Gateway of last resort is not set
 
   1.0.0.0/32 is subnetted, 1 subnets
-S    1.1.1.1 [1/0] via 10.10.10.1
+S       1.1.1.1 [1/0] via 10.10.10.1
   2.0.0.0/32 is subnetted, 1 subnets
-C    2.2.2.2 is directly connected, Loopback2
+C       2.2.2.2 is directly connected, Loopback2
   172.16.0.0/32 is subnetted, 2 subnets
-C    172.16.20.20 is directly connected, Loopback20
-B    172.16.10.10 [20/0] via 1.1.1.1, 00:00:45
+C       172.16.20.20 is directly connected, Loopback20
+B       172.16.10.10 [20/0] via 1.1.1.1, 00:00:45
   10.0.0.0/30 is subnetted, 1 subnets
-C    10.10.10.0 is directly connected, FastEthernet0/0
-R7#sh ip bgp sum
+C       10.10.10.0 is directly connected, FastEthernet0/0
+
+! ==========================
+! BGP Summary Verification
+! ==========================
+R7#show ip bgp summary
 BGP router identifier 172.16.20.20, local AS number 65002
 BGP table version is 3, main routing table version 3
 2 network entries using 234 bytes of memory
 2 path entries using 104 bytes of memory
 3/2 BGP path/bestpath attribute entries using 372 bytes of memory
 1 BGP AS-PATH entries using 24 bytes of memory
-0 BGP route-map cache entries using 0 bytes of memory
-0 BGP filter-list cache entries using 0 bytes of memory
 BGP using 734 total bytes of memory
 BGP activity 2/0 prefixes, 2/0 paths, scan interval 60 secs
 
-Neighbor    V  AS MsgRcvd MsgSent  TblVer InQ OutQ Up/Down State/PfxRcd
-1.1.1.1     4 65001    5    5    3  0  0 00:01:18    1
-R7#
+Neighbor        V   AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down State/PfxRcd
+1.1.1.1         4 65001      5      5      3   0   0 00:01:18          1
 </code></pre>
     </section>
   </div>
@@ -1363,179 +1401,181 @@ show ip bgp
 
 <h4 class="note-subtitle">P1R1</h4>
 <pre class="note-codeblock"><code>
-
-
-!
-!
+! ==========================
+! Interface Configuration
+! ==========================
 interface Loopback1
- ip address 1.1.1.1 255.255.255.255
-!         
+ ip address 1.1.1.1 255.255.255.255
+!
 interface Loopback10
- ip address 172.16.10.10 255.255.255.255
+ ip address 172.16.10.10 255.255.255.255
 !
 interface FastEthernet0/0
- ip address 10.10.10.1 255.255.255.252
- duplex half
+ ip address 10.10.10.1 255.255.255.252
+ duplex half
 !
 interface FastEthernet1/0
- no ip address
- shutdown
- duplex half
+ no ip address
+ shutdown
+ duplex half
 !
 interface FastEthernet2/0
- no ip address
- shutdown
- duplex half
+ no ip address
+ shutdown
+ duplex half
 !
+! ==========================
+! BGP Configuration
+! ==========================
 router bgp 65001
- no synchronization
- bgp log-neighbor-changes
- network 172.16.10.10 mask 255.255.255.255
- neighbor 2.2.2.2 remote-as 65001
- neighbor 2.2.2.2 update-source Loopback1
- no auto-summary
+ no synchronization
+ bgp log-neighbor-changes
+ network 172.16.10.10 mask 255.255.255.255
+ neighbor 2.2.2.2 remote-as 65001
+ neighbor 2.2.2.2 update-source Loopback1
+ no auto-summary
 !
+! ==========================
+! Static Routing
+! ==========================
 ip route 2.2.2.2 255.255.255.255 10.10.10.2
 ip route 3.3.3.3 255.255.255.255 10.10.10.2
-
-R8#sh ip route
-Codes: C - connected, S - static, R - RIP, M - mobile, B - BGP
-       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
-       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-       E1 - OSPF external type 1, E2 - OSPF external type 2
-       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
-       ia - IS-IS inter area, * - candidate default, U - per-user static route
-       o - ODR, P - periodic downloaded static route
-
+!
+! ==========================
+! Routing Table Verification
+! ==========================
+R8#show ip route
 Gateway of last resort is not set
 
-     1.0.0.0/32 is subnetted, 1 subnets
-C       1.1.1.1 is directly connected, Loopback1
-     2.0.0.0/32 is subnetted, 1 subnets
-S       2.2.2.2 [1/0] via 10.10.10.2
-     3.0.0.0/32 is subnetted, 1 subnets
-S       3.3.3.3 [1/0] via 10.10.10.2
-     172.16.0.0/32 is subnetted, 3 subnets
-B       172.16.30.30 [200/0] via 3.3.3.3, 00:00:04
-B       172.16.20.20 [200/0] via 2.2.2.2, 00:00:04
-C       172.16.10.10 is directly connected, Loopback10
-     10.0.0.0/30 is subnetted, 1 subnets
-C       10.10.10.0 is directly connected, FastEthernet0/0
-
-
-R8#sh ip bgp
-BGP table version is 4, local router ID is 172.16.10.10
-Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
-              r RIB-failure, S Stale
-Origin codes: i - IGP, e - EGP, ? - incomplete
-
-   Network          Next Hop            Metric LocPrf Weight Path
-*> 172.16.10.10/32  0.0.0.0                  0         32768 i
-*>i172.16.20.20/32  2.2.2.2                  0    100      0 i
-*>i172.16.30.30/32  3.3.3.3                  0    100      0 i
-R8#sh ip bgp sum
+     1.0.0.0/32 is subnetted, 1 subnets
+C       1.1.1.1 is directly connected, Loopback1
+     2.0.0.0/32 is subnetted, 1 subnets
+S       2.2.2.2 [1/0] via 10.10.10.2
+     3.0.0.0/32 is subnetted, 1 subnets
+S       3.3.3.3 [1/0] via 10.10.10.2
+     172.16.0.0/32 is subnetted, 3 subnets
+B       172.16.30.30 [200/0] via 3.3.3.3, 00:00:04
+B       172.16.20.20 [200/0] via 2.2.2.2, 00:00:04
+C       172.16.10.10 is directly connected, Loopback10
+     10.0.0.0/30 is subnetted, 1 subnets
+C       10.10.10.0 is directly connected, FastEthernet0/0
+!
+! ==========================
+! BGP Table Verification
+! ==========================
+R8#show ip bgp
+   Network          Next Hop            Metric LocPrf Weight Path
+*> 172.16.10.10/32  0.0.0.0                  0         32768 i
+*>i172.16.20.20/32  2.2.2.2                  0    100      0 i
+*>i172.16.30.30/32  3.3.3.3                  0    100      0 i
+!
+! ==========================
+! BGP Summary Verification
+! ==========================
+R8#show ip bgp summary
 BGP router identifier 172.16.10.10, local AS number 65001
 BGP table version is 4, main routing table version 4
 3 network entries using 351 bytes of memory
 3 path entries using 156 bytes of memory
 3/2 BGP path/bestpath attribute entries using 372 bytes of memory
 1 BGP rrinfo entries using 24 bytes of memory
-0 BGP route-map cache entries using 0 bytes of memory
-0 BGP filter-list cache entries using 0 bytes of memory
 BGP using 903 total bytes of memory
 BGP activity 3/0 prefixes, 3/0 paths, scan interval 60 secs
 
-Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
-2.2.2.2         4 65001       6       4        4    0    0 00:00:49        2
+Neighbor        V    AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down  State/PfxRcd
+2.2.2.2         4 65001      6      4      4    0    0 00:00:49         2
 </code></pre>
 
 <h4 class="note-subtitle">P1R2</h4>
 <pre class="note-codeblock"><code>
-!
+! ==========================
+! Interface Configuration
+! ==========================
 interface Loopback2
- ip address 2.2.2.2 255.255.255.255
-!         
+ ip address 2.2.2.2 255.255.255.255
+!
 interface Loopback20
- ip address 172.16.20.20 255.255.255.255
+ ip address 172.16.20.20 255.255.255.255
 !
 interface FastEthernet0/0
- ip address 10.10.10.2 255.255.255.252
- duplex half
+ ip address 10.10.10.2 255.255.255.252
+ duplex half
 !
 interface FastEthernet1/0
- ip address 11.11.11.1 255.255.255.252
- duplex half
+ ip address 11.11.11.1 255.255.255.252
+ duplex half
 !
 interface FastEthernet2/0
- no ip address
- shutdown
- duplex half
+ no ip address
+ shutdown
+ duplex half
 !
+! ==========================
+! BGP Configuration
+! ==========================
 router bgp 65001
- no synchronization
- bgp log-neighbor-changes
- network 172.16.20.20 mask 255.255.255.255
- neighbor 1.1.1.1 remote-as 65001
- neighbor 1.1.1.1 update-source Loopback2
- neighbor 1.1.1.1 route-reflector-client
- neighbor 3.3.3.3 remote-as 65001
- neighbor 3.3.3.3 update-source Loopback2
- neighbor 3.3.3.3 route-reflector-client
- no auto-summary
+ no synchronization
+ bgp log-neighbor-changes
+ network 172.16.20.20 mask 255.255.255.255
+ neighbor 1.1.1.1 remote-as 65001
+ neighbor 1.1.1.1 update-source Loopback2
+ neighbor 1.1.1.1 route-reflector-client
+ neighbor 3.3.3.3 remote-as 65001
+ neighbor 3.3.3.3 update-source Loopback2
+ neighbor 3.3.3.3 route-reflector-client
+ no auto-summary
 !
+! ==========================
+! Static Routing
+! ==========================
 ip route 1.1.1.1 255.255.255.255 10.10.10.1
 ip route 3.3.3.3 255.255.255.255 11.11.11.2
-
-
-R9#sh ip route
-Codes: C - connected, S - static, R - RIP, M - mobile, B - BGP
-       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
-       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-       E1 - OSPF external type 1, E2 - OSPF external type 2
-       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
-       ia - IS-IS inter area, * - candidate default, U - per-user static route
-       o - ODR, P - periodic downloaded static route
-
+!
+! ==========================
+! Routing Table Verification
+! ==========================
+R9#show ip route
 Gateway of last resort is not set
 
-     1.0.0.0/32 is subnetted, 1 subnets
-S       1.1.1.1 [1/0] via 10.10.10.1
-     2.0.0.0/32 is subnetted, 1 subnets
-C       2.2.2.2 is directly connected, Loopback2
-     3.0.0.0/32 is subnetted, 1 subnets
-S       3.3.3.3 [1/0] via 11.11.11.2
-     172.16.0.0/32 is subnetted, 3 subnets
-B       172.16.30.30 [200/0] via 3.3.3.3, 00:00:49
-C       172.16.20.20 is directly connected, Loopback20
-B       172.16.10.10 [200/0] via 1.1.1.1, 00:00:49
-     10.0.0.0/30 is subnetted, 1 subnets
-C       10.10.10.0 is directly connected, FastEthernet0/0
-     11.0.0.0/30 is subnetted, 1 subnets
-C       11.11.11.0 is directly connected, FastEthernet1/0
-R9#sh ip bgp sum
+     1.0.0.0/32 is subnetted, 1 subnets
+S       1.1.1.1 [1/0] via 10.10.10.1
+     2.0.0.0/32 is subnetted, 1 subnets
+C       2.2.2.2 is directly connected, Loopback2
+     3.0.0.0/32 is subnetted, 1 subnets
+S       3.3.3.3 [1/0] via 11.11.11.2
+     172.16.0.0/32 is subnetted, 3 subnets
+B       172.16.30.30 [200/0] via 3.3.3.3, 00:00:49
+C       172.16.20.20 is directly connected, Loopback20
+B       172.16.10.10 [200/0] via 1.1.1.1, 00:00:49
+     10.0.0.0/30 is subnetted, 1 subnets
+C       10.10.10.0 is directly connected, FastEthernet0/0
+     11.0.0.0/30 is subnetted, 1 subnets
+C       11.11.11.0 is directly connected, FastEthernet1/0
+!
+! ==========================
+! BGP Summary Verification
+! ==========================
+R9#show ip bgp summary
 BGP router identifier 172.16.20.20, local AS number 65001
 BGP table version is 4, main routing table version 4
 3 network entries using 351 bytes of memory
 3 path entries using 156 bytes of memory
 3/2 BGP path/bestpath attribute entries using 372 bytes of memory
-0 BGP route-map cache entries using 0 bytes of memory
-0 BGP filter-list cache entries using 0 bytes of memory
 BGP using 879 total bytes of memory
 BGP activity 3/0 prefixes, 3/0 paths, scan interval 60 secs
 
-Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
-1.1.1.1         4 65001       5       7        4    0    0 00:01:22        1
-3.3.3.3         4 65001       5       7        4    0    0 00:01:23        1
-R9#sh ip bgp
-BGP table version is 4, local router ID is 172.16.20.20
-Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
-              r RIB-failure, S Stale
-Origin codes: i - IGP, e - EGP, ? - incomplete
-
-   Network          Next Hop            Metric LocPrf Weight Path
-*>i172.16.10.10/32  1.1.1.1                  0    100      0 i
-*> 172.16.20.20/32  0.0.0.0                  0         32768 i
-*>i172.16.30.30/32  3.3.3.3                  0    100      0 i
+Neighbor        V    AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down  State/PfxRcd
+1.1.1.1         4 65001      5      7      4    0    0 00:01:22         1
+3.3.3.3         4 65001      5      7      4    0    0 00:01:23         1
+!
+! ==========================
+! BGP Table Verification
+! ==========================
+R9#show ip bgp
+   Network          Next Hop            Metric LocPrf Weight Path
+*>i172.16.10.10/32  1.1.1.1                  0    100      0 i
+*>  172.16.20.20/32 0.0.0.0                  0         32768 i
+*>i172.16.30.30/32  3.3.3.3                  0    100      0 i
 </code></pre>
 
     </section>
