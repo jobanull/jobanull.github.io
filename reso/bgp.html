@@ -12,7 +12,7 @@
     <h2 class="note-title text-center">Border Gateway Protocol (BGP)</h2>
     <p class="note-paragraph">
       Border Gateway Protocol (BGP) adalah protokol routing yang digunakan untuk bertukar informasi rute antar 
-      <em>Autonomous System</em> (AS). BGP termasuk kategori <strong>path vector protocol</strong> 
+      <em>Autonomous System</em> (AS) di internet. BGP termasuk kategori <strong>path vector protocol</strong> 
       yang mengandalkan <em>policy-based routing</em> untuk memilih jalur terbaik, bukan sekadar metrik teknis.
       BGP berjalan di atas TCP port 179 sehingga komunikasi antar router bersifat andal dan terkontrol.
     </p>
@@ -42,6 +42,19 @@
       <li><strong>Multi-Exit Discriminator (MED)</strong> - Memberi sinyal jalur keluar yang diinginkan kepada AS tetangga.</li>
       <li><strong>Next Hop</strong> - Menentukan alamat router berikut yang harus dilalui paket untuk mencapai tujuan.</li>
     </ul>
+
+    <h3 class="note-subtitle">BGP Prepend</h3>
+    <p class="note-paragraph">
+      <strong>BGP Prepend</strong> (atau <em>AS Path Prepending</em>) adalah teknik untuk mengontrol <em>incoming traffic</em> 
+      dengan cara menambahkan nomor AS kita berulang kali pada atribut <strong>AS Path</strong> ketika mengiklankan rute. 
+      Tujuannya adalah membuat jalur tersebut terlihat lebih panjang sehingga router lain di internet akan lebih memilih 
+      jalur alternatif yang lebih pendek.
+    </p>
+    <p class="note-paragraph">
+      Contoh: Jika sebuah prefix diiklankan dengan AS Path <code>65001</code>, maka dengan prepend dapat diubah menjadi 
+      <code>65001 65001 65001</code>. Router tetangga akan menganggap jalur ini lebih panjang dan cenderung memilih jalur lain 
+      jika tersedia.
+    </p>
 
     <h3 class="note-subtitle">Kelebihan BGP</h3>
     <ul class="note-list">
@@ -487,12 +500,12 @@ ip route 3.3.3.3 255.255.255.255 10.10.10.2
 ! ==========================
 ! BGP Verification
 ! ==========================
-show ip bgp summary
+P1R1#show ip bgp summary
 Neighbor        V    AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down   State/PfxRcd
 2.2.2.2         4 65001     10     10      9    0    0 00:05:45   2
 3.3.3.3         4 65001      8      7      9    0    0 00:02:43   2
 
-show ip bgp
+P1R1#show ip bgp
 BGP table version is 9, local router ID is 1.1.1.1
 Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
                r RIB-failure, S Stale
@@ -546,15 +559,19 @@ ip route 3.3.3.3 255.255.255.255 11.11.11.2
 
 ! ==========================
 ! BGP Verification
-show ip bgp summary
+! ==========================
+R2#show ip bgp summary
 Neighbor        V    AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down   State/PfxRcd
 1.1.1.1         4 65001     12     12      9    0    0 00:07:20   2
-3.3.3.3         4 65001     10      9      9    0    0 00:04:16   show ip bgp
+3.3.3.3         4 65001     10      9      9    0    0 00:04:16   2
+
+R2#show ip bgp
 BGP table version is 9, local router ID is 2.2.2.2
-codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
                r RIB-failure, S Stale
 Origin codes:  i - IGP, e - EGP, ? - incomplete
-         Next Hop        Metric LocPrf Weight Path
+
+   Network          Next Hop        Metric LocPrf Weight Path
 r>i1.1.1.1/32       1.1.1.1              0   100      0 i
 *> 2.2.2.2/32       0.0.0.0              0     0  32768 i
 r>i3.3.3.3/32       3.3.3.3              0   100      0 i
@@ -600,12 +617,12 @@ ip route 2.2.2.2 255.255.255.255 11.11.11.1
 ! ==========================
 ! BGP Verification
 ! ==========================
-show ip bgp summary
+R3#show ip bgp summary
 Neighbor        V    AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down   State/PfxRcd
 1.1.1.1         4 65001      9     10      9    0    0 00:04:38   2
 2.2.2.2         4 65001      9     10      9    0    0 00:04:36   2
 
-show ip bgp
+R3#show ip bgp
 BGP table version is 9, local router ID is 3.3.3.3
 Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
                r RIB-failure, S Stale
@@ -716,7 +733,7 @@ show ip route bgp
 <h4 class="note-subtitle">Implementasi</h4>
 <img src="img/ebgp.png" alt="Diagram jaringan" class="note-image" />
 
-<h4 class="note-subtitle">P2R1</h4>
+<h4 class="note-subtitle">P1R1</h4>
 <pre class="note-codeblock"><code>
 ! ==========================
 ! Interface Configuration
@@ -750,11 +767,11 @@ ip route 2.2.2.2 255.255.255.255 10.10.10.2
 ! ==========================
 ! BGP Verification
 ! ==========================
-show ip bgp summary
+R4#show ip bgp summary
 Neighbor        V    AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down   State/PfxRcd
 2.2.2.2         4 65002     19     19      3    0    0 00:15:56   1
 
-show ip bgp
+R4#show ip bgp
 BGP table version is 3, local router ID is 1.1.1.1
 Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
                r RIB-failure, S Stale
@@ -764,14 +781,14 @@ Origin codes:  i - IGP, e - EGP, ? - incomplete
 *> 172.16.10.10/32  0.0.0.0              0     0  32768 i
 *> 172.16.20.20/32  2.2.2.2              0     0      0 65002 i
 
-show ip route bgp
+R4#show ip route bgp
      172.16.0.0/32 is subnetted, 2 subnets
 B       172.16.20.20 [20/0] via 2.2.2.2, 00:01:27
 
 ! ==========================
 ! IP Routing Table
 ! ==========================
-show ip route
+R4#show ip route
 Gateway of last resort is not set
 
      1.0.0.0/32 is subnetted, 1 subnets
@@ -786,7 +803,7 @@ C       10.10.10.0 is directly connected, FastEthernet0/0
 
 </code></pre>
 
-<h4 class="note-subtitle">P2R2</h4>
+<h4 class="note-subtitle">P1R2</h4>
 <pre class="note-codeblock"><code>
 ! ==========================
 ! Interface Configuration
@@ -824,11 +841,11 @@ ip route 1.1.1.1 255.255.255.255 10.10.10.1
 ! ==========================
 ! BGP Verification
 ! ==========================
-show ip bgp summary
+R5#show ip bgp summary
 Neighbor        V   AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down State/PfxRcd
 1.1.1.1         4 65001     20     20      3   0   0 00:16:30          1
 
-show ip bgp
+R5#show ip bgp
 BGP table version is 3, local router ID is 2.2.2.2
 Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
               r RIB-failure, S Stale
@@ -838,14 +855,14 @@ Origin codes: i - IGP, e - EGP, ? - incomplete
 *> 172.16.10.10/32  1.1.1.1            0             0 65001 i
 *> 172.16.20.20/32  0.0.0.0            0         32768 i
 
-show ip route bgp
+R5#show ip route bgp
      172.16.0.0/32 is subnetted, 2 subnets
 B       172.16.10.10 [20/0] via 1.1.1.1, 00:01:27
 
 ! ==========================
 ! IP Routing Table
 ! ==========================
-show ip route
+R5#show ip route
 Gateway of last resort is not set
 
   1.0.0.0/32 is subnetted, 1 subnets
@@ -1015,7 +1032,7 @@ show ip bgp summary
 <h4 class="note-subtitle">Implementasi</h4>
 <img src="img/bgp-auth.png" alt="Diagram jaringan" class="note-image" />
 
-<h4 class="note-subtitle">P4R1</h4>
+<h4 class="note-subtitle">P1R1</h4>
 <pre class="note-codeblock"><code>
 ! ==========================
 ! Interface Configuration
@@ -1052,14 +1069,14 @@ ip route 2.2.2.2 255.255.255.255 10.10.10.2
 ! ==========================
 ! BGP Verification
 ! ==========================
-show ip bgp summary
+R6#show ip bgp summary
 Neighbor        V   AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down State/PfxRcd
 2.2.2.2         4 65002      4      4      3   0   0 00:00:50          1
 
 ! ==========================
 ! IP Routing Table
 ! ==========================
-show ip route
+R6#show ip route
 Gateway of last resort is not set
 
   1.0.0.0/32 is subnetted, 1 subnets
@@ -1113,7 +1130,7 @@ ip route 1.1.1.1 255.255.255.255 10.10.10.1
 ! ==========================
 ! Routing Table Verification
 ! ==========================
-show ip route
+R7#show ip route
 Gateway of last resort is not set
 
   1.0.0.0/32 is subnetted, 1 subnets
@@ -1129,7 +1146,7 @@ C       10.10.10.0 is directly connected, FastEthernet0/0
 ! ==========================
 ! BGP Summary Verification
 ! ==========================
-show ip bgp summary
+R7#show ip bgp summary
 Neighbor        V   AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down State/PfxRcd
 1.1.1.1         4 65001      5      5      3   0   0 00:01:18          1
 </code></pre>
@@ -1269,7 +1286,7 @@ ip route 3.3.3.3 255.255.255.255 10.10.10.2
 ! ==========================
 ! Routing Table Verification
 ! ==========================
-show ip route
+R8#show ip route
 Gateway of last resort is not set
 
      1.0.0.0/32 is subnetted, 1 subnets
@@ -1288,7 +1305,7 @@ C       10.10.10.0 is directly connected, FastEthernet0/0
 ! ==========================
 ! BGP Table Verification
 ! ==========================
-show ip bgp
+R8#show ip bgp
    Network          Next Hop            Metric LocPrf Weight Path
 *> 172.16.10.10/32  0.0.0.0                  0         32768 i
 *>i172.16.20.20/32  2.2.2.2                  0    100      0 i
@@ -1297,7 +1314,7 @@ show ip bgp
 ! ==========================
 ! BGP Summary Verification
 ! ==========================
-show ip bgp summary
+R8#show ip bgp summary
 Neighbor        V    AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down  State/PfxRcd
 2.2.2.2         4 65001      6      4      4    0    0 00:00:49         2
 </code></pre>
@@ -1343,7 +1360,7 @@ ip route 3.3.3.3 255.255.255.255 11.11.11.2
 ! ==========================
 ! Routing Table Verification
 ! ==========================
-show ip route
+R9#show ip route
 Gateway of last resort is not set
 
      1.0.0.0/32 is subnetted, 1 subnets
@@ -1364,14 +1381,15 @@ C       11.11.11.0 is directly connected, FastEthernet1/0
 ! ==========================
 ! BGP Summary Verification
 ! ==========================
-show ip bgp summary
+R9#show ip bgp summary
 Neighbor        V    AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down  State/PfxRcd
 1.1.1.1         4 65001      5      7      4    0    0 00:01:22         1
 3.3.3.3         4 65001      5      7      4    0    0 00:01:23         1
 !
 ! ==========================
-! BGP Verification
-show ip bgp
+! BGP Table Verification
+! ==========================
+R9#show ip bgp
    Network          Next Hop            Metric LocPrf Weight Path
 *>i172.16.10.10/32  1.1.1.1                  0    100      0 i
 *>  172.16.20.20/32 0.0.0.0                  0         32768 i
@@ -1379,7 +1397,7 @@ show ip bgp
 </code></pre>
 
     </section>
-  </di
+  </div>
 </div>
 
 <!-- BGP Attribute - Origin -->
@@ -1398,7 +1416,7 @@ show ip bgp
       <p class="note-paragraph">Ada 3 jenis nilai Origin:</p>
       <ul class="note-list">
         <li><strong>IGP (i)</strong> → Prefix di-inject ke BGP dengan perintah <code>network</code>.  
-          Ditandai dengan huruf <code>i</code> di <show ip bgp</code>.</li>
+          Ditandai dengan huruf <code>i</code> di output <code>show ip bgp</code>.</li>
         <li><strong>EGP (e)</strong> → Prefix berasal dari protokol EGP (sudah jarang digunakan).  
           Ditandai dengan huruf <code>e</code>.</li>
         <li><strong>Incomplete (?)</strong> → Prefix dimasukkan ke BGP melalui <em>redistribution</em> (static, connected, OSPF, EIGRP, dll).  
@@ -1407,7 +1425,7 @@ show ip bgp
 
       <h4 class="note-subtitle">🔑 Urutan Preferensi Origin</h4>
       <ul class="note-list">
-        <li><strong>IGP (i)</strong> lebih disukai<strong>EGP (e)</strong>.</li>
+        <li><strong>IGP (i)</strong> lebih disukai dibanding <strong>EGP (e)</strong>.</li>
         <li><strong>EGP (e)</strong> lebih disukai dibanding <strong>Incomplete (?)</strong>.</li>
       </ul>
       <p class="note-paragraph"><strong>Sehingga: IGP (i) > EGP (e) > Incomplete (?)</strong></p>
@@ -1432,7 +1450,9 @@ ip route 2.2.2.2 255.255.255.255 Null0
       </code></pre>
 
       <h4 class="note-subtitle">🔎 Verifikasi Origin</h4>
-      <pre class="note-codeblock"><code# show ip bgp
+      <pre class="note-codeblock"><code>
+# Di R2
+show ip bgp
 
    Network          Next Hop        Metric LocPrf Weight Path
 *> 1.1.1.1/32       192.168.12.1         0             0 65001 i
@@ -1441,7 +1461,7 @@ ip route 2.2.2.2 255.255.255.255 Null0
 
       <p class="note-paragraph">👉 Terlihat:</p>
       <ul class="note-list">
-        <li><code>1.1.1.1/32</code> punOrigin <strong>i (IGP)</strong>.</li>
+        <li><code>1.1.1.1/32</code> punya Origin <strong>i (IGP)</strong>.</li>
         <li><code>2.2.2.2/32</code> punya Origin <strong>? (Incomplete)</strong>.</li>
       </ul>
 
@@ -1490,8 +1510,8 @@ ip route 2.2.2.2 255.255.255.255 10.10.10.2
 !
 ! ==========================
 ! Routing Table Verification
-==========================
-show ip route
+! ==========================
+R11#show ip route
 Gateway of last resort is not set
 
      1.0.0.0/32 is subnetted, 1 subnets
@@ -1499,7 +1519,7 @@ C       1.1.1.1 is directly connected, Loopback1
      2.0.0.0/32 is subnetted, 1 subnets
 S       2.2.2.2 [1/0] via 10.10.10.2
      3.0.0.0/32 is subnetted, 1 subnets
-      3.3.3.3 [20/0] via 2.2.2.2, 00:00:08
+B       3.3.3.3 [20/0] via 2.2.2.2, 00:00:08
      10.0.0.0/30 is subnetted, 1 subnets
 C       10.10.10.0 is directly connected, FastEthernet0/0
      11.0.0.0/30 is subnetted, 1 subnets
@@ -1510,7 +1530,7 @@ C       172.16.10.10 is directly connected, Loopback10
 ! ==========================
 ! BGP Summary Verification
 ! ==========================
-show ip bgp summary
+R11#show ip bgp summary
 BGP activity 4/0 prefixes, 4/0 paths, scan interval 60 secs
 
 Neighbor        V    AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down  State/PfxRcd
@@ -1519,7 +1539,7 @@ Neighbor        V    AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down  State/PfxRcd
 ! ==========================
 ! BGP Table Verification
 ! ==========================
-show ip bgp
+R11#show ip bgp
    Network          Next Hop            Metric LocPrf Weight Path
 r> 1.1.1.1/32       2.2.2.2                  0             0 65002 ?
 *> 3.3.3.3/32       2.2.2.2                  0             0 65002 ?
@@ -1564,7 +1584,7 @@ ip route 11.11.11.0 255.255.255.252 Null0
 ! ==========================
 ! Routing Table Verification
 ! ==========================
-show ip route
+R12#show ip route
 Gateway of last resort is not set
 
      1.0.0.0/32 is subnetted, 1 subnets
@@ -1583,7 +1603,7 @@ B       172.16.10.10 [20/0] via 1.1.1.1, 00:00:00
 ! ==========================
 ! BGP Table Verification
 ! ==========================
-show ip bgp
+R12#show ip bgp
    Network          Next Hop            Metric LocPrf Weight Path
 *> 1.1.1.1/32       10.10.10.1              0         32768 ?
 *> 3.3.3.3/32       0.0.0.0                 0         32768 ?
@@ -1593,7 +1613,7 @@ show ip bgp
 ! ==========================
 ! BGP Summary Verification
 ! ==========================
-show ip bgp summary
+R12#show ip bgp summary
 Neighbor        V    AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down  State/PfxRcd
 1.1.1.1         4 65001      5      6      5    0    0 00:01:11         1
 </code></pre>
@@ -1909,7 +1929,7 @@ ip route 2.2.2.2 255.255.255.255 10.10.10.2
 ! ==========================
 ! Routing Table Verification
 ! ==========================
-show ip route
+R15#show ip route
 Gateway of last resort is not set
 
      2.0.0.0/32 is subnetted, 1 subnets
@@ -1922,7 +1942,7 @@ C       10.10.10.0/30 is directly connected, FastEthernet0/0
 ! ==========================
 ! BGP Table Verification
 ! ==========================
-show ip bgp
+R15#show ip bgp
    Network          Next Hop            Metric LocPrf Weight Path
 r> 2.2.2.2/32       10.10.10.2              0             0 65002 i
 *> 10.10.0.0/16     0.0.0.0                           32768 i
@@ -1958,7 +1978,7 @@ ip route 1.1.1.1 255.255.255.255 10.10.10.1
 ! ======================
 ! Verification
 ! ======================
-show ip bgp
+R17#show ip bgp
 BGP table version is 3, local router ID is 2.2.2.2
 Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
               r RIB-failure, S Stale
@@ -1968,7 +1988,7 @@ Origin codes: i - IGP, e - EGP, ? - incomplete
 *> 2.2.2.2/32     0.0.0.0              0     32768 i
 *> 10.10.0.0/16   10.10.10.1           0         0 65001 i
 
-show ip route
+R17#show ip route
 Gateway of last resort is not set
 
      1.0.0.0/32 is subnetted, 1 subnets
@@ -2122,7 +2142,7 @@ no cdp log mismatch duplex
 ! ======================
 ! Verification
 ! ======================
-show ip route
+R16#show ip route
 Gateway of last resort is not set
 
   1.0.0.0/32 is subnetted, 1 subnets
@@ -2135,12 +2155,12 @@ C    10.10.10.0 is directly connected, FastEthernet0/0
   11.0.0.0/30 is subnetted, 1 subnets
 C    11.11.11.0 is directly connected, FastEthernet1/0
 
-show ip bgp summary
+R16#show ip bgp summary
 Neighbor      V  AS   MsgRcvd MsgSent TblVer InQ OutQ Up/Down State/PfxRcd
 10.10.10.2    4 65002      6      6      4    0    0 00:01:30         2
 11.11.11.2    4 65004      6      6      4    0    0 00:01:27         2
 
-show ip bgp
+R16#show ip bgp
 BGP table version is 4, local router ID is 172.16.10.10
 Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
               r RIB-failure, S Stale
@@ -2232,7 +2252,7 @@ router bgp 65003
 ! ======================
 ! Verification
 ! ======================
-show ip bgp
+R20#show ip bgp
 BGP table version is 4, local router ID is 172.16.30.30
 Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
               r RIB-failure, S Stale
@@ -2244,12 +2264,12 @@ Origin codes: i - IGP, e - EGP, ? - incomplete
 *>                  12.12.12.2                  0 65002 65001 i
 *> 172.16.30.30/32  0.0.0.0              0     32768 i
 
-show ip bgp summary
+R20#show ip bgp summary
 Neighbor        V  AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down State/PfxRcd
 12.12.12.2      4 65002      7      7      4    0    0 00:02:50        1
 13.13.13.2      4 65004      7      7      4    0    0 00:02:45        1
 
-show ip route
+R20#show ip route
 Gateway of last resort is not set
 
      1.0.0.0/32 is subnetted, 1 subnets
@@ -2390,7 +2410,7 @@ route-map SET-LP permit 10
 ! ======================
 ! Verification
 ! ======================
-show ip route
+R21#show ip route
 Gateway of last resort is not set
 
      1.0.0.0/32 is subnetted, 1 subnets
@@ -2403,7 +2423,7 @@ C       10.10.10.0 is directly connected, FastEthernet0/0
      11.0.0.0/30 is subnetted, 1 subnets
 C       11.11.11.0 is directly connected, FastEthernet1/0
 
-show ip bgp
+R21#show ip bgp
 BGP table version is 4, local router ID is 172.16.10.10
 Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
               r RIB-failure, S Stale
@@ -2416,7 +2436,7 @@ Origin codes: i - IGP, e - EGP, ? - incomplete
 *  172.16.30.30/32  11.11.11.2             0     0 65004 65003 i
 *>                  10.10.10.2       200   0     0 65002 65003 i
 
-show ip bgp summary
+R21#show ip bgp summary
 Neighbor        V  AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down State/PfxRcd
 10.10.10.2      4 65002      6      6      4    0    0 00:01:44        2
 11.11.11.2      4 65004      6      6      4    0    0 00:01:41        2
@@ -2479,7 +2499,7 @@ router bgp 65003
 ! ======================
 ! Verification
 ! ======================
-show ip route
+R23#show ip route
 Gateway of last resort is not set
 
      1.0.0.0/32 is subnetted, 1 subnets
@@ -2492,12 +2512,12 @@ C       12.12.12.0 is directly connected, FastEthernet1/0
      13.0.0.0/30 is subnetted, 1 subnets
 C       13.13.13.0 is directly connected, FastEthernet2/0
 
-show ip bgp summary
+R23#show ip bgp summary
 Neighbor        V  AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down State/PfxRcd
 12.12.12.2      4 65002      7      7      4    0    0 00:02:27        1
 13.13.13.2      4 65004      7      7      4    0    0 00:02:22        1
 
-show ip bgp
+R23#show ip bgp
 BGP table version is 4, local router ID is 172.16.30.30
 Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
               r RIB-failure, S Stale
@@ -2536,7 +2556,7 @@ router bgp 65004
 ! ======================
 ! Verification
 ! ======================
-show ip route
+R22#show ip route
 Gateway of last resort is not set
 
      11.0.0.0/30 is subnetted, 1 subnets
@@ -2547,12 +2567,12 @@ B       1.1.1.1 [20/0] via 13.13.13.1, 00:00:30
 B       172.16.10.10 [20/0] via 11.11.11.1, 00:00:30
 B       172.16.30.30 [20/0] via 13.13.13.1, 00:00:30
 
-show ip bgp summary
+R22#show ip bgp summary
 Neighbor        V  AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down State/PfxRcd
 11.11.11.1      4 65001      6      6      4    0    0 00:01:22        2
 13.13.13.1      4 65003      6      6      4    0    0 00:01:20        2
 
-show ip bgp
+R22#show ip bgp
 BGP table version is 4, local router ID is 11.11.11.2
 Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
               r RIB-failure, S Stale
@@ -3068,11 +3088,11 @@ router bgp 65002
 ! Static Routing (untuk reach loopback R6)
 ! ======================
 ip route 1.1.1.1 255.255.255.255 10.10.10.1
-show ip bgp summary
+R7#show ip bgp summary
 Neighbor    V  AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down State/PfxRcd
 1.1.1.1     4 65001    5      5     3     0   0   00:01:05    1
 
-show ip route
+R7#show ip route
 Codes: C - connected, S - static, R - RIP, M - mobile, B - BGP
 Gateway of last resort is not set
 
@@ -3126,7 +3146,7 @@ ip route 1.1.1.1 255.255.255.255 10.10.10.1
 ! ======================
 ! Verification
 ! ======================
-show ip route
+R7#show ip route
 Gateway of last resort is not set
 
   1.0.0.0/32 is subnetted, 1 subnets
@@ -3139,7 +3159,7 @@ B    172.16.10.10 [20/0] via 1.1.1.1, 00:00:45
   10.0.0.0/30 is subnetted, 1 subnets
 C    10.10.10.0 is directly connected, FastEthernet0/0
 
-show ip bgp summary
+R7#show ip bgp summary
 Neighbor        V  AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down State/PfxRcd
 1.1.1.1         4 65001      5      5      3    0    0 00:01:18        1
 </code></pre>
