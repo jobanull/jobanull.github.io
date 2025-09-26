@@ -37,20 +37,20 @@
     Berikut tahapan utamanya:
   </p>
   <ul class="note-list">
-    <li><strong>Idle</strong> – Router siap, tapi belum mencoba membuat koneksi TCP ke peer.</li>
-    <li><strong>Connect</strong> – Router mencoba membuka koneksi TCP port 179 ke tetangga. Jika sukses → lanjut ke <em>OpenSent</em>, jika gagal → masuk <em>Active</em>.</li>
-    <li><strong>Active</strong> – Router mencoba kembali establish koneksi TCP. Jika berhasil → lanjut ke <em>OpenSent</em>.</li>
-    <li><strong>OpenSent</strong> – Router mengirim <em>Open Message</em> (AS Number, BGP version, hold time, router ID) dan menunggu balasan.</li>
-    <li><strong>OpenConfirm</strong> – Sesi TCP terbentuk, router saling bertukar <em>Keepalive</em>.</li>
-    <li><strong>Established</strong> – Sesi resmi hidup, router bertukar <em>Update Message</em> (prefix, AS Path, atribut routing).</li>
+    <li><strong>Idle</strong> - Router siap, tapi belum mencoba membuat koneksi TCP ke peer.</li>
+    <li><strong>Connect</strong> - Router mencoba membuka koneksi TCP port 179 ke tetangga. Jika sukses → lanjut ke <em>OpenSent</em>, jika gagal → masuk <em>Active</em>.</li>
+    <li><strong>Active</strong> - Router mencoba kembali establish koneksi TCP. Jika berhasil → lanjut ke <em>OpenSent</em>.</li>
+    <li><strong>OpenSent</strong> - Router mengirim <em>Open Message</em> (AS Number, BGP version, hold time, router ID) dan menunggu balasan.</li>
+    <li><strong>OpenConfirm</strong> - Sesi TCP terbentuk, router saling bertukar <em>Keepalive</em>.</li>
+    <li><strong>Established</strong> - Sesi resmi hidup, router bertukar <em>Update Message</em> (prefix, AS Path, atribut routing).</li>
   </ul>
 
   <h4 class="note-subsubtitle">Jenis Pesan BGP</h4>
   <ul class="note-list">
-    <li><strong>Open Message</strong> – Digunakan saat awal pembentukan sesi (handshake).</li>
-    <li><strong>Keepalive Message</strong> – Menjaga agar sesi tetap aktif (default tiap 60 detik).</li>
-    <li><strong>Update Message</strong> – Mengumumkan prefix baru atau menarik prefix lama.</li>
-    <li><strong>Notification Message</strong> – Digunakan saat terjadi error atau memutus sesi.</li>
+    <li><strong>Open Message</strong> - Digunakan saat awal pembentukan sesi (handshake).</li>
+    <li><strong>Keepalive Message</strong> - Menjaga agar sesi tetap aktif (default tiap 60 detik).</li>
+    <li><strong>Update Message</strong> - Mengumumkan prefix baru atau menarik prefix lama.</li>
+    <li><strong>Notification Message</strong> - Digunakan saat terjadi error atau memutus sesi.</li>
   </ul>
 
   <h4 class="note-subsubtitle">Pertukaran Rute</h4>
@@ -73,19 +73,6 @@
     <li><strong>Next Hop</strong> - Menentukan alamat router berikut yang harus dilalui paket untuk mencapai tujuan.</li>
   </ul>
 
-  <h3 class="note-subtitle">BGP Prepend</h3>
-  <p class="note-paragraph">
-    <strong>BGP Prepend</strong> (atau <em>AS Path Prepending</em>) adalah teknik untuk mengontrol <em>incoming traffic</em> 
-    dengan cara menambahkan nomor AS kita berulang kali pada atribut <strong>AS Path</strong> ketika mengiklankan rute. 
-    Tujuannya adalah membuat jalur tersebut terlihat lebih panjang sehingga router lain di internet akan lebih memilih 
-    jalur alternatif yang lebih pendek.
-  </p>
-  <p class="note-paragraph">
-    Contoh: Jika sebuah prefix diiklankan dengan AS Path <code>65001</code>, maka dengan prepend dapat diubah menjadi 
-    <code>65001 65001 65001</code>. Router tetangga akan menganggap jalur ini lebih panjang dan cenderung memilih jalur lain 
-    jika tersedia.
-  </p>
-
   <h3 class="note-subtitle">Kelebihan BGP</h3>
   <ul class="note-list">
     <li>Kontrol routing yang sangat fleksibel.</li>
@@ -100,7 +87,7 @@
     <li>Konsvergensi (waktu stabil) lebih lambat dibanding protokol routing internal seperti OSPF atau EIGRP.</li>
     <li>Sangat bergantung pada kebijakan dan pengaturan manual oleh administrator.</li>
   </ul>
-  
+
      <h3 class="note-subtitle">CONTOH KASUS</h3>
       <ul class="note-list">
         <li>Tujuan: Mengonfigurasi <strong>BGP dan filter</strong> agar <strong>PC 1 hanya bisa melakukan ping ke PC2</strong>.</li>
