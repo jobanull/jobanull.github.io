@@ -108,11 +108,9 @@ hostname R1
 !
 interface FastEthernet0/0
   ip address 10.10.10.1 255.255.255.252
-  duplex half
 !
 interface FastEthernet1/0
   ip address 192.168.10.1 255.255.255.0
-  duplex half
 !
 router eigrp 100
   network 10.10.10.0 0.0.0.3
@@ -129,11 +127,9 @@ hostname R2
 !
 interface FastEthernet0/0
   ip address 10.10.10.2 255.255.255.252
-  duplex half
 !
 interface FastEthernet1/0
   ip address 192.168.20.1 255.255.255.0
-  duplex half
 !
 router eigrp 100
   network 10.10.10.0 0.0.0.3
@@ -234,11 +230,9 @@ interface Loopback12
 !
 interface FastEthernet0/0
  ip address 10.10.10.1 255.255.255.252
- duplex half
 !
 interface FastEthernet1/0
  no ip address
- duplex half
 !
 ! ======================
 ! EIGRP Configuration
@@ -293,11 +287,9 @@ P 10.10.10.0/30, 1 successors, FD is 28160
 ! ======================
 interface FastEthernet0/0
  ip address 10.10.10.2 255.255.255.252
- duplex half
 !
 interface FastEthernet1/0
  no ip address
- duplex half
 !
 ! ======================
 ! EIGRP Configuration
@@ -438,11 +430,9 @@ interface Loopback12
 !
 interface FastEthernet0/0
  ip address 10.10.10.1 255.255.255.252
- duplex half
 !
 interface FastEthernet1/0
  no ip address
- duplex half
 !
 ! ======================
 ! EIGRP Configuration
@@ -486,11 +476,9 @@ P 10.10.10.0/30, 1 successors, FD is 28160
 ! ======================
 interface FastEthernet0/0
  ip address 10.10.10.2 255.255.255.252
- duplex half
 !
 interface FastEthernet1/0
  no ip address
- duplex half
 !
 ! ======================
 ! EIGRP Configuration
@@ -717,11 +705,9 @@ interface Loopback103
 !
 interface FastEthernet0/0
  ip address 10.10.10.1 255.255.255.252
- duplex half
 !
 interface FastEthernet1/0
  no ip address
- duplex half
 !
 ! ======================
 ! EIGRP Configuration
@@ -777,11 +763,9 @@ P 192.168.1.102/32, 1 successors, FD is 128256
 ! ======================
 interface FastEthernet0/0
  ip address 10.10.10.2 255.255.255.252
- duplex half
 !
 interface FastEthernet1/0
  no ip address
- duplex half
 !
 ! ======================
 ! EIGRP Configuration
@@ -926,11 +910,9 @@ interface Loopback103
 !
 interface FastEthernet0/0
  ip address 10.10.10.1 255.255.255.252
- duplex half
 !
 interface FastEthernet1/0
  no ip address
- duplex half
 !
 ! ======================
 ! EIGRP Configuration
@@ -999,11 +981,9 @@ P 192.168.1.102/32, 1 successors, FD is 128256
 ! ======================
 interface FastEthernet0/0
  ip address 10.10.10.2 255.255.255.252
- duplex half
 !
 interface FastEthernet1/0
  no ip address
- duplex half
 !
 ! ======================
 ! EIGRP Configuration
@@ -1169,12 +1149,10 @@ ip address 192.168.1.103 255.255.255.255
 interface FastEthernet0/0
 ip address 10.10.10.1 255.255.255.252
 ip authentication mode eigrp 100 md5
-ip authentication key-chain eigrp 100 EIGRP_KEYS
-duplex half
+ip authentication key-chain eigrp 100 EIGRP_KEY
 !
 interface FastEthernet1/0
-no ip address
-duplex half
+no ip addres
 !
 router eigrp 100
 network 10.10.10.0 0.0.0.3
@@ -1216,11 +1194,9 @@ interface FastEthernet0/0
  ip address 10.10.10.2 255.255.255.252
  ip authentication mode eigrp 100 md5
  ip authentication key-chain eigrp 100 EIGRP_KEYS
- duplex half
 !
 interface FastEthernet1/0
  no ip address
- duplex half
 !
 ! ======================
 ! EIGRP Configuration
@@ -1414,11 +1390,9 @@ interface Loopback103
 ! ======================
 interface FastEthernet0/0
  ip address 10.10.10.1 255.255.255.252
- duplex half
 !
 interface FastEthernet1/0
  no ip address
- duplex half
 !
 ! ======================
 ! EIGRP Configuration
@@ -1454,11 +1428,9 @@ H  Address         Interface    Hold Uptime  SRTT  RTO  Q  Seq
 ! ======================
 interface FastEthernet0/0
  ip address 10.10.10.2 255.255.255.252
- duplex half
 !
 interface FastEthernet1/0
  no ip address
- duplex half
 !
 ! ======================
 ! EIGRP Configuration
@@ -1576,11 +1548,9 @@ interface FastEthernet0/0
  ip address 10.10.10.1 255.255.255.252
  ! Inject default route ke EIGRP (administrative distance 5)
  ip summary-address eigrp 100 0.0.0.0 0.0.0.0 5
- duplex half
 !
 interface FastEthernet1/0
  ip address 192.168.190.121 255.255.255.0
- duplex half
 !
 ! ======================
 ! EIGRP Configuration
@@ -1619,11 +1589,9 @@ H  Address         Interface    Hold Uptime  SRTT  RTO  Q Seq
 ! ======================
 interface FastEthernet0/0
  ip address 10.10.10.2 255.255.255.252
- duplex half
 !
 interface FastEthernet1/0
  no ip address
- duplex half
 !
 ! ======================
 ! EIGRP Configuration
@@ -1778,11 +1746,9 @@ interface Loopback103
 !
 interface FastEthernet0/0
  ip address 10.10.10.1 255.255.255.252
- duplex half
 !
 interface FastEthernet1/0
  no ip address
- duplex half
 !
 ! ======================
 ! EIGRP Configuration
@@ -1820,11 +1786,9 @@ H  Address         Interface    Hold Uptime  SRTT  RTO  Q Seq
 ! ======================
 interface FastEthernet0/0
  ip address 10.10.10.2 255.255.255.252
- duplex half
 !
 interface FastEthernet1/0
  ip address 11.11.11.1 255.255.255.252
- duplex half
 !
 ! ======================
 ! EIGRP Config
@@ -1879,17 +1843,14 @@ interface Loopback120
 !
 interface FastEthernet0/0
  ip address 11.11.11.2 255.255.255.252
- duplex half
 !
 interface FastEthernet1/0
  no ip address
  shutdown
- duplex half
 !
 interface FastEthernet2/0
  no ip address
  shutdown
- duplex half
 !
 ! ======================
 ! RIP Config
@@ -2035,11 +1996,9 @@ interface Loopback103
 !
 interface FastEthernet0/0
  ip address 10.10.10.1 255.255.255.252
- duplex half
 !
 interface FastEthernet1/0
  ip address 11.11.11.1 255.255.255.252
- duplex half
 !
 ! ======================
 ! EIGRP Configuration
@@ -2073,11 +2032,9 @@ D EX  120.120.120.120  [170/284160] via 10.10.10.2, 00:00:21, FastEthernet0/0
 ! ======================
 interface FastEthernet0/0
  ip address 10.10.10.2 255.255.255.252
- duplex half
 !
 interface FastEthernet1/0
  ip address 11.11.11.1 255.255.255.252
- duplex half
 !
 ! ======================
 ! EIGRP Configuration
@@ -2132,17 +2089,14 @@ interface Loopback120
 !
 interface FastEthernet0/0
  ip address 11.11.11.2 255.255.255.252
- duplex half
 !
 interface FastEthernet1/0
  no ip address
  shutdown
- duplex half
 !
 interface FastEthernet2/0
  no ip address
  shutdown
- duplex half
 !
 ! ======================
 ! OSPF Configuration
