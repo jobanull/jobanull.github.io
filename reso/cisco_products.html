@@ -196,7 +196,6 @@
     </main>
   </section>
 
-
   <section id="cisco-aci" class="note-container container">
     <main class="note-main">
       <h2 class="note-title text-center">Cisco ACI (Application Centric Infrastructure)</h2>
@@ -217,10 +216,35 @@
 
       <h3 class="note-subtitle">Komponen Utama</h3>
       <ul>
-        <li><strong>APIC (Application Policy Infrastructure Controller)</strong> - pusat kontrol dan manajemen kebijakan.</li>
-        <li><strong>Leaf Switch</strong> - switch yang terhubung langsung ke server/aplikasi.</li>
-        <li><strong>Spine Switch</strong> - backbone yang menghubungkan seluruh leaf switch.</li>
-        <li><strong>Policy Model</strong> - aturan komunikasi antar aplikasi.</li>
+        <li>
+          <strong>APIC (Application Policy Infrastructure Controller)</strong> – pusat kontrol & manajemen kebijakan ACI. 
+          Berbasis software, namun biasanya dipaketkan Cisco dalam bentuk <em>appliance server fisik</em> (cluster minimal 3 node). 
+          APIC tidak meneruskan trafik data, tapi menjadi otak pengelolaan fabric.
+        </li>
+        <li>
+          <strong>Leaf Switch</strong> – switch yang terhubung langsung ke endpoint (server, firewall, router). 
+          Leaf berfungsi sebagai <em>policy enforcement point</em> dan <em>VXLAN edge</em>: menyimpan informasi endpoint, menempelkan encapsulation VXLAN, 
+          serta menerapkan policy (tenant, EPG, contract).
+        </li>
+        <li>
+          <strong>Spine Switch</strong> – backbone yang menghubungkan seluruh leaf switch. 
+          Spine hanya berperan sebagai transport cepat (*stateless core*), tidak menyimpan informasi endpoint agar fabric tetap sederhana dan bisa <em>scale-out</em>.
+        </li>
+        <li>
+          <strong>Fabric</strong> – gabungan leaf, spine, dan APIC yang bekerja sebagai satu kesatuan logis. 
+          Fabric memungkinkan jaringan dikelola sebagai satu entitas, bukan per switch.
+        </li>
+        <li>
+          <strong>Policy Model</strong> – aturan komunikasi antar aplikasi, mencakup <em>Endpoint Group (EPG)</em>, <em>Contract</em>, dan <em>Tenant</em>.
+        </li>
+      </ul>
+
+      <h3 class="note-subtitle">Kenapa Endpoint Connect ke Leaf, bukan Spine?</h3>
+      <ul>
+        <li>Spine hanya berfungsi sebagai transport cepat antar leaf, tanpa menyimpan informasi endpoint.</li>
+        <li>Leaf bertugas sebagai <em>policy edge</em>, tempat policy diterapkan dan endpoint dicatat.</li>
+        <li>Menaruh endpoint di spine akan membuat spine jadi bottleneck, karena harus menyimpan semua tabel endpoint.</li>
+        <li>Penyimpanan tabel endpoint tersebar di leaf, sehingga fabric lebih efisien dan skalabel.</li>
       </ul>
 
       <h3 class="note-subtitle">Kelebihan</h3>
@@ -237,9 +261,9 @@
         <li>Membutuhkan pembelajaran khusus (berbeda dari jaringan tradisional).</li>
         <li>Ketergantungan pada ekosistem Cisco (vendor lock-in).</li>
       </ul>
-
     </main>
   </section>
+
 
   <!-- Cisco ASA -->
   <section id="cisco-asa" class="note-container container">
