@@ -125,6 +125,7 @@
         <li><a class="dropdown-item" href="#multihoming">Multihoming</a></li>
         <li><a class="dropdown-item" href="#route-leaking">Route Leaking</a></li>
         <li><a class="dropdown-item" href="#stub-routing">Stub Routing</a></li>
+        <li><a class="dropdown-item" href="#intervlan-routing">Inter-VLAN Routing</a></li>
         </ul>
     </li>
 
@@ -1535,6 +1536,71 @@
       <li>Pilih tipe stub sesuai kebutuhan (connected, summary, static, dll.).</li>
       <li>Jangan gunakan stub jika router butuh akses penuh ke semua rute detail.</li>
       <li>Pastikan dokumentasi konfigurasi stub untuk mempermudah troubleshooting.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="intervlan-routing" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Inter-VLAN Routing</h2>
+    <p class="note-paragraph">
+      <strong>Inter-VLAN Routing</strong> adalah mekanisme yang memungkinkan komunikasi 
+      antar perangkat di VLAN yang berbeda. Secara default, VLAN bersifat 
+      terisolasi sehingga host pada VLAN berbeda tidak bisa saling berkomunikasi 
+      tanpa bantuan perangkat Layer 3 (Router atau Switch L3).
+    </p>
+
+    <h3 class="note-subtitle">Tujuan Inter-VLAN Routing</h3>
+    <ul>
+      <li>Memungkinkan komunikasi antar VLAN yang terpisah.</li>
+      <li>Mengoptimalkan segmentasi jaringan tanpa kehilangan konektivitas.</li>
+      <li>Memberikan keamanan dan efisiensi dengan tetap mempertahankan isolasi VLAN.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Metode Inter-VLAN Routing</h3>
+    <p class="note-paragraph">
+      Terdapat dua metode utama untuk melakukan inter-VLAN routing:
+    </p>
+    <ul>
+      <li>
+        <strong>Router-on-a-Stick (RoAS):</strong>
+        <ul>
+          <li>Menggunakan router dengan satu interface fisik yang dikonfigurasi sebagai trunk.</li>
+          <li>Setiap VLAN direpresentasikan dengan sub-interface pada router.</li>
+          <li>Routing antar VLAN dilakukan oleh router.</li>
+          <li>Kelemahan: semua trafik antar VLAN melewati satu link trunk → bisa menjadi bottleneck.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Switch Virtual Interface (SVI):</strong>
+        <ul>
+          <li>Digunakan pada <em>Layer 3 Switch</em> yang mendukung routing.</li>
+          <li>Setiap VLAN memiliki interface VLAN (SVI) sebagai default gateway.</li>
+          <li>Routing antar VLAN langsung dilakukan di dalam switch tanpa router eksternal.</li>
+          <li>Lebih cepat, efisien, dan scalable dibanding Router-on-a-Stick.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan & Kekurangan</h3>
+    <ul>
+      <li><strong>Router-on-a-Stick:</strong> sederhana & murah, tapi kurang efisien di jaringan besar.</li>
+      <li><strong>SVI:</strong> performa tinggi & scalable, tapi membutuhkan switch Layer 3.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Lab kecil atau jaringan kampus → cukup menggunakan Router-on-a-Stick.</li>
+      <li>Data center atau enterprise network → lebih cocok menggunakan SVI pada switch L3.</li>
+    </ul>
+
+    <!-- <img src="img/intervlan-routing.png" alt="Ilustrasi Inter-VLAN Routing" class="note-image" /> -->
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan <strong>RoAS</strong> untuk skala kecil atau lab pembelajaran.</li>
+      <li>Pilih <strong>SVI</strong> untuk jaringan produksi yang butuh kecepatan & skalabilitas.</li>
+      <li>Pastikan dokumentasi konfigurasi VLAN & gateway untuk memudahkan troubleshooting.</li>
     </ul>
   </main>
 </section>
