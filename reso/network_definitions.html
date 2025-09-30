@@ -150,7 +150,7 @@
         <li><a class="dropdown-item" href="#fibre-channel">Fibre Channel</a></li>
         <li><a class="dropdown-item" href="#network-segmentation">Network Segmentation & Microsegmentation</a></li>
         <li><a class="dropdown-item" href="#overlay-underlay">Overlay & Underlay</a></li>
- 
+        <li><a class="dropdown-item" href="#control-plane">Control Plane</a></li>
         </ul>
     </li>
 
@@ -206,23 +206,18 @@
         </ul>
     </li>
 
-    <!-- Jenis / Tipe Traffic -->
+    <!-- Network Application -->
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-        Traffic Type
+        Network Application
         </a>
         <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#control-traffic">Control Traffic</a></li>
-        <li><a class="dropdown-item" href="#ip-traffic">IP Traffic</a></li>
-        <li><a class="dropdown-item" href="#ethernet-traffic">Ethernet Traffic</a></li>
-        <li><a class="dropdown-item" href="#mpls-traffic">MPLS Traffic (Multiprotocol Label Switching)</a></li>
-        <li><a class="dropdown-item" href="#vxlan-overlay-traffic">VXLAN / Overlay Traffic</a></li>
-        <li><a class="dropdown-item" href="#voice-video-traffic">Voice & Video Traffic</a></li>
-        <li><a class="dropdown-item" href="#storage-traffic">Storage Traffic (iSCSI, FCoE, NFS)</a></li>
-        <li><a class="dropdown-item" href="#management-traffic">Management Traffic</a></li>
-        <li><a class="dropdown-item" href="#control-plane">Control Plane Traffic</a></li>
-        <li><a class="dropdown-item" href="#multicast">Multicast Traffic</a></li>
-        <li><a class="dropdown-item" href="#control-plane">Control Plane</a></li>
+        <li><a class="dropdown-item" href="#prtg">PRTG</a></li>
+        <li><a class="dropdown-item" href="#grafana">Grafana</a></li>
+        <li><a class="dropdown-item" href="#cacti">Cacti</a></li>
+        <li><a class="dropdown-item" href="#netbox">Netbox</a></li>
+        <li><a class="dropdown-item" href="#zabbix">Zabbix</a></li>
+        <li><a class="dropdown-item" href="#meta-ping">Meta Ping</a></li>
         </ul>
     </li>
 
@@ -2599,7 +2594,66 @@
   </main>
 </section>
 
+<section id="control-plane" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Control Plane</h2>
+    <p class="note-paragraph">
+      <strong>Control Plane</strong> adalah bagian dari arsitektur perangkat jaringan (router, switch, firewall) 
+      yang bertugas untuk mengambil keputusan bagaimana lalu lintas harus diarahkan. 
+      Control plane mengatur logika, protokol routing, serta pembuatan tabel forwarding yang nantinya digunakan oleh data plane.
+    </p>
 
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Mengelola protokol routing (OSPF, EIGRP, BGP, IS-IS).</li>
+      <li>Membangun dan memelihara tabel routing (RIB).</li>
+      <li>Menghasilkan tabel forwarding (FIB) untuk data plane.</li>
+      <li>Menangani signaling, manajemen, dan update routing.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Control Plane</h3>
+    <ul>
+      <li>Berjalan di CPU perangkat jaringan.</li>
+      <li>Menggunakan control traffic (misalnya OSPF hello, BGP update, ARP, ICMP redirect).</li>
+      <li>Lebih fokus pada pengambilan keputusan, bukan forwarding paket.</li>
+      <li>Mengonsumsi lebih banyak resource (CPU & memori) dibanding data plane.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Memungkinkan pengambilan keputusan cerdas dalam routing & manajemen traffic.</li>
+      <li>Memberikan fleksibilitas dalam mendukung berbagai protokol routing.</li>
+      <li>Dapat dioptimalkan untuk high availability melalui protokol redundansi.</li>
+      <li>Terpisah dari data plane, sehingga forwarding tetap berjalan meski control plane sibuk.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Jika CPU overload, control plane bisa terganggu dan routing terputus.</li>
+      <li>Lebih rentan terhadap serangan DoS/DDoS berbasis control traffic.</li>
+      <li>Membutuhkan proteksi ekstra (misalnya Control Plane Policing - CoPP).</li>
+      <li>Tidak langsung mem-forward traffic user, hanya membuat keputusan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Router menghitung SPF (Shortest Path First) dengan OSPF untuk menentukan rute terbaik.</li>
+      <li>BGP mengiklankan dan menerima update routing antar Autonomous System.</li>
+      <li>Switch menjalankan STP (Spanning Tree Protocol) untuk mencegah loop.</li>
+      <li>ARP request & reply dikelola sebagai bagian dari control plane.</li>
+    </ul>
+
+    <!-- <img src="img/control-plane.png" alt="Ilustrasi Control Plane" class="note-image" /> -->
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan <em>Control Plane Policing (CoPP)</em> untuk melindungi CPU dari serangan.</li>
+      <li>Monitor penggunaan CPU dan memori untuk menghindari overload.</li>
+      <li>Segmentasi management plane dan control plane untuk keamanan ekstra.</li>
+      <li>Pastikan protokol routing hanya diaktifkan di interface yang relevan.</li>
+    </ul>
+  </main>
+</section>
 
 <section id="nat" class="note-container container">
   <main class="note-main">
@@ -4104,665 +4158,6 @@
     </ul>
   </main>
 </section>
-
-
-<section id="control-traffic" class="note-container container">
-  <main class="note-main">
-    <h2 class="note-title text-center">Control Traffic</h2>
-    <p class="note-paragraph">
-      <strong>Control Traffic</strong> adalah jenis lalu lintas jaringan yang digunakan untuk mengelola, 
-      memonitor, dan mengatur perangkat jaringan serta protokol komunikasi. 
-      Tidak mengangkut data pengguna, tetapi informasi yang mengontrol jalannya jaringan, seperti routing, signaling, dan manajemen link.
-    </p>
-
-    <h3 class="note-subtitle">Fungsi Utama</h3>
-    <ul>
-      <li>Menyampaikan informasi routing antara perangkat jaringan (misalnya OSPF, BGP updates).</li>
-      <li>Mendukung protokol manajemen jaringan seperti SNMP, ICMP, dan LLDP.</li>
-      <li>Menjaga stabilitas dan ketersediaan jaringan dengan signaling dan kontrol link.</li>
-      <li>Menyediakan mekanisme monitoring dan diagnosa jaringan secara real-time.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Karakteristik Control Traffic</h3>
-    <ul>
-      <li>Biasanya bersifat kecil dan sporadis dibandingkan data traffic.</li>
-      <li>Connectionless atau connection-oriented tergantung protokol (misal ICMP vs. TCP).</li>
-      <li>Memiliki prioritas tinggi agar jaringan tetap stabil dan responsif.</li>
-      <li>Tidak membawa data aplikasi pengguna, tetapi instruksi dan status jaringan.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kelebihan</h3>
-    <ul>
-      <li>Menjaga kestabilan dan ketersediaan jaringan.</li>
-      <li>Mendukung routing dinamis dan manajemen trafik real-time.</li>
-      <li>Memudahkan troubleshooting dan monitoring jaringan.</li>
-      <li>Memastikan protokol jaringan dapat beroperasi dengan baik.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kekurangan</h3>
-    <ul>
-      <li>Meskipun kecil, kontrol traffic berlebih bisa menyebabkan overhead di jaringan padat.</li>
-      <li>Jika terganggu, bisa menimbulkan gangguan routing atau manajemen link.</li>
-      <li>Memerlukan pengaturan QoS agar selalu prioritas, terutama di jaringan backbone.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Kasus</h3>
-    <ul>
-      <li>Router OSPF saling bertukar LSA untuk menentukan jalur terbaik.</li>
-      <li>Switch menggunakan LLDP untuk mendeteksi perangkat tetangga.</li>
-      <li>Perangkat memonitor status link melalui SNMP dan ICMP ping secara berkala.</li>
-    </ul>
-
-    <!-- <img src="img/control-traffic.png" alt="Ilustrasi Control Traffic" class="note-image" /> -->
-
-    <h3 class="note-subtitle">Tips Praktis</h3>
-    <ul>
-      <li>Prioritaskan control traffic di jaringan kritikal menggunakan QoS.</li>
-      <li>Monitor control traffic untuk memastikan routing dan signaling berjalan lancar.</li>
-      <li>Gunakan segmentasi atau VLAN untuk memisahkan control traffic dari data traffic intensif.</li>
-      <li>Pastikan protokol kontrol selalu di-update agar kompatibel dengan perangkat jaringan terbaru.</li>
-    </ul>
-  </main>
-</section>
-
-<section id="ip-traffic" class="note-container container">
-  <main class="note-main">
-    <h2 class="note-title text-center">IP Traffic</h2>
-    <p class="note-paragraph">
-      <strong>IP Traffic</strong> adalah jenis lalu lintas jaringan yang membawa data pengguna 
-      melalui protokol Internet Protocol (IP). Ini mencakup semua komunikasi yang dikemas dalam 
-      paket IP, baik berupa web browsing, email, file transfer, streaming, maupun aplikasi lainnya.
-    </p>
-
-    <h3 class="note-subtitle">Fungsi Utama</h3>
-    <ul>
-      <li>Mengangkut data aplikasi pengguna dari sumber ke tujuan melalui jaringan IP.</li>
-      <li>Mendukung berbagai protokol transport seperti TCP, UDP, dan ICMP.</li>
-      <li>Memungkinkan routing dinamis dan statis untuk efisiensi pengiriman paket.</li>
-      <li>Menyediakan dasar untuk Internet dan jaringan private (LAN/WAN).</li>
-    </ul>
-
-    <h3 class="note-subtitle">Karakteristik IP Traffic</h3>
-    <ul>
-      <li>Berasal dari berbagai aplikasi dan protokol berbasis IP.</li>
-      <li>Dapat berupa traffic reliabel (TCP) atau cepat/tidak reliabel (UDP).</li>
-      <li>Paket IP berisi header dengan informasi alamat sumber, tujuan, TTL, dan protokol.</li>
-      <li>Dapat melewati berbagai media fisik (Ethernet, Wi-Fi, MPLS, dsb.).</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kelebihan</h3>
-    <ul>
-      <li>Standar universal untuk komunikasi data antar perangkat di jaringan modern.</li>
-      <li>Fleksibel dan kompatibel dengan berbagai jenis aplikasi.</li>
-      <li>Mendukung routing, fragmentation, dan QoS untuk performa optimal.</li>
-      <li>Mudah dimonitor menggunakan alat analisis jaringan berbasis IP.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kekurangan</h3>
-    <ul>
-      <li>Reliabilitas tergantung protokol transport, TCP untuk jaminan, UDP untuk kecepatan.</li>
-      <li>Tanpa mekanisme keamanan bawaan; perlu firewall atau IPSec untuk proteksi.</li>
-      <li>IP traffic bisa padat sehingga memerlukan manajemen bandwidth agar tidak terjadi congestion.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Kasus</h3>
-    <ul>
-      <li>Browsing web menggunakan HTTP/HTTPS yang dikemas dalam paket IP.</li>
-      <li>Streaming video melalui YouTube atau Netflix menggunakan UDP/TCP over IP.</li>
-      <li>File transfer antar server dalam jaringan LAN/WAN dengan protokol TCP/IP.</li>
-    </ul>
-
-    <!-- <img src="img/ip-traffic.png" alt="Ilustrasi IP Traffic" class="note-image" /> -->
-
-    <h3 class="note-subtitle">Tips Praktis</h3>
-    <ul>
-      <li>Gunakan monitoring berbasis IP untuk menganalisis performa jaringan.</li>
-      <li>Prioritaskan traffic kritikal menggunakan QoS agar latency minimal.</li>
-      <li>Pastikan alamat IP unik untuk setiap perangkat agar tidak terjadi konflik.</li>
-      <li>Gunakan firewall dan IPSec untuk menjaga keamanan IP traffic di jaringan publik atau private.</li>
-    </ul>
-  </main>
-</section>
-<section id="ethernet-traffic" class="note-container container">
-  <main class="note-main">
-    <h2 class="note-title text-center">Ethernet Traffic</h2>
-    <p class="note-paragraph">
-      <strong>Ethernet Traffic</strong> adalah jenis lalu lintas jaringan yang dikirim melalui 
-      protokol Ethernet, protokol standar untuk LAN. Ethernet mengatur bagaimana data dikemas 
-      dalam frame, ditransmisikan, dan diterima oleh perangkat dalam jaringan lokal.
-    </p>
-
-    <h3 class="note-subtitle">Fungsi Utama</h3>
-    <ul>
-      <li>Mengangkut data antar perangkat dalam jaringan LAN.</li>
-      <li>Mendukung pengiriman frame dengan alamat MAC sebagai identitas perangkat.</li>
-      <li>Menyediakan mekanisme deteksi kesalahan sederhana melalui CRC.</li>
-      <li>Mendukung berbagai kecepatan seperti 10/100/1000 Mbps dan 10/25/40/100 Gbps.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Karakteristik Ethernet Traffic</h3>
-    <ul>
-      <li>Data dikirim dalam bentuk <strong>frame</strong> dengan header, payload, dan trailer.</li>
-      <li>Menggunakan alamat MAC untuk identifikasi sumber dan tujuan.</li>
-      <li>Biasanya connectionless dan bekerja di layer 2 (data link layer) OSI.</li>
-      <li>Dapat bekerja di topologi star, bus, atau ring tergantung perangkat.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kelebihan</h3>
-    <ul>
-      <li>Standar de facto untuk jaringan LAN modern.</li>
-      <li>Fleksibel dan mudah diimplementasikan dengan switch dan NIC standar.</li>
-      <li>Memiliki mekanisme deteksi error (CRC) untuk keandalan dasar.</li>
-      <li>Dukungan kecepatan tinggi hingga ratusan Gbps di jaringan backbone.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kekurangan</h3>
-    <ul>
-      <li>Tidak menjamin QoS secara bawaan; memerlukan VLAN atau QoS tambahan.</li>
-      <li>Collision bisa terjadi di jaringan hub lama (CSMA/CD), walaupun jarang di switch modern.</li>
-      <li>Frame Ethernet terbatas ukurannya (maks 1518 bytes untuk frame standar).</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Kasus</h3>
-    <ul>
-      <li>Pengiriman data antar komputer di kantor melalui switch Ethernet.</li>
-      <li>Streaming video dalam LAN menggunakan frame Ethernet standar.</li>
-      <li>Pengiriman paket VoIP melalui jaringan Ethernet kantor.</li>
-    </ul>
-
-    <!-- <img src="img/ethernet-traffic.png" alt="Ilustrasi Ethernet Traffic" class="note-image" /> -->
-
-    <h3 class="note-subtitle">Tips Praktis</h3>
-    <ul>
-      <li>Gunakan switch modern untuk menghindari collision dan meningkatkan throughput.</li>
-      <li>Implementasikan VLAN untuk segmentasi dan manajemen traffic Ethernet.</li>
-      <li>Monitor penggunaan bandwidth dan error frame untuk performa optimal.</li>
-      <li>Pastikan NIC dan kabel mendukung kecepatan link agar Ethernet traffic stabil.</li>
-    </ul>
-  </main>
-</section>
-
-<section id="mpls-traffic" class="note-container container">
-  <main class="note-main">
-    <h2 class="note-title text-center">MPLS Traffic</h2>
-    <p class="note-paragraph">
-      <strong>MPLS Traffic</strong> adalah jenis lalu lintas jaringan yang menggunakan 
-      <strong>Multiprotocol Label Switching (MPLS)</strong> untuk pengiriman paket data. 
-      MPLS mempermudah forwarding paket berdasarkan label, bukan alamat IP, sehingga 
-      meningkatkan efisiensi routing dan mendukung Quality of Service (QoS).
-    </p>
-
-    <h3 class="note-subtitle">Fungsi Utama</h3>
-    <ul>
-      <li>Mengirim paket data berdasarkan label MPLS daripada alamat IP.</li>
-      <li>Mendukung pengaturan jalur khusus (traffic engineering) untuk performa optimal.</li>
-      <li>Menyediakan QoS untuk prioritas trafik tertentu (VoIP, video, data kritikal).</li>
-      <li>Mempermudah integrasi berbagai protokol dalam satu jaringan backbone.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Karakteristik MPLS Traffic</h3>
-    <ul>
-      <li>Connection-oriented di layer 2.5; paket diberi label sebelum forwarding.</li>
-      <li>Dapat membawa berbagai jenis payload: IP, Ethernet, ATM, Frame Relay.</li>
-      <li>Mendukung jalur statis maupun dinamis melalui MPLS TE (Traffic Engineering).</li>
-      <li>Meningkatkan efisiensi routing dibandingkan routing IP tradisional.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kelebihan</h3>
-    <ul>
-      <li>Routing cepat berbasis label, mengurangi beban pada router.</li>
-      <li>Prioritas dan QoS terjamin untuk trafik penting.</li>
-      <li>Mendukung berbagai protokol dan jenis payload dalam satu jaringan.</li>
-      <li>Mempermudah pengaturan jalur (traffic engineering) untuk menghindari kemacetan.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kekurangan</h3>
-    <ul>
-      <li>Implementasi lebih kompleks dibandingkan routing IP standar.</li>
-      <li>Perlu perangkat MPLS-aware (router/switch dengan kemampuan MPLS).</li>
-      <li>Konfigurasi TE dan QoS memerlukan keahlian khusus.</li>
-      <li>Kurang efisien untuk jaringan kecil tanpa kebutuhan QoS atau traffic engineering.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Kasus</h3>
-    <ul>
-      <li>ISP menggunakan MPLS untuk mengatur jalur VoIP dengan latensi rendah.</li>
-      <li>Perusahaan menggunakan MPLS VPN untuk menghubungkan beberapa kantor cabang.</li>
-      <li>Backbone jaringan operator menggunakan MPLS untuk traffic engineering dan prioritas paket kritikal.</li>
-    </ul>
-
-    <!-- <img src="img/mpls-traffic.png" alt="Ilustrasi MPLS Traffic" class="note-image" /> -->
-
-    <h3 class="note-subtitle">Tips Praktis</h3>
-    <ul>
-      <li>Pastikan router dan switch mendukung MPLS dan label switching.</li>
-      <li>Gunakan MPLS TE untuk jalur kritikal agar menghindari congestion.</li>
-      <li>Implementasikan QoS untuk memprioritaskan trafik penting di jaringan MPLS.</li>
-      <li>Monitor label-switched paths (LSP) agar performa dan stabilitas tetap optimal.</li>
-    </ul>
-  </main>
-</section>
-
-
-<section id="vxlan-overlay-traffic" class="note-container container">
-  <main class="note-main">
-    <h2 class="note-title text-center">VXLAN Traffic</h2>
-    <p class="note-paragraph">
-      <strong>VXLAN (Virtual Extensible LAN) Traffic</strong> adalah jenis lalu lintas jaringan yang menggunakan 
-      protokol VXLAN untuk membuat overlay network di atas infrastruktur IP/L3. VXLAN memungkinkan 
-      segmentasi layer 2 dalam jaringan layer 3, sangat berguna untuk data center modern dan virtualisasi.
-    </p>
-
-    <h3 class="note-subtitle">Fungsi Utama</h3>
-    <ul>
-      <li>Membungkus frame Layer 2 ke dalam paket UDP untuk transport Layer 3.</li>
-      <li>Mendukung pembuatan overlay network dengan ribuan segment (VXLAN IDs).</li>
-      <li>Meningkatkan skalabilitas data center dan multi-tenant environment.</li>
-      <li>Mendukung mobilitas VM antar host tanpa mengubah alamat IP Layer 2.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Karakteristik VXLAN Traffic</h3>
-    <ul>
-      <li>Berbasis encapsulation: frame L2 dikapsulkan ke dalam UDP/IP.</li>
-      <li>Menggunakan VXLAN Network Identifier (VNI) untuk segmentasi.</li>
-      <li>Dapat melewati jaringan L3 (IP) tanpa kehilangan isolasi L2.</li>
-      <li>Dukungan untuk multitenancy dan overlay networks di cloud/data center.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kelebihan</h3>
-    <ul>
-      <li>Meningkatkan skalabilitas LAN tradisional hingga ribuan segment virtual.</li>
-      <li>Mendukung mobilitas VM tanpa perlu perubahan IP fisik.</li>
-      <li>Integrasi mudah dengan hypervisor dan SDN controllers.</li>
-      <li>Membuat overlay network terisolasi dan aman untuk tenant berbeda.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kekurangan</h3>
-    <ul>
-      <li>Menambah overhead karena encapsulation (UDP/IP headers tambahan).</li>
-      <li>Memerlukan perangkat dan switch yang mendukung VXLAN (VTEP).</li>
-      <li>Kompleksitas manajemen lebih tinggi dibanding VLAN tradisional.</li>
-      <li>Monitoring dan troubleshooting lebih sulit karena lalu lintas overlay.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Kasus</h3>
-    <ul>
-      <li>Data center menggunakan VXLAN untuk memisahkan tenant A dan B secara virtual.</li>
-      <li>VM yang berpindah dari host satu ke host lain tetap menggunakan alamat IP yang sama.</li>
-      <li>Jaringan cloud hybrid memanfaatkan VXLAN overlay untuk integrasi L2 di atas L3.</li>
-    </ul>
-
-    <!-- <img src="img/vxlan-traffic.png" alt="Ilustrasi VXLAN Traffic" class="note-image" /> -->
-
-    <h3 class="note-subtitle">Tips Praktis</h3>
-    <ul>
-      <li>Pastikan switch/router mendukung VXLAN dan VTEP untuk overlay network.</li>
-      <li>Monitor overlay traffic untuk menghindari congestion di jaringan fisik.</li>
-      <li>Gunakan VXLAN IDs unik untuk setiap tenant agar tidak terjadi konflik segment.</li>
-      <li>Integrasikan dengan SDN/Orchestrator untuk manajemen dan automasi yang lebih efisien.</li>
-    </ul>
-  </main>
-</section>
-
-<section id="voice-video-traffic" class="note-container container">
-  <main class="note-main">
-    <h2 class="note-title text-center">Voice & Video Traffic</h2>
-    <p class="note-paragraph">
-      <strong>Voice & Video Traffic</strong> adalah jenis lalu lintas jaringan yang membawa data suara dan video 
-      secara real-time melalui jaringan IP. Biasanya menggunakan protokol seperti VoIP (SIP/RTP) untuk suara 
-      dan RTP/RTCP untuk video streaming agar kualitas komunikasi tetap optimal.
-    </p>
-
-    <h3 class="note-subtitle">Fungsi Utama</h3>
-    <ul>
-      <li>Menyampaikan komunikasi suara dan video secara real-time antar pengguna.</li>
-      <li>Mendukung aplikasi VoIP, video conference, dan streaming multimedia.</li>
-      <li>Menggunakan protokol transport seperti RTP/UDP untuk latency rendah.</li>
-      <li>Mendukung QoS untuk prioritas dan kualitas layanan yang konsisten.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Karakteristik Voice & Video Traffic</h3>
-    <ul>
-      <li>Real-time dan latency-sensitive; delay lebih dari beberapa ratus ms bisa mengganggu kualitas.</li>
-      <li>Memerlukan bandwidth cukup dan jitter rendah agar kualitas suara/video tetap baik.</li>
-      <li>Biasanya dikirim via UDP untuk mengurangi overhead dan delay retransmission.</li>
-      <li>Memerlukan QoS dan prioritas tinggi di jaringan untuk menghindari packet loss.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kelebihan</h3>
-    <ul>
-      <li>Mendukung komunikasi real-time yang penting untuk bisnis dan kolaborasi.</li>
-      <li>Efisien dalam penggunaan bandwidth dibandingkan metode tradisional.</li>
-      <li>Dapat diintegrasikan dengan aplikasi enterprise dan cloud.</li>
-      <li>Dapat menggunakan codec untuk kompresi dan optimalisasi kualitas.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kekurangan</h3>
-    <ul>
-      <li>Sangat sensitif terhadap latency, jitter, dan packet loss.</li>
-      <li>Memerlukan QoS dan jaringan yang stabil agar kualitas tetap baik.</li>
-      <li>Pengaturan codec dan bandwidth perlu disesuaikan dengan kapasitas jaringan.</li>
-      <li>Kesalahan konfigurasi jaringan dapat menyebabkan drop panggilan atau video putus-putus.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Kasus</h3>
-    <ul>
-      <li>Panggilan VoIP antar kantor menggunakan SIP/RTP dengan QoS untuk kualitas optimal.</li>
-      <li>Video conference perusahaan yang menghubungkan beberapa lokasi menggunakan bandwidth prioritas.</li>
-      <li>Streaming webinar atau online training dengan latency rendah dan jitter minimal.</li>
-    </ul>
-
-    <!-- <img src="img/voice-video-traffic.png" alt="Ilustrasi Voice & Video Traffic" class="note-image" /> -->
-
-    <h3 class="note-subtitle">Tips Praktis</h3>
-    <ul>
-      <li>Prioritaskan voice & video traffic menggunakan QoS agar kualitas real-time tetap optimal.</li>
-      <li>Monitor jitter, latency, dan packet loss secara berkala.</li>
-      <li>Gunakan codec efisien untuk menghemat bandwidth tanpa mengurangi kualitas.</li>
-      <li>Pastikan jaringan mendukung trafik burst saat konferensi multi-pengguna.</li>
-    </ul>
-  </main>
-</section>
-
-<section id="storage-traffic" class="note-container container">
-  <main class="note-main">
-    <h2 class="note-title text-center">Storage Traffic (iSCSI, FCoE, NFS)</h2>
-    <p class="note-paragraph">
-      <strong>Storage Traffic</strong> adalah jenis lalu lintas jaringan yang mengangkut data dari dan ke perangkat penyimpanan (storage) 
-      menggunakan protokol khusus seperti <strong>iSCSI</strong>, <strong>FCoE (Fibre Channel over Ethernet)</strong>, dan <strong>NFS (Network File System)</strong>. 
-      Traffic ini umumnya sensitif terhadap latency dan membutuhkan bandwidth tinggi untuk performa optimal.
-    </p>
-
-    <h3 class="note-subtitle">Fungsi Utama</h3>
-    <ul>
-      <li>Mengirim data blok atau file dari server ke storage dan sebaliknya.</li>
-      <li>Mendukung SAN (Storage Area Network) dan NAS (Network Attached Storage).</li>
-      <li>Memastikan transfer data cepat, handal, dan konsisten untuk aplikasi kritikal.</li>
-      <li>Mendukung protokol yang spesifik untuk storage seperti iSCSI, FCoE, dan NFS.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Karakteristik Storage Traffic</h3>
-    <ul>
-      <li>Sangat sensitif terhadap latency dan packet loss.</li>
-      <li>Menggunakan protokol transport TCP/IP (iSCSI, NFS) atau Ethernet encapsulation (FCoE).</li>
-      <li>Biasanya prioritas tinggi di jaringan enterprise untuk mencegah bottleneck.</li>
-      <li>Sering menggunakan dedicated network atau VLAN untuk isolasi dari traffic lain.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kelebihan</h3>
-    <ul>
-      <li>Performa tinggi dan konsisten untuk akses storage kritikal.</li>
-      <li>Mendukung virtualisasi dan clustering di data center.</li>
-      <li>Memudahkan manajemen storage melalui protokol standar.</li>
-      <li>Memungkinkan integrasi SAN/NAS dengan jaringan IP yang ada.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kekurangan</h3>
-    <ul>
-      <li>Memerlukan bandwidth tinggi agar tidak terjadi bottleneck.</li>
-      <li>Perlu monitoring khusus untuk latency, jitter, dan packet loss.</li>
-      <li>Implementasi lebih kompleks dibanding traffic data biasa.</li>
-      <li>FCoE memerlukan perangkat yang mendukung Ethernet dengan lossless mode.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Kasus</h3>
-    <ul>
-      <li>Server database mengakses SAN via iSCSI untuk membaca dan menulis data blok secara cepat.</li>
-      <li>Virtual machine menggunakan storage FCoE untuk performa tinggi dan integrasi dengan VLAN.</li>
-      <li>File server menggunakan NFS untuk berbagi file antar server Linux dalam jaringan enterprise.</li>
-    </ul>
-
-    <!-- <img src="img/storage-traffic.png" alt="Ilustrasi Storage Traffic" class="note-image" /> -->
-
-    <h3 class="note-subtitle">Tips Praktis</h3>
-    <ul>
-      <li>Pisahkan storage traffic dari jaringan data biasa menggunakan VLAN atau dedicated link.</li>
-      <li>Monitor latency, throughput, dan error untuk menjaga performa storage tetap optimal.</li>
-      <li>Gunakan protokol yang sesuai dengan kebutuhan: iSCSI untuk IP-based SAN, FCoE untuk Ethernet lossless, NFS untuk file sharing.</li>
-      <li>Pastikan jaringan mendukung prioritas traffic storage untuk mencegah bottleneck pada aplikasi kritikal.</li>
-    </ul>
-  </main>
-</section>
-
-<section id="management-traffic" class="note-container container">
-  <main class="note-main">
-    <h2 class="note-title text-center">Management Traffic</h2>
-    <p class="note-paragraph">
-      <strong>Management Traffic</strong> adalah jenis lalu lintas jaringan yang digunakan untuk mengelola, 
-      memonitor, dan mengatur perangkat jaringan. Berbeda dengan data pengguna, management traffic membawa 
-      informasi untuk administrasi jaringan seperti konfigurasi, status perangkat, dan protokol monitoring.
-    </p>
-
-    <h3 class="note-subtitle">Fungsi Utama</h3>
-    <ul>
-      <li>Menyediakan akses untuk konfigurasi perangkat (switch, router, firewall).</li>
-      <li>Mendukung protokol manajemen jaringan seperti SNMP, SSH, Telnet, dan ICMP.</li>
-      <li>Memantau kesehatan dan performa jaringan secara real-time.</li>
-      <li>Mendukung pengumpulan log, auditing, dan alerting pada jaringan enterprise.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Karakteristik Management Traffic</h3>
-    <ul>
-      <li>Berukuran kecil dibandingkan data traffic, biasanya berupa paket ringan.</li>
-      <li>Bersifat kritikal untuk operasional jaringan meskipun volume rendah.</li>
-      <li>Memerlukan keamanan tinggi karena membawa akses ke perangkat jaringan.</li>
-      <li>Dapat diprioritaskan menggunakan QoS agar tidak terganggu traffic lain.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kelebihan</h3>
-    <ul>
-      <li>Memudahkan administrasi dan pemantauan jaringan.</li>
-      <li>Meningkatkan stabilitas jaringan melalui monitoring real-time.</li>
-      <li>Memungkinkan automasi jaringan dengan protokol manajemen modern.</li>
-      <li>Dapat mengurangi downtime dengan deteksi dini masalah jaringan.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kekurangan</h3>
-    <ul>
-      <li>Jika terganggu atau hilang, perangkat tidak bisa dimonitor atau dikonfigurasi.</li>
-      <li>Memerlukan proteksi keamanan karena traffic ini sensitif.</li>
-      <li>Overhead kecil tapi tetap bisa menjadi bottleneck di jaringan sangat padat jika tidak diatur.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Kasus</h3>
-    <ul>
-      <li>Administrator mengakses switch melalui SSH untuk konfigurasi VLAN.</li>
-      <li>Router mengirim SNMP traps ke server monitoring untuk alert jaringan.</li>
-      <li>Perangkat firewall mengirim log aktivitas ke syslog server untuk audit keamanan.</li>
-    </ul>
-
-    <!-- <img src="img/management-traffic.png" alt="Ilustrasi Management Traffic" class="note-image" /> -->
-
-    <h3 class="note-subtitle">Tips Praktis</h3>
-    <ul>
-      <li>Pisahkan management traffic ke VLAN atau jaringan dedicated untuk keamanan.</li>
-      <li>Gunakan protokol aman seperti SSH dan SNMPv3 untuk akses jaringan.</li>
-      <li>Prioritaskan traffic ini agar tetap responsif di jaringan sibuk.</li>
-      <li>Monitor terus status perangkat agar gangguan jaringan bisa diatasi lebih cepat.</li>
-    </ul>
-  </main>
-</section>
-
-<section id="control-plane-traffic" class="note-container container">
-  <main class="note-main">
-    <h2 class="note-title text-center">Control Plane Traffic</h2>
-    <p class="note-paragraph">
-      <strong>Control Plane Traffic</strong> adalah jenis lalu lintas jaringan yang digunakan oleh perangkat jaringan 
-      untuk saling bertukar informasi kontrol, seperti routing, signaling, dan protokol manajemen link. 
-      Traffic ini berbeda dari data pengguna (data plane) karena bertujuan mengatur jalannya jaringan.
-    </p>
-
-    <h3 class="note-subtitle">Fungsi Utama</h3>
-    <ul>
-      <li>Menyampaikan update routing antar router (OSPF, BGP, IS-IS).</li>
-      <li>Mendukung protokol signaling dan manajemen link (ICMP, LDP, BFD).</li>
-      <li>Memastikan jaringan tetap stabil dan perangkat dapat menentukan jalur optimal.</li>
-      <li>Mendukung monitoring, diagnosa, dan troubleshooting jaringan.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Karakteristik Control Plane Traffic</h3>
-    <ul>
-      <li>Volume biasanya kecil, tapi sangat kritikal untuk operasional jaringan.</li>
-      <li>Memiliki prioritas tinggi agar routing dan signaling tidak terganggu.</li>
-      <li>Bersifat connectionless atau connection-oriented tergantung protokol.</li>
-      <li>Tidak membawa data pengguna, melainkan informasi kontrol jaringan.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kelebihan</h3>
-    <ul>
-      <li>Menjaga kestabilan jaringan dengan update routing real-time.</li>
-      <li>Mendukung protokol routing dinamis dan manajemen link secara efisien.</li>
-      <li>Memudahkan troubleshooting karena informasi kontrol tersedia di perangkat.</li>
-      <li>Meningkatkan keandalan dan ketersediaan jaringan.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kekurangan</h3>
-    <ul>
-      <li>Jika control plane traffic terganggu, jaringan bisa menjadi tidak stabil atau routing gagal.</li>
-      <li>Perlu pengaturan QoS agar prioritasnya tetap tinggi di jaringan padat.</li>
-      <li>Overhead kecil tapi kritikal, sehingga kehilangan paket bisa berdampak besar.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Kasus</h3>
-    <ul>
-      <li>Router OSPF saling bertukar LSA untuk update jalur terbaik.</li>
-      <li>BGP update antara ISP untuk menentukan path internet optimal.</li>
-      <li>LDP exchange di MPLS untuk membangun Label Switched Path (LSP).</li>
-    </ul>
-
-    <!-- <img src="img/control-plane-traffic.png" alt="Ilustrasi Control Plane Traffic" class="note-image" /> -->
-
-    <h3 class="note-subtitle">Tips Praktis</h3>
-    <ul>
-      <li>Prioritaskan control plane traffic dengan QoS untuk menghindari gangguan routing.</li>
-      <li>Monitor control plane agar network convergence tetap cepat dan stabil.</li>
-      <li>Segmentasi traffic control dari data plane untuk isolasi dan keamanan.</li>
-      <li>Pastikan protokol routing dan signaling selalu kompatibel antar perangkat.</li>
-    </ul>
-  </main>
-</section>
-
-<section id="multicast" class="note-container container">
-  <main class="note-main">
-    <h2 class="note-title text-center">Multicast Traffic</h2>
-    <p class="note-paragraph">
-      <strong>Multicast Traffic</strong> adalah jenis lalu lintas jaringan di mana satu sumber mengirimkan data 
-      ke sekelompok tujuan tertentu secara bersamaan. Berbeda dari unicast (satu-ke-satu) atau broadcast (satu-ke-semua), 
-      multicast efisien untuk pengiriman data ke banyak penerima yang terdaftar di grup multicast.
-    </p>
-
-    <h3 class="note-subtitle">Fungsi Utama</h3>
-    <ul>
-      <li>Mendistribusikan konten secara efisien ke beberapa penerima tanpa menggandakan paket.</li>
-      <li>Mendukung aplikasi streaming video, IPTV, dan konferensi video.</li>
-      <li>Mengurangi beban jaringan dibandingkan jika menggunakan unicast untuk semua penerima.</li>
-      <li>Memungkinkan grup multicast untuk berlangganan atau berhenti menerima traffic secara dinamis.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Karakteristik Multicast Traffic</h3>
-    <ul>
-      <li>Sumber mengirim satu paket, tetapi dapat diterima banyak penerima.</li>
-      <li>Memerlukan protokol manajemen grup seperti IGMP (IPv4) atau MLD (IPv6).</li>
-      <li>Routing multicast menggunakan PIM (Protocol Independent Multicast) untuk mendistribusi paket.</li>
-      <li>Efisien dalam penggunaan bandwidth karena paket tidak digandakan di jaringan backbone.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kelebihan</h3>
-    <ul>
-      <li>Penggunaan bandwidth lebih efisien dibanding unicast untuk banyak penerima.</li>
-      <li>Cocok untuk aplikasi streaming dan distribusi konten skala besar.</li>
-      <li>Mendukung dynamic group membership melalui protokol IGMP/MLD.</li>
-      <li>Dapat dikombinasikan dengan QoS untuk memastikan kualitas streaming real-time.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kekurangan</h3>
-    <ul>
-      <li>Kompleksitas manajemen lebih tinggi dibanding unicast.</li>
-      <li>Memerlukan perangkat jaringan yang mendukung multicast routing (PIM, IGMP snooping).</li>
-      <li>Jika tidak dikonfigurasi dengan benar, multicast dapat menyebabkan traffic flood di jaringan.</li>
-      <li>Debugging dan troubleshooting lebih rumit dibanding unicast atau broadcast.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Kasus</h3>
-    <ul>
-      <li>Streaming video konferensi ke beberapa kantor cabang menggunakan multicast group.</li>
-      <li>IPTV provider mendistribusikan saluran TV ke banyak pelanggan melalui jaringan multicast.</li>
-      <li>Pembaruan software atau patch dikirimkan ke banyak server secara efisien dengan multicast.</li>
-    </ul>
-
-    <!-- <img src="img/multicast-traffic.png" alt="Ilustrasi Multicast Traffic" class="note-image" /> -->
-
-    <h3 class="note-subtitle">Tips Praktis</h3>
-    <ul>
-      <li>Gunakan IGMP snooping untuk membatasi multicast hanya ke port yang membutuhkannya.</li>
-      <li>Pastikan routing multicast dikonfigurasi dengan PIM di seluruh jaringan.</li>
-      <li>Monitor grup multicast dan bandwidth untuk menghindari flooding traffic.</li>
-      <li>Segmentasi jaringan jika perlu untuk mengisolasi multicast dari traffic biasa.</li>
-    </ul>
-  </main>
-</section>
-
-<section id="control-plane" class="note-container container">
-  <main class="note-main">
-    <h2 class="note-title text-center">Control Plane</h2>
-    <p class="note-paragraph">
-      <strong>Control Plane</strong> adalah bagian dari arsitektur perangkat jaringan (router, switch, firewall) 
-      yang bertugas untuk mengambil keputusan bagaimana lalu lintas harus diarahkan. 
-      Control plane mengatur logika, protokol routing, serta pembuatan tabel forwarding yang nantinya digunakan oleh data plane.
-    </p>
-
-    <h3 class="note-subtitle">Fungsi Utama</h3>
-    <ul>
-      <li>Mengelola protokol routing (OSPF, EIGRP, BGP, IS-IS).</li>
-      <li>Membangun dan memelihara tabel routing (RIB).</li>
-      <li>Menghasilkan tabel forwarding (FIB) untuk data plane.</li>
-      <li>Menangani signaling, manajemen, dan update routing.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Karakteristik Control Plane</h3>
-    <ul>
-      <li>Berjalan di CPU perangkat jaringan.</li>
-      <li>Menggunakan control traffic (misalnya OSPF hello, BGP update, ARP, ICMP redirect).</li>
-      <li>Lebih fokus pada pengambilan keputusan, bukan forwarding paket.</li>
-      <li>Mengonsumsi lebih banyak resource (CPU & memori) dibanding data plane.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kelebihan</h3>
-    <ul>
-      <li>Memungkinkan pengambilan keputusan cerdas dalam routing & manajemen traffic.</li>
-      <li>Memberikan fleksibilitas dalam mendukung berbagai protokol routing.</li>
-      <li>Dapat dioptimalkan untuk high availability melalui protokol redundansi.</li>
-      <li>Terpisah dari data plane, sehingga forwarding tetap berjalan meski control plane sibuk.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kekurangan</h3>
-    <ul>
-      <li>Jika CPU overload, control plane bisa terganggu dan routing terputus.</li>
-      <li>Lebih rentan terhadap serangan DoS/DDoS berbasis control traffic.</li>
-      <li>Membutuhkan proteksi ekstra (misalnya Control Plane Policing - CoPP).</li>
-      <li>Tidak langsung mem-forward traffic user, hanya membuat keputusan.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Kasus</h3>
-    <ul>
-      <li>Router menghitung SPF (Shortest Path First) dengan OSPF untuk menentukan rute terbaik.</li>
-      <li>BGP mengiklankan dan menerima update routing antar Autonomous System.</li>
-      <li>Switch menjalankan STP (Spanning Tree Protocol) untuk mencegah loop.</li>
-      <li>ARP request & reply dikelola sebagai bagian dari control plane.</li>
-    </ul>
-
-    <!-- <img src="img/control-plane.png" alt="Ilustrasi Control Plane" class="note-image" /> -->
-
-    <h3 class="note-subtitle">Tips Praktis</h3>
-    <ul>
-      <li>Gunakan <em>Control Plane Policing (CoPP)</em> untuk melindungi CPU dari serangan.</li>
-      <li>Monitor penggunaan CPU dan memori untuk menghindari overload.</li>
-      <li>Segmentasi management plane dan control plane untuk keamanan ekstra.</li>
-      <li>Pastikan protokol routing hanya diaktifkan di interface yang relevan.</li>
-    </ul>
-  </main>
-</section>
-
 
 <section id="tunnel" class="note-container container">
   <main class="note-main">
