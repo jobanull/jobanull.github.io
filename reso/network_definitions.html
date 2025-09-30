@@ -1266,7 +1266,6 @@
     </ul>
   </main>
 </section>
-
 <section id="cost-routing" class="note-container container">
   <main class="note-main">
     <h2 class="note-title text-center">Cost Routing</h2>
@@ -1299,6 +1298,57 @@
     </ul>
 
     <!-- <img src="img/cost-routing.png" alt="Ilustrasi Cost Routing" class="note-image" /> -->
+
+    <h3 class="note-subtitle">Perbandingan Cost Routing Protocol</h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Routing Protocol</th>
+          <th>Dasar Cost/Metrik</th>
+          <th>Formula / Mekanisme</th>
+          <th>Urutan Pemilihan Jalur</th>
+          <th>Catatan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>RIP</strong></td>
+          <td>Hop Count</td>
+          <td>Jumlah router (hop)</td>
+          <td>Hop terkecil dipilih</td>
+          <td>Max hop = 15, tidak lihat bandwidth/delay</td>
+        </tr>
+        <tr>
+          <td><strong>OSPF</strong></td>
+          <td>Bandwidth</td>
+          <td>Cost = Ref BW / Interface BW (default Ref BW = 100 Mbps)</td>
+          <td>Bandwidth besar = cost kecil</td>
+          <td>Bisa override manual (<code>ip ospf cost</code>)</td>
+        </tr>
+        <tr>
+          <td><strong>EIGRP</strong></td>
+          <td>Bandwidth &amp; Delay (default)</td>
+          <td>Metric = (10^7 / min_bandwidth) + (sum_delay/10)</td>
+          <td>Bandwidth besar + delay kecil lebih disukai</td>
+          <td>K-values bisa diubah, default pakai BW+Delay</td>
+        </tr>
+        <tr>
+          <td><strong>IS-IS</strong></td>
+          <td>Default Cost (manual/auto)</td>
+          <td>Tiap link biasanya cost = 10 (default Cisco)</td>
+          <td>Total cost terkecil dipilih</td>
+          <td>Bisa dikustom sesuai kebijakan admin</td>
+        </tr>
+        <tr>
+          <td><strong>BGP</strong></td>
+          <td>Path Attributes</td>
+          <td>LOCAL_PREF &gt; AS_PATH &gt; ORIGIN &gt; MED &gt; eBGP/iBGP &gt; IGP metric &gt; Router ID</td>
+          <td>Ikuti best path selection</td>
+          <td>Tidak pakai angka “cost” sederhana</td>
+        </tr>
+      </tbody>
+    </table>
+
 
     <h3 class="note-subtitle">Tips Praktis</h3>
     <ul>
