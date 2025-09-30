@@ -3760,6 +3760,46 @@
   </main>
 </section>
 
+
+<section id="stackwise" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cisco StackWise</h2>
+    <p class="note-paragraph">
+      <strong>StackWise</strong> adalah teknologi dari Cisco yang memungkinkan beberapa switch fisik 
+      digabung menjadi satu kesatuan logis (logical switch). Dengan menggunakan kabel khusus StackWise, 
+      switch-switch tersebut akan bekerja seolah-olah hanya ada satu perangkat dengan satu control plane.
+    </p>
+
+    <h3 class="note-subtitle">Karakteristik Utama</h3>
+    <ul>
+      <li><strong>Stack Master</strong> - switch utama yang mengontrol manajemen, konfigurasi, dan distribusi.</li>
+      <li><strong>Member Switch</strong> - switch tambahan yang menambah kapasitas port dan forwarding.</li>
+      <li><strong>Redundansi</strong> - jika master gagal, otomatis salah satu member akan menjadi master baru.</li>
+      <li><strong>Skalabilitas</strong> - dapat menambah switch baru tanpa konfigurasi ulang dari nol.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Fungsi dan Manfaat</h3>
+    <p class="note-paragraph">
+      StackWise memberikan kemudahan manajemen, peningkatan ketersediaan, dan efisiensi jaringan. 
+      Semua switch dalam stack berbagi satu IP management dan tampil sebagai satu perangkat tunggal.
+    </p>
+    <ul>
+      <li>Menyederhanakan administrasi jaringan karena hanya perlu satu konfigurasi.</li>
+      <li>Memperluas jumlah port dengan menambahkan switch baru ke dalam stack.</li>
+      <li>Meningkatkan keandalan karena ada failover otomatis ke switch lain.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus Penggunaan</h3>
+    <ul>
+      <li>Digunakan pada <em>Distribution Layer Switch</em> untuk meningkatkan redundansi.</li>
+      <li>Di <em>Access Layer</em>, mempermudah manajemen banyak switch seolah-olah menjadi satu perangkat.</li>
+      <li>Pada jaringan kampus atau enterprise untuk mempermudah skalabilitas port.</li>
+    </ul>
+
+    <!-- <img src="img/stackwise.png" alt="Ilustrasi Cisco StackWise" class="note-image" />
+  </main> -->
+</section>
+
 <section id="device-naming" class="note-container container">
   <main class="note-main">
     <h2 class="note-title text-center">Device Naming Convention</h2>
