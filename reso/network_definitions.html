@@ -146,7 +146,10 @@
         <li><a class="dropdown-item" href="#multicast">Multicast</a></li>
         <li><a class="dropdown-item" href="#broadcast">Broadcast</a></li>
         <li><a class="dropdown-item" href="#uplink-downlink">Uplink & Downlink</a></li>
-        <li><a class="dropdown-item" href="#ieee">IEEE</a></li>
+        <li><a class="dropdown-item" href="#ieee">IEEE</a></li> 
+        <li><a class="dropdown-item" href="#fibre-channel">Fibre Channel</a></li>
+        <li><a class="dropdown-item" href="#network-segmentation">Network Segmentation & Microsegmentation</a></li>
+        <li><a class="dropdown-item" href="#overlay-underlay">Overlay & Underlay</a></li>
  
         </ul>
     </li>
@@ -2463,6 +2466,139 @@
     </ul>
   </main>
 </section>
+
+
+<section id="fibre-channel" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Fibre Channel</h2>
+    <p class="note-paragraph">
+      <strong>Fibre Channel (FC)</strong> adalah protokol jaringan berkecepatan tinggi 
+      yang dirancang khusus untuk <em>storage networking</em> (Storage Area Network / SAN). 
+      Teknologi ini memungkinkan server berkomunikasi langsung dengan storage 
+      menggunakan performa tinggi, latency rendah, dan reliabilitas yang tinggi.
+    </p>
+
+    <h3 class="note-subtitle">Karakteristik Fibre Channel</h3>
+    <ul>
+      <li><strong>Tujuan:</strong> Menghubungkan server (host) ke storage seperti disk array dengan kinerja tinggi.</li>
+      <li><strong>Transportasi:</strong> Biasanya lewat kabel serat optik, meskipun bisa juga menggunakan tembaga.</li>
+      <li><strong>Kecepatan:</strong> Umumnya 2, 4, 8, 16, 32, hingga 128 Gbps.</li>
+      <li><strong>Protokol:</strong> Fibre Channel dapat membawa perintah SCSI sehingga host seolah langsung berbicara ke disk.</li>
+    </ul>
+
+    <h3 class="note-subtitle">FCoE (Fibre Channel over Ethernet)</h3>
+    <p class="note-paragraph">
+      <strong>FCoE</strong> adalah teknologi yang memungkinkan protokol Fibre Channel 
+      dijalankan di atas jaringan Ethernet. Dengan ini, jaringan data (Ethernet) 
+      dan jaringan storage (Fibre Channel) dapat digabung dalam satu infrastruktur.
+    </p>
+    <ul>
+      <li><strong>Cara Kerja:</strong> Frame Fibre Channel dienkapsulasi ke dalam Ethernet frame sehingga bisa berjalan di 10G/25G/40G Ethernet.</li>
+      <li><strong>Kelebihan:</strong> Mengurangi jumlah kabel dan adapter, mendukung <em>Converged Network Adapter (CNA)</em> untuk Ethernet + FCoE.</li>
+      <li><strong>Keterbatasan:</strong> Membutuhkan switch yang mendukung <em>Data Center Bridging (DCB)</em> agar Ethernet bisa bersifat lossless.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkas</h3>
+    <ul>
+      <li><strong>Fibre Channel:</strong> Jaringan storage dedicated, performa tinggi, digunakan di SAN.</li>
+      <li><strong>FCoE:</strong> Fibre Channel di atas Ethernet, hemat infrastruktur dengan berbagi kabel untuk data & storage.</li>
+    </ul>
+  </main>
+</section>
+
+
+<section id="network-segmentation" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Network Segmentation & Microsegmentation</h2>
+    <p class="note-paragraph">
+      <strong>Network segmentation</strong> dan <strong>microsegmentation</strong> adalah teknik pembagian jaringan
+      untuk meningkatkan keamanan, performa, dan pengelolaan. 
+      Bedanya terletak pada seberapa detail tingkat pembagiannya.
+    </p>
+
+    <h3 class="note-subtitle">Network Segmentation</h3>
+    <ul>
+      <li><strong>Definisi:</strong> Membagi jaringan besar menjadi beberapa segmen (subnet/VLAN) agar lalu lintas lebih terkontrol.</li>
+      <li><strong>Tujuan:</strong> 
+        <ol>
+          <li>Meningkatkan keamanan (serangan di 1 segmen tidak menyebar ke segmen lain).</li>
+          <li>Meningkatkan performa (membatasi broadcast domain, mengurangi congestion).</li>
+          <li>Manajemen lebih mudah (setiap segmen bisa punya kebijakan sendiri).</li>
+        </ol>
+      </li>
+      <li><strong>Contoh Implementasi:</strong> VLAN di switch (VLAN 10 = HR, VLAN 20 = Finance), firewall rules antar subnet.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Microsegmentation</h3>
+    <ul>
+      <li><strong>Definisi:</strong> Segmentasi yang lebih detail hingga level workload, server, atau aplikasi, dengan aturan akses spesifik.</li>
+      <li><strong>Umumnya dipakai di:</strong> Data center modern & cloud (SDN, virtualized network).</li>
+      <li><strong>Keuntungan:</strong>
+        <ol>
+          <li><em>Zero Trust Security</em>: semua komunikasi ditolak secara default, hanya diizinkan lewat aturan eksplisit.</li>
+          <li>Granular control: bukan hanya antar subnet, tapi antar VM, container, bahkan aplikasi.</li>
+          <li>Membatasi lateral movement: serangan di satu server tidak bisa dengan mudah menyebar ke server lain.</li>
+        </ol>
+      </li>
+      <li><strong>Contoh Implementasi:</strong> VMware NSX (firewall per-VM), Kubernetes network policies, Cisco ACI (policy per EPG).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkas</h3>
+    <ul>
+      <li><strong>Network segmentation:</strong> level jaringan/subnet (misalnya antar divisi kantor).</li>
+      <li><strong>Microsegmentation:</strong> level workload/aplikasi (misalnya antar VM/container dalam subnet yang sama).</li>
+    </ul>
+  </main>
+</section>
+
+<section id="overlay-underlay" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Overlay & Underlay Concepts</h2>
+    <p class="note-paragraph">
+      <strong>Underlay</strong> adalah jaringan fisik (real) yang membawa paket dari titik A ke titik B, 
+      sedangkan <strong>Overlay</strong> adalah jaringan virtual yang dibangun di atas underlay menggunakan teknik tunneling atau encapsulation. 
+      Konsep ini banyak digunakan di data center modern dan Software-Defined Networking (SDN).
+    </p>
+
+    <h3 class="note-subtitle">Underlay Network</h3>
+    <ul>
+      <li><strong>Definisi:</strong> Jaringan fisik yang terdiri dari switch, router, kabel, dan protokol routing.</li>
+      <li><strong>Tugas utama:</strong> Menyediakan <em>basic connectivity</em> antar perangkat dengan protokol standar (misalnya OSPF, BGP, IS-IS).</li>
+      <li><strong>Karakteristik:</strong> Simple, biasanya berupa IP fabric (leaf-spine), fokus pada reachability & keandalan.</li>
+      <li><strong>Analogi:</strong> Jalan raya & infrastruktur kota.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Overlay Network</h3>
+    <ul>
+      <li><strong>Definisi:</strong> Jaringan virtual di atas underlay yang menggunakan tunneling/encapsulation.</li>
+      <li><strong>Cara kerja:</strong> Paket asli dibungkus dengan header tambahan agar bisa menumpang jaringan underlay.</li>
+      <li><strong>Tujuan:</strong> Memberikan fleksibilitas & segmentasi tanpa perlu mengubah infrastruktur fisik.</li>
+      <li><strong>Teknologi umum:</strong> VXLAN, GRE, NVGRE, MPLS, Geneve.</li>
+      <li><strong>Manfaat:</strong>
+        <ol>
+          <li>Multi-tenant isolation (misalnya di cloud / data center).</li>
+          <li>Membawa VLAN/L2 network antar lokasi fisik lewat IP network.</li>
+          <li>Lebih scalable dibanding VLAN tradisional (VXLAN support hingga 16 juta segment vs VLAN max 4096).</li>
+        </ol>
+      </li>
+      <li><strong>Analogi:</strong> Jalan tol layang di atas kota – jalur virtual yang bisa dipakai tenant tertentu tanpa ganggu jalan bawah.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Hubungan Underlay & Overlay</h3>
+    <ul>
+      <li><strong>Underlay:</strong> Memberikan transport dasar (misalnya leaf-spine dengan BGP EVPN).</li>
+      <li><strong>Overlay:</strong> Memberikan layanan fleksibel (misalnya VXLAN untuk isolasi tenant).</li>
+      <li>Overlay tidak akan berjalan tanpa underlay karena underlay yang membawa paket encapsulated ke tujuan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkas</h3>
+    <ul>
+      <li><strong>Underlay:</strong> Jaringan fisik (IP routing biasa).</li>
+      <li><strong>Overlay:</strong> Jaringan virtual di atas underlay (VXLAN/MPLS untuk isolasi & fleksibilitas).</li>
+    </ul>
+  </main>
+</section>
+
 
 
 <section id="nat" class="note-container container">
