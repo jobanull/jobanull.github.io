@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload PDF dan Ambil Nama File</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Upload File PDF</h2>
+    <input type="file" id="pdfUploader" multiple accept=".pdf">
+    <h3>Daftar Nama File:</h3>
+    <ul id="fileList"></ul>
+
+    <script>
+        const uploader = document.getElementById('pdfUploader');
+        const fileList = document.getElementById('fileList');
+
+        uploader.addEventListener('change', () => {
+            // Kosongkan daftar sebelumnya
+            fileList.innerHTML = '';
+
+            // Ambil file yang diupload
+            const files = Array.from(uploader.files);
+
+            // Filter hanya file PDF
+            const pdfFiles = files.filter(file => file.type === "application/pdf");
+
+            if(pdfFiles.length === 0){
+                fileList.innerHTML = "<li>Tidak ada file PDF yang dipilih</li>";
+                return;
+            }
+
+            // Tampilkan nama file
+            pdfFiles.forEach(file => {
+                const li = document.createElement('li');
+                li.textContent = file.name;
+                fileList.appendChild(li);
+            });
+        });
+    </script>
+</body>
+</html>
