@@ -81,6 +81,7 @@
         <li><a class="dropdown-item" href="#intserv">IntServ</a></li>
         <li><a class="dropdown-item" href="#spike">Spike</a></li>
         <li><a class="dropdown-item" href="#scheduling">Scheduling</a></li>
+        <li><a class="dropdown-item" href="#wireless">Wireless</a></li>
         </ul>
     </li>
 
@@ -769,6 +770,62 @@
   </main>
 </section>
 
+<section id="wireless" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Wireless</h2>
+    <p class="note-paragraph">
+      <strong>Wireless</strong> adalah teknologi jaringan yang memungkinkan perangkat seperti laptop, smartphone, 
+      atau IoT device terhubung tanpa kabel. Proses koneksi melibatkan beberapa tahap dari pemilihan SSID, 
+      autentikasi, hingga mendapatkan IP address melalui DHCP sehingga perangkat bisa berkomunikasi di jaringan.
+    </p>
+
+    <h3 class="note-subtitle">Proses Koneksi Wi-Fi</h3>
+    <ul>
+      <li><strong>Scanning SSID:</strong> Laptop mencari dan mendeteksi Access Point (AP) dengan SSID tertentu.</li>
+      <li><strong>Authentication:</strong> Laptop melakukan login ke AP. Jika menggunakan WPA/WPA2/WPA3, terjadi 
+          <em>4-way handshake</em> untuk pertukaran kunci enkripsi.</li>
+      <li><strong>Association:</strong> Laptop resmi terhubung dengan AP, channel komunikasi terbentuk.</li>
+      <li><strong>DHCP:</strong> Laptop broadcast permintaan IP (Discover), menerima tawaran (Offer), mengajukan request, 
+          lalu DHCP server memberikan ACK beserta subnet mask, gateway, dan DNS.</li>
+      <li><strong>ARP:</strong> Laptop menanyakan MAC address gateway melalui ARP Request, gateway membalas ARP Reply, 
+          sehingga laptop siap mengirim paket ke jaringan.</li>
+      <li><strong>Komunikasi Aktif:</strong> Setelah IP dan MAC gateway didapat, laptop bisa ping gateway dan mengakses internet.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Urutan Paket (Frame/Packet) di Wireshark</h3>
+    <ul>
+      <li>Probe Request → Laptop broadcast cari SSID.</li>
+      <li>Probe Response → AP balas SSID, channel, security info.</li>
+      <li>Authentication Request/Response → Laptop dan AP autentikasi.</li>
+      <li>Association Request/Response → Laptop resmi terhubung.</li>
+      <li>EAPOL 4-Way Handshake → Pertukaran kunci enkripsi (jika WPA/WPA2/WPA3).</li>
+      <li>DHCP Discover → Laptop broadcast cari server IP.</li>
+      <li>DHCP Offer → Server/AP menawarkan IP.</li>
+      <li>DHCP Request → Laptop minta IP tertentu.</li>
+      <li>DHCP ACK → Server/AP konfirmasi binding IP.</li>
+      <li>ARP Request → Laptop tanyakan MAC gateway.</li>
+      <li>ARP Reply → Gateway balas dengan MAC address.</li>
+      <li>ICMP Echo/Reply → Laptop ping gateway, siap komunikasi normal.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Catatan Penting</h3>
+    <ul>
+      <li>ARP kadang muncul dua kali: untuk pengecekan konflik IP saat DHCP dan untuk komunikasi pertama ke gateway.</li>
+      <li>Layer yang terlibat: 802.11 Management Frame → EAPOL (security) → DHCP (UDP/IP) → ARP → TCP/IP traffic.</li>
+      <li>Proses ini memastikan laptop dapat berkomunikasi dengan jaringan dan internet secara aman dan terstruktur.</li>
+    </ul>
+
+    <!-- <img src="img/wireless.png" alt="Ilustrasi Koneksi Wireless" class="note-image" /> -->
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Seorang pengguna laptop di kafe public Wi-Fi memilih SSID, memasukkan password, dan otomatis mendapatkan IP 
+          dari DHCP router untuk browsing internet.</li>
+      <li>Di kantor, laptop karyawan terhubung ke Wi-Fi enterprise dengan WPA2 Enterprise, autentikasi via EAP, 
+          DHCP memberikan IP internal, lalu laptop dapat mengakses server internal dan internet.</li>
+    </ul>
+  </main>
+</section>
 
 
 <section id="handshake" class="note-container container">
