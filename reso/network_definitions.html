@@ -228,8 +228,7 @@
         Tunneling / VPN
         </a>
         <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#tunnel">Tunnel</a></li>
-        <li><a class="dropdown-item" href="#vpn">VPN (Virtual Private Network)</a></li>
+        <li><a class="dropdown-item" href="#tunnel">Tunnel</a></li>ß
         <li><a class="dropdown-item" href="#vpn">VPN (Virtual Private Network)</a></li>
         <li><a class="dropdown-item" href="#dmvpn">DMVPN</a></li>
         </ul>
@@ -4218,6 +4217,354 @@
   </main>
 </section>
 
+<section id="prtg" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">PRTG Network Monitor</h2>
+    <p class="note-paragraph">
+      <strong>PRTG</strong> adalah perangkat lunak pemantauan jaringan yang membantu administrator memonitor ketersediaan, performa, dan kesehatan jaringan secara real-time. PRTG mendukung berbagai jenis sensor untuk perangkat jaringan, server, aplikasi, dan layanan cloud.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Memantau status perangkat jaringan (router, switch, firewall) dan server.</li>
+      <li>Mengukur bandwidth, traffic, dan penggunaan jaringan.</li>
+      <li>Mendeteksi downtime atau gangguan pada jaringan dan layanan.</li>
+      <li>Menyediakan laporan performa historis untuk analisis dan perencanaan kapasitas.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik PRTG</h3>
+    <ul>
+      <li>Menggunakan konsep <em>sensor</em> untuk memantau berbagai metrik (ping, SNMP, NetFlow, WMI, HTTP, dll.).</li>
+      <li>Menawarkan dashboard visual yang mudah dibaca dan dikustomisasi.</li>
+      <li>Mendukung notifikasi melalui email, SMS, atau push notification jika terjadi masalah.</li>
+      <li>Dapat diinstal di server lokal atau dijalankan di cloud.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Memudahkan monitoring seluruh infrastruktur jaringan dari satu platform.</li>
+      <li>Menyediakan alert otomatis saat terjadi gangguan.</li>
+      <li>Dapat membuat laporan dan grafik performa untuk analisis mendalam.</li>
+      <li>Mendukung integrasi dengan sistem lain melalui API dan sensor kustom.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Versi gratis dibatasi jumlah sensor, bisa menjadi mahal untuk jaringan besar.</li>
+      <li>Konfigurasi awal bisa kompleks untuk jaringan dengan banyak perangkat.</li>
+      <li>Kinerja dashboard bisa lambat jika jumlah sensor sangat banyak.</li>
+      <li>Memerlukan pengetahuan dasar tentang protokol monitoring (SNMP, WMI, NetFlow, dll.).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Memantau uptime router dan switch di kantor cabang.</li>
+      <li>Memonitor penggunaan bandwidth internet dan VPN.</li>
+      <li>Mengirim alert otomatis saat server email atau database down.</li>
+    </ul>
+
+    <!-- <img src="img/prtg-dashboard.png" alt="Ilustrasi PRTG Dashboard" class="note-image" /> -->
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan sensor yang sesuai untuk perangkat dan layanan yang dimonitor.</li>
+      <li>Tentukan threshold alert agar tidak terjadi false positive.</li>
+      <li>Manfaatkan dashboard dan laporan untuk analisis performa jangka panjang.</li>
+      <li>Rutin update PRTG agar mendapatkan fitur baru dan patch keamanan.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="grafana" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Grafana</h2>
+    <p class="note-paragraph">
+      <strong>Grafana</strong> adalah platform visualisasi data open-source yang digunakan untuk memonitor, menganalisis, dan membuat dashboard interaktif dari berbagai sumber data, seperti database, server, aplikasi, dan layanan cloud.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Membuat dashboard interaktif untuk visualisasi metrik jaringan, server, dan aplikasi.</li>
+      <li>Mengumpulkan data dari berbagai sumber (Prometheus, InfluxDB, MySQL, Elasticsearch, dll.).</li>
+      <li>Menyediakan alert otomatis berdasarkan kondisi metrik tertentu.</li>
+      <li>Mendukung analisis historis dan real-time data monitoring.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Grafana</h3>
+    <ul>
+      <li>Open-source dan dapat di-host sendiri atau menggunakan versi cloud.</li>
+      <li>Mendukung berbagai jenis visualisasi: grafik, tabel, heatmap, gauge, dll.</li>
+      <li>Integrasi mudah dengan banyak sumber data melalui plugin dan API.</li>
+      <li>Mendukung dashboard multi-user dengan hak akses berbeda.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Dashboard sangat fleksibel dan mudah dikustomisasi.</li>
+      <li>Mendukung alert otomatis melalui email, Slack, atau webhook.</li>
+      <li>Komunitas besar dan banyak plugin untuk berbagai integrasi.</li>
+      <li>Dapat menampilkan data real-time dan historis dalam satu tampilan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Membutuhkan konfigurasi awal untuk koneksi ke berbagai sumber data.</li>
+      <li>Alerting kadang kompleks jika menggunakan query atau kondisi custom.</li>
+      <li>Dashboard bisa berat jika menampilkan terlalu banyak panel atau data real-time.</li>
+      <li>Tidak menyimpan data sendiri, hanya visualisasi dari sumber data yang ada.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Membuat dashboard untuk memonitor CPU, RAM, dan traffic server.</li>
+      <li>Visualisasi penggunaan bandwidth jaringan di kantor cabang.</li>
+      <li>Integrasi dengan Prometheus untuk memantau performa aplikasi web.</li>
+    </ul>
+
+    <!-- <img src="img/grafana-dashboard.png" alt="Ilustrasi Grafana Dashboard" class="note-image" /> -->
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan panel dan visualisasi sesuai kebutuhan metrik.</li>
+      <li>Optimalkan query agar dashboard tetap responsif.</li>
+      <li>Manfaatkan alert untuk notifikasi otomatis saat metrik kritis tercapai.</li>
+      <li>Gunakan folder dan tag untuk mengorganisasi dashboard di tim besar.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="cacti" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Cacti</h2>
+    <p class="note-paragraph">
+      <strong>Cacti</strong> adalah platform open-source untuk memantau jaringan dan server menggunakan SNMP. Cacti mengumpulkan data performa secara periodik dan menampilkannya dalam bentuk grafik, sehingga memudahkan analisis tren jaringan atau server.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Memonitor perangkat jaringan dan server melalui SNMP.</li>
+      <li>Membuat grafik penggunaan bandwidth, CPU, RAM, dan disk.</li>
+      <li>Menyimpan data historis untuk analisis tren jangka panjang.</li>
+      <li>Mendukung notifikasi sederhana melalui email ketika terjadi anomali.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Cacti</h3>
+    <ul>
+      <li>Berbasis web dengan database MySQL untuk menyimpan data metrik.</li>
+      <li>Menggunakan RRDtool untuk membuat grafik performa dari data SNMP.</li>
+      <li>Memungkinkan pembuatan template perangkat untuk monitoring massal.</li>
+      <li>Dapat dijalankan pada server lokal atau virtual machine.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Mudah membuat grafik performa dari perangkat SNMP.</li>
+      <li>Mendukung monitoring historis untuk analisis tren jangka panjang.</li>
+      <li>Open-source dan banyak komunitas yang menyediakan template.</li>
+      <li>Dapat diintegrasikan dengan sistem lain melalui script dan plugin.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Fokus utama pada grafik, kurang mendukung alerting real-time canggih.</li>
+      <li>Dashboard tidak seinteraktif Grafana atau PRTG.</li>
+      <li>Membutuhkan konfigurasi SNMP dan template untuk tiap perangkat.</li>
+      <li>Kurang ideal untuk monitoring aplikasi modern atau cloud-native.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Grafik penggunaan bandwidth pada router dan switch di kantor cabang.</li>
+      <li>Memantau beban CPU dan RAM server database secara historis.</li>
+      <li>Membuat laporan bulanan tren penggunaan jaringan untuk manajemen.</li>
+    </ul>
+
+    <!-- <img src="img/cacti-graph.png" alt="Ilustrasi Cacti Graph" class="note-image" /> -->
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Buat template perangkat untuk mempermudah monitoring banyak perangkat.</li>
+      <li>Gunakan interval polling yang sesuai agar data historis tetap akurat.</li>
+      <li>Optimalkan database MySQL agar performa tetap baik jika jumlah perangkat banyak.</li>
+      <li>Integrasikan dengan notifikasi sederhana untuk alert dasar melalui email.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="netbox" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">NetBox Labs</h2>
+    <p class="note-paragraph">
+      <strong>NetBox</strong> adalah aplikasi open-source untuk dokumentasi jaringan dan manajemen IP Address (IPAM) serta perangkat keras jaringan. NetBox Labs biasanya digunakan sebagai lingkungan latihan atau lab untuk mempraktikkan konfigurasi dan dokumentasi jaringan.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Mendokumentasikan perangkat jaringan, rack, koneksi, dan interface.</li>
+      <li>Memanajemen IP Address, VLAN, VRF, dan subnet.</li>
+      <li>Mendukung visualisasi topologi jaringan secara sederhana.</li>
+      <li>Digunakan untuk latihan lab atau simulasi jaringan sebelum implementasi nyata.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik NetBox Labs</h3>
+    <ul>
+      <li>Berbasis web dengan database PostgreSQL untuk menyimpan data.</li>
+      <li>Mendukung API untuk integrasi dengan alat otomasi jaringan lain.</li>
+      <li>Dapat mengelola hierarki site, rack, device, dan koneksi antar perangkat.</li>
+      <li>Versi lab biasanya ringan, untuk tujuan edukasi dan pengujian konfigurasi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Mudahkan dokumentasi jaringan secara terstruktur dan rapi.</li>
+      <li>Dapat mengelola IP Address dan VLAN secara sistematis.</li>
+      <li>Mendukung integrasi dengan otomatisasi jaringan dan script custom.</li>
+      <li>Cocok untuk lab dan simulasi sebelum implementasi produksi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Tidak memantau performa jaringan secara real-time (bukan monitoring tool).</li>
+      <li>Membutuhkan setup database dan web server untuk digunakan.</li>
+      <li>Versi lab biasanya terbatas skala dan fitur dibanding produksi.</li>
+      <li>Perlu pemahaman konsep IPAM, VLAN, dan topologi jaringan untuk penggunaan maksimal.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Mendokumentasikan rack dan perangkat jaringan di lab perusahaan.</li>
+      <li>Memanajemen IP Address dan subnet untuk jaringan lab virtual.</li>
+      <li>Simulasi topologi jaringan untuk latihan konfigurasi router dan switch.</li>
+    </ul>
+
+    <!-- <img src="img/netbox-lab.png" alt="Ilustrasi NetBox Labs" class="note-image" /> -->
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan versi lab untuk latihan tanpa risiko mengganggu jaringan produksi.</li>
+      <li>Buat hierarki site, rack, dan device dengan rapi agar mudah dipahami.</li>
+      <li>Manfaatkan API untuk integrasi dengan automation tools seperti Ansible.</li>
+      <li>Update dokumentasi secara rutin agar lab tetap konsisten dengan konfigurasi yang diuji.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="zabbix" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Zabbix</h2>
+    <p class="note-paragraph">
+      <strong>Zabbix</strong> adalah platform open-source untuk monitoring jaringan, server, aplikasi, dan layanan cloud secara real-time. Zabbix memungkinkan administrator memantau ketersediaan, performa, dan integritas sistem dengan notifikasi otomatis saat terjadi masalah.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Memonitor perangkat jaringan, server, aplikasi, dan layanan cloud.</li>
+      <li>Mengukur metrik performa seperti CPU, RAM, disk, dan traffic jaringan.</li>
+      <li>Menyediakan notifikasi otomatis melalui email, SMS, atau webhook saat terjadi gangguan.</li>
+      <li>Mendukung analisis historis dan grafik performa untuk perencanaan kapasitas.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Zabbix</h3>
+    <ul>
+      <li>Mendukung monitoring agent-based dan agentless (SNMP, IPMI, JMX, SSH, WMI).</li>
+      <li>Memiliki dashboard web interaktif dan dapat dikustomisasi sesuai kebutuhan.</li>
+      <li>Mendukung template untuk memudahkan monitoring perangkat atau aplikasi massal.</li>
+      <li>Dapat diintegrasikan dengan sistem lain menggunakan API dan media types.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Monitoring real-time lengkap untuk infrastruktur dan aplikasi.</li>
+      <li>Alerting otomatis dengan berbagai metode notifikasi.</li>
+      <li>Dukungan template mempercepat deployment monitoring massal.</li>
+      <li>Open-source dengan komunitas besar dan dokumentasi lengkap.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Konfigurasi awal cukup kompleks terutama untuk jaringan besar.</li>
+      <li>Dashboard bisa terasa berat jika memonitor banyak host dan item.</li>
+      <li>Perlu pemahaman tentang template, trigger, dan item untuk setup optimal.</li>
+      <li>Versi open-source membutuhkan maintenance manual untuk skala besar.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Memonitor uptime dan performa server database di data center.</li>
+      <li>Memantau traffic router dan switch menggunakan SNMP.</li>
+      <li>Mengirim alert otomatis jika layanan web atau email down.</li>
+    </ul>
+
+    <!-- <img src="img/zabbix-dashboard.png" alt="Ilustrasi Zabbix Dashboard" class="note-image" /> -->
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan template yang sesuai untuk perangkat dan layanan yang dimonitor.</li>
+      <li>Tentukan trigger dan threshold alert agar notifikasi relevan.</li>
+      <li>Optimalkan database backend agar performa tetap stabil untuk banyak host.</li>
+      <li>Manfaatkan dashboard dan grafik untuk analisis tren performa jangka panjang.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="meta-ping" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Meta Ping</h2>
+    <p class="note-paragraph">
+      <strong>Meta Ping</strong> adalah alat monitoring jaringan berbasis cloud yang digunakan untuk memeriksa ketersediaan dan performa situs web, server, dan layanan online. Meta Ping memberikan notifikasi real-time saat terjadi downtime atau degradasi performa.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama</h3>
+    <ul>
+      <li>Mengecek uptime dan ketersediaan server, website, atau layanan online.</li>
+      <li>Memonitor respon time dan performa layanan secara real-time.</li>
+      <li>Menyediakan notifikasi otomatis melalui email, SMS, atau webhook saat terjadi gangguan.</li>
+      <li>Membantu analisis tren performa dan downtime untuk perbaikan proaktif.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Karakteristik Meta Ping</h3>
+    <ul>
+      <li>Berbasis cloud, sehingga tidak perlu instalasi lokal.</li>
+      <li>Mendukung monitoring HTTP, HTTPS, ping, dan TCP port.</li>
+      <li>Menyediakan dashboard web yang mudah dibaca dan dikustomisasi.</li>
+      <li>Dapat mengirim alert multi-channel: email, SMS, Slack, webhook, dll.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Monitoring real-time tanpa perlu infrastruktur sendiri.</li>
+      <li>Alert cepat saat layanan down atau performa menurun.</li>
+      <li>Dashboard dan laporan sederhana untuk analisis downtime dan performa.</li>
+      <li>Cocok untuk memantau website, server, atau API eksternal.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Fokus hanya pada availability dan respon time, kurang cocok untuk monitoring internal jaringan secara detail.</li>
+      <li>Versi gratis biasanya memiliki batasan jumlah monitor dan alert.</li>
+      <li>Tergantung koneksi cloud, sehingga monitoring bisa terpengaruh jika ada gangguan pada penyedia layanan.</li>
+      <li>Kurang fleksibel dibandingkan platform monitoring full-stack seperti Zabbix atau PRTG.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Mengecek uptime website perusahaan dan alert saat website down.</li>
+      <li>Memonitor respon time API yang digunakan oleh aplikasi mobile.</li>
+      <li>Membuat laporan bulanan tentang downtime dan performa layanan web.</li>
+    </ul>
+
+    <!-- <img src="img/meta-ping-dashboard.png" alt="Ilustrasi Meta Ping Dashboard" class="note-image" /> -->
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Tambahkan semua endpoint kritis untuk monitoring agar tidak ada yang terlewat.</li>
+      <li>Atur alert threshold sesuai SLA layanan agar notifikasi relevan.</li>
+      <li>Gunakan dashboard dan laporan untuk evaluasi performa jangka panjang.</li>
+      <li>Integrasikan alert dengan tim support untuk respons cepat saat downtime.</li>
+    </ul>
+  </main>
+</section>
+
 <section id="tunnel" class="note-container container">
   <main class="note-main">
     <h2 class="note-title text-center">Tunnel</h2>
@@ -4277,7 +4624,6 @@
     </ul>
   </main>
 </section>
-
 
 <section id="vpn" class="note-container container">
   <main class="note-main">
