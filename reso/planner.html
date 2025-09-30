@@ -20,6 +20,7 @@
     button{padding:8px 12px;border-radius:8px;border:0;background:#0f62fe;color:white;cursor:pointer}
     .controls{display:flex;gap:10px;align-items:center}
     .small{font-size:0.85rem}
+    .grand-total{background:#0f62fe;color:white;font-weight:bold}
   </style>
 </head>
 <body>
@@ -174,100 +175,156 @@
     </div>
   </section>
 
+  <!-- Grand Total Section -->
+  <section class="card grand-total">
+    <h2>Total Semua Pengeluaran</h2>
+    <div class="summary">
+      <div  style="color:black;font-weight:bold">Total:</div>
+      <div id="grandTotal"  style="color:black;font-weight:bold">Rp 0</div>
+    </div>
+  </section>
+
   <script>
-    const idFormat = new Intl.NumberFormat('id-ID');
+  const idFormat = new Intl.NumberFormat('id-ID');
 
-    // Laundry
-    function computeLaundry(){
-      const start = new Date(startInput.value);
-      const end = new Date(endInput.value);
-      const targetDow = Number(daySelect.value);
-      const cost = Number(costInput.value) || 0;
-      const dates = [];
-      if(!startInput.value||!endInput.value) return;
-      const first = new Date(start);
-      let diff = (targetDow - first.getDay() + 7)%7;
-      first.setDate(first.getDate()+diff);
-      for(let d=new Date(first); d<=end; d.setDate(d.getDate()+7)) dates.push(new Date(d));
-      datesList.innerHTML='';
-      dates.forEach(dt=>{let li=document.createElement('li');li.textContent=dt.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});datesList.appendChild(li)});
-      countEl.textContent=dates.length;
-      totalEl.textContent='Rp '+idFormat.format(dates.length*cost);
+  // --- Helper ---
+  function parseRupiah(el){
+    if(!el || !el.textContent) return 0;
+    return Number(el.textContent.replace(/[^\d]/g,'')) || 0;
+  }
+
+  function updateGrandTotal(){
+    const total =
+      parseRupiah(totalEl) +
+      parseRupiah(eggTotal) +
+      parseRupiah(lunchTotal) +
+      parseRupiah(dinnerTotal);
+    document.getElementById('grandTotal').textContent = 'Rp ' + idFormat.format(total);
+  }
+
+  // --- Laundry ---
+  function computeLaundry(){
+    if(!startInput.value||!endInput.value) return;
+    const start = new Date(startInput.value);
+    const end = new Date(endInput.value);
+    const targetDow = Number(daySelect.value);
+    const cost = Number(costInput.value) || 0;
+    const dates = [];
+
+    const first = new Date(start);
+    let diff = (targetDow - first.getDay() + 7) % 7;
+    first.setDate(first.getDate() + diff);
+
+    for(let d = new Date(first); d <= end; d.setDate(d.getDate()+7)){
+      dates.push(new Date(d));
     }
-    const startInput=document.getElementById('start');
-    const endInput=document.getElementById('end');
-    const daySelect=document.getElementById('day');
-    const costInput=document.getElementById('cost');
-    const datesList=document.getElementById('datesList');
-    const countEl=document.getElementById('count');
-    const totalEl=document.getElementById('total');
-    const todayBtn=document.getElementById('todayBtn');
-    [startInput,endInput,daySelect,costInput].forEach(el=>el.addEventListener('input',computeLaundry));
-    todayBtn.addEventListener('click',()=>{startInput.value='2025-09-25';endInput.value='2025-10-25';daySelect.value='5';costInput.value='15000';computeLaundry()});
 
-    // Sarapan
-    function computeEgg(){
-      if(!eggStart.value||!eggEnd.value) return;
-      const start=new Date(eggStart.value),end=new Date(eggEnd.value);
-      let days=0;for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){if(d.getDay()>=1&&d.getDay()<=5)days++}
-      const perDay=Number(eggPerDay.value)||0;
-      const totalEggs=days*perDay;
-      const pricePerEgg=(Number(eggPrice.value)||0)/4;
-      const totalCost=totalEggs*pricePerEgg;
-      eggCount.textContent=totalEggs+' butir';
-      eggTotal.textContent='Rp '+idFormat.format(totalCost);
+    datesList.innerHTML = '';
+    dates.forEach(dt => {
+      let li = document.createElement('li');
+      li.textContent = dt.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+      datesList.appendChild(li);
+    });
+
+    countEl.textContent = dates.length;
+    const total = dates.length * cost;
+    totalEl.textContent = 'Rp ' + idFormat.format(total);
+    updateGrandTotal();
+  }
+
+  const startInput=document.getElementById('start');
+  const endInput=document.getElementById('end');
+  const daySelect=document.getElementById('day');
+  const costInput=document.getElementById('cost');
+  const datesList=document.getElementById('datesList');
+  const countEl=document.getElementById('count');
+  const totalEl=document.getElementById('total');
+  const todayBtn=document.getElementById('todayBtn');
+  [startInput,endInput,daySelect,costInput].forEach(el=>el.addEventListener('input',computeLaundry));
+  todayBtn.addEventListener('click',()=>{startInput.value='2025-09-25';endInput.value='2025-10-25';daySelect.value='5';costInput.value='15000';computeLaundry()});
+
+  // --- Sarapan (Egg) ---
+  function computeEgg(){
+    if(!eggStart.value||!eggEnd.value) return;
+    const start=new Date(eggStart.value), end=new Date(eggEnd.value);
+    let days=0;
+    for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
+      if(d.getDay()>=1 && d.getDay()<=5) days++;
     }
-    const eggStart=document.getElementById('eggStart');
-    const eggEnd=document.getElementById('eggEnd');
-    const eggPerDay=document.getElementById('eggPerDay');
-    const eggPrice=document.getElementById('eggPrice');
-    const eggCount=document.getElementById('eggCount');
-    const eggTotal=document.getElementById('eggTotal');
-    const eggBtn=document.getElementById('eggBtn');
-    [eggStart,eggEnd,eggPerDay,eggPrice].forEach(el=>el.addEventListener('input',computeEgg));
-    eggBtn.addEventListener('click',()=>{eggStart.value='2025-09-25';eggEnd.value='2025-10-25';eggPerDay.value='2';eggPrice.value='7500';computeEgg()});
+    const perDay=Number(eggPerDay.value)||0;
+    const totalEggs=days*perDay;
+    const pricePerEgg=(Number(eggPrice.value)||0)/4;
+    const totalCost=totalEggs*pricePerEgg;
 
-    // Makan Siang
-    function computeLunch(){
-      if(!lunchStart.value||!lunchEnd.value) return;
-      const start=new Date(lunchStart.value),end=new Date(lunchEnd.value);
-      let days=0;for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){if(d.getDay()>=1&&d.getDay()<=5)days++}
-      const cost=Number(lunchCost.value)||0;
-      lunchCount.textContent=days+' hari';
-      lunchTotal.textContent='Rp '+idFormat.format(days*cost);
+    eggCount.textContent=totalEggs+' butir';
+    eggTotal.textContent='Rp '+idFormat.format(totalCost);
+    updateGrandTotal();
+  }
+
+  const eggStart=document.getElementById('eggStart');
+  const eggEnd=document.getElementById('eggEnd');
+  const eggPerDay=document.getElementById('eggPerDay');
+  const eggPrice=document.getElementById('eggPrice');
+  const eggCount=document.getElementById('eggCount');
+  const eggTotal=document.getElementById('eggTotal');
+  const eggBtn=document.getElementById('eggBtn');
+  [eggStart,eggEnd,eggPerDay,eggPrice].forEach(el=>el.addEventListener('input',computeEgg));
+  eggBtn.addEventListener('click',()=>{eggStart.value='2025-09-25';eggEnd.value='2025-10-25';eggPerDay.value='2';eggPrice.value='7500';computeEgg()});
+
+  // --- Makan Siang ---
+  function computeLunch(){
+    if(!lunchStart.value||!lunchEnd.value) return;
+    const start=new Date(lunchStart.value),end=new Date(lunchEnd.value);
+    let days=0;
+    for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
+      if(d.getDay()>=1&&d.getDay()<=5) days++;
     }
-    const lunchStart=document.getElementById('lunchStart');
-    const lunchEnd=document.getElementById('lunchEnd');
-    const lunchCost=document.getElementById('lunchCost');
-    const lunchCount=document.getElementById('lunchCount');
-    const lunchTotal=document.getElementById('lunchTotal');
-    const lunchBtn=document.getElementById('lunchBtn');
-    [lunchStart,lunchEnd,lunchCost].forEach(el=>el.addEventListener('input',computeLunch));
-    lunchBtn.addEventListener('click',()=>{lunchStart.value='2025-09-25';lunchEnd.value='2025-10-25';lunchCost.value='15000';computeLunch()});
+    const cost=Number(lunchCost.value)||0;
+    const total=days*cost;
+    lunchCount.textContent=days+' hari';
+    lunchTotal.textContent='Rp '+idFormat.format(total);
+    updateGrandTotal();
+  }
 
-    // Makan Sore
-    function computeDinner(){
-      if(!dinnerStart.value||!dinnerEnd.value) return;
-      const start=new Date(dinnerStart.value),end=new Date(dinnerEnd.value);
-      let days=0;for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){if(d.getDay()>=1&&d.getDay()<=5)days++}
-      const cost=Number(dinnerCost.value)||0;
-      dinnerCount.textContent=days+' hari';
-      dinnerTotal.textContent='Rp '+idFormat.format(days*cost);
+  const lunchStart=document.getElementById('lunchStart');
+  const lunchEnd=document.getElementById('lunchEnd');
+  const lunchCost=document.getElementById('lunchCost');
+  const lunchCount=document.getElementById('lunchCount');
+  const lunchTotal=document.getElementById('lunchTotal');
+  const lunchBtn=document.getElementById('lunchBtn');
+  [lunchStart,lunchEnd,lunchCost].forEach(el=>el.addEventListener('input',computeLunch));
+  lunchBtn.addEventListener('click',()=>{lunchStart.value='2025-09-25';lunchEnd.value='2025-10-25';lunchCost.value='15000';computeLunch()});
+
+  // --- Makan Sore ---
+  function computeDinner(){
+    if(!dinnerStart.value||!dinnerEnd.value) return;
+    const start=new Date(dinnerStart.value),end=new Date(dinnerEnd.value);
+    let days=0;
+    for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
+      if(d.getDay()>=1&&d.getDay()<=5) days++;
     }
-    const dinnerStart=document.getElementById('dinnerStart');
-    const dinnerEnd=document.getElementById('dinnerEnd');
-    const dinnerCost=document.getElementById('dinnerCost');
-    const dinnerCount=document.getElementById('dinnerCount');
-    const dinnerTotal=document.getElementById('dinnerTotal');
-    const dinnerBtn=document.getElementById('dinnerBtn');
-    [dinnerStart,dinnerEnd,dinnerCost].forEach(el=>el.addEventListener('input',computeDinner));
-    dinnerBtn.addEventListener('click',()=>{dinnerStart.value='2025-09-25';dinnerEnd.value='2025-10-25';dinnerCost.value='10000';computeDinner()});
+    const cost=Number(dinnerCost.value)||0;
+    const total=days*cost;
+    dinnerCount.textContent=days+' hari';
+    dinnerTotal.textContent='Rp '+idFormat.format(total);
+    updateGrandTotal();
+  }
 
-    // Init all
-    todayBtn.click();
-    eggBtn.click();
-    lunchBtn.click();
-    dinnerBtn.click();
-  </script>
+  const dinnerStart=document.getElementById('dinnerStart');
+  const dinnerEnd=document.getElementById('dinnerEnd');
+  const dinnerCost=document.getElementById('dinnerCost');
+  const dinnerCount=document.getElementById('dinnerCount');
+  const dinnerTotal=document.getElementById('dinnerTotal');
+  const dinnerBtn=document.getElementById('dinnerBtn');
+  [dinnerStart,dinnerEnd,dinnerCost].forEach(el=>el.addEventListener('input',computeDinner));
+  dinnerBtn.addEventListener('click',()=>{dinnerStart.value='2025-09-25';dinnerEnd.value='2025-10-25';dinnerCost.value='10000';computeDinner()});
+
+  // --- Init all ---
+  todayBtn.click();
+  eggBtn.click();
+  lunchBtn.click();
+  dinnerBtn.click();
+</script>
+
 </body>
 </html>
