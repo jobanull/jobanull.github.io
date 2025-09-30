@@ -3534,7 +3534,7 @@
 
 <section id="on-premise" class="note-container container">
   <main class="note-main">
-    <h2 class="note-title text-center">On-Premise</h2>
+    <h2 class="note-title text-center">On Premise</h2>
     <p class="note-paragraph">
       <strong>On-Premise</strong> adalah model penempatan infrastruktur IT di lokasi fisik perusahaan sendiri, 
       seperti server, storage, jaringan, dan perangkat pendukung lainnya. 
@@ -3580,6 +3580,244 @@
       <li>Pastikan backup rutin untuk mencegah kehilangan data.</li>
       <li>Gunakan segmentasi jaringan dan firewall untuk meningkatkan keamanan internal.</li>
       <li>Rencanakan kapasitas dan upgrade hardware agar mudah scaling di masa depan.</li>
+    </ul>
+  </main>
+</section>
+
+
+<section id="high-availability" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">High Availability (HA)</h2>
+    <p class="note-paragraph">
+      <strong>High Availability (HA)</strong> adalah metode atau konfigurasi pada sistem, server, atau perangkat jaringan 
+      yang bertujuan untuk memastikan layanan tetap berjalan meskipun terjadi kegagalan pada salah satu komponen. 
+      Tujuan utamanya adalah <em>meminimalkan downtime</em> dan menjaga <em>ketersediaan layanan</em>.
+    </p>
+
+    <h3 class="note-subtitle">Konsep Dasar HA</h3>
+    <ul>
+      <li><strong>Redundansi:</strong> Menyediakan perangkat/server cadangan. Jika perangkat utama gagal, perangkat cadangan otomatis mengambil alih.</li>
+      <li><strong>Failover:</strong> Proses perpindahan layanan dari perangkat utama (primary/active) ke perangkat cadangan (secondary/standby) saat terjadi gangguan.</li>
+      <li><strong>Load Sharing / Load Balancing:</strong> Beberapa konfigurasi HA memungkinkan perangkat bekerja secara active-active untuk berbagi beban trafik.</li>
+      <li><strong>Heartbeat / Health Check:</strong> Mekanisme untuk memantau kondisi perangkat utama. Jika tidak ada respons, failover dijalankan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Implementasi</h3>
+    <ul>
+      <li><strong>Firewall:</strong> Cisco ASA, Fortigate, Mikrotik CCR, pfSense dengan HA active-standby atau active-active.</li>
+      <li><strong>Server / VM:</strong> VMware vSphere HA, Proxmox HA, Kubernetes HA yang memindahkan workload saat node down.</li>
+      <li><strong>Database:</strong> MySQL Cluster, PostgreSQL HA dengan master-replica untuk mencegah data loss.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Meminimalkan downtime layanan kritikal.</li>
+      <li>Meningkatkan keandalan sistem dan jaringan.</li>
+      <li>Mendukung skala besar (enterprise & data center).</li>
+      <li>Menjamin layanan tetap online meski ada kegagalan hardware/software.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Membutuhkan biaya lebih tinggi karena ada perangkat cadangan.</li>
+      <li>Konfigurasi lebih kompleks dibanding sistem tunggal.</li>
+      <li>Memerlukan monitoring dan maintenance rutin.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Dua firewall dikonfigurasi active-standby, jika firewall utama mati, cadangan langsung aktif.</li>
+      <li>Cluster server VMware vSphere HA, workload otomatis berpindah ke host lain saat satu host down.</li>
+      <li>Database PostgreSQL dengan HA: primary mati → replica otomatis menjadi primary.</li>
+    </ul>
+
+    <!-- <img src="img/ha.png" alt="Ilustrasi High Availability" class="note-image" /> -->
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan minimal dua perangkat/server untuk redundansi.</li>
+      <li>Terapkan monitoring dan logging untuk memantau status HA.</li>
+      <li>Uji failover secara berkala untuk memastikan mekanisme berjalan.</li>
+      <li>Pertimbangkan biaya dan kebutuhan sebelum menentukan desain HA.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="lisp" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">LISP (Locator/ID Separation Protocol)</h2>
+    <p class="note-paragraph">
+      <strong>LISP</strong> (Locator/ID Separation Protocol) adalah arsitektur routing yang memisahkan 
+      fungsi alamat IP menjadi dua bagian: <em>Endpoint Identifier (EID)</em> sebagai identitas host dan 
+      <em>Routing Locator (RLOC)</em> sebagai lokasi dalam jaringan. 
+      Dengan pemisahan ini, LISP memudahkan mobilitas, multi-homing, dan skalabilitas routing.
+    </p>
+
+    <h3 class="note-subtitle">Komponen Utama LISP</h3>
+    <ul>
+      <li><strong>EID (Endpoint ID):</strong> Identitas host atau perangkat, digunakan oleh aplikasi.</li>
+      <li><strong>RLOC (Routing Locator):</strong> Lokasi perangkat di topologi jaringan, digunakan untuk forwarding.</li>
+      <li><strong>ITR (Ingress Tunnel Router):</strong> Router yang mengenkapsulasi paket dari EID ke RLOC.</li>
+      <li><strong>ETR (Egress Tunnel Router):</strong> Router yang mendekapsulasi paket dan meneruskannya ke EID.</li>
+      <li><strong>Map-Server/Map-Resolver:</strong> Basis data untuk memetakan EID ke RLOC.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Cara Kerja Sederhana</h3>
+    <ul>
+      <li>Host A (EID-A) ingin berkomunikasi dengan Host B (EID-B).</li>
+      <li>ITR mencari pemetaan EID-B ke RLOC-B melalui Map-Resolver.</li>
+      <li>ITR mengenkapsulasi paket: <em>Outer IP (RLOC-A → RLOC-B)</em> berisi <em>Inner IP (EID-A → EID-B)</em>.</li>
+      <li>ETR menerima, mendekapsulasi, lalu meneruskan paket ke Host B (EID-B).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan LISP</h3>
+    <ul>
+      <li>Mendukung mobilitas host tanpa harus mengganti identitas (IP tetap sama).</li>
+      <li>Multi-homing dengan load balancing dan failover yang lebih fleksibel.</li>
+      <li>Mengurangi ukuran routing table global, lebih scalable.</li>
+      <li>Dapat digunakan untuk overlay/VPN pada data center.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Perangkat mobile berpindah jaringan tanpa kehilangan sesi komunikasi.</li>
+      <li>Data center multi-site menggunakan LISP untuk load balancing dan redundansi.</li>
+      <li>Migrasi virtual machine antar site tetap menjaga koneksi aktif.</li>
+    </ul>
+
+    <!-- <img src="img/lisp.png" alt="Ilustrasi LISP" class="note-image" /> -->
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Pahami perbedaan fungsi EID dan RLOC sebelum implementasi.</li>
+      <li>Konfigurasikan Map-Server dan Map-Resolver dengan benar untuk pemetaan yang optimal.</li>
+      <li>Gunakan LISP untuk mendukung mobilitas, multi-homing, atau desain overlay network.</li>
+      <li>Integrasikan dengan protokol routing lain (seperti BGP) jika diperlukan di skala besar.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="dns" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Domain Name System (DNS)</h2>
+    <p class="note-paragraph">
+      <strong>DNS (Domain Name System)</strong> adalah sistem yang digunakan untuk menerjemahkan nama domain 
+      (misalnya <em>www.example.com</em>) menjadi alamat IP (misalnya <em>192.0.2.1</em>) agar dapat dipahami oleh perangkat jaringan. 
+      DNS berfungsi sebagai “buku telepon internet” yang memastikan komunikasi antar perangkat berjalan lancar.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama DNS</h3>
+    <ul>
+      <li>Mengubah nama domain menjadi alamat IP.</li>
+      <li>Memudahkan pengguna mengakses layanan tanpa menghafal alamat IP.</li>
+      <li>Menyediakan layanan hierarki dan terdistribusi untuk resolusi nama.</li>
+      <li>Memberikan dukungan keamanan melalui DNSSEC.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Internal Caching</h3>
+    <p class="note-paragraph">
+      <strong>Internal caching</strong> pada DNS digunakan untuk menyimpan hasil query sementara. 
+      Tujuannya adalah mengurangi waktu resolusi dan beban trafik ke server upstream.
+    </p>
+    <ul>
+      <li>Mengurangi latensi query DNS bagi pengguna internal.</li>
+      <li>Menghemat bandwidth karena jawaban bisa langsung diberikan dari cache.</li>
+      <li>TTL (Time To Live) menentukan berapa lama data DNS disimpan di cache.</li>
+    </ul>
+
+    <h3 class="note-subtitle">DNS Forwarding</h3>
+    <p class="note-paragraph">
+      <strong>Forwarding</strong> adalah metode di mana server DNS lokal meneruskan query yang tidak bisa dijawab 
+      ke server DNS lain (biasanya milik ISP atau public DNS seperti 8.8.8.8). 
+      Hal ini membantu efisiensi dan mempercepat resolusi nama.
+    </p>
+    <ul>
+      <li>Server DNS lokal fokus melayani cache internal.</li>
+      <li>Query eksternal diarahkan ke server upstream yang lebih cepat atau terpercaya.</li>
+      <li>Biasa digunakan untuk meningkatkan keamanan dan performa.</li>
+    </ul>
+
+    <h3 class="note-subtitle">DNSSEC (DNS Security Extensions)</h3>
+    <p class="note-paragraph">
+      <strong>DNSSEC</strong> adalah ekstensi keamanan pada DNS yang menambahkan tanda tangan digital 
+      untuk memastikan integritas dan keaslian jawaban DNS. 
+      Dengan DNSSEC, pengguna dapat yakin bahwa jawaban DNS tidak dimodifikasi oleh pihak ketiga (misalnya serangan cache poisoning).
+    </p>
+    <ul>
+      <li>Menjamin data DNS asli dari server otoritatif.</li>
+      <li>Mencegah manipulasi data (DNS spoofing).</li>
+      <li>Menggunakan kriptografi kunci publik untuk verifikasi.</li>
+    </ul>
+
+    <!-- <img src="img/dns.png" alt="Ilustrasi DNS" class="note-image" /> -->
+
+    <h3 class="note-subtitle">Contoh Kasus Penggunaan</h3>
+    <ul>
+      <li>Perusahaan menggunakan DNS caching internal untuk mempercepat akses ke aplikasi SaaS.</li>
+      <li>ISP menggunakan DNS forwarding untuk mengoptimalkan resolusi domain bagi pelanggannya.</li>
+      <li>Bank menerapkan DNSSEC untuk memastikan pengguna tidak diarahkan ke situs palsu.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="device-naming" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Device Naming Convention</h2>
+    <p class="note-paragraph">
+      <strong>Device Naming Convention</strong> adalah aturan penamaan perangkat dalam 
+      topologi jaringan. Tujuannya agar konsisten, mudah didokumentasikan, serta 
+      memudahkan identifikasi posisi dan fungsi perangkat dalam jaringan.
+    </p>
+
+    <h3 class="note-subtitle">Prinsip Umum</h3>
+    <ul>
+      <li><strong>Konsistensi</strong> - semua perangkat dinamai dengan pola yang seragam.</li>
+      <li><strong>Deskriptif</strong> - nama mencerminkan fungsi/peran perangkat.</li>
+      <li><strong>Skalabilitas</strong> - memudahkan penambahan perangkat baru tanpa membingungkan dokumentasi.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Penamaan di Enterprise</h3>
+    <ul>
+      <li><strong>CSW</strong> - Core Switch</li>
+      <li><strong>DSW</strong> - Distribution Switch</li>
+      <li><strong>ASW</strong> - Access Switch</li>
+      <li><strong>CR</strong> - Core Router</li>
+      <li><strong>ER</strong> - Edge Router</li>
+      <li><strong>BR</strong> - Border Router</li>
+      <li><strong>DR</strong> - Designated Router</li>
+      <li><strong>BDR</strong> - Backup Designated Router</li>
+      <li><strong>DROTHER</strong> - Backup Designated Router</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Penamaan di ISP/MPLS</h3>
+    <ul>
+      <li><strong>CE</strong> - Customer Edge Router</li>
+      <li><strong>PE</strong> - Provider Edge Router</li>
+      <li><strong>P</strong> - Provider Core Router</li>
+      <li><strong>RPR</strong> - Regional/Remote Provider Router</li>
+      <li><strong>ICS</strong> - Internet/Core Switch</li>
+    </ul>
+
+    <h3 class="note-subtitle">Pengertian Pod</h3>
+    <p class="note-paragraph">
+      <strong>Pod</strong> adalah satu set perangkat jaringan (router, switch, server, PC) 
+      yang dikonfigurasi sebagai satu lingkungan lab mandiri. Dalam pelatihan atau ujian 
+      sertifikasi, setiap peserta biasanya mendapatkan satu pod sehingga bisa berlatih 
+      dengan topologi yang sama tanpa mengganggu peserta lain. 
+      Penamaan perangkat dalam pod biasanya mengikuti pola:
+    </p>
+    <ul>
+      <li><strong>P1ASW1</strong> - Pod 1, Access Switch 1</li>
+      <li><strong>P1DSW1</strong> - Pod 1, Distribution Switch 1</li>
+      <li><strong>P1CSW1</strong> - Pod 1, Core Switch 1</li>
+      <li><strong>P1R1</strong> - Pod 1, Router 1</li>
+    </ul>
+
+    <h3 class="note-subtitle">Manfaat Naming Convention</h3>
+    <ul>
+      <li>Memudahkan identifikasi perangkat di diagram dan konfigurasi.</li>
+      <li>Mengurangi kesalahan saat troubleshooting dan deployment.</li>
+      <li>Menyediakan standar dokumentasi yang jelas di enterprise maupun ISP.</li>
     </ul>
   </main>
 </section>
@@ -3879,282 +4117,6 @@
       <li>Gunakan QoS untuk memprioritaskan trafik penting di buffer.</li>
       <li>Monitor latency dan packet drop untuk menilai kinerja buffer.</li>
       <li>Hindari buffer terlalu besar agar tidak terjadi bufferbloat.</li>
-    </ul>
-  </main>
-</section>
-
-<section id="high-availability" class="note-container container">
-  <main class="note-main">
-    <h2 class="note-title text-center">High Availability (HA) Configuration</h2>
-    <p class="note-paragraph">
-      <strong>High Availability (HA)</strong> adalah metode atau konfigurasi pada sistem, server, atau perangkat jaringan 
-      yang bertujuan untuk memastikan layanan tetap berjalan meskipun terjadi kegagalan pada salah satu komponen. 
-      Tujuan utamanya adalah <em>meminimalkan downtime</em> dan menjaga <em>ketersediaan layanan</em>.
-    </p>
-
-    <h3 class="note-subtitle">Konsep Dasar HA</h3>
-    <ul>
-      <li><strong>Redundansi:</strong> Menyediakan perangkat/server cadangan. Jika perangkat utama gagal, perangkat cadangan otomatis mengambil alih.</li>
-      <li><strong>Failover:</strong> Proses perpindahan layanan dari perangkat utama (primary/active) ke perangkat cadangan (secondary/standby) saat terjadi gangguan.</li>
-      <li><strong>Load Sharing / Load Balancing:</strong> Beberapa konfigurasi HA memungkinkan perangkat bekerja secara active-active untuk berbagi beban trafik.</li>
-      <li><strong>Heartbeat / Health Check:</strong> Mekanisme untuk memantau kondisi perangkat utama. Jika tidak ada respons, failover dijalankan.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Implementasi</h3>
-    <ul>
-      <li><strong>Firewall:</strong> Cisco ASA, Fortigate, Mikrotik CCR, pfSense dengan HA active-standby atau active-active.</li>
-      <li><strong>Server / VM:</strong> VMware vSphere HA, Proxmox HA, Kubernetes HA yang memindahkan workload saat node down.</li>
-      <li><strong>Database:</strong> MySQL Cluster, PostgreSQL HA dengan master-replica untuk mencegah data loss.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kelebihan</h3>
-    <ul>
-      <li>Meminimalkan downtime layanan kritikal.</li>
-      <li>Meningkatkan keandalan sistem dan jaringan.</li>
-      <li>Mendukung skala besar (enterprise & data center).</li>
-      <li>Menjamin layanan tetap online meski ada kegagalan hardware/software.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kekurangan</h3>
-    <ul>
-      <li>Membutuhkan biaya lebih tinggi karena ada perangkat cadangan.</li>
-      <li>Konfigurasi lebih kompleks dibanding sistem tunggal.</li>
-      <li>Memerlukan monitoring dan maintenance rutin.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Kasus</h3>
-    <ul>
-      <li>Dua firewall dikonfigurasi active-standby, jika firewall utama mati, cadangan langsung aktif.</li>
-      <li>Cluster server VMware vSphere HA, workload otomatis berpindah ke host lain saat satu host down.</li>
-      <li>Database PostgreSQL dengan HA: primary mati → replica otomatis menjadi primary.</li>
-    </ul>
-
-    <!-- <img src="img/ha.png" alt="Ilustrasi High Availability" class="note-image" /> -->
-
-    <h3 class="note-subtitle">Tips Praktis</h3>
-    <ul>
-      <li>Gunakan minimal dua perangkat/server untuk redundansi.</li>
-      <li>Terapkan monitoring dan logging untuk memantau status HA.</li>
-      <li>Uji failover secara berkala untuk memastikan mekanisme berjalan.</li>
-      <li>Pertimbangkan biaya dan kebutuhan sebelum menentukan desain HA.</li>
-    </ul>
-  </main>
-</section>
-
-<section id="lisp" class="note-container container">
-  <main class="note-main">
-    <h2 class="note-title text-center">LISP (Locator/ID Separation Protocol)</h2>
-    <p class="note-paragraph">
-      <strong>LISP</strong> (Locator/ID Separation Protocol) adalah arsitektur routing yang memisahkan 
-      fungsi alamat IP menjadi dua bagian: <em>Endpoint Identifier (EID)</em> sebagai identitas host dan 
-      <em>Routing Locator (RLOC)</em> sebagai lokasi dalam jaringan. 
-      Dengan pemisahan ini, LISP memudahkan mobilitas, multi-homing, dan skalabilitas routing.
-    </p>
-
-    <h3 class="note-subtitle">Komponen Utama LISP</h3>
-    <ul>
-      <li><strong>EID (Endpoint ID):</strong> Identitas host atau perangkat, digunakan oleh aplikasi.</li>
-      <li><strong>RLOC (Routing Locator):</strong> Lokasi perangkat di topologi jaringan, digunakan untuk forwarding.</li>
-      <li><strong>ITR (Ingress Tunnel Router):</strong> Router yang mengenkapsulasi paket dari EID ke RLOC.</li>
-      <li><strong>ETR (Egress Tunnel Router):</strong> Router yang mendekapsulasi paket dan meneruskannya ke EID.</li>
-      <li><strong>Map-Server/Map-Resolver:</strong> Basis data untuk memetakan EID ke RLOC.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Cara Kerja Sederhana</h3>
-    <ul>
-      <li>Host A (EID-A) ingin berkomunikasi dengan Host B (EID-B).</li>
-      <li>ITR mencari pemetaan EID-B ke RLOC-B melalui Map-Resolver.</li>
-      <li>ITR mengenkapsulasi paket: <em>Outer IP (RLOC-A → RLOC-B)</em> berisi <em>Inner IP (EID-A → EID-B)</em>.</li>
-      <li>ETR menerima, mendekapsulasi, lalu meneruskan paket ke Host B (EID-B).</li>
-    </ul>
-
-    <h3 class="note-subtitle">Kelebihan LISP</h3>
-    <ul>
-      <li>Mendukung mobilitas host tanpa harus mengganti identitas (IP tetap sama).</li>
-      <li>Multi-homing dengan load balancing dan failover yang lebih fleksibel.</li>
-      <li>Mengurangi ukuran routing table global, lebih scalable.</li>
-      <li>Dapat digunakan untuk overlay/VPN pada data center.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Kasus</h3>
-    <ul>
-      <li>Perangkat mobile berpindah jaringan tanpa kehilangan sesi komunikasi.</li>
-      <li>Data center multi-site menggunakan LISP untuk load balancing dan redundansi.</li>
-      <li>Migrasi virtual machine antar site tetap menjaga koneksi aktif.</li>
-    </ul>
-
-    <!-- <img src="img/lisp.png" alt="Ilustrasi LISP" class="note-image" /> -->
-
-    <h3 class="note-subtitle">Tips Praktis</h3>
-    <ul>
-      <li>Pahami perbedaan fungsi EID dan RLOC sebelum implementasi.</li>
-      <li>Konfigurasikan Map-Server dan Map-Resolver dengan benar untuk pemetaan yang optimal.</li>
-      <li>Gunakan LISP untuk mendukung mobilitas, multi-homing, atau desain overlay network.</li>
-      <li>Integrasikan dengan protokol routing lain (seperti BGP) jika diperlukan di skala besar.</li>
-    </ul>
-  </main>
-</section>
-
-<section id="dns" class="note-container container">
-  <main class="note-main">
-    <h2 class="note-title text-center">Domain Name System (DNS)</h2>
-    <p class="note-paragraph">
-      <strong>DNS (Domain Name System)</strong> adalah sistem yang digunakan untuk menerjemahkan nama domain 
-      (misalnya <em>www.example.com</em>) menjadi alamat IP (misalnya <em>192.0.2.1</em>) agar dapat dipahami oleh perangkat jaringan. 
-      DNS berfungsi sebagai “buku telepon internet” yang memastikan komunikasi antar perangkat berjalan lancar.
-    </p>
-
-    <h3 class="note-subtitle">Fungsi Utama DNS</h3>
-    <ul>
-      <li>Mengubah nama domain menjadi alamat IP.</li>
-      <li>Memudahkan pengguna mengakses layanan tanpa menghafal alamat IP.</li>
-      <li>Menyediakan layanan hierarki dan terdistribusi untuk resolusi nama.</li>
-      <li>Memberikan dukungan keamanan melalui DNSSEC.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Internal Caching</h3>
-    <p class="note-paragraph">
-      <strong>Internal caching</strong> pada DNS digunakan untuk menyimpan hasil query sementara. 
-      Tujuannya adalah mengurangi waktu resolusi dan beban trafik ke server upstream.
-    </p>
-    <ul>
-      <li>Mengurangi latensi query DNS bagi pengguna internal.</li>
-      <li>Menghemat bandwidth karena jawaban bisa langsung diberikan dari cache.</li>
-      <li>TTL (Time To Live) menentukan berapa lama data DNS disimpan di cache.</li>
-    </ul>
-
-    <h3 class="note-subtitle">DNS Forwarding</h3>
-    <p class="note-paragraph">
-      <strong>Forwarding</strong> adalah metode di mana server DNS lokal meneruskan query yang tidak bisa dijawab 
-      ke server DNS lain (biasanya milik ISP atau public DNS seperti 8.8.8.8). 
-      Hal ini membantu efisiensi dan mempercepat resolusi nama.
-    </p>
-    <ul>
-      <li>Server DNS lokal fokus melayani cache internal.</li>
-      <li>Query eksternal diarahkan ke server upstream yang lebih cepat atau terpercaya.</li>
-      <li>Biasa digunakan untuk meningkatkan keamanan dan performa.</li>
-    </ul>
-
-    <h3 class="note-subtitle">DNSSEC (DNS Security Extensions)</h3>
-    <p class="note-paragraph">
-      <strong>DNSSEC</strong> adalah ekstensi keamanan pada DNS yang menambahkan tanda tangan digital 
-      untuk memastikan integritas dan keaslian jawaban DNS. 
-      Dengan DNSSEC, pengguna dapat yakin bahwa jawaban DNS tidak dimodifikasi oleh pihak ketiga (misalnya serangan cache poisoning).
-    </p>
-    <ul>
-      <li>Menjamin data DNS asli dari server otoritatif.</li>
-      <li>Mencegah manipulasi data (DNS spoofing).</li>
-      <li>Menggunakan kriptografi kunci publik untuk verifikasi.</li>
-    </ul>
-
-    <!-- <img src="img/dns.png" alt="Ilustrasi DNS" class="note-image" /> -->
-
-    <h3 class="note-subtitle">Contoh Kasus Penggunaan</h3>
-    <ul>
-      <li>Perusahaan menggunakan DNS caching internal untuk mempercepat akses ke aplikasi SaaS.</li>
-      <li>ISP menggunakan DNS forwarding untuk mengoptimalkan resolusi domain bagi pelanggannya.</li>
-      <li>Bank menerapkan DNSSEC untuk memastikan pengguna tidak diarahkan ke situs palsu.</li>
-    </ul>
-  </main>
-</section>
-
-<section id="stackwise" class="note-container container">
-  <main class="note-main">
-    <h2 class="note-title text-center">Cisco StackWise</h2>
-    <p class="note-paragraph">
-      <strong>StackWise</strong> adalah teknologi dari Cisco yang memungkinkan beberapa switch fisik 
-      digabung menjadi satu kesatuan logis (logical switch). Dengan menggunakan kabel khusus StackWise, 
-      switch-switch tersebut akan bekerja seolah-olah hanya ada satu perangkat dengan satu control plane.
-    </p>
-
-    <h3 class="note-subtitle">Karakteristik Utama</h3>
-    <ul>
-      <li><strong>Stack Master</strong> - switch utama yang mengontrol manajemen, konfigurasi, dan distribusi.</li>
-      <li><strong>Member Switch</strong> - switch tambahan yang menambah kapasitas port dan forwarding.</li>
-      <li><strong>Redundansi</strong> - jika master gagal, otomatis salah satu member akan menjadi master baru.</li>
-      <li><strong>Skalabilitas</strong> - dapat menambah switch baru tanpa konfigurasi ulang dari nol.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Fungsi dan Manfaat</h3>
-    <p class="note-paragraph">
-      StackWise memberikan kemudahan manajemen, peningkatan ketersediaan, dan efisiensi jaringan. 
-      Semua switch dalam stack berbagi satu IP management dan tampil sebagai satu perangkat tunggal.
-    </p>
-    <ul>
-      <li>Menyederhanakan administrasi jaringan karena hanya perlu satu konfigurasi.</li>
-      <li>Memperluas jumlah port dengan menambahkan switch baru ke dalam stack.</li>
-      <li>Meningkatkan keandalan karena ada failover otomatis ke switch lain.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Kasus Penggunaan</h3>
-    <ul>
-      <li>Digunakan pada <em>Distribution Layer Switch</em> untuk meningkatkan redundansi.</li>
-      <li>Di <em>Access Layer</em>, mempermudah manajemen banyak switch seolah-olah menjadi satu perangkat.</li>
-      <li>Pada jaringan kampus atau enterprise untuk mempermudah skalabilitas port.</li>
-    </ul>
-
-    <!-- <img src="img/stackwise.png" alt="Ilustrasi Cisco StackWise" class="note-image" />
-  </main> -->
-</section>
-
-<section id="device-naming" class="note-container container">
-  <main class="note-main">
-    <h2 class="note-title text-center">Device Naming Convention</h2>
-    <p class="note-paragraph">
-      <strong>Device Naming Convention</strong> adalah aturan penamaan perangkat dalam 
-      topologi jaringan. Tujuannya agar konsisten, mudah didokumentasikan, serta 
-      memudahkan identifikasi posisi dan fungsi perangkat dalam jaringan.
-    </p>
-
-    <h3 class="note-subtitle">Prinsip Umum</h3>
-    <ul>
-      <li><strong>Konsistensi</strong> - semua perangkat dinamai dengan pola yang seragam.</li>
-      <li><strong>Deskriptif</strong> - nama mencerminkan fungsi/peran perangkat.</li>
-      <li><strong>Skalabilitas</strong> - memudahkan penambahan perangkat baru tanpa membingungkan dokumentasi.</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Penamaan di Enterprise</h3>
-    <ul>
-      <li><strong>CSW</strong> - Core Switch</li>
-      <li><strong>DSW</strong> - Distribution Switch</li>
-      <li><strong>ASW</strong> - Access Switch</li>
-      <li><strong>CR</strong> - Core Router</li>
-      <li><strong>ER</strong> - Edge Router</li>
-      <li><strong>BR</strong> - Border Router</li>
-      <li><strong>DR</strong> - Designated Router</li>
-      <li><strong>BDR</strong> - Backup Designated Router</li>
-      <li><strong>DROTHER</strong> - Backup Designated Router</li>
-    </ul>
-
-    <h3 class="note-subtitle">Contoh Penamaan di ISP/MPLS</h3>
-    <ul>
-      <li><strong>CE</strong> - Customer Edge Router</li>
-      <li><strong>PE</strong> - Provider Edge Router</li>
-      <li><strong>P</strong> - Provider Core Router</li>
-      <li><strong>RPR</strong> - Regional/Remote Provider Router</li>
-      <li><strong>ICS</strong> - Internet/Core Switch</li>
-    </ul>
-
-    <h3 class="note-subtitle">Pengertian Pod</h3>
-    <p class="note-paragraph">
-      <strong>Pod</strong> adalah satu set perangkat jaringan (router, switch, server, PC) 
-      yang dikonfigurasi sebagai satu lingkungan lab mandiri. Dalam pelatihan atau ujian 
-      sertifikasi, setiap peserta biasanya mendapatkan satu pod sehingga bisa berlatih 
-      dengan topologi yang sama tanpa mengganggu peserta lain. 
-      Penamaan perangkat dalam pod biasanya mengikuti pola:
-    </p>
-    <ul>
-      <li><strong>P1ASW1</strong> - Pod 1, Access Switch 1</li>
-      <li><strong>P1DSW1</strong> - Pod 1, Distribution Switch 1</li>
-      <li><strong>P1CSW1</strong> - Pod 1, Core Switch 1</li>
-      <li><strong>P1R1</strong> - Pod 1, Router 1</li>
-    </ul>
-
-    <h3 class="note-subtitle">Manfaat Naming Convention</h3>
-    <ul>
-      <li>Memudahkan identifikasi perangkat di diagram dan konfigurasi.</li>
-      <li>Mengurangi kesalahan saat troubleshooting dan deployment.</li>
-      <li>Menyediakan standar dokumentasi yang jelas di enterprise maupun ISP.</li>
     </ul>
   </main>
 </section>
