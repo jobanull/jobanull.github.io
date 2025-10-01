@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wedding Countdown — 12 Desember 2025</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#0f172a;
+      --bg2:#0b1220;
+      --accent1:#ff7aa2;
+      --accent2:#7afcff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Poppins',system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(127,90,255,0.12), transparent),
+                  radial-gradient(900px 400px at 90% 90%, rgba(122,252,255,0.05), transparent),
+                  linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:#e6eef8;
+      display:flex;align-items:center;justify-content:center;padding:32px;
+    }
+    .container{
+      width:100%;max-width:760px;background:rgba(255,255,255,0.03);
+      border-radius:20px;padding:32px;box-shadow:0 8px 30px rgba(2,6,23,0.6);backdrop-filter: blur(8px);
+      position:relative;text-align:center;
+    }
+    .couple{display:flex;gap:16px;align-items:center;justify-content:center;margin-bottom:20px}
+    .avatar{
+      width:96px;height:96px;border-radius:16px;flex:0 0 96px;background:linear-gradient(135deg,var(--accent1),var(--accent2));
+      display:flex;align-items:center;justify-content:center;font-weight:800;font-size:28px;color:#071029;box-shadow:0 6px 20px rgba(122,90,255,0.2);
+    }
+    h1{margin:0;font-size:30px;letter-spacing:-0.4px}
+    p.lead{margin:8px 0 18px;color:rgba(230,238,248,0.85)}
+    .meta{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;justify-content:center}
+    .chip{background:rgba(255,255,255,0.06);padding:8px 12px;border-radius:999px;font-weight:600;font-size:13px}
+    .countdown-wrap{background:rgba(255,255,255,0.03);padding:20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;margin-top:20px}
+    .countdown-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;width:100%}
+    @media (max-width:480px){.countdown-grid{grid-template-columns:repeat(2,1fr)}}
+    .unit{background:rgba(255,255,255,0.02);padding:16px;border-radius:10px;text-align:center}
+    .num{font-size:32px;font-weight:800;letter-spacing:-0.8px}
+    .label{font-size:12px;color:rgba(230,238,248,0.7);margin-top:6px;font-weight:600}
+    .footer-note{font-size:13px;color:rgba(230,238,248,0.65);margin-top:20px}
+    .hearts{position:absolute;right:28px;top:-24px;opacity:0.15;transform:rotate(-10deg)}
+    .pulse{animation:pulse 2.5s infinite}
+    @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.03)}100%{transform:scale(1)}}
+    .confetti-canvas{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none}
+  </style>
+</head>
+<body>
+  <canvas id="confetti" class="confetti-canvas"></canvas>
+  <div class="container" role="main">
+    <svg class="hearts" width="120" height="80" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M12 21s-8-6.5-8-11a4 4 0 0 1 8 0 4 4 0 0 1 8 0c0 4.5-8 11-8 11z" fill="url(#g)"/>
+      <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#ff7aa2"/><stop offset="1" stop-color="#7afcff"/></linearGradient></defs>
+    </svg>
+    <div class="couple">
+      <div class="avatar">E &amp; J</div>
+      <div>
+        <h1>Undangan Pernikahan</h1>
+        <p class="lead">Kami akan menikah — catat tanggalnya dan rayakan bersama kami!</p>
+        <div class="meta">
+          <div class="chip">📅 12 Desember 2025</div>
+          <div class="chip">📍 KUA Jagakarsa</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="countdown-wrap pulse">
+      <div style="font-weight:800;margin-bottom:12px">Hitung Mundur</div>
+      <div class="countdown-grid" id="countdown">
+        <div class="unit"><div class="num" id="days">--</div><div class="label">Hari</div></div>
+        <div class="unit"><div class="num" id="hours">--</div><div class="label">Jam</div></div>
+        <div class="unit"><div class="num" id="minutes">--</div><div class="label">Menit</div></div>
+        <div class="unit"><div class="num" id="seconds">--</div><div class="label">Detik</div></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const targetISO = '2025-12-12T00:00:00+07:00';
+    const target = new Date(targetISO);
+    const $days = document.getElementById('days');
+    const $hours = document.getElementById('hours');
+    const $minutes = document.getElementById('minutes');
+    const $seconds = document.getElementById('seconds');
+
+    function updateCountdown(){
+      const now = new Date();
+      let diff = target - now;
+      if (diff <= 0){
+        $days.textContent = '0'; $hours.textContent = '0'; $minutes.textContent = '0'; $seconds.textContent = '0';
+        celebrate();
+        clearInterval(intervalId);
+        return;
+      }
+      const s = Math.floor(diff/1000);
+      const days = Math.floor(s/86400);
+      const hours = Math.floor((s % 86400)/3600);
+      const minutes = Math.floor((s % 3600)/60);
+      const seconds = s % 60;
+      $days.textContent = String(days).padStart(2,'0');
+      $hours.textContent = String(hours).padStart(2,'0');
+      $minutes.textContent = String(minutes).padStart(2,'0');
+      $seconds.textContent = String(seconds).padStart(2,'0');
+    }
+
+    const intervalId = setInterval(updateCountdown, 250);
+    updateCountdown();
+
+    function celebrate(){
+      const canvas = document.getElementById('confetti');
+      canvas.width = innerWidth; canvas.height = innerHeight;
+      const ctx = canvas.getContext('2d');
+      const pieces = [];
+      const colors = ['#ff7aa2','#ffd166','#7afcff','#9b8cff','#60f99a'];
+      for(let i=0;i<150;i++){
+        pieces.push({
+          x: Math.random()*canvas.width,
+          y: Math.random()*-canvas.height,
+          vx: (Math.random()-0.5)*6,
+          vy: Math.random()*6+2,
+          r: Math.random()*6+4,
+          c: colors[Math.floor(Math.random()*colors.length)],
+          rot: Math.random()*360,
+          vr: (Math.random()-0.5)*10
+        });
+      }
+      let t=0;
+      function frame(){
+        t+=1;
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        for(const p of pieces){
+          p.x += p.vx; p.y += p.vy; p.vy += 0.12; p.rot += p.vr;
+          ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
+          ctx.fillStyle = p.c; ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r*0.6);
+          ctx.restore();
+        }
+        if(t<300) requestAnimationFrame(frame);
+        else ctx.clearRect(0,0,canvas.width,canvas.height);
+      }
+      frame();
+    }
+
+    setInterval(()=>{
+      document.title = `E & J Wedding — ${$days.textContent}d ${$hours.textContent}h ${$minutes.textContent}m`;
+    },5000);
+  </script>
+</body>
+</html>
