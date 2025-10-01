@@ -3640,7 +3640,6 @@
   </main>
 </section>
 
-
 <section id="high-availability" class="note-container container">
   <main class="note-main">
     <h2 class="note-title text-center">High Availability (HA)</h2>
@@ -3698,6 +3697,64 @@
     </ul>
   </main>
 </section>
+
+<section id="failover" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Failover</h2>
+    <p class="note-paragraph">
+      <strong>Failover</strong> adalah mekanisme otomatis untuk memindahkan layanan dari sistem utama 
+      (<em>primary/active</em>) ke sistem cadangan (<em>secondary/standby</em>) ketika terjadi gangguan 
+      atau kegagalan pada sistem utama. Failover merupakan salah satu komponen penting dalam desain High Availability (HA).
+    </p>
+
+    <h3 class="note-subtitle">Konsep Dasar Failover</h3>
+    <ul>
+      <li><strong>Primary & Secondary:</strong> Sistem utama (primary) menangani trafik, sedangkan cadangan (secondary) standby.</li>
+      <li><strong>Monitoring:</strong> Failover membutuhkan mekanisme health check untuk mendeteksi kegagalan.</li>
+      <li><strong>Switching:</strong> Saat primary gagal, layanan otomatis dialihkan ke secondary.</li>
+      <li><strong>Recovery:</strong> Setelah primary pulih, sistem bisa kembali otomatis (failback) atau manual.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Implementasi</h3>
+    <ul>
+      <li><strong>Router:</strong> VRRP, HSRP, atau CARP untuk backup default gateway.</li>
+      <li><strong>Firewall:</strong> Active-standby pair, jika firewall utama mati cadangan aktif.</li>
+      <li><strong>Server:</strong> Failover cluster Windows Server atau Linux Pacemaker/Corosync.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan</h3>
+    <ul>
+      <li>Menjamin layanan tetap berjalan meski perangkat utama gagal.</li>
+      <li>Proses switching cepat dan otomatis.</li>
+      <li>Lebih sederhana dibanding HA penuh (active-active cluster).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan</h3>
+    <ul>
+      <li>Biasanya hanya mendukung mode active-passive (secondary standby saja).</li>
+      <li>Ada risiko <em>split-brain</em> jika monitoring tidak akurat.</li>
+      <li>Tidak selalu membagi beban trafik (beda dengan load balancing).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>Dua router dengan HSRP: router utama mati, router backup otomatis jadi default gateway.</li>
+      <li>Firewall Fortigate HA active-standby, primary mati → secondary aktif.</li>
+      <li>Windows Server Failover Cluster (WSFC), aplikasi dipindahkan ke node lain saat primary gagal.</li>
+    </ul>
+
+    <!-- <img src="img/failover.png" alt="Ilustrasi Failover" class="note-image" /> -->
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Selalu uji failover secara berkala agar yakin mekanisme berjalan.</li>
+      <li>Gunakan monitoring real-time agar deteksi failure cepat.</li>
+      <li>Pastikan konfigurasi jaringan mendukung switching cepat.</li>
+      <li>Jika perlu, siapkan mekanisme failback agar sistem bisa kembali ke primary.</li>
+    </ul>
+  </main>
+</section>
+
 
 <section id="lisp" class="note-container container">
   <main class="note-main">
