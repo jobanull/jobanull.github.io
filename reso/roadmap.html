@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Roadmap Network Engineer — Interactive Chart</title>
+  <style>
+    :root{
+      --bg: #0f172a;
+      --card: #0b1220;
+      --muted: #94a3b8;
+      --yellow: #f59e0b;
+      --green: #10b981;
+      --glass: rgba(255,255,255,0.03);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#071029 0%, #071428 100%);
+      color:#e6eef8;
+      min-height:100vh;
+      padding:28px;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    .app{
+      max-width:1100px;
+      margin:0 auto;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:12px;
+      padding:22px;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      border:1px solid rgba(255,255,255,0.03);
+    }
+
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    header h1{font-size:18px;margin:0}
+    header p{margin:0;color:var(--muted);font-size:13px}
+
+    /* Org chart container */
+    .chart{
+      display:flex;
+      justify-content:center;
+      padding:18px 8px 36px;
+      overflow:auto;
+    }
+
+    .node{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:12px;
+      min-width:160px;
+    }
+
+    .level{
+      display:flex;
+      gap:28px;
+      align-items:flex-start;
+      justify-content:center;
+      padding:18px 8px;
+    }
+
+    /* connectors (vertical lines) */
+    .connector{
+      width:2px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      height:18px;
+      border-radius:2px;
+    }
+
+    .card-btn{
+      appearance:none;
+      -webkit-appearance:none;
+      border:0;
+      padding:12px 16px;
+      border-radius:10px;
+      min-width:160px;
+      text-align:left;
+      font-weight:600;
+      background:linear-gradient(180deg, var(--glass), rgba(255,255,255,0.01));
+      color:inherit;
+      box-shadow: 0 6px 18px rgba(2,6,23,0.5);
+      cursor:pointer;
+      transition:transform .12s ease, box-shadow .12s ease, background-color .12s ease;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .card-btn:hover{transform:translateY(-3px)}
+
+    .status-dot{
+      width:12px;height:12px;border-radius:50%;flex:0 0 12px;box-shadow:0 2px 6px rgba(2,6,23,0.6);
+    }
+
+    /* default yellow */
+    .card-btn[data-state="todo"]{background:linear-gradient(180deg, rgba(245,158,11,0.12), rgba(245,158,11,0.06));border:1px solid rgba(245,158,11,0.18)}
+    .card-btn[data-state="todo"] .status-dot{background:var(--yellow)}
+
+    /* done green */
+    .card-btn[data-state="done"]{background:linear-gradient(180deg, rgba(16,185,129,0.12), rgba(16,185,129,0.06));border:1px solid rgba(16,185,129,0.18)}
+    .card-btn[data-state="done"] .status-dot{background:var(--green)}
+
+    .card-title{font-size:14px}
+    .card-sub{font-size:12px;color:var(--muted);font-weight:500}
+
+    /* small controls */
+    .controls{display:flex;gap:8px;align-items:center}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:8px 12px;border-radius:8px;cursor:pointer}
+
+    /* responsive */
+    @media (max-width:720px){
+      .level{flex-direction:column;gap:12px}
+      .node{min-width:220px}
+    }
+
+    /* arrows between siblings (simple) */
+    .branch{
+      display:flex;flex-direction:column;align-items:center;gap:8px;
+    }
+
+    .hint{margin-top:12px;color:var(--muted);font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="app" role="application" aria-label="Roadmap Network Engineer">
+    <header>
+      <div>
+        <h1>Roadmap Network Engineer — Interactive</h1>
+        <p>Klik item (kuning) untuk menandai selesai (hijau). Status tersimpan di browser.</p>
+      </div>
+      <div class="controls">
+        <button id="resetBtn" class="btn-ghost" title="Reset semua">Reset semua</button>
+        <button id="exportBtn" class="btn-ghost" title="Ekspor status ke JSON">Ekspor</button>
+      </div>
+    </header>
+
+    <main class="chart" id="chartRoot">
+      <!-- Top level: Foundational -->
+      <div>
+        <div class="level">
+          <div class="node">
+            <button class="card-btn" data-id="end-devices" data-state="todo" aria-pressed="false">
+              <span class="status-dot" aria-hidden="true"></span>
+              <div>
+                <div class="card-title">End Devices</div>
+                <div class="card-sub">Perangkat akhir: PC, server, router, switch</div>
+              </div>
+            </button>
+            <div class="connector" aria-hidden="true"></div>
+
+            <div class="level" style="margin-top:6px">
+              <div class="branch">
+                <div class="level">
+                  <div class="node">
+                    <button class="card-btn" data-id="osi" data-state="todo" aria-pressed="false">
+                      <span class="status-dot" aria-hidden="true"></span>
+                      <div>
+                        <div class="card-title">OSI Layer</div>
+                        <div class="card-sub">Model komunikasi jaringan</div>
+                      </div>
+                    </button>
+
+                    <div class="connector" aria-hidden="true"></div>
+
+                    <div class="level">
+                      <div class="node">
+                        <button class="card-btn" data-id="ip-address" data-state="todo" aria-pressed="false">
+                          <span class="status-dot" aria-hidden="true"></span>
+                          <div>
+                            <div class="card-title">IP Address</div>
+                            <div class="card-sub">Penomoran & kelas alamat</div>
+                          </div>
+                        </button>
+
+                        <div class="connector" aria-hidden="true"></div>
+
+                        <div class="level">
+                          <div class="node">
+                            <button class="card-btn" data-id="subnetting" data-state="todo" aria-pressed="false">
+                              <span class="status-dot" aria-hidden="true"></span>
+                              <div>
+                                <div class="card-title">Subnetting</div>
+                                <div class="card-sub">Mask, network ID, host count</div>
+                              </div>
+                            </button>
+
+                            <div class="connector" aria-hidden="true"></div>
+
+                            <div class="level">
+                              <div class="node">
+                                <button class="card-btn" data-id="tcp_udp" data-state="todo" aria-pressed="false">
+                                  <span class="status-dot" aria-hidden="true"></span>
+                                  <div>
+                                    <div class="card-title">TCP / UDP</div>
+                                    <div class="card-sub">Transport protocols & contoh</div>
+                                  </div>
+                                </button>
+                              </div>
+
+                              <!-- you can add more leaf nodes here -->
+                            </div>
+
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <!-- optional sibling: basic services -->
+                      <div class="node">
+                        <button class="card-btn" data-id="basic-services" data-state="todo" aria-pressed="false">
+                          <span class="status-dot" aria-hidden="true"></span>
+                          <div>
+                            <div class="card-title">Basic Services</div>
+                            <div class="card-sub">DHCP, DNS, HTTP</div>
+                          </div>
+                        </button>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="hint">Tip: Gunakan tombol Export untuk menyimpan status sebagai JSON. Tekan Reset untuk mengosongkan semua status.</div>
+  </div>
+
+  <script>
+    (function(){
+      const STORAGE_KEY = 'roadmap_network_status_v1';
+      const buttons = Array.from(document.querySelectorAll('.card-btn'));
+      const resetBtn = document.getElementById('resetBtn');
+      const exportBtn = document.getElementById('exportBtn');
+
+      // load saved states
+      const saved = (() => {
+        try{ const s = localStorage.getItem(STORAGE_KEY); return s? JSON.parse(s): {}; }catch(e){return{}};
+      })();
+
+      function applyState(btn, state){
+        btn.setAttribute('data-state', state);
+        const pressed = state === 'done';
+        btn.setAttribute('aria-pressed', pressed? 'true' : 'false');
+      }
+
+      // initialize
+      buttons.forEach(btn => {
+        const id = btn.dataset.id;
+        const s = saved[id] || 'todo';
+        applyState(btn, s);
+
+        btn.addEventListener('click', (e) => {
+          const cur = btn.getAttribute('data-state');
+          const next = cur === 'done' ? 'todo' : 'done';
+          applyState(btn, next);
+          saveState(id, next);
+        });
+
+        // keyboard accessibility: Enter/Space toggles
+        btn.addEventListener('keydown', (ev) => {
+          if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); btn.click(); }
+        });
+      });
+
+      function saveState(id, state){
+        try{
+          const cur = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+          cur[id] = state;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(cur));
+        }catch(e){console.warn('save failed', e)}
+      }
+
+      resetBtn.addEventListener('click', () => {
+        if(!confirm('Reset semua status?')) return;
+        buttons.forEach(b => { applyState(b, 'todo'); b.setAttribute('aria-pressed','false'); });
+        try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+      });
+
+      exportBtn.addEventListener('click', () => {
+        const out = {};
+        buttons.forEach(b => out[b.dataset.id] = b.getAttribute('data-state'));
+        const data = JSON.stringify(out, null, 2);
+        // download as file
+        const blob = new Blob([data], {type:'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'roadmap-status.json';
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      });
+
+    })();
+  </script>
+</body>
+</html>
