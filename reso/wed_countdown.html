@@ -51,19 +51,19 @@
       margin-top:20px;
     }
     .countdown-grid{
-      display:flex;
-      flex-direction:column; /* vertikal */
-      align-items:center;
-      gap:14px;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
       width:100%;
-      max-width:160px;
+    }
+    @media (max-width:480px){
+      .countdown-grid{grid-template-columns:repeat(2,1fr)}
     }
     .unit{
       background:rgba(255,255,255,0.02);
-      padding:12px;
+      padding:16px;
       border-radius:10px;
       text-align:center;
-      width:100%;
     }
     .num{
       font-size:32px;
@@ -71,9 +71,9 @@
       letter-spacing:-0.8px;
     }
     .label{
-      font-size:13px;
+      font-size:12px;
       color:rgba(230,238,248,0.7);
-      margin-top:4px;
+      margin-top:6px;
       font-weight:600;
     }
 
@@ -117,16 +117,19 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="countdown-wrap pulse">
-    <div style="font-weight:800;margin-bottom:12px">Hitung Mundur</div>
-    <div class="countdown-grid" id="countdown">
-      <div class="unit"><div class="num" id="days">--</div><div class="label">Hari</div></div>
-      <div class="unit"><div class="num" id="hours">--</div><div class="label">Jam</div></div>
-      <div class="unit"><div class="num" id="minutes">--</div><div class="label">Menit</div></div>
-      <div class="unit"><div class="num" id="seconds">--</div><div class="label">Detik</div></div>
+    <!-- Countdown pindah ke sini -->
+    <div class="countdown-wrap pulse">
+      <div style="font-weight:800;margin-bottom:12px">Hitung Mundur</div>
+      <div class="countdown-grid" id="countdown">
+        <div class="unit"><div class="num" id="days">--</div><div class="label">Hari</div></div>
+        <div class="unit"><div class="num" id="hours">--</div><div class="label">Jam</div></div>
+        <div class="unit"><div class="num" id="minutes">--</div><div class="label">Menit</div></div>
+        <div class="unit"><div class="num" id="seconds">--</div><div class="label">Detik</div></div>
+      </div>
     </div>
+    <!-- end countdown -->
+
   </div>
 
   <script>
