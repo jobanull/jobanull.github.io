@@ -39,12 +39,44 @@
     p.lead{margin:8px 0 18px;color:rgba(230,238,248,0.85)}
     .meta{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;justify-content:center}
     .chip{background:rgba(255,255,255,0.06);padding:8px 12px;border-radius:999px;font-weight:600;font-size:13px}
-    .countdown-wrap{background:rgba(255,255,255,0.03);padding:20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;margin-top:20px}
-    .countdown-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;width:100%}
-    @media (max-width:480px){.countdown-grid{grid-template-columns:repeat(2,1fr)}}
-    .unit{background:rgba(255,255,255,0.02);padding:16px;border-radius:10px;text-align:center}
-    .num{font-size:32px;font-weight:800;letter-spacing:-0.8px}
-    .label{font-size:12px;color:rgba(230,238,248,0.7);margin-top:6px;font-weight:600}
+
+    /* Countdown */
+    .countdown-wrap{
+      background:rgba(255,255,255,0.03);
+      padding:20px;
+      border-radius:14px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      margin-top:20px;
+    }
+    .countdown-grid{
+      display:flex;
+      flex-direction:column; /* vertikal */
+      align-items:center;
+      gap:14px;
+      width:100%;
+      max-width:160px;
+    }
+    .unit{
+      background:rgba(255,255,255,0.02);
+      padding:12px;
+      border-radius:10px;
+      text-align:center;
+      width:100%;
+    }
+    .num{
+      font-size:32px;
+      font-weight:800;
+      letter-spacing:-0.8px;
+    }
+    .label{
+      font-size:13px;
+      color:rgba(230,238,248,0.7);
+      margin-top:4px;
+      font-weight:600;
+    }
+
     .footer-note{font-size:13px;color:rgba(230,238,248,0.65);margin-top:20px}
     .hearts{position:absolute;right:28px;top:-24px;opacity:0.15;transform:rotate(-10deg)}
     .pulse{animation:pulse 2.5s infinite}
@@ -55,50 +87,45 @@
 <body>
   <canvas id="confetti" class="confetti-canvas"></canvas>
 
-    <div class="container" role="main">
+  <div class="container" role="main">
     <svg class="hearts" width="120" height="80" viewBox="0 0 24 24" fill="none" aria-hidden>
-        <path 
-        d="M12 21s-8-6.5-8-11a4 4 0 0 1 8 0 4 4 0 0 1 8 0c0 4.5-8 11-8 11z" 
-        fill="url(#g)" 
-        />
-        <defs>
+      <path d="M12 21s-8-6.5-8-11a4 4 0 0 1 8 0 4 4 0 0 1 8 0c0 4.5-8 11-8 11z" fill="url(#g)" />
+      <defs>
         <linearGradient id="g" x1="0" x2="1">
-            <stop offset="0" stop-color="#ff7aa2" />
-            <stop offset="1" stop-color="#7afcff" />
+          <stop offset="0" stop-color="#ff7aa2" />
+          <stop offset="1" stop-color="#7afcff" />
         </linearGradient>
-        </defs>
+      </defs>
     </svg>
 
     <div class="couple">
-        <div class="avatar">E &amp; J</div>
-        <div>
+      <div class="avatar">E &amp; J</div>
+      <div>
         <h1>بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</h1>        
         <p class="lead">
-             “Ya Allah, dengan menyebut nama-Mu kami melangkah. <br/>
-            Jadikanlah pernikahan ini sebagai ibadah, penuh berkah, 
-            sakinah, mawaddah, wa rahmah. <br/>
-            Satukan hati kami dalam kebaikan, hindarkan dari segala keburukan, 
-            dan bimbing kami menuju ridha-Mu. <br/>
-            Āmīn.”
+          “Ya Allah, dengan menyebut nama-Mu kami melangkah. <br/>
+          Jadikanlah pernikahan ini sebagai ibadah, penuh berkah, 
+          sakinah, mawaddah, wa rahmah. <br/>
+          Satukan hati kami dalam kebaikan, hindarkan dari segala keburukan, 
+          dan bimbing kami menuju ridha-Mu. <br/>
+          Āmīn.”
         </p>
         
         <div class="meta">
-            <div class="chip">📅 12 Desember 2025</div>
-            <div class="chip">📍 KUA Jagakarsa</div>
+          <div class="chip">📅 12 Desember 2025</div>
+          <div class="chip">📍 KUA Jagakarsa</div>
         </div>
-        </div>
-    </div>
-    </div>
-
-
-    <div class="countdown-wrap pulse">
-      <div style="font-weight:800;margin-bottom:12px">Hitung Mundur</div>
-      <div class="countdown-grid" id="countdown">
-        <div class="unit"><div class="num" id="days">--</div><div class="label">Hari</div></div>
-        <div class="unit"><div class="num" id="hours">--</div><div class="label">Jam</div></div>
-        <div class="unit"><div class="num" id="minutes">--</div><div class="label">Menit</div></div>
-        <div class="unit"><div class="num" id="seconds">--</div><div class="label">Detik</div></div>
       </div>
+    </div>
+  </div>
+
+  <div class="countdown-wrap pulse">
+    <div style="font-weight:800;margin-bottom:12px">Hitung Mundur</div>
+    <div class="countdown-grid" id="countdown">
+      <div class="unit"><div class="num" id="days">--</div><div class="label">Hari</div></div>
+      <div class="unit"><div class="num" id="hours">--</div><div class="label">Jam</div></div>
+      <div class="unit"><div class="num" id="minutes">--</div><div class="label">Menit</div></div>
+      <div class="unit"><div class="num" id="seconds">--</div><div class="label">Detik</div></div>
     </div>
   </div>
 
