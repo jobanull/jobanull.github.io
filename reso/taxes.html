@@ -13,12 +13,15 @@
     header h1{font-size:20px;margin:0}
     .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.6);margin-bottom:14px}
     label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
-    input,select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:var(--glass);color:inherit}
+    input[type="number"], input[type="text"], select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:var(--glass);color:inherit}
     .row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
     .row-2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
     .controls{display:flex;gap:10px;align-items:center}
     button{padding:10px 12px;border-radius:8px;border:0;cursor:pointer;background:var(--accent);color:#052023}
     .muted-btn{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+    .toggle-group{display:flex;gap:6px}
+    .toggle{padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);cursor:pointer;background:transparent}
+    .toggle.active{background:#0e7490;color:#051219}
     .result{display:flex;gap:12px;flex-wrap:wrap}
     .stat{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:10px;min-width:180px}
     table{width:100%;border-collapse:collapse;margin-top:12px}
@@ -33,10 +36,10 @@
   <div class="app">
     <header>
       <h1>Aplikasi Hitung Pajak Penghasilan</h1>
-      <div class="small">Menghitung PPh21 (sederhana), iuran BPJS Kesehatan &amp; Ketenagakerjaan.</div>
+      <div class="small">Menghitung PPh21 (sederhana), iuran BPJS Kesehatan &amp; Ketenagakerjaan.
+      </div>
     </header>
 
-    <!-- Input Section -->
     <section class="card">
       <div class="row">
         <div>
@@ -57,22 +60,24 @@
         <div>
           <label>Status PTKP</label>
           <select id="ptkp">
-            <option value="TK0">TK/0</option>
-            <option value="TK1">TK/1</option>
-            <option value="TK2">TK/2</option>
-            <option value="TK3">TK/3</option>
-            <option value="K0" selected>K/0</option>
-            <option value="K1">K/1</option>
-            <option value="K2">K/2</option>
-            <option value="K3">K/3</option>
+            <option value="TK0">TK/0 (Tidak kawin, 0 tanggungan)</option>
+            <option value="TK1">TK/1 (Tidak kawin, 1)</option>
+            <option value="TK2">TK/2 (Tidak kawin, 2)</option>
+            <option value="TK3">TK/3 (Tidak kawin, 3)</option>
+            <option value="K0">K/0 (Kawin, 0)</option>
+            <option value="K1">K/1 (Kawin, 1)</option>
+            <option value="K2">K/2 (Kawin, 2)</option>
+            <option value="K3">K/3 (Kawin, 3)</option>
           </select>
+          <div class="small">PTKP default sesuai ketentuan (lihat catatan).</div>
         </div>
         <div>
           <label>BPJS: ikut BPJS Kesehatan?</label>
           <select id="bpjsHealth">
-            <option value="yes">Ya</option>
+            <option value="yes">Ya (standar 1% karyawan, 4% employer)</option>
             <option value="no">Tidak</option>
           </select>
+          <div class="small">Kontribusi dipotong dari gaji dengan plafon upah (12 juta untuk Kesehatan).</div>
         </div>
       </div>
 
@@ -83,20 +88,27 @@
       </div>
     </section>
 
-    <!-- Output Section -->
     <section id="output" class="card">
       <div class="result">
         <div class="stat">
           <div class="small">Upah per bulan</div>
-          <div id="outSalary" style="font-weight:700;font-size:18px">Rp 0</div>
+          <div id="outSalary" style="font-weight:700;font-size:18px">Rp 8.000.000</div>
         </div>
         <div class="stat">
-          <div class="small">Total Potongan (per bulan)</div>
-          <div id="outDeduction" style="font-weight:700;font-size:18px">Rp 0</div>
+          <div class="small">Iuran BPJS Kesehatan (karyawan)</div>
+          <div id="outBpjsHealth" style="font-weight:700;font-size:18px">Rp 0</div>
         </div>
         <div class="stat">
-          <div class="small">Pendapatan Netto (take-home pay)</div>
-          <div id="outNetto" style="font-weight:700;font-size:18px">Rp 0</div>
+          <div class="small">Iuran JHT (karyawan)</div>
+          <div id="outJHT" style="font-weight:700;font-size:18px">Rp 0</div>
+        </div>
+        <div class="stat">
+          <div class="small">Iuran JP (karyawan)</div>
+          <div id="outJP" style="font-weight:700;font-size:18px">Rp 0</div>
+        </div>
+        <div class="stat">
+          <div class="small">PPh 21 (potong per bulan, estimasi)</div>
+          <div id="outPph" style="font-weight:700;font-size:18px">Rp 0</div>
         </div>
       </div>
 
@@ -105,32 +117,38 @@
           <thead>
             <tr><th>Item</th><th>Per bulan (Rp)</th><th>Per tahun (Rp)</th></tr>
           </thead>
-          <tbody></tbody>
+          <tbody>
+            <!-- rows inserted here -->
+          </tbody>
         </table>
       </div>
 
       <footer>
         <strong>Catatan:</strong> Default rate yang dipakai (dapat diubah di kode):<br>
-        • BPJS Kesehatan: employer 4%, employee 1%, plafon upah Rp12 juta.<br>
-        • BPJS Ketenagakerjaan: JHT 5.7% (3.7% + 2%); JP 3% (2% + 1%).<br>
-        • PTKP sesuai ketentuan (TK/0 = Rp54 juta, K/0 = Rp58,5 juta dst).<br>
-        • PPh21 dihitung pakai tarif progresif Pasal 17 (sederhana).
+        • BPJS Kesehatan: employer 4% (maks Rp480.000), employee 1% (maks Rp120.000) — plafon upah Rp12.000.000. citeturn0search6turn0search15<br>
+        • BPJS Ketenagakerjaan: JHT total 5.7% (3.7% employer, 2% employee); JP employer 2% + employee 1% (dasar upah maksimal berlaku). citeturn1search1turn1search6<br>
+        • PTKP (Penghasilan Tidak Kena Pajak) digunakan sesuai ketentuan (contoh: TK/0 = Rp54.000.000; K/0 = Rp58.500.000 dst.). citeturn2search5<br>
+        • Perhitungan PPh 21 menggunakan skema TER / atau tarif Pasal 17 (disederhanakan) sesuai PMK terkait. Hati-hati: aturan PPh21 cukup kompleks — konfirmasi pada sumber resmi untuk kasus spesifik. citeturn0search12turn0search3
       </footer>
     </section>
   </div>
 
   <script>
-    const fmt = n => 'Rp ' + Math.round(n||0).toLocaleString('id-ID');
+    // Helper: format currency
+    const fmt = (n)=> { const x = Math.round(n||0); return 'Rp ' + x.toLocaleString('id-ID'); }
     const $ = id => document.getElementById(id);
 
+    // Default statutory values (kept in one place so user can change easily)
     const RATES = {
-      bpjsHealth: { employeePct: 0.01, wageCap: 12000000 },
-      bpjsKetenagakerjaan: { JHT_employee: 0.02, JP_employee: 0.01 },
-      biayaJabatanPct: 0.05, biayaJabatanCapPerYear: 6000000,
+      bpjsHealth: { employeePct: 0.01, employerPct: 0.04, wageCap: 12000000, empCapAmount: 120000 },
+      bpjsKetenagakerjaan: { JHT_employee: 0.02, JHT_employer: 0.037, JP_employee: 0.01, JP_employer: 0.02, JKM_employer_pct: 0.003 },
+      biayaJabatanPct: 0.05, // biaya jabatan 5%
+      biayaJabatanCapPerYear: 6000000, // Rp 500.000 per bulan => Rp 6.000.000 per tahun
       ptkpMap: {
-        'TK0': 54000000,'TK1': 58500000,'TK2': 63000000,'TK3': 67500000,
-        'K0': 58500000,'K1': 63000000,'K2': 67500000,'K3': 72000000
+        'TK0': 54000000, 'TK1': 58500000, 'TK2': 63000000, 'TK3': 67500000,
+        'K0': 58500000, 'K1': 63000000, 'K2': 67500000, 'K3': 72000000
       },
+      // Progressive tax brackets (Pasal 17 / HPP) - simplified yearly table
       taxBrackets: [
         { upTo: 60000000, rate: 0.05 },
         { upTo: 250000000, rate: 0.15 },
@@ -139,71 +157,112 @@
       ]
     };
 
-    function calc(){
-      const salary = +$('salary').value||0;
-      const allowance = +$('allowance').value||0;
-      const bonus = +$('bonus').value||0;
-      const ptkp = RATES.ptkpMap[$('ptkp').value];
-      const useBpjs = $('bpjsHealth').value==='yes';
+    function calc() {
+      const salary = Number($('salary').value) || 0;
+      const allowance = Number($('allowance').value) || 0;
+      const bonus = Number($('bonus').value) || 0;
+      const ptkpKey = $('ptkp').value;
+      const useBpjsHealth = $('bpjsHealth').value === 'yes';
 
-      const grossMonthly = salary+allowance;
-      const grossYearly = grossMonthly*12+bonus;
+      // monthly and yearly
+      const grossMonthly = salary + allowance;
+      const grossYearly = grossMonthly * 12 + bonus;
 
-      const bpjsHealth = useBpjs ? Math.min(grossMonthly,RATES.bpjsHealth.wageCap)*RATES.bpjsHealth.employeePct : 0;
-      const jht = grossMonthly*RATES.bpjsKetenagakerjaan.JHT_employee;
-      const jp  = grossMonthly*RATES.bpjsKetenagakerjaan.JP_employee;
-
-      const biayaJabatan = Math.min(grossYearly*RATES.biayaJabatanPct,RATES.biayaJabatanCapPerYear);
-      const iuranPensiun = jp*12;
-      const netYearly = grossYearly-biayaJabatan-iuranPensiun;
-
-      let pkp = netYearly-ptkp;
-      pkp = pkp<=0?0:Math.floor(pkp/1000)*1000;
-
-      let remaining=pkp, pajak=0, lower=0;
-      for(const br of RATES.taxBrackets){
-        const taxable=Math.min(remaining,br.upTo-lower);
-        pajak+=taxable*br.rate; remaining-=taxable; lower=br.upTo;
-        if(remaining<=0) break;
+      // BPJS Kesehatan (employee share) with wage cap
+      let bpjsHealthEmployeeMonthly = 0;
+      if (useBpjsHealth) {
+        const base = Math.min(grossMonthly, RATES.bpjsHealth.wageCap);
+        bpjsHealthEmployeeMonthly = Math.round(base * RATES.bpjsHealth.employeePct);
       }
 
-      const pph = pajak/12;
-      const totalPotongan = bpjsHealth+jht+jp+pph;
-      const netto = grossMonthly-totalPotongan;
+      // BPJS Ketenagakerjaan - JHT and JP employee contributions (monthly)
+      const jhtEmployeeMonthly = Math.round(grossMonthly * RATES.bpjsKetenagakerjaan.JHT_employee);
+      const jpEmployeeMonthly = Math.round(grossMonthly * RATES.bpjsKetenagakerjaan.JP_employee);
 
-      // update breakdown
-      const tbody=$('#breakdown tbody'); tbody.innerHTML='';
-      const rows=[
-        ['Gaji + tunjangan (gross)',fmt(grossMonthly),fmt(grossYearly)],
-        ['BPJS Kesehatan (karyawan)',fmt(bpjsHealth),fmt(bpjsHealth*12)],
-        ['JHT (karyawan)',fmt(jht),fmt(jht*12)],
-        ['JP (karyawan)',fmt(jp),fmt(jp*12)],
-        ['Biaya jabatan',"-",fmt(biayaJabatan)],
-        ['Iuran pensiun (JP)',"-",fmt(iuranPensiun)],
-        ['Penghasilan neto (tahun)',"-",fmt(netYearly)],
-        ['PTKP',"-",fmt(ptkp)],
-        ['PKP',"-",fmt(pkp)],
-        ['PPh21 terhutang (tahun)',"-",fmt(pajak)],
-        ['PPh21 potong (bulan)',fmt(pph),fmt(pph*12)],
-        ['Total potongan (bulan)',fmt(totalPotongan),fmt(totalPotongan*12)],
-        ['Pendapatan Netto (take-home)',fmt(netto),fmt(netto*12)]
+      // For PPh21: biaya jabatan (5% of gross yearly, capped)
+      const biayaJabatan = Math.min(Math.round(grossYearly * RATES.biayaJabatanPct), RATES.biayaJabatanCapPerYear);
+
+      // Iuran pensiun (employee JP) deductible from gross in many cases — we'll subtract employee JP annual
+      const iuranPensiunYearly = jpEmployeeMonthly * 12;
+
+      // Penghasilan neto tahun (untuk PKP): grossYearly - biayaJabatan - iuranPensiunYearly
+      const netYearly = Math.max(0, grossYearly - biayaJabatan - iuranPensiunYearly);
+
+      // PTKP
+      const ptkp = RATES.ptkpMap[ptkpKey] || 54000000;
+
+      // PKP = netYearly - PTKP (dibulatkan ke 1.000)
+      let pkp = netYearly - ptkp;
+      if (pkp <= 0) pkp = 0; else pkp = Math.floor(pkp / 1000) * 1000;
+
+      // Hitung PPh terhutang per tahun menggunakan progressive brackets
+      let remaining = pkp;
+      let taxYearly = 0;
+      let lowerBound = 0;
+      for (const br of RATES.taxBrackets) {
+        const taxableInBand = Math.min(remaining, br.upTo - lowerBound);
+        if (taxableInBand > 0) {
+          taxYearly += taxableInBand * br.rate;
+          remaining -= taxableInBand;
+          lowerBound = br.upTo;
+        }
+        if (remaining <= 0) break;
+      }
+
+      // PPh per bulan (estimasi) -- TER approach is more complex; this is a simplified monthly accrual
+      const taxMonthly = Math.round(taxYearly / 12);
+
+      // Total potongan per bulan (employee side): BPJS Health + JHT + JP + PPh
+      const totalEmployeeMonthly = bpjsHealthEmployeeMonthly + jhtEmployeeMonthly + jpEmployeeMonthly + taxMonthly;
+
+      // Build breakdown rows
+      const tbody = document.querySelector('#breakdown tbody');
+      tbody.innerHTML = '';
+      const rows = [
+        ['Gaji + tunjangan (gross)', fmt(grossMonthly), fmt(grossYearly)],
+        ['BPJS Kesehatan (karyawan)', fmt(bpjsHealthEmployeeMonthly), fmt(bpjsHealthEmployeeMonthly *12)],
+        ['JHT (karyawan)', fmt(jhtEmployeeMonthly), fmt(jhtEmployeeMonthly*12)],
+        ['JP (karyawan)', fmt(jpEmployeeMonthly), fmt(jpEmployeeMonthly*12)],
+        ['Biaya jabatan (tahun)', "-", fmt(biayaJabatan)],
+        ['Iuran pensiun (dikurangkan)', "-", fmt(iuranPensiunYearly)],
+        ['Penghasilan neto (thn)', "-", fmt(netYearly)],
+        ['PTKP (thn)', "-", fmt(ptkp)],
+        ['PKP (thn)', "-", fmt(pkp)],
+        ['PPh 21 terhutang (thn)', "-", fmt(Math.round(taxYearly))],
+        ['PPh 21 potong (bln) - estimasi', fmt(taxMonthly), fmt(taxMonthly*12)],
+        ['Total potongan (karyawan/bln)', fmt(totalEmployeeMonthly), fmt(totalEmployeeMonthly*12)]
       ];
+
       rows.forEach(r=>{
-        const tr=document.createElement('tr');
-        tr.innerHTML=`<td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td>`;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td>`;
         tbody.appendChild(tr);
       });
 
-      // update cards
-      $('outSalary').textContent=fmt(grossMonthly);
-      $('outDeduction').textContent=fmt(totalPotongan);
-      $('outNetto').textContent=fmt(netto);
+      // Update stat cards
+      $('outSalary').textContent = fmt(grossMonthly);
+      $('outBpjsHealth').textContent = fmt(bpjsHealthEmployeeMonthly);
+      $('outJHT').textContent = fmt(jhtEmployeeMonthly);
+      $('outJP').textContent = fmt(jpEmployeeMonthly);
+      $('outPph').textContent = fmt(taxMonthly);
+
+      return {
+        grossMonthly, grossYearly, bpjsHealthEmployeeMonthly, jhtEmployeeMonthly, jpEmployeeMonthly, taxMonthly, taxYearly
+      }
     }
 
-    $('calc').onclick=calc;
-    $('reset').onclick=()=>{ $('salary').value=12000000; $('allowance').value=0; $('bonus').value=0; $('ptkp').value='K0'; $('bpjsHealth').value='yes'; calc(); };
-    $('export').onclick=()=>{ alert("Export CSV bisa ditambah di bagian script sesuai kebutuhan."); };
+    // events
+    $('calc').addEventListener('click', ()=>{ calc(); });
+    $('reset').addEventListener('click', ()=>{
+      $('salary').value = 12000000; $('allowance').value = 0; $('bonus').value = 0; $('ptkp').value = 'K0'; $('bpjsHealth').value = 'yes'; calc();
+    });
+    $('export').addEventListener('click', ()=>{
+      const data = calc();
+      const csv = `Item,Perbulan,Pertahun\n"Gaji+Tunjangan",${data.grossMonthly},${data.grossYearly}\n"BPJS Health (karyawan)",${data.bpjsHealthEmployeeMonthly},${data.bpjsHealthEmployeeMonthly*12}\n"JHT (karyawan)",${data.jhtEmployeeMonthly},${data.jhtEmployeeMonthly*12}\n"JP (karyawan)",${data.jpEmployeeMonthly},${data.jpEmployeeMonthly*12}\n"PPh21 (est bln)",${data.taxMonthly},${data.taxYearly}\n`;
+      navigator.clipboard.writeText(csv).then(()=>{ alert('CSV disalin ke clipboard.'); }, ()=>{ alert('Gagal menyalin CSV.'); });
+    });
 
+    // initial
     calc();
   </script>
 </body>
