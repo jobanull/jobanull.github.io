@@ -25,12 +25,44 @@
       <li><strong>FEC (Forwarding Equivalence Class):</strong> sekumpulan paket yang diperlakukan sama oleh MPLS.</li>
     </ul>
 
+    <h3 class="note-subtitle">Posisi dan Perbandingan Layer</h3>
+    <p class="note-paragraph">
+      MPLS dikenal sebagai <strong>Layer 2.5</strong> karena posisinya berada di antara Layer 2 (Data Link) dan Layer 3 (Network).
+    </p>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Layer</th>
+          <th>Kelebihan</th>
+          <th>Kekurangan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Layer 2 (Data Link)</td>
+          <td>Sangat cepat, tidak butuh resource besar.</td>
+          <td>Bisa looping, tidak fleksibel (tidak ada metrik, path, best path).</td>
+        </tr>
+        <tr>
+          <td>Layer 3 (Network)</td>
+          <td>Fleksibel, mengenal IP address, ada metrik & prioritas paket.</td>
+          <td>Lebih lambat, memakan resource besar.</td>
+        </tr>
+        <tr>
+          <td>MPLS (Layer 2.5)</td>
+          <td>Gabungan kecepatan Layer 2 dan fleksibilitas Layer 3.</td>
+          <td>Tidak ada enkripsi bawaan, rawan jika tanpa VPN/IPSec.</td>
+        </tr>
+      </tbody>
+    </table>
+
     <h3 class="note-subtitle">Komponen Utama</h3>
     <ul class="note-list">
-      <li><strong>LER (Label Edge Router):</strong> Router di tepi MPLS domain yang menambahkan atau menghapus label.</li>
-      <li><strong>LSR (Label Switch Router):</strong> Router di dalam MPLS domain yang hanya mengganti label sesuai tabel forwarding.</li>
-      <li><strong>LDP (Label Distribution Protocol):</strong> Protokol yang mendistribusikan label antar router MPLS.</li>
-      <li><strong>RSVP-TE:</strong> Protokol signaling untuk MPLS Traffic Engineering.</li>
+      <li><strong>LER (Label Edge Router / PE):</strong> Router di tepi domain MPLS. Menambahkan label pada ingress, menghapus label pada egress.</li>
+      <li><strong>LSR (Label Switch Router / P):</strong> Router di tengah domain MPLS yang hanya mengganti label sesuai tabel LFIB.</li>
+      <li><strong>CE (Customer Edge Router):</strong> Router di sisi pelanggan, tidak menjalankan MPLS, hanya routing biasa (static/dynamic).</li>
+      <li><strong>LDP (Label Distribution Protocol):</strong> Protokol untuk distribusi label.</li>
+      <li><strong>RSVP-TE:</strong> Signaling protocol untuk Traffic Engineering.</li>
     </ul>
 
     <h3 class="note-subtitle">Header MPLS</h3>
@@ -56,13 +88,34 @@
       <li>Paket sampai di LER egress → label dihapus → paket diteruskan ke tujuan akhir.</li>
     </ol>
 
-    <h3 class="note-subtitle">Keuntungan MPLS</h3>
-    <ul class="note-list">
-      <li>Forwarding lebih cepat dibanding routing murni.</li>
-      <li>Mendukung multi-protocol (IPv4, IPv6, Ethernet, Frame Relay, ATM).</li>
-      <li>Mendukung QoS untuk aplikasi real-time (VoIP, video).</li>
-      <li>Mudah mengimplementasikan VPN skala besar.</li>
-    </ul>
+    <h3 class="note-subtitle">Keuntungan dan Kelemahan MPLS</h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Kelebihan</th>
+          <th>Kekurangan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Stabil dan memiliki kinerja tinggi.</td>
+          <td>Tidak ada enkripsi bawaan → rawan.</td>
+        </tr>
+        <tr>
+          <td>Efisien dalam penggunaan bandwidth.</td>
+          <td>Tergeser oleh teknologi baru (SD-WAN, Cloud-based).</td>
+        </tr>
+        <tr>
+          <td>Mengurangi kepadatan traffic → meningkatkan user experience.</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>Forwarding cepat dengan label switching.</td>
+          <td>-</td>
+        </tr>
+      </tbody>
+    </table>
+
 
     <h3 class="note-subtitle">CONTOH KASUS</h3>
     <ul class="note-list">

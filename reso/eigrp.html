@@ -15,7 +15,7 @@
       EIGRP menggunakan algoritma <em>DUAL (Diffusing Update Algorithm)</em> untuk menentukan jalur terbaik 
       dan cepat beradaptasi terhadap perubahan topologi jaringan.
     </p>
-    
+
     <p class="note-paragraph">
       <strong>IGRP</strong> adalah protokol routing interior yang dikembangkan oleh Cisco sebelum EIGRP. 
       IGRP menggunakan algoritma <em>distance-vector</em> dengan metrik komposit 
@@ -24,10 +24,11 @@
     </p>
 
     <ul class="note-list">
-      <li><strong>Kelebihan:</strong> Cepat konvergensi, mendukung VLSM, load balancing secara otomatis, hemat bandwidth dengan update parsial.</li>
+      <li><strong>Kelebihan:</strong> Cepat konvergensi, mendukung VLSM, load balancing otomatis, hemat bandwidth dengan update parsial.</li>
       <li><strong>Keterbatasan:</strong> Hanya bekerja optimal pada jaringan Cisco (proprietary) sebelum versi EIGRP untuk IPv6 terbuka.</li>
       <li><strong>Gunakan Saat:</strong> Jaringan LAN dan WAN Cisco yang kompleks membutuhkan konvergensi cepat dan load balancing otomatis.</li>
     </ul>
+
     <h3 class="note-subtitle">IGRP vs EIGRP</h3>
     <p class="note-paragraph">
       IGRP dan EIGRP adalah protokol routing interior yang dikembangkan oleh Cisco. 
@@ -83,6 +84,25 @@
       </tbody>
     </table>
 
+    <h3 class="note-subtitle">Keunggulan Tambahan EIGRP</h3>
+    <ul class="note-list">
+      <li>Menggunakan <strong>multi-metric</strong> (bandwidth, delay, load, reliability) untuk memilih jalur terbaik.</li>
+      <li>Mendukung <strong>redistribution</strong> ke protokol routing lain.</li>
+      <li>100% <strong>loop-free</strong> di Layer 3.</li>
+      <li><strong>Feasible Successor:</strong> menyimpan jalur backup terbaik secara otomatis.</li>
+      <li><strong>Summarization</strong> bisa dilakukan di mana saja, berbeda dengan OSPF yang terbatas di ABR/ASBR.</li>
+      <li>Mendukung <strong>equal cost</strong> dan <strong>unequal cost load balancing</strong>.</li>
+      <li>Mendukung <strong>multi-protocol</strong>.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis Paket EIGRP</h3>
+    <ul class="note-list">
+      <li><strong>Hello Packet:</strong> membangun dan menjaga hubungan neighbor.</li>
+      <li><strong>Update Packet:</strong> membawa informasi routing, dikirim multicast ke router yang membutuhkan.</li>
+      <li><strong>Acknowledgement (ACK) Packet:</strong> memastikan update diterima.</li>
+      <li><strong>Query Packet:</strong> dikirim saat jalur utama hilang untuk mencari jalur alternatif.</li>
+      <li><strong>Reply Packet:</strong> jawaban dari query, berisi jalur terbaik pengganti.</li>
+    </ul>
 
     <h3 class="note-subtitle">Tips Praktis</h3>
     <ul class="note-list">
@@ -90,6 +110,7 @@
       <li>Gunakan <strong>passive-interface</strong> untuk mencegah update EIGRP di interface tertentu.</li>
       <li>Periksa <strong>metric EIGRP</strong> (bandwidth, delay) agar jalur terbaik sesuai kebutuhan jaringan.</li>
     </ul>
+
 
 
 

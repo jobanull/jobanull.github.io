@@ -68,29 +68,27 @@
       <li>Mendukung autentikasi (plaintext dan MD5).</li>
     </ul>
 
-    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <h3 class="note-subtitle">Contoh Kasus</h3>
     <ul class="note-list">
-      <li>Tujuan: Mengimplementasikan <strong>OSPF multi-area</strong> pada jaringan MikroTik untuk mendistribusikan routing dinamis antar-router.</li>
-      <li>Topologi: Jaringan terdiri dari 7 router (R1-R7) dengan beberapa area OSPF:
+      <li><strong>Tujuan:</strong> Mengimplementasikan OSPF multi-area pada jaringan MikroTik untuk mendistribusikan routing dinamis antar-router.</li>
+      <li><strong>Topologi:</strong> Jaringan terdiri dari 7 router (R1-R7) dengan beberapa area OSPF:
         <ul>
           <li>Area backbone (0.0.0.0) menghubungkan R1, R2, R3</li>
           <li>Area2 (2.2.2.2) menghubungkan R2, R6, R7</li>
           <li>Area3 (3.3.3.3) menghubungkan R3, R4, R5</li>
         </ul>
       </li>
-      <li>Catatan:
+      <li><strong>Catatan:</strong>
         <ul>
-          <li>Setiap router memiliki IP unik untuk setiap interface yang terhubung ke jaringan point-to-point.</li>
+          <li>Setiap router memiliki IP unik untuk setiap interface point-to-point.</li>
           <li>Interface ditambahkan ke OSPF sesuai area masing-masing.</li>
           <li>Network mapping dilakukan agar OSPF mengetahui subnet yang termasuk dalam setiap area.</li>
           <li>Router diberi identitas unik dengan <code>/system identity</code> agar mudah diidentifikasi.</li>
-          <li>R1 juga mengatur NAT dan default route ke gateway internet untuk koneksi keluar.</li>
-          <li>DNS di beberapa router diset ke Google DNS (8.8.8.8 & 8.8.4.4) agar client dapat resolve nama domain.</li>
+          <li>R1 mengatur NAT dan default route ke gateway internet untuk koneksi keluar.</li>
+          <li>DNS di beberapa router diset ke Google DNS (8.8.8.8 &amp; 8.8.4.4) agar client dapat resolve nama domain.</li>
         </ul>
       </li>
     </ul>
-
-
 
     <img src="img/ospf.png" alt="Diagram jaringan" class="note-image" />
     

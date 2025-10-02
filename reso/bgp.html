@@ -11,82 +11,94 @@
   <main class="note-main">
   <h2 class="note-title text-center">Border Gateway Protocol (BGP)</h2>
   <p class="note-paragraph">
-    Border Gateway Protocol (BGP) adalah protokol routing yang digunakan untuk bertukar informasi rute antar 
-    <em>Autonomous System</em> (AS) di internet. BGP termasuk kategori <strong>path vector protocol</strong> 
-    yang mengandalkan <em>policy-based routing</em> untuk memilih jalur terbaik, bukan sekadar metrik teknis.
+    Border Gateway Protocol (BGP) adalah protokol routing yang menyatukan seluruh internet. 
+    BGP termasuk kategori <strong>path vector protocol</strong> yang mengandalkan 
+    <em>policy-based routing</em> untuk memilih jalur terbaik berdasarkan atribut, bukan sekadar metrik teknis.
     BGP berjalan di atas TCP port 179 sehingga komunikasi antar router bersifat andal dan terkontrol.
   </p>
 
-  <h3 class="note-subtitle">Peran dan Fungsi BGP</h3>
+  <h3 class="note-subtitle">Karakteristik BGP</h3>
   <ul class="note-list">
-    <li>Memilih jalur terbaik untuk mencapai jaringan tujuan berdasarkan kebijakan.</li>
-    <li>Menghubungkan jaringan antar-AS di internet.</li>
-    <li>Memberikan kontrol penuh terhadap rute yang diumumkan atau diterima.</li>
-    <li>Menangani skala besar (puluhan ribu hingga jutaan rute).</li>
+    <li>Merupakan protokol routing paling rumit dan kompleks.</li>
+    <li>Berbeda dengan OSPF/EIGRP (IGP) yang otomatis membentuk adjacency, pada BGP setiap neighbor harus dikonfigurasi manual.</li>
+    <li>Menentukan jalur terbaik berdasarkan atribut yang dapat dimanipulasi untuk mengontrol pola traffic.</li>
+  </ul>
+
+  <h3 class="note-subtitle">Autonomous System (AS)</h3>
+  <ul class="note-list">
+    <li>BGP digunakan untuk routing traffic antar <em>Autonomous System</em> (AS).</li>
+    <li>Menghubungkan antar ISP, di mana setiap ISP memiliki <strong>AS Number</strong> unik.</li>
+    <li><strong>AS Number</strong> berukuran 16-bit (1–65.535).</li>
+    <li><strong>Private AS</strong>: 64.512–65.535, biasanya dipakai untuk simulasi atau lab.</li>
+    <li>BGP dipakai jika neighbor/AS adalah transit AS (menghubungkan antar-AS).</li>
   </ul>
 
   <h3 class="note-subtitle">Jenis BGP</h3>
   <ul class="note-list">
-    <li><strong>EBGP (External BGP)</strong> - Digunakan untuk pertukaran rute antar-AS yang berbeda.</li>
-    <li><strong>IBGP (Internal BGP)</strong> - Digunakan untuk pertukaran rute antar-router dalam AS yang sama.</li>
+    <li><strong>EBGP (External BGP)</strong> - Pertukaran rute antar-AS berbeda (AD: 20).</li>
+    <li><strong>IBGP (Internal BGP)</strong> - Pertukaran rute antar-router dalam AS yang sama (AD: 200).</li>
   </ul>
 
-  <h3 class="note-subtitle">Proses Terbentuknya Koneksi BGP</h3>
+  <h3 class="note-subtitle">Istilah Penting dalam BGP</h3>
+  <ul class="note-list">
+    <li><strong>BGP Speaker</strong> - Router yang menjalankan protokol BGP.</li>
+    <li><strong>BGP Peers</strong> - Router lain yang menjadi neighbor BGP.</li>
+  </ul>
+
+  <h3 class="note-subtitle">Tahapan Pembentukan Koneksi BGP (FSM)</h3>
   <p class="note-paragraph">
-    BGP menggunakan <em>Finite State Machine (FSM)</em> untuk memastikan sesi antar-router terbentuk dengan benar. 
-    Berikut tahapan utamanya:
+    BGP menggunakan <em>Finite State Machine (FSM)</em> dengan beberapa state:
   </p>
   <ul class="note-list">
-    <li><strong>Idle</strong> - Router siap, tapi belum mencoba membuat koneksi TCP ke peer.</li>
-    <li><strong>Connect</strong> - Router mencoba membuka koneksi TCP port 179 ke tetangga. Jika sukses → lanjut ke <em>OpenSent</em>, jika gagal → masuk <em>Active</em>.</li>
-    <li><strong>Active</strong> - Router mencoba kembali establish koneksi TCP. Jika berhasil → lanjut ke <em>OpenSent</em>.</li>
-    <li><strong>OpenSent</strong> - Router mengirim <em>Open Message</em> (AS Number, BGP version, hold time, router ID) dan menunggu balasan.</li>
-    <li><strong>OpenConfirm</strong> - Sesi TCP terbentuk, router saling bertukar <em>Keepalive</em>.</li>
-    <li><strong>Established</strong> - Sesi resmi hidup, router bertukar <em>Update Message</em> (prefix, AS Path, atribut routing).</li>
+    <li><strong>Idle</strong> - Status awal, router siap namun belum membuka koneksi.</li>
+    <li><strong>Connect</strong> - TCP handshake berhasil di port 179.</li>
+    <li><strong>Active</strong> - Router mencoba kembali membuat koneksi TCP jika sebelumnya gagal.</li>
+    <li><strong>OpenSent</strong> - Router mengirim <em>Open Message</em> (AS Number, BGP version, Router ID, Hold Time).</li>
+    <li><strong>OpenConfirm</strong> - Menunggu <em>Keepalive</em> dari neighbor.</li>
+    <li><strong>Established</strong> - Sesi terbentuk, router bertukar informasi routing.</li>
   </ul>
 
-  <h4 class="note-subsubtitle">Jenis Pesan BGP</h4>
+  <h4 class="note-subsubtitle">Jenis Pesan BGP (KORUN)</h4>
   <ul class="note-list">
-    <li><strong>Open Message</strong> - Digunakan saat awal pembentukan sesi (handshake).</li>
-    <li><strong>Keepalive Message</strong> - Menjaga agar sesi tetap aktif (default tiap 60 detik).</li>
-    <li><strong>Update Message</strong> - Mengumumkan prefix baru atau menarik prefix lama.</li>
-    <li><strong>Notification Message</strong> - Digunakan saat terjadi error atau memutus sesi.</li>
+    <li><strong>Keepalive</strong> - Menjaga sesi tetap aktif (default tiap 60 detik).</li>
+    <li><strong>Open</strong> - Digunakan saat awal pembentukan sesi.</li>
+    <li><strong>Route Refresh</strong> - Mempercepat update atau refresh informasi route.</li>
+    <li><strong>Update</strong> - Mengumumkan atau menarik prefix.</li>
+    <li><strong>Notification</strong> - Dikirim jika terjadi error atau untuk memutus sesi.</li>
   </ul>
 
-  <h4 class="note-subsubtitle">Pertukaran Rute</h4>
+  <h3 class="note-subtitle">Pertukaran Rute</h3>
   <ul class="note-list">
     <li>Setelah sesi <em>Established</em>, router bertukar <strong>full routing table</strong>.</li>
     <li>Selanjutnya hanya perubahan (<em>incremental update</em>) yang dikirim.</li>
     <li>Router menjalankan algoritma <strong>Best Path Selection</strong> berdasarkan atribut BGP.</li>
-    <li>Rute terbaik dipasang ke <strong>RIB (Routing Information Base)</strong> dan diteruskan ke <strong>FIB (Forwarding Information Base)</strong> untuk forwarding trafik.</li>
+    <li>Rute terbaik dipasang ke <strong>RIB (Routing Information Base)</strong> lalu ke <strong>FIB</strong> untuk forwarding trafik.</li>
   </ul>
 
   <h3 class="note-subtitle">Atribut Penting BGP</h3>
-  <p class="note-paragraph">
-    BGP menggunakan sejumlah atribut untuk menentukan jalur terbaik. Beberapa yang paling umum:
-  </p>
   <ul class="note-list">
-    <li><strong>Weight</strong> - Atribut lokal pada router Cisco, nilai lebih besar lebih diutamakan.</li>
-    <li><strong>Local Preference (LOCAL_PREF)</strong> - Menentukan preferensi jalur keluar dalam satu AS; nilai lebih tinggi lebih diutamakan.</li>
-    <li><strong>AS Path</strong> - Menyimpan urutan AS yang dilewati; jalur terpendek biasanya diutamakan.</li>
+    <li><strong>Weight</strong> - Atribut lokal (Cisco); nilai lebih besar lebih diutamakan.</li>
+    <li><strong>Local Preference (LOCAL_PREF)</strong> - Preferensi jalur keluar dalam satu AS; nilai lebih tinggi lebih diutamakan.</li>
+    <li><strong>AS Path</strong> - Urutan AS yang dilewati; jalur terpendek biasanya diutamakan.</li>
     <li><strong>Multi-Exit Discriminator (MED)</strong> - Memberi sinyal jalur keluar yang diinginkan kepada AS tetangga.</li>
-    <li><strong>Next Hop</strong> - Menentukan alamat router berikut yang harus dilalui paket untuk mencapai tujuan.</li>
+    <li><strong>Next Hop</strong> - Menentukan router berikut yang dilalui paket.</li>
   </ul>
 
   <h3 class="note-subtitle">Kelebihan BGP</h3>
   <ul class="note-list">
     <li>Kontrol routing yang sangat fleksibel.</li>
     <li>Mendukung multi-homing dan redundansi koneksi.</li>
-    <li>Skalabilitas tinggi untuk jaringan berskala global.</li>
+    <li>Skalabilitas tinggi (puluhan ribu hingga jutaan rute).</li>
     <li>Dapat mengimplementasikan kebijakan keamanan dan filtering rute.</li>
   </ul>
 
   <h3 class="note-subtitle">Kekurangan BGP</h3>
   <ul class="note-list">
     <li>Konfigurasi dan pemeliharaan relatif kompleks.</li>
-    <li>Konsvergensi (waktu stabil) lebih lambat dibanding protokol routing internal seperti OSPF atau EIGRP.</li>
-    <li>Sangat bergantung pada kebijakan dan pengaturan manual oleh administrator.</li>
+    <li>Konvergensi lebih lambat dibanding OSPF/EIGRP.</li>
+    <li>Sangat bergantung pada kebijakan manual administrator.</li>
   </ul>
+
 
      <h3 class="note-subtitle">CONTOH KASUS</h3>
       <ul class="note-list">
