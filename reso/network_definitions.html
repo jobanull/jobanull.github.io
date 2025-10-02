@@ -1711,6 +1711,91 @@
   </main>
 </section>
 
+<section id="traffic-engineering" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Traffic Engineering (TE)</h2>
+    <p class="note-paragraph">
+      <strong>Traffic Engineering (TE)</strong> adalah proses perencanaan, pengelolaan, 
+      dan pengoptimalan aliran trafik dalam jaringan agar penggunaan sumber daya 
+      (bandwidth, link, router, dan perangkat lainnya) menjadi lebih efisien. 
+      TE banyak digunakan pada jaringan skala besar, seperti ISP, data center, 
+      dan enterprise network, terutama dengan dukungan teknologi <em>MPLS</em>.
+    </p>
+
+    <h3 class="note-subtitle">Tujuan Traffic Engineering</h3>
+    <ul>
+      <li>Mengoptimalkan utilisasi bandwidth jaringan.</li>
+      <li>Mencegah kemacetan (congestion) pada jalur tertentu.</li>
+      <li>Memberikan <em>Quality of Service (QoS)</em> yang lebih baik.</li>
+      <li>Meningkatkan keandalan (reliability) jaringan dengan redundansi rute.</li>
+      <li>Mendukung kebutuhan bisnis seperti latency rendah atau jalur khusus untuk aplikasi kritikal.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Metode Traffic Engineering</h3>
+    <p class="note-paragraph">
+      Ada beberapa metode dan teknologi utama yang digunakan untuk implementasi TE:
+    </p>
+    <ul>
+      <li>
+        <strong>IP Routing Tradisional:</strong>
+        <ul>
+          <li>Menggunakan routing protokol standar (OSPF, IS-IS, BGP).</li>
+          <li>Routing dilakukan berdasarkan shortest path (SPF).</li>
+          <li>Keterbatasan: tidak memperhitungkan utilisasi link dan QoS.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>MPLS Traffic Engineering:</strong>
+        <ul>
+          <li>Menggunakan <em>Label Switched Path (LSP)</em> untuk mengarahkan trafik.</li>
+          <li>Dapat membuat jalur khusus (explicit path) berdasarkan kebijakan (policy-based routing).</li>
+          <li>Memungkinkan load balancing, failover, dan optimasi QoS.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Segment Routing (SR):</strong>
+        <ul>
+          <li>Penyempurnaan MPLS dengan lebih sedikit state di core router.</li>
+          <li>Routing ditentukan berdasarkan <em>segment ID</em>.</li>
+          <li>Lebih sederhana dan scalable dibanding MPLS-TE klasik.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Software-Defined Networking (SDN) for TE:</strong>
+        <ul>
+          <li>Manajemen routing berbasis controller terpusat.</li>
+          <li>Mengizinkan dynamic rerouting berdasarkan traffic condition.</li>
+          <li>Cocok untuk data center dan cloud environment.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan & Kekurangan</h3>
+    <ul>
+      <li><strong>IP Routing Tradisional:</strong> sederhana, tapi kurang fleksibel dalam optimasi trafik.</li>
+      <li><strong>MPLS TE:</strong> fleksibel, mendukung QoS, tapi lebih kompleks dalam konfigurasi.</li>
+      <li><strong>Segment Routing:</strong> lebih ringan & scalable, tapi butuh dukungan perangkat modern.</li>
+      <li><strong>SDN TE:</strong> sangat dinamis & otomatis, tapi bergantung pada controller pusat.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Kasus</h3>
+    <ul>
+      <li>ISP mengalihkan trafik video streaming ke jalur dengan kapasitas besar untuk menghindari congestion.</li>
+      <li>Perusahaan finansial menggunakan jalur TE dengan latency rendah untuk aplikasi transaksi realtime.</li>
+      <li>Data center menggunakan SDN TE untuk load balancing antar server farm.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul>
+      <li>Gunakan <strong>MPLS TE</strong> jika jaringan berskala besar dengan kebutuhan QoS tinggi.</li>
+      <li>Pertimbangkan <strong>Segment Routing</strong> untuk jaringan modern agar lebih sederhana & scalable.</li>
+      <li>Implementasikan <strong>SDN TE</strong> di data center untuk fleksibilitas dan efisiensi tinggi.</li>
+      <li>Lakukan monitoring dan analisis trafik secara rutin untuk menyesuaikan kebijakan TE.</li>
+    </ul>
+  </main>
+</section>
+
+
 <section id="dhu" class="note-container container">
   <main class="note-main">
     <h2 class="note-title text-center">DHU Destination Host Unreachable</h2>
