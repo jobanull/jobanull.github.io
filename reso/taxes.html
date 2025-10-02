@@ -110,6 +110,11 @@
           <div class="small">PPh 21 (potong per bulan, estimasi)</div>
           <div id="outPph" style="font-weight:700;font-size:18px">Rp 0</div>
         </div>
+        <div class="stat">
+        <div class="small">Pendapatan netto (per bulan)</div>
+          <div id="outNetto" style="font-weight:700;font-size:18px">Rp 0</div>
+        </div>
+
       </div>
 
       <div id="breakdownArea" style="margin-top:12px">
@@ -209,11 +214,15 @@
         if (remaining <= 0) break;
       }
 
-      // PPh per bulan (estimasi) -- TER approach is more complex; this is a simplified monthly accrual
+      // PPh per bulan (estimasi)
       const taxMonthly = Math.round(taxYearly / 12);
 
       // Total potongan per bulan (employee side): BPJS Health + JHT + JP + PPh
       const totalEmployeeMonthly = bpjsHealthEmployeeMonthly + jhtEmployeeMonthly + jpEmployeeMonthly + taxMonthly;
+
+      // === Pendapatan Netto (Take Home Pay) ===
+      const netIncomeMonthly = grossMonthly - totalEmployeeMonthly;
+      const netIncomeYearly = grossYearly - (totalEmployeeMonthly * 12);
 
       // Build breakdown rows
       const tbody = document.querySelector('#breakdown tbody');
@@ -230,7 +239,8 @@
         ['PKP (thn)', "-", fmt(pkp)],
         ['PPh 21 terhutang (thn)', "-", fmt(Math.round(taxYearly))],
         ['PPh 21 potong (bln) - estimasi', fmt(taxMonthly), fmt(taxMonthly*12)],
-        ['Total potongan (karyawan/bln)', fmt(totalEmployeeMonthly), fmt(totalEmployeeMonthly*12)]
+        ['Total potongan (karyawan/bln)', fmt(totalEmployeeMonthly), fmt(totalEmployeeMonthly*12)],
+        ['Pendapatan netto (take home pay)', fmt(netIncomeMonthly), fmt(netIncomeYearly)]
       ];
 
       rows.forEach(r=>{
@@ -246,8 +256,13 @@
       $('outJP').textContent = fmt(jpEmployeeMonthly);
       $('outPph').textContent = fmt(taxMonthly);
 
+      // Update netto stat card
+      if ($('outNetto')) {
+        $('outNetto').textContent = fmt(netIncomeMonthly);
+      }
+
       return {
-        grossMonthly, grossYearly, bpjsHealthEmployeeMonthly, jhtEmployeeMonthly, jpEmployeeMonthly, taxMonthly, taxYearly
+        grossMonthly, grossYearly, bpjsHealthEmployeeMonthly, jhtEmployeeMonthly, jpEmployeeMonthly, taxMonthly, taxYearly, netIncomeMonthly, netIncomeYearly
       }
     }
 
@@ -258,12 +273,13 @@
     });
     $('export').addEventListener('click', ()=>{
       const data = calc();
-      const csv = `Item,Perbulan,Pertahun\n"Gaji+Tunjangan",${data.grossMonthly},${data.grossYearly}\n"BPJS Health (karyawan)",${data.bpjsHealthEmployeeMonthly},${data.bpjsHealthEmployeeMonthly*12}\n"JHT (karyawan)",${data.jhtEmployeeMonthly},${data.jhtEmployeeMonthly*12}\n"JP (karyawan)",${data.jpEmployeeMonthly},${data.jpEmployeeMonthly*12}\n"PPh21 (est bln)",${data.taxMonthly},${data.taxYearly}\n`;
+      const csv = `Item,Perbulan,Pertahun\n"Gaji+Tunjangan",${data.grossMonthly},${data.grossYearly}\n"BPJS Health (karyawan)",${data.bpjsHealthEmployeeMonthly},${data.bpjsHealthEmployeeMonthly*12}\n"JHT (karyawan)",${data.jhtEmployeeMonthly},${data.jhtEmployeeMonthly*12}\n"JP (karyawan)",${data.jpEmployeeMonthly},${data.jpEmployeeMonthly*12}\n"PPh21 (est bln)",${data.taxMonthly},${data.taxYearly}\n"Pendapatan Netto",${data.netIncomeMonthly},${data.netIncomeYearly}\n`;
       navigator.clipboard.writeText(csv).then(()=>{ alert('CSV disalin ke clipboard.'); }, ()=>{ alert('Gagal menyalin CSV.'); });
     });
 
     // initial
     calc();
   </script>
+
 </body>
 </html>
