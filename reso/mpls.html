@@ -6,8 +6,8 @@
   <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="note-container">
 
+<body class="note-container">
   <main class="note-main">
     <h2 class="note-title text-center">Multiprotocol Label Switching (MPLS)</h2>
     <p class="note-paragraph">
@@ -81,6 +81,21 @@
       <li><strong>MPLS QoS:</strong> Memberikan prioritas layanan berdasarkan label EXP.</li>
     </ul>
 
+    <h3 class="note-subtitle">Apakah MPLS ke arah CE harus menggunakan VRF?</h3>
+    <p class="note-paragraph">
+      Tidak selalu, tergantung jenis layanan MPLS yang digunakan:
+    </p>
+    <ul class="note-list">
+      <li><strong>MPLS L3VPN:</strong> Wajib menggunakan <em>VRF</em> di sisi PE untuk memisahkan routing antar pelanggan. 
+      Setiap interface PE yang terhubung ke CE harus diikat ke VRF tertentu. Hal ini memungkinkan pelanggan berbeda tetap bisa menggunakan IP address yang sama tanpa konflik.</li>
+      <li><strong>MPLS L2VPN:</strong> Tidak memerlukan VRF, karena PE hanya meneruskan frame Layer 2 secara transparan tanpa ikut campur di routing.</li>
+      <li><strong>MPLS Transport Backbone:</strong> Jika MPLS hanya digunakan di internal provider (misalnya untuk Traffic Engineering atau Fast Reroute), tidak diperlukan VRF ke arah CE, kecuali ada layanan VPN tambahan.</li>
+    </ul>
+    <p class="note-paragraph">
+      <strong>Kesimpulan:</strong> VRF ke arah CE <em>wajib</em> bila menggunakan MPLS L3VPN, 
+      sedangkan pada L2VPN atau backbone transport, VRF tidak diperlukan.
+    </p>
+
     <h3 class="note-subtitle">Proses Forwarding MPLS</h3>
     <ol class="note-list">
       <li>Paket masuk ke LER ingress → dicocokkan dengan FEC → diberi label.</li>
@@ -115,6 +130,7 @@
         </tr>
       </tbody>
     </table>
+
 
 
     <h3 class="note-subtitle">CONTOH KASUS</h3>
