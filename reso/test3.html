@@ -18,19 +18,22 @@
       align-items: center;
       flex-direction: column;
       padding: 40px;
+      text-align: center;
     }
     .intro {
       background: linear-gradient(135deg, #0d6efd, #6ea8fe);
       color: white;
-      text-align: center;
     }
     .timeline-section {
       background: #f9fafb;
       overflow-y: auto;
     }
-    .btn-next {
-      margin-top: 30px;
-      padding: 12px 24px;
+    .contact-section {
+      background: #e9f7ef;
+    }
+    .btn-nav {
+      margin: 15px;
+      padding: 10px 20px;
       font-size: 18px;
       border-radius: 30px;
     }
@@ -40,6 +43,7 @@
       position: relative;
       max-width: 700px;
       margin: auto;
+      text-align: left;
     }
     .timeline::before {
       content: '';
@@ -81,7 +85,6 @@
     ul {
       margin: 0;
       padding-left: 20px;
-      text-align: left;
     }
   </style>
 </head>
@@ -89,12 +92,10 @@
 
   <!-- Section 1: Intro -->
   <section class="intro" id="section1">
+    <h1 class="fw-bold">Selamat Datang</h1>
+    <p class="lead">Presentasi Rencana Pembelajaran Jaringan</p>
     <div>
-      <h1 class="fw-bold">Selamat Datang</h1>
-      <p class="lead">Presentasi Rencana Pembelajaran Jaringan</p>
-      <button class="btn btn-light btn-next" onclick="nextSection('#section2')">
-        Lanjut ➡️
-      </button>
+      <button class="btn btn-light btn-nav" onclick="nextSection('#section2')">Lanjut ➡️</button>
     </div>
   </section>
 
@@ -158,10 +159,19 @@
       </div>
     </div>
 
-    <div class="text-center mt-5">
-      <button class="btn btn-primary btn-next" onclick="nextSection('#section1')">
-        🔄 Kembali ke Awal
-      </button>
+    <div class="mt-5">
+      <button class="btn btn-secondary btn-nav" onclick="nextSection('#section1')">⬅️ Back</button>
+      <button class="btn btn-primary btn-nav" onclick="nextSection('#section3')">Next ➡️</button>
+    </div>
+  </section>
+
+  <!-- Section 3: Kontak (Dummy) -->
+  <section class="contact-section" id="section3">
+    <h1 class="fw-bold">Kontak</h1>
+    <p class="lead">Ini dummy section untuk informasi kontak.</p>
+    <div>
+      <button class="btn btn-secondary btn-nav" onclick="nextSection('#section2')">⬅️ Back</button>
+      <button class="btn btn-primary btn-nav" onclick="nextSection('#section1')">🔄 Kembali ke Awal</button>
     </div>
   </section>
 
