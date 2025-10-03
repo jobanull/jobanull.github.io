@@ -1095,6 +1095,63 @@
     </ul>
   </main>
 </section>
+<section id="supernetting" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Supernetting</h2>
+    <p class="note-paragraph">
+      <strong>Supernetting</strong> adalah teknik untuk menggabungkan beberapa jaringan kecil (subnet) 
+      menjadi satu jaringan yang lebih besar. Kebalikan dari <em>subnetting</em> yang memecah jaringan, 
+      supernetting justru melakukan penggabungan (<em>route aggregation</em>).
+    </p>
+
+    <h3 class="note-subtitle">Tujuan Supernetting</h3>
+    <ul>
+      <li>Mengurangi jumlah entri routing pada router (efisiensi routing).</li>
+      <li>Menyederhanakan tabel routing dengan cara menggabungkan banyak network kecil menjadi satu rute besar.</li>
+      <li>Menghemat sumber daya router dan mempercepat proses lookup routing.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Perbedaan dengan Subnetting</h3>
+    <ul>
+      <li><strong>Subnetting</strong> → Membagi jaringan besar menjadi beberapa jaringan kecil.</li>
+      <li><strong>Supernetting</strong> → Menggabungkan beberapa jaringan kecil menjadi satu jaringan besar.</li>
+    </ul>
+
+    <h3 class="note-subtitle">CIDR dalam Supernetting</h3>
+    <p>
+      Supernetting memanfaatkan <strong>CIDR (Classless Inter-Domain Routing)</strong> 
+      untuk menuliskan banyak network menjadi satu notasi ringkas.
+    </p>
+    <p><strong>Contoh:</strong></p>
+    <ul>
+      <li>Empat jaringan kelas C: 
+        <code>192.168.0.0/24</code>, <code>192.168.1.0/24</code>, <code>192.168.2.0/24</code>, <code>192.168.3.0/24</code></li>
+      <li>Bisa digabung (supernet) menjadi satu jaringan: <code>192.168.0.0/22</code></li>
+      <li>/22 meliputi range IP dari <code>192.168.0.0</code> sampai <code>192.168.3.255</code></li>
+    </ul>
+
+    <h3 class="note-subtitle">Syarat Supernetting</h3>
+    <ul>
+      <li>Network yang akan digabung harus <strong>berurutan</strong> (contiguous).</li>
+      <li>Jumlah network harus dalam bentuk pangkat 2 (misalnya 2, 4, 8, 16, dst).</li>
+      <li>Harus dimulai dari network address yang tepat sesuai blok CIDR.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Manfaat dalam Routing</h3>
+    <ul>
+      <li>Router hanya perlu menyimpan satu route besar, bukan banyak route kecil.</li>
+      <li>Meningkatkan <em>scalability</em> jaringan besar (misalnya ISP dan backbone).</li>
+      <li>Lebih mudah dalam manajemen alamat IP skala luas.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <ul>
+      <li><strong>Subnetting</strong> = "pecah-pecah" jaringan besar → jaringan kecil.</li>
+      <li><strong>Supernetting</strong> = "gabungkan" jaringan kecil → jaringan besar.</li>
+      <li>Supernetting banyak dipakai untuk <strong>route summarization</strong> di backbone internet.</li>
+    </ul>
+  </main>
+</section>
 
 
 <section id="handshake" class="note-container container">
