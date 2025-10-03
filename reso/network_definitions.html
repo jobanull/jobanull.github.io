@@ -842,6 +842,186 @@
   </main>
 </section>
 
+<section id="ipv4" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">IPv4 Addressing</h2>
+    <p class="note-paragraph">
+      <strong>IPv4 Address</strong> adalah sistem penomoran berukuran 32-bit yang digunakan untuk memberikan 
+      identitas logis pada perangkat di jaringan komputer. Sama seperti alamat rumah yang dipakai kurir untuk 
+      mengantar paket, <em>IP address</em> digunakan agar data sampai ke tujuan yang benar.
+    </p>
+
+    <h3 class="note-subtitle">Jenis Address di Jaringan</h3>
+    <ul>
+      <li><strong>MAC Address</strong> → alamat fisik unik tiap perangkat jaringan (bawaan pabrik).</li>
+      <li><strong>IP Address</strong> → alamat logis yang bisa dikonfigurasi, digunakan untuk komunikasi antar jaringan.</li>
+      <li><strong>Port Address</strong> → nomor yang menunjukkan aplikasi atau service tertentu dalam satu perangkat.</li>
+      <li><strong>Domain/URL</strong> → alamat dalam bentuk nama yang mudah diingat, dipetakan ke IP melalui DNS.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Peran Address dalam Komunikasi</h3>
+    <p>
+      Address berfungsi sebagai <strong>penanda siapa pengirim dan siapa penerima</strong>. 
+      Tanpa alamat, data tidak tahu harus dikirim ke mana.
+    </p>
+    <ul>
+      <li><strong>MAC Address</strong> = seperti nomor seri unik di setiap HP/laptop.</li>
+      <li><strong>IP Address</strong> = seperti alamat rumah/kantor yang bisa berubah.</li>
+      <li><strong>Port Address</strong> = seperti nomor ruangan di dalam sebuah gedung.</li>
+      <li><strong>Domain</strong> = seperti nama toko/brand, lebih mudah diingat daripada koordinat GPS.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kenapa Penting?</h3>
+    <ul>
+      <li>Device bisa <strong>saling mengenali</strong> dalam jaringan.</li>
+      <li>Data bisa <strong>dikirim tepat sasaran</strong>.</li>
+      <li>Proses <strong>routing dan switching</strong> bisa berjalan dengan baik.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Struktur IPv4 & IPv6</h3>
+    <ul>
+      <li><strong>IPv4</strong>
+        <ul>
+          <li>Panjang: <strong>32-bit</strong> (ditulis 4 oktet desimal, dipisah titik).</li>
+          <li>Contoh: <code>192.168.1.1</code></li>
+          <li>Total kemungkinan: ±4,3 milyar alamat.</li>
+          <li>Masalah: cepat habis karena pertumbuhan internet.</li>
+        </ul>
+      </li>
+      <li><strong>IPv6</strong>
+        <ul>
+          <li>Panjang: <strong>128-bit</strong> (ditulis dalam heksadesimal, dipisah titik dua <code>:</code>).</li>
+          <li>Contoh: <code>2001:0db8:85a3::8a2e:0370:7334</code></li>
+          <li>Total kemungkinan: hampir tak terbatas (<code>3,4 × 10^38</code> alamat).</li>
+          <li>Solusi kehabisan IPv4, mendukung teknologi modern (IoT, mobile, dsb).</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelas IP (IPv4 Classful – konsep lama)</h3>
+    <p>Dulu, IP address dibagi berdasarkan <strong>kelas</strong>:</p>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Kelas</th>
+          <th>Range Awal</th>
+          <th>Range Akhir</th>
+          <th>Default Mask</th>
+          <th>Jumlah Host</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>A</strong></td>
+          <td>0.0.0.0</td>
+          <td>127.255.255.255</td>
+          <td>255.0.0.0 (/8)</td>
+          <td>16 juta host</td>
+        </tr>
+        <tr>
+          <td><strong>B</strong></td>
+          <td>128.0.0.0</td>
+          <td>191.255.255.255</td>
+          <td>255.255.0.0 (/16)</td>
+          <td>65 ribu host</td>
+        </tr>
+        <tr>
+          <td><strong>C</strong></td>
+          <td>192.0.0.0</td>
+          <td>223.255.255.255</td>
+          <td>255.255.255.0 (/24)</td>
+          <td>254 host</td>
+        </tr>
+        <tr>
+          <td><strong>D</strong></td>
+          <td>224.0.0.0</td>
+          <td>239.255.255.255</td>
+          <td>-</td>
+          <td>Multicast</td>
+        </tr>
+        <tr>
+          <td><strong>E</strong></td>
+          <td>240.0.0.0</td>
+          <td>255.255.255.255</td>
+          <td>-</td>
+          <td>Reserved (eksperimental)</td>
+        </tr>
+      </tbody>
+    </table>
+    <p><em>Sekarang jarang dipakai, digantikan <strong>CIDR (classless)</strong> yang lebih fleksibel.</em></p>
+
+    <h3 class="note-subtitle">Public vs Private IP</h3>
+    <ul>
+      <li><strong>Public IP</strong>
+        <ul>
+          <li>Bisa diakses langsung dari internet.</li>
+          <li>Harus unik global, didapat dari ISP.</li>
+          <li>Contoh: <code>8.8.8.8</code> (Google DNS).</li>
+        </ul>
+      </li>
+      <li><strong>Private IP</strong>
+        <ul>
+          <li>Hanya berlaku di dalam jaringan lokal (LAN).</li>
+          <li>Tidak bisa langsung diakses internet (butuh NAT).</li>
+          <li>Range Private:
+            <ul>
+              <li><code>10.0.0.0 – 10.255.255.255</code> (/8)</li>
+              <li><code>172.16.0.0 – 172.31.255.255</code> (/12)</li>
+              <li><code>192.168.0.0 – 192.168.255.255</code> (/16)</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis Komunikasi</h3>
+    <ul>
+      <li><strong>Unicast</strong> → satu pengirim ke satu penerima. 
+        <br>Contoh: Laptop akses web server.</li>
+      <li><strong>Broadcast</strong> → satu pengirim ke semua host dalam satu subnet. 
+        <br>Contoh: ARP request (<code>192.168.1.255</code>).</li>
+      <li><strong>Multicast</strong> → satu pengirim ke sekelompok host yang berlangganan grup multicast. 
+        <br>Contoh: Streaming video IP TV (<code>224.0.0.x</code>).</li>
+      <li><strong>Anycast</strong> → satu pengirim ke <em>satu penerima terdekat</em> (secara routing). 
+        <br>Contoh: DNS server IPv6 anycast.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Special Address</h3>
+    <ul>
+      <li><strong>Loopback Address</strong>
+        <ul>
+          <li><strong>IPv4</strong>: <code>127.0.0.1</code> (localhost).</li>
+          <li><strong>IPv6</strong>: <code>::1</code>.</li>
+          <li>Fungsi: menguji stack TCP/IP pada perangkat itu sendiri. 
+              <br>Contoh: <code>ping 127.0.0.1</code>.</li>
+        </ul>
+      </li>
+      <li><strong>Link-Local Address</strong>
+        <ul>
+          <li><strong>IPv4</strong>: <code>169.254.0.0/16</code> (169.254.x.x), disebut juga APIPA.</li>
+          <li>Terjadi kalau perangkat tidak mendapat IP dari DHCP.</li>
+          <li>Hanya bisa komunikasi dalam satu segmen LAN (tanpa router).</li>
+          <li><strong>IPv6</strong>: <code>FE80::/10</code>, otomatis ada di setiap interface.</li>
+        </ul>
+      </li>
+      <li><strong>APIPA (Automatic Private IP Addressing)</strong>
+        <ul>
+          <li>Bagian dari Link-Local IPv4.</li>
+          <li>Range: <code>169.254.0.1 – 169.254.255.254</code>.</li>
+          <li>Dipakai jika DHCP server gagal merespons.</li>
+          <li>Device hanya bisa komunikasi lokal, tidak bisa ke internet.</li>
+        </ul>
+      </li>
+      <li><strong>Alamat Khusus Lain</strong>
+        <ul>
+          <li><code>0.0.0.0</code> → default route / alamat belum diassign.</li>
+          <li><code>255.255.255.255</code> → broadcast ke seluruh jaringan.</li>
+        </ul>
+      </li>
+    </ul>
+  </main>
+</section>
+
 
 <section id="handshake" class="note-container container">
   <main class="note-main">
