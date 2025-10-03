@@ -1022,6 +1022,76 @@
   </main>
 </section>
 
+<section id="ipv6" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">IPv6 Addressing</h2>
+    <p class="note-paragraph">
+      <strong>IPv6</strong> (Internet Protocol version 6) adalah versi terbaru dari protokol IP 
+      yang menggunakan panjang alamat 128-bit. IPv6 dikembangkan untuk menggantikan IPv4 
+      karena keterbatasan jumlah alamat IPv4 yang hanya 32-bit.
+    </p>
+
+    <h3 class="note-subtitle">Mengapa IPv6 Diperlukan?</h3>
+    <ul>
+      <li><strong>Keterbatasan IPv4</strong>: hanya menyediakan sekitar 4,3 miliar alamat.</li>
+      <li><strong>Pertumbuhan Internet</strong>: jumlah perangkat IoT, mobile, dan server semakin banyak.</li>
+      <li><strong>Efisiensi Routing</strong>: IPv6 mendukung <em>route aggregation</em> lebih baik.</li>
+      <li><strong>Keamanan</strong>: IPv6 mendukung <code>IPSec</code> secara bawaan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Format Alamat IPv6</h3>
+    <p>
+      IPv6 menggunakan 128-bit, ditulis dalam 8 blok heksadesimal yang dipisahkan tanda titik dua (<code>:</code>).
+    </p>
+    <ul>
+      <li>Contoh: <code>2001:0db8:0000:0000:0000:ff00:0042:8329</code></li>
+      <li>Bisa disingkat:
+        <ul>
+          <li><code>2001:db8::ff00:42:8329</code> (mengganti blok nol berturut-turut dengan "::")</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis Address IPv6</h3>
+    <ul>
+      <li><strong>Unicast</strong>: alamat untuk satu perangkat saja.
+        <ul>
+          <li><em>Global Unicast</em> → bisa diakses melalui Internet (seperti Public IPv4).</li>
+          <li><em>Link-Local</em> (<code>FE80::/10</code>) → otomatis ada di setiap interface, hanya untuk komunikasi lokal.</li>
+          <li><em>Unique Local</em> (<code>FC00::/7</code>) → mirip dengan Private IPv4.</li>
+        </ul>
+      </li>
+      <li><strong>Multicast</strong>: alamat untuk mengirim ke sekelompok perangkat.</li>
+      <li><strong>Anycast</strong>: alamat yang dipakai beberapa perangkat, data akan dikirim ke yang terdekat.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh Alamat Khusus IPv6</h3>
+    <ul>
+      <li><strong>::1</strong> → Loopback (sama seperti 127.0.0.1 di IPv4).</li>
+      <li><strong>::</strong> → Unspecified address (alamat kosong, digunakan saat perangkat belum punya alamat).</li>
+      <li><strong>FE80::/10</strong> → Link-Local (selalu ada pada setiap interface).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan IPv6 Dibanding IPv4</h3>
+    <ul>
+      <li>Alamat jauh lebih banyak (2<sup>128</sup> alamat unik).</li>
+      <li>Konfigurasi otomatis (stateless autoconfiguration).</li>
+      <li>Dukungan penuh untuk <strong>QoS</strong> (Quality of Service).</li>
+      <li>Keamanan lebih baik dengan dukungan bawaan <code>IPSec</code>.</li>
+      <li>Efisiensi routing dan <strong>tidak membutuhkan NAT</strong>.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <ul>
+      <li>IPv6 adalah pengganti IPv4 dengan panjang alamat 128-bit.</li>
+      <li>Mengatasi masalah kehabisan alamat IPv4.</li>
+      <li>Mendukung fitur modern: autoconfig, IPSec, QoS, dan efisiensi routing.</li>
+      <li>Jenis utama: Unicast, Multicast, Anycast.</li>
+    </ul>
+  </main>
+</section>
+
+
 <section id="subnetting" class="note-container container">
   <main class="note-main">
     <h2 class="note-title text-center">Subnetting</h2>
