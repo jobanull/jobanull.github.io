@@ -1022,6 +1022,80 @@
   </main>
 </section>
 
+<section id="subnetting" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Subnetting</h2>
+    <p class="note-paragraph">
+      <strong>Subnetting</strong> adalah teknik untuk membagi sebuah jaringan IP besar menjadi beberapa jaringan 
+      kecil (<em>subnetwork</em> atau subnet). Tujuannya untuk efisiensi penggunaan alamat IP, meningkatkan keamanan, 
+      dan mengoptimalkan lalu lintas jaringan.
+    </p>
+
+    <h3 class="note-subtitle">Subnet Mask & CIDR Notation</h3>
+    <ul>
+      <li><strong>Subnet Mask</strong> → angka biner 32-bit yang menentukan bagian <em>network</em> dan bagian <em>host</em>.
+        <br>Contoh: <code>255.255.255.0</code></li>
+      <li><strong>CIDR (Classless Inter-Domain Routing)</strong> → cara singkat menulis subnet mask dengan tanda garis miring.
+        <br>Contoh: <code>/24</code> artinya subnet mask = <code>255.255.255.0</code>.</li>
+      <li><strong>Contoh</strong>:
+        <ul>
+          <li><code>192.168.1.0/24</code> → 24 bit untuk network, 8 bit untuk host.</li>
+          <li><code>10.0.0.0/16</code> → 16 bit untuk network, 16 bit untuk host.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis Address dalam Subnet</h3>
+    <ul>
+      <li><strong>Network Address</strong>
+        <br>Alamat pertama dari sebuah subnet, menunjukkan identitas jaringan.
+        <br>Contoh: <code>192.168.1.0/24</code> → network address = <code>192.168.1.0</code>
+      </li>
+      <li><strong>Host Address</strong>
+        <br>Alamat yang bisa dipakai oleh perangkat dalam subnet.
+        <br>Contoh: <code>192.168.1.1 – 192.168.1.254</code> untuk subnet <code>/24</code>.
+      </li>
+      <li><strong>Broadcast Address</strong>
+        <br>Alamat terakhir dari subnet, dipakai untuk komunikasi ke semua host dalam subnet.
+        <br>Contoh: <code>192.168.1.255</code> untuk subnet <code>/24</code>.
+      </li>
+    </ul>
+
+    <h3 class="note-subtitle">Cara Hitung Subnet</h3>
+    <ol>
+      <li><strong>Jumlah Host</strong>
+        <br>Formula: <code>(2^jumlah_bit_host) - 2</code> 
+        <br>(dikurangi 2 karena network address & broadcast tidak bisa dipakai).
+        <br><em>Contoh</em>: /24 → 32 - 24 = 8 bit host → 2^8 - 2 = 254 host.
+      </li>
+      <li><strong>Jumlah Subnet</strong>
+        <br>Formula: <code>2^jumlah_bit_dipinjam</code>
+        <br>(bit host yang diubah jadi bit network).
+        <br><em>Contoh</em>: dari /24 menjadi /26 → pinjam 2 bit → 2^2 = 4 subnet.
+      </li>
+      <li><strong>Ukuran Blok (Block Size)</strong>
+        <br>Formula: <code>256 - subnet_mask_octet</code>
+        <br><em>Contoh</em>: /26 → subnet mask = 255.255.255.192 → block size = 256 - 192 = 64.
+        <br>Maka subnetnya: 
+        <ul>
+          <li>192.168.1.0 – 192.168.1.63</li>
+          <li>192.168.1.64 – 192.168.1.127</li>
+          <li>192.168.1.128 – 192.168.1.191</li>
+          <li>192.168.1.192 – 192.168.1.255</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <ul>
+      <li><strong>/30</strong> → 4 IP (2 host) → sering dipakai point-to-point link.</li>
+      <li><strong>/29</strong> → 8 IP (6 host) → untuk jaringan kecil.</li>
+      <li><strong>/24</strong> → 256 IP (254 host) → umum untuk LAN.</li>
+      <li><strong>/16</strong> → 65 ribu host → jaringan besar.</li>
+    </ul>
+  </main>
+</section>
+
 
 <section id="handshake" class="note-container container">
   <main class="note-main">
