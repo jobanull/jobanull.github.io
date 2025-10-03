@@ -1091,14 +1091,18 @@
   </main>
 </section>
 
-
 <section id="subnetting" class="note-container container">
   <main class="note-main">
-    <h2 class="note-title text-center">Subnetting</h2>
+    <h2 class="note-title text-center">Subnetting (FLSM)</h2>
     <p class="note-paragraph">
       <strong>Subnetting</strong> adalah teknik untuk membagi sebuah jaringan IP besar menjadi beberapa jaringan 
       kecil (<em>subnetwork</em> atau subnet). Tujuannya untuk efisiensi penggunaan alamat IP, meningkatkan keamanan, 
-      dan mengoptimalkan lalu lintas jaringan.
+      dan mengoptimalkan lalu lintas jaringan. 
+    </p>
+    <p class="note-paragraph">
+      Subnetting dasar ini biasanya disebut juga <strong>FLSM (Fixed Length Subnet Masking)</strong>, 
+      karena semua subnet yang dihasilkan memiliki ukuran (jumlah host) yang sama. 
+      Berbeda dengan <strong>VLSM</strong> yang memungkinkan subnet dengan ukuran berbeda-beda.
     </p>
 
     <h3 class="note-subtitle">Subnet Mask & CIDR Notation</h3>
@@ -1158,6 +1162,7 @@
 
     <h3 class="note-subtitle">Ringkasan</h3>
     <ul>
+      <li><strong>Subnetting (FLSM)</strong> menghasilkan subnet dengan ukuran sama.</li>
       <li><strong>/30</strong> → 4 IP (2 host) → sering dipakai point-to-point link.</li>
       <li><strong>/29</strong> → 8 IP (6 host) → untuk jaringan kecil.</li>
       <li><strong>/24</strong> → 256 IP (254 host) → umum untuk LAN.</li>
@@ -1165,6 +1170,7 @@
     </ul>
   </main>
 </section>
+
 <section id="supernetting" class="note-container container">
   <main class="note-main">
     <h2 class="note-title text-center">Supernetting</h2>
@@ -1219,6 +1225,122 @@
       <li><strong>Subnetting</strong> = "pecah-pecah" jaringan besar → jaringan kecil.</li>
       <li><strong>Supernetting</strong> = "gabungkan" jaringan kecil → jaringan besar.</li>
       <li>Supernetting banyak dipakai untuk <strong>route summarization</strong> di backbone internet.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="cidr" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">CIDR (Classless Inter-Domain Routing)</h2>
+    <p class="note-paragraph">
+      <strong>CIDR</strong> adalah metode pengalamatan IP yang menggantikan sistem classful (kelas A, B, C).
+      Dengan CIDR, alamat IP ditulis menggunakan <em>prefix length</em> (misalnya <code>/24</code>, <code>/27</code>) 
+      untuk menunjukkan jumlah bit yang digunakan sebagai <strong>network ID</strong>.
+    </p>
+
+    <h3 class="note-subtitle">Tujuan CIDR</h3>
+    <ul>
+      <li><strong>Menghemat Alamat IP</strong>: tidak terpaku pada kelas A, B, C.</li>
+      <li><strong>Efisiensi Routing</strong>: mendukung <em>route aggregation</em> sehingga tabel routing lebih ringkas.</li>
+      <li><strong>Fleksibilitas</strong>: prefix length bisa bervariasi sesuai kebutuhan jaringan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Cara Kerja CIDR</h3>
+    <p>
+      CIDR menggunakan notasi <code>IP Address/Prefix</code> untuk menunjukkan bagian network dan host.
+    </p>
+    <ul>
+      <li>Contoh: <code>192.168.10.0/26</code></li>
+      <li><strong>/26</strong> berarti 26 bit untuk network, 6 bit untuk host.</li>
+      <li>Subnet mask = <code>255.255.255.192</code></li>
+      <li>Jumlah host = 2<sup>6</sup> – 2 = 62 host.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Perbandingan Classful vs CIDR</h3>
+    <ul>
+      <li><strong>Classful</strong>: subnet mask baku (A=/8, B=/16, C=/24), tidak fleksibel.</li>
+      <li><strong>CIDR</strong>: prefix length bisa berapa saja (/13, /20, /27, dst).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan CIDR</h3>
+    <ul>
+      <li>Alokasi IP lebih efisien.</li>
+      <li>Dapat membuat subnet sesuai kebutuhan.</li>
+      <li>Mendukung <em>route summarization</em> (supernetting).</li>
+      <li>Mengurangi ukuran tabel routing pada backbone Internet.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh CIDR</h3>
+    <ul>
+      <li><code>10.0.0.0/8</code> → jaringan besar dengan 16 juta host.</li>
+      <li><code>172.16.0.0/12</code> → private IP dengan range besar.</li>
+      <li><code>192.168.1.0/24</code> → 256 alamat (254 host).</li>
+      <li><code>192.168.1.0/27</code> → 32 alamat (30 host).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <ul>
+      <li>CIDR adalah metode pengalamatan classless.</li>
+      <li>Menggunakan notasi prefix length (misalnya <code>/24</code>).</li>
+      <li>Lebih hemat, fleksibel, dan efisien dibanding sistem classful.</li>
+      <li>Dasar bagi teknik subnetting dan VLSM.</li>
+    </ul>
+  </main>
+</section>
+
+<section id="vlsm" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">VLSM (Variable Length Subnet Masking)</h2>
+    <p class="note-paragraph">
+      <strong>VLSM</strong> adalah teknik subnetting yang memungkinkan penggunaan subnet mask dengan panjang berbeda-beda 
+      dalam satu jaringan. Dengan VLSM, alokasi IP dapat disesuaikan dengan kebutuhan host pada tiap subnet, 
+      sehingga lebih efisien dibanding subnetting biasa.
+    </p>
+
+    <h3 class="note-subtitle">Mengapa VLSM Diperlukan?</h3>
+    <ul>
+      <li><strong>Efisiensi Alamat IP</strong>: mengurangi pemborosan karena tiap subnet bisa punya ukuran berbeda.</li>
+      <li><strong>Fleksibilitas</strong>: dapat menyesuaikan jumlah host dengan kebutuhan nyata.</li>
+      <li><strong>Skalabilitas</strong>: cocok untuk jaringan dengan banyak segmentasi berbeda.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Cara Kerja VLSM</h3>
+    <p>
+      Dalam VLSM, sebuah network dibagi menjadi subnet dengan mask yang berbeda sesuai kebutuhan perangkat.
+    </p>
+    <ul>
+      <li>Langkah pertama: tentukan jumlah host pada setiap subnet.</li>
+      <li>Subnet besar diberi prefix kecil (misal <code>/24</code>), subnet kecil diberi prefix lebih besar (misal <code>/30</code>).</li>
+      <li>Gunakan notasi CIDR untuk menuliskan hasil subnetting.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Contoh VLSM</h3>
+    <p>Dari network <code>192.168.1.0/24</code>:</p>
+    <ul>
+      <li>Subnet untuk 50 host → <code>192.168.1.0/26</code> (62 host).</li>
+      <li>Subnet untuk 10 host → <code>192.168.1.64/28</code> (14 host).</li>
+      <li>Subnet point-to-point (2 host) → <code>192.168.1.80/30</code> (2 host).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Perbandingan Subnetting Biasa vs VLSM</h3>
+    <ul>
+      <li><strong>Subnetting Biasa (FLSM)</strong>: semua subnet berukuran sama.</li>
+      <li><strong>VLSM</strong>: subnet bisa berbeda ukuran sesuai kebutuhan.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan VLSM</h3>
+    <ul>
+      <li>Menghemat penggunaan alamat IP.</li>
+      <li>Lebih fleksibel daripada subnetting standar.</li>
+      <li>Mendukung desain jaringan yang kompleks dan efisien.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <ul>
+      <li>VLSM adalah subnetting dengan panjang subnet mask yang bervariasi.</li>
+      <li>Membagi jaringan sesuai kebutuhan host pada tiap subnet.</li>
+      <li>Lebih efisien dibanding subnetting dengan ukuran tetap.</li>
+      <li>Bekerja dengan notasi CIDR sebagai dasarnya.</li>
     </ul>
   </main>
 </section>
