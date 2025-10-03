@@ -842,6 +842,7 @@
     </ul>
   </main>
 </section>
+
 <section id="ipv4" class="note-container container">
   <main class="note-main">
     <h2 class="note-title text-center">IPv4 Addressing</h2>
@@ -1019,51 +1020,6 @@
         </ul>
       </li>
     </ul>
-
-    <h3 class="note-subtitle">Subnet Kecil (Small Subnets)</h3>
-    <p>
-      Dalam praktik jaringan, ada beberapa subnet mask khusus yang disebut <strong>subnet kecil</strong> 
-      karena jumlah alamatnya sangat terbatas. Biasanya digunakan untuk kebutuhan khusus, bukan LAN biasa.
-    </p>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Prefix</th>
-          <th>Subnet Mask</th>
-          <th>Total IP</th>
-          <th>Usable Host</th>
-          <th>Umum Dipakai Untuk</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>/30</strong></td>
-          <td>255.255.255.252</td>
-          <td>4</td>
-          <td>2</td>
-          <td>Point-to-point link (konvensional, masih ada network & broadcast)</td>
-        </tr>
-        <tr>
-          <td><strong>/31</strong></td>
-          <td>255.255.255.254</td>
-          <td>2</td>
-          <td>2 (RFC 3021)</td>
-          <td>Point-to-point link hemat IP (router ke router, tanpa broadcast)</td>
-        </tr>
-        <tr>
-          <td><strong>/32</strong></td>
-          <td>255.255.255.255</td>
-          <td>1</td>
-          <td>1</td>
-          <td>Host tunggal, loopback, identifikasi unik perangkat</td>
-        </tr>
-      </tbody>
-    </table>
-    <p>
-      <em>Keuntungan utama /31 adalah <strong>hemat IP address</strong>, karena kedua alamat bisa digunakan 
-      langsung tanpa terbuang sebagai network/broadcast. Namun, subnet ini hanya cocok untuk 
-      <strong>point-to-point</strong> link, bukan untuk LAN dengan banyak host.</em>
-    </p>
   </main>
 </section>
 
@@ -1135,7 +1091,6 @@
     </ul>
   </main>
 </section>
-
 <section id="subnetting" class="note-container container">
   <main class="note-main">
     <h2 class="note-title text-center">Subnetting (FLSM)</h2>
@@ -1213,8 +1168,55 @@
       <li><strong>/24</strong> → 256 IP (254 host) → umum untuk LAN.</li>
       <li><strong>/16</strong> → 65 ribu host → jaringan besar.</li>
     </ul>
+
+    <h3 class="note-subtitle">Subnet Kecil (Small Subnets)</h3>
+    <p>
+      Beberapa prefix subnet sangat kecil jumlah alamatnya, dan dipakai untuk kebutuhan khusus. 
+      Misalnya point-to-point link antar router, atau identifikasi host tunggal. 
+      Subnet ini sangat penting dalam efisiensi penggunaan IPv4.
+    </p>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Prefix</th>
+          <th>Subnet Mask</th>
+          <th>Total IP</th>
+          <th>Usable Host</th>
+          <th>Umum Dipakai Untuk</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>/30</strong></td>
+          <td>255.255.255.252</td>
+          <td>4</td>
+          <td>2</td>
+          <td>Point-to-point link (cara lama, masih ada network & broadcast)</td>
+        </tr>
+        <tr>
+          <td><strong>/31</strong></td>
+          <td>255.255.255.254</td>
+          <td>2</td>
+          <td>2 (RFC 3021)</td>
+          <td>Point-to-point link hemat IP (router ke router, tanpa broadcast)</td>
+        </tr>
+        <tr>
+          <td><strong>/32</strong></td>
+          <td>255.255.255.255</td>
+          <td>1</td>
+          <td>1</td>
+          <td>Host tunggal, loopback, identifikasi unik perangkat</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      <em>Subnet /31 disebut <strong>hemat IP</strong> karena kedua alamatnya bisa digunakan langsung 
+      (tanpa terbuang sebagai network/broadcast). Namun, hanya cocok untuk <strong>point-to-point link</strong>. 
+      Sedangkan /32 biasanya dipakai untuk loopback interface pada router.</em>
+    </p>
   </main>
 </section>
+
 
 <section id="supernetting" class="note-container container">
   <main class="note-main">
