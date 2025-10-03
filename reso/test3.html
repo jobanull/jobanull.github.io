@@ -28,7 +28,10 @@
       background: #f9fafb;
       overflow-y: auto;
     }
-    .contact-section {
+    .requirement-section {
+      background: #fff3cd;
+    }
+    .invest-section {
       background: #e9f7ef;
     }
     .btn-nav {
@@ -93,7 +96,7 @@
   <!-- Section 1: Intro -->
   <section class="intro" id="section1">
     <h1 class="fw-bold">Selamat Datang</h1>
-    <p class="lead">Presentasi Rencana Pembelajaran Jaringan</p>
+    <p class="lead">Kelas Jaringan Cisco Packet Tracert</p>
     <div>
       <button class="btn btn-light btn-nav" onclick="nextSection('#section2')">Lanjut ➡️</button>
     </div>
@@ -165,12 +168,25 @@
     </div>
   </section>
 
-  <!-- Section 3: Kontak (Dummy) -->
-  <section class="contact-section" id="section3">
-    <h1 class="fw-bold">Kontak</h1>
-    <p class="lead">Ini dummy section untuk informasi kontak.</p>
+  <!-- Section 3: Requirement -->
+  <section class="requirement-section" id="section3">
+    <h1 class="fw-bold">Requirement</h1>
+    <ul class="lead text-start">
+      <li>Laptop</li>
+      <li>Cisco Packet Tracer v8.2.2 (versi terbaru)</li>
+    </ul>
     <div>
       <button class="btn btn-secondary btn-nav" onclick="nextSection('#section2')">⬅️ Back</button>
+      <button class="btn btn-primary btn-nav" onclick="nextSection('#section4')">Next ➡️</button>
+    </div>
+  </section>
+
+  <!-- Section 4: Investasi -->
+  <section class="invest-section" id="section4">
+    <h1 class="fw-bold">Investasi</h1>
+    <p class="lead">Rp. 150.000</p>
+    <div>
+      <button class="btn btn-secondary btn-nav" onclick="nextSection('#section3')">⬅️ Back</button>
       <button class="btn btn-primary btn-nav" onclick="nextSection('#section1')">🔄 Kembali ke Awal</button>
     </div>
   </section>
