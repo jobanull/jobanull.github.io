@@ -5409,7 +5409,6 @@
     </ul>
   </main>
 </section>
-
 <section id="vpn" class="note-container container">
   <main class="note-main">
     <h2 class="note-title text-center">VPN (Virtual Private Network)</h2>
@@ -5458,14 +5457,21 @@
       <li>VPN site-to-site menghubungkan pusat data dengan cloud provider secara aman.</li>
     </ul>
 
-    <!-- <img src="img/vpn-traffic.png" alt="Ilustrasi VPN Tunnel" class="note-image" /> -->
-
     <h3 class="note-subtitle">Tips Praktis</h3>
     <ul>
       <li>Pilih protokol VPN sesuai kebutuhan: IPsec untuk site-to-site, SSL untuk remote access.</li>
       <li>Gunakan enkripsi kuat (AES 256-bit) dan autentikasi multifaktor untuk keamanan optimal.</li>
       <li>Monitor performa dan latency VPN untuk memastikan koneksi stabil.</li>
       <li>Periksa sertifikat dan kunci secara berkala untuk mencegah kebocoran data.</li>
+    </ul>
+
+    <!-- Perbedaan VPN dan Tunnel -->
+    <h3 class="note-subtitle">Perbedaan VPN dan Tunnel</h3>
+    <ul>
+      <li><strong>Tunnel:</strong> Teknik encapsulation untuk membuat jalur logis agar data bisa melewati jaringan lain. Tidak selalu aman (contoh: GRE Tunnel, MPLS Tunnel).</li>
+      <li><strong>VPN:</strong> Jenis tunnel dengan tambahan keamanan seperti enkripsi, autentikasi, dan integritas data. Menggunakan protokol aman (IPsec, SSL/TLS, L2TP/IPsec).</li>
+      <li>Semua VPN adalah tunnel, tapi tidak semua tunnel adalah VPN.</li>
+      <li>Contoh: GRE adalah tunnel biasa (tanpa enkripsi), sedangkan IPsec VPN adalah tunnel dengan enkripsi penuh.</li>
     </ul>
   </main>
 </section>
