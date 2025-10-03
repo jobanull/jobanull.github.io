@@ -5467,11 +5467,18 @@
 
     <!-- Perbedaan VPN dan Tunnel -->
     <h3 class="note-subtitle">Perbedaan VPN dan Tunnel</h3>
+    <h4>1. Tunnel</h4>
     <ul>
-      <li><strong>Tunnel:</strong> Teknik encapsulation untuk membuat jalur logis agar data bisa melewati jaringan lain. Tidak selalu aman (contoh: GRE Tunnel, MPLS Tunnel).</li>
-      <li><strong>VPN:</strong> Jenis tunnel dengan tambahan keamanan seperti enkripsi, autentikasi, dan integritas data. Menggunakan protokol aman (IPsec, SSL/TLS, L2TP/IPsec).</li>
-      <li>Semua VPN adalah tunnel, tapi tidak semua tunnel adalah VPN.</li>
-      <li>Contoh: GRE adalah tunnel biasa (tanpa enkripsi), sedangkan IPsec VPN adalah tunnel dengan enkripsi penuh.</li>
+      <li><strong>Koneksi Point-to-Point:</strong> Tunnel menghubungkan dua titik secara langsung (point-to-point connection).</li>
+      <li><strong>Kebutuhan IP Publik:</strong> Kedua titik harus memiliki IP publik karena saling melakukan dial untuk membentuk satu tunnel.</li>
+      <li><strong>Skenario:</strong> Cocok untuk menghubungkan dua lokasi atau jaringan spesifik.</li>
+    </ul>
+
+    <h4>2. VPN (Virtual Private Network)</h4>
+    <ul>
+      <li><strong>Koneksi One-to-Many:</strong> VPN menggunakan satu server yang dapat dihubungkan oleh banyak pengguna sekaligus.</li>
+      <li><strong>Kebutuhan IP Publik:</strong> Hanya server VPN yang memerlukan IP publik. Pengguna dapat terkoneksi meski tidak memiliki IP publik.</li>
+      <li><strong>Skenario:</strong> Memungkinkan banyak user dari berbagai lokasi mengakses jaringan pribadi yang sama melalui satu server.</li>
     </ul>
   </main>
 </section>
