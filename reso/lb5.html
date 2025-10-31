@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Load Balancing (PBR)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Load Balancing (Policy-Based Routing / PBR)</h2>
+    <p class="note-paragraph">
+      <strong>PBR (Policy-Based Routing)</strong> adalah teknik routing di mana keputusan jalur tidak hanya
+      berdasarkan routing table, tetapi juga kebijakan tertentu seperti sumber IP, jenis trafik, atau port.
+      Cocok untuk multi-WAN atau skenario khusus yang membutuhkan kontrol granular atas jalur trafik.
+    </p>
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Fleksibel, dapat menentukan jalur berbeda untuk user/servis/jenis trafik tertentu.</li>
+      <li><strong>Keterbatasan:</strong> Konfigurasi lebih kompleks; perlu pemeliharaan rutin agar kebijakan tetap konsisten.</li>
+      <li><strong>Gunakan Saat:</strong> Multi-WAN dengan prioritas pengguna, aplikasi tertentu harus melewati gateway spesifik, atau trafik VoIP/VoD butuh jalur khusus.</li>
+    </ul>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+      <!-- <li>Tujuan: Menghubungkan RB1, RB2, dan RB3 menggunakan <strong>protokol routing IS-IS</strong> untuk pertukaran routing.</li> -->
+    </ul>
+
+
+    <img src="img/lb5.png" alt="Diagram jaringan" class="note-image" />
+    <p class="note-subtitle">R.PBR</p>
+    <pre class="note-codeblock"><code>
+/ip address
+add address=192.168.1.2/30 interface=ether1 network=192.168.1.0     # IP ke ISP1
+add address=172.16.1.2/30 interface=ether2 network=172.16.1.0       # IP ke ISP2
+add address=192.168.10.1/30 interface=ether3 network=192.168.10.0   # LAN1 (Client1)
+add address=192.168.20.1/30 interface=ether4 network=192.168.20.0   # LAN2 (Client2)
+
+/ip dns
+set servers=8.8.8.8,8.8.4.4                                         # DNS Google
+
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1              # NAT keluar via ISP1
+add action=masquerade chain=srcnat out-interface=ether2              # NAT keluar via ISP2
+
+/ip route
+add distance=1 gateway=192.168.1.1 routing-mark=ISP1                # Default route untuk traffic yang ditandai ISP1
+add distance=1 gateway=172.16.1.1 routing-mark=ISP2                 # Default route untuk traffic yang ditandai ISP2
+add distance=1 gateway=192.168.1.1                                  # Default route umum ke ISP1 (backup)
+
+/ip route rule
+add dst-address=192.168.10.0/24 src-address=192.168.20.0/24 table=main   # Akses antar LAN (LAN2 ke LAN1) tetap lewat main table
+add dst-address=192.168.20.0/24 src-address=192.168.10.0/24 table=main   # Akses antar LAN (LAN1 ke LAN2) tetap lewat main table
+add src-address=192.168.10.0/24 table=ISP1                               # LAN1 diarahkan ke ISP1
+add src-address=192.168.20.0/24 table=ISP2                               # LAN2 diarahkan ke ISP2
+
+/system identity
+set name=R.PBR                                                           # Set nama router = R.PBR
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan routing mark secara konsisten agar trafik sesuai kebijakan yang diinginkan.</li>
+      <li>Periksa kombinasi PBR dan NAT jika trafik keluar harus diubah IP sumber.</li>
+      <li>Dokumentasikan kebijakan PBR untuk memudahkan troubleshooting dan future scaling.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      PBR memungkinkan kontrol granular atas jalur trafik berdasarkan kebijakan tertentu, seperti sumber IP, jenis aplikasi, atau port.
+      Sangat berguna pada multi-WAN untuk memastikan aplikasi/klien tertentu selalu melewati jalur yang diinginkan.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+  <script src="js/index.js"></script>
+</body>
+</html>

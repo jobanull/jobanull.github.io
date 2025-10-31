@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Load Balancing (NTH / PCC)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Load Balancing (NTH / PCC)</h2>
+    <p class="note-paragraph">
+      <strong>NTH / PCC (Per-Connection Classifier)</strong> membagi trafik berdasarkan urutan koneksi atau paket menggunakan hashing. 
+      Umum digunakan untuk <em>multi-WAN</em> agar sesi/klien tertentu diarahkan ke uplink berbeda secara merata.
+    </p>
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Mudah diimplementasikan, tidak memerlukan routing protocol, cocok untuk membagi beban antar-sesi/klien.</li>
+      <li><strong>Keterbatasan:</strong> Tidak aware terhadap bandwidth realtime; hindari per-packet balancing agar tidak terjadi reordering TCP.</li>
+      <li><strong>Gunakan Saat:</strong> Multi-WAN rumahan/kantor dengan beberapa koneksi internet, ingin pembagian koneksi yang konsisten per-user atau per-session.</li>
+    </ul>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+      <li>Tujuan: Mengimplementasikan <strong>NTH Packet Routing</strong> untuk membagi trafik keluar secara bergantian (round-robin per paket) ke dua jalur ISP menggunakan MikroTik Router.</li>
+      <li>Topologi: Router R.NTH memiliki dua jalur keluar ke ISP melalui interface <code>ether1</code> dan <code>ether2</code>, serta menyediakan DHCP untuk jaringan LAN via <code>ether5</code>.</li>
+      <li>Catatan:
+        <ul>
+          <li>Mangle digunakan untuk menandai koneksi dengan parameter <code>nth</code> sehingga paket dapat dialokasikan secara bergantian ke dua jalur.</li>
+          <li>Marking routing membuat jalur terpisah (<code>jalur_1</code> dan <code>jalur_2</code>) untuk mengatur forwarding paket sesuai tanda.</li>
+          <li>Routing default mencakup kedua gateway agar terjadi load sharing antar ISP.</li>
+          <li>DHCP server memberikan IP kepada client di jaringan LAN.</li>
+          <li>NAT digunakan untuk mengakses internet melalui kedua ISP.</li>
+          <li>DNS diset ke Google DNS (8.8.8.8 & 8.8.4.4) agar client dapat resolve nama domain.</li>
+        </ul>
+      </li>
+    </ul>
+
+
+
+    <img src="img/lb4.png" alt="Diagram jaringan" class="note-image" />
+    
+    <p class="note-subtitle">R.NTH</p>
+
+    <pre class="note-codeblock"><code>
+/ip pool
+add name=dhcp_pool0 ranges=10.10.10.2                # Pool DHCP untuk client LAN
+
+/ip dhcp-server
+add address-pool=dhcp_pool0 disabled=no interface=ether5 name=dhcp1  # DHCP server di LAN
+
+/ip address
+add address=192.168.1.2/30 interface=ether1 network=192.168.1.0  # IP ke ISP1
+add address=172.16.1.2/30 interface=ether2 network=172.16.1.0     # IP ke ISP2
+add address=10.10.10.1/30 interface=ether5 network=10.10.10.0     # IP LAN gateway
+
+/ip dhcp-server network
+add address=10.10.10.0/30 gateway=10.10.10.1       # Default gateway DHCP client
+
+/ip dns
+set servers=8.8.8.8,8.8.4.4                         # DNS Google
+
+/ip firewall mangle
+add action=mark-connection chain=prerouting in-interface=ether5 new-connection-mark=koneksi_1 nth=2,1  
+# Tandai paket ke jalur_1 secara bergantian (1 dari 2)
+add action=mark-connection chain=prerouting in-interface=ether5 new-connection-mark=koneksi_2 nth=2,2  
+# Tandai paket ke jalur_2 secara bergantian (2 dari 2)
+
+add action=mark-routing chain=prerouting connection-mark=koneksi_1 in-interface=ether5 new-routing-mark=jalur_1 passthrough=no  
+# Routing jalur_1
+add action=mark-routing chain=prerouting connection-mark=koneksi_2 in-interface=ether5 new-routing-mark=jalur_2 passthrough=no  
+# Routing jalur_2
+
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1  # NAT keluar ISP1
+add action=masquerade chain=srcnat out-interface=ether2  # NAT keluar ISP2
+
+/ip route
+add distance=1 gateway=192.168.1.1 routing-mark=jalur_1   # Route jalur_1
+add distance=1 gateway=172.16.1.1 routing-mark=jalur_2    # Route jalur_2
+add distance=1 gateway=172.16.1.1,192.168.1.1             # Default ECMP: load sharing
+
+/system identity
+set name=R.NTH                                           # Nama router
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan per-connection (bukan per-packet) agar trafik TCP tetap stabil.</li>
+      <li>Pastikan IP range atau pengguna dibagi merata agar load balancing efektif.</li>
+      <li>Dokumentasikan penandaan koneksi (connection mark) dan routing mark untuk memudahkan troubleshooting.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      NTH / PCC membagi koneksi antar WAN berdasarkan hash koneksi atau alamat sumber, meningkatkan distribusi trafik
+      tanpa perlu protokol routing. Cocok untuk multi-WAN di lingkungan kantor atau rumahan.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+  <script src="js/index.js"></script>
+</body>
+</html>

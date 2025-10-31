@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Access Control List</title>
+      <!-- Bootstrap core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Access Control List</h2>
+    <p class="note-paragraph">
+      Access List (ACL) adalah daftar aturan yang digunakan pada perangkat jaringan untuk mengatur lalu lintas data
+      yang melewati interface. ACL dapat memeriksa paket berdasarkan kriteria tertentu, seperti alamat IP, protokol,
+      atau nomor port. Berdasarkan pemeriksaan tersebut, paket akan diizinkan (<em>permit</em>) atau ditolak (<em>deny</em>)
+      sesuai kebijakan. ACL digunakan untuk meningkatkan keamanan, membatasi akses, dan mengoptimalkan lalu lintas jaringan.
+    </p>
+
+    <h3 class="note-subtitle">Jenis-jenis ACL</h3>
+    <ul class="note-list">
+      <li><strong>Standard ACL</strong> - Menyaring berdasarkan alamat IP sumber saja.</li>
+      <li><strong>Extended ACL</strong> - Menyaring berdasarkan IP sumber, IP tujuan, protokol, dan port.</li>
+      <li><strong>Named ACL</strong> - Menggunakan nama untuk pengelolaan aturan yang lebih fleksibel.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Manfaat ACL</h3>
+    <ul class="note-list">
+      <li>Meningkatkan keamanan jaringan dengan membatasi akses tidak sah.</li>
+      <li>Mengurangi lalu lintas yang tidak diperlukan.</li>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li><strong>Tujuan:</strong> Membatasi akses host tertentu dari tiap VLAN menggunakan ACL (Standard dan Extended).</li>
+        
+        <li><strong>ACL Standard (ACL 1):</strong> 
+            <ul>
+                <li>Memblokir host <code>192.168.100.252</code> dari VLAN 100 agar tidak bisa keluar melalui interface Fa1/0.</li>
+                <li>Diterapkan pada arah <em>outbound</em> di interface <code>FastEthernet1/0</code>.</li>
+            </ul>
+        </li>
+        
+        <li><strong>ACL Extended (ACL 100):</strong> 
+            <ul>
+                <li>Memblokir ICMP dari host <code>192.168.200.252</code> (VLAN 200) ke alamat <code>192.168.1.2</code> di jaringan /30.</li>
+                <li>Diterapkan pada arah <em>inbound</em> di subinterface <code>FastEthernet0/0.200</code>.</li>
+            </ul>
+        </li>
+        
+        <li><strong>ACL Extended Named (ACL_NAMED):</strong> 
+            <ul>
+                <li>Memblokir ICMP dari host <code>192.168.210.252</code> (VLAN 210) ke alamat <code>192.168.1.2</code> di jaringan /30.</li>
+                <li>Diterapkan pada arah <em>inbound</em> di subinterface <code>FastEthernet0/0.210</code>.</li>
+            </ul>
+        </li>
+
+        <li><strong>Catatan:</strong>
+            <ul>
+                <li>ACL Standard memfilter hanya berdasarkan alamat sumber.</li>
+                <li>ACL Extended bisa memfilter berdasarkan sumber, tujuan, dan protokol (contohnya ICMP).</li>
+                <li>Setiap VLAN memiliki gateway pada R1 dan dikontrol oleh ACL masing-masing.</li>
+            </ul>
+        </li>
+    </ul>
+
+
+       <img src="img/acl1.png" alt="Diagram jaringan" class="note-image" />
+       <p class="note-subtitle">SW DISTRIBUTE</p>
+       <pre class="note-codeblock"><code>
+# Membuat bridge dengan VLAN filtering aktif
+/interface bridge
+add name=BRIDGE_VLAN vlan-filtering=yes
+
+# Membuat VLAN interface di atas bridge BRIDGE_VLAN
+/interface vlan
+add interface=BRIDGE_VLAN name=vlan100 vlan-id=100   # VLAN 100 untuk segmen jaringan 1
+add interface=BRIDGE_VLAN name=vlan200 vlan-id=200   # VLAN 200 untuk segmen jaringan 2
+add interface=BRIDGE_VLAN name=vlan210 vlan-id=210   # VLAN 210 untuk segmen jaringan 3
+
+# Menambahkan port fisik ke dalam bridge
+/interface bridge port
+add bridge=BRIDGE_VLAN interface=ether24             # ether24 sebagai trunk (tagged VLAN 100,200,210)
+add bridge=BRIDGE_VLAN interface=ether1 pvid=100     # ether1 akses VLAN 100 (untagged)
+add bridge=BRIDGE_VLAN interface=ether2 pvid=100     # ether2 akses VLAN 100 (untagged)
+add bridge=BRIDGE_VLAN interface=ether3 pvid=200     # ether3 akses VLAN 200 (untagged)
+add bridge=BRIDGE_VLAN interface=ether4 pvid=200     # ether4 akses VLAN 200 (untagged)
+add bridge=BRIDGE_VLAN interface=ether5 pvid=210     # ether5 akses VLAN 210 (untagged)
+add bridge=BRIDGE_VLAN interface=ether6 pvid=210     # ether6 akses VLAN 210 (untagged)
+
+# Mapping VLAN ID dengan port tagged (trunk) dan untagged (akses)
+/interface bridge vlan
+add bridge=BRIDGE_VLAN tagged=ether24 untagged=ether1,ether2 vlan-ids=100   # VLAN 100: trunk ether24, akses ether1-2
+add bridge=BRIDGE_VLAN tagged=ether24 untagged=ether3,ether4 vlan-ids=200   # VLAN 200: trunk ether24, akses ether3-4
+add bridge=BRIDGE_VLAN tagged=ether24 untagged=ether5,ether6 vlan-ids=210   # VLAN 210: trunk ether24, akses ether5-6
+
+# Mengatur nama perangkat (hostname)
+/system identity
+set name=CRS.DITRIBUTE
+
+    </code></pre>
+       <p class="note-subtitle">R1</p>
+       <pre class="note-codeblock"><code>
+! Interface fisik Fa0/0 sebagai trunk (tidak pakai IP langsung)
+interface FastEthernet0/0
+ no ip address
+ duplex half
+
+! Subinterface untuk VLAN 100
+interface FastEthernet0/0.100
+ encapsulation dot1Q 100                  ! VLAN ID 100
+ ip address 192.168.100.1 255.255.255.0   ! Gateway VLAN 100
+
+! Subinterface untuk VLAN 200
+interface FastEthernet0/0.200
+ encapsulation dot1Q 200                  ! VLAN ID 200
+ ip address 192.168.200.1 255.255.255.0   ! Gateway VLAN 200
+ ip access-group 100 in                   ! Terapkan ACL 100 ke arah masuk VLAN 200
+
+! Subinterface untuk VLAN 210
+interface FastEthernet0/0.210
+ encapsulation dot1Q 210                  ! VLAN ID 210
+ ip address 192.168.210.1 255.255.255.0   ! Gateway VLAN 210
+ ip access-group ACL_NAMED in             ! Terapkan ACL_NAMED ke arah masuk VLAN 210
+
+! Interface point-to-point ke router/ISP lain
+interface FastEthernet1/0
+ ip address 192.168.1.1 255.255.255.252   ! IP sisi R1 pada link /30
+ ip access-group 1 out                    ! Terapkan ACL 1 untuk traffic keluar
+ duplex half
+
+! ACL NAMED: memblokir ICMP dari host VLAN 210 ke host di jaringan /30
+ip access-list extended ACL_NAMED
+ deny   icmp host 192.168.210.252 host 192.168.1.2
+ permit ip any any
+
+! ACL 1: memblokir IP tertentu dari VLAN 100 keluar ke Fa1/0
+access-list 1 deny   192.168.100.252
+access-list 1 permit any
+
+! ACL 100: memblokir ICMP dari host VLAN 200 ke host di jaringan /30
+access-list 100 deny   icmp host 192.168.200.252 host 192.168.1.2
+access-list 100 permit ip any any
+
+    </code></pre>
+
+
+    <h3 class="note-subtitle">Verifikasi ACL</h3>
+    <pre class="note-codeblock"><code>
+R1#show access-lists 
+
+Standard IP access list 1
+    10 deny   192.168.100.252   ! Memblokir host 192.168.100.252 (VLAN 100) keluar Fa1/0
+    20 permit any               ! Mengizinkan semua host lain
+
+Extended IP access list 100
+    10 deny icmp host 192.168.200.252 host 192.168.1.2   ! Memblokir ICMP dari VLAN 200 ke 192.168.1.2 (/30)
+    20 permit ip any any                                ! Mengizinkan trafik lainnya
+
+Extended IP access list ACL_NAMED
+    10 deny icmp host 192.168.210.252 host 192.168.1.2   ! Memblokir ICMP dari VLAN 210 ke 192.168.1.2 (/30)
+    20 permit ip any any                                ! Mengizinkan trafik lainnya
+    </code></pre>
+   
+    <script src="js/index.js"></script>
+</body>

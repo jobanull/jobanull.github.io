@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Quiz Pilihan Ganda — Kita Kehabisan IP Address</title>
+<link rel="stylesheet" href="../css/cssquiz.css">
+</head>
+<body>
+<div class="card" id="quizCard">
+  <h1>Quiz Singkat — RFC 1918, NAT, dan IPv6</h1>
+  <form id="quizForm">
+
+    <div class="question" data-q="1">
+      <div class="q">1. Mengapa dunia bisa kehabisan alamat IP versi IPv4?</div>
+      <div class="options">
+        <label><input type="radio" name="q1" value="A"> A. Karena banyak alamat IP rusak</label>
+        <label><input type="radio" name="q1" value="B"> B. Karena setiap perangkat sekarang butuh IP (IoT)</label>
+        <label><input type="radio" name="q1" value="C"> C. Karena IPv4 dihapus dari internet</label>
+        <label><input type="radio" name="q1" value="D"> D. Karena hanya digunakan di komputer</label>
+      </div>
+    </div>
+
+    <div class="question" data-q="2">
+      <div class="q">2. RFC 1918 dibuat untuk menyelamatkan internet dari kehabisan IP dengan cara...</div>
+      <div class="options">
+        <label><input type="radio" name="q2" value="A"> A. Membuat alamat IPv6</label>
+        <label><input type="radio" name="q2" value="B"> B. Menyediakan konsep Private IP Address</label>
+        <label><input type="radio" name="q2" value="C"> C. Menghapus alamat IP publik</label>
+        <label><input type="radio" name="q2" value="D"> D. Menambah panjang alamat IPv4</label>
+      </div>
+    </div>
+
+    <div class="question" data-q="3">
+      <div class="q">3. Berikut ini adalah contoh range Private IP dari RFC 1918, kecuali...</div>
+      <div class="options">
+        <label><input type="radio" name="q3" value="A"> A. 10.0.0.0/8</label>
+        <label><input type="radio" name="q3" value="B"> B. 172.16.0.0/12</label>
+        <label><input type="radio" name="q3" value="C"> C. 192.168.0.0/16</label>
+        <label><input type="radio" name="q3" value="D"> D. 11.0.0.0/8</label>
+      </div>
+    </div>
+
+    <div class="question" data-q="4">
+      <div class="q">4. Kenapa Private IP tidak bisa langsung digunakan untuk mengakses internet?</div>
+      <div class="options">
+        <label><input type="radio" name="q4" value="A"> A. Karena kecepatannya lebih lambat</label>
+        <label><input type="radio" name="q4" value="B"> B. Karena tidak dirutekan di jaringan publik</label>
+        <label><input type="radio" name="q4" value="C"> C. Karena butuh IP publik tambahan</label>
+        <label><input type="radio" name="q4" value="D"> D. Karena hanya bisa digunakan di server</label>
+      </div>
+    </div>
+
+    <div class="question" data-q="5">
+      <div class="q">5. Apa fungsi NAT (Network Address Translation) dalam jaringan rumah?</div>
+      <div class="options">
+        <label><input type="radio" name="q5" value="A"> A. Menggandakan IP publik agar lebih cepat</label>
+        <label><input type="radio" name="q5" value="B"> B. Menerjemahkan IP privat ke IP publik saat ke internet</label>
+        <label><input type="radio" name="q5" value="C"> C. Menyimpan data DNS sementara</label>
+        <label><input type="radio" name="q5" value="D"> D. Mengatur kecepatan koneksi</label>
+      </div>
+    </div>
+
+    <div class="question" data-q="6">
+      <div class="q">6. Ketika banyak perangkat di rumah mengakses internet bersamaan, mereka terlihat di internet menggunakan...</div>
+      <div class="options">
+        <label><input type="radio" name="q6" value="A"> A. IP publik yang berbeda untuk setiap perangkat</label>
+        <label><input type="radio" name="q6" value="B"> B. IP publik yang sama milik router</label>
+        <label><input type="radio" name="q6" value="C"> C. IP privat unik dari masing-masing perangkat</label>
+        <label><input type="radio" name="q6" value="D"> D. IP gabungan antara publik dan privat</label>
+      </div>
+    </div>
+
+    <div class="question" data-q="7">
+      <div class="q">7. Konsep Private IP Address diambil dari kelas IP berikut...</div>
+      <div class="options">
+        <label><input type="radio" name="q7" value="A"> A. Hanya dari Class C</label>
+        <label><input type="radio" name="q7" value="B"> B. Dari Class A, B, dan C</label>
+        <label><input type="radio" name="q7" value="C"> C. Dari Class D dan E</label>
+        <label><input type="radio" name="q7" value="D"> D. Hanya dari Class A</label>
+      </div>
+    </div>
+
+    <div class="question" data-q="8">
+      <div class="q">8. IPv6 dibuat karena...</div>
+      <div class="options">
+        <label><input type="radio" name="q8" value="A"> A. IPv4 memiliki alamat yang terbatas</label>
+        <label><input type="radio" name="q8" value="B"> B. IPv6 lebih lambat</label>
+        <label><input type="radio" name="q8" value="C"> C. NAT sudah tidak berfungsi</label>
+        <label><input type="radio" name="q8" value="D"> D. Semua perangkat wajib IPv6</label>
+      </div>
+    </div>
+
+    <div class="question" data-q="9">
+      <div class="q">9. Jumlah kemungkinan alamat pada IPv6 adalah...</div>
+      <div class="options">
+        <label><input type="radio" name="q9" value="A"> A. 2³²</label>
+        <label><input type="radio" name="q9" value="B"> B. 2⁶⁴</label>
+        <label><input type="radio" name="q9" value="C"> C. 2¹²⁸</label>
+        <label><input type="radio" name="q9" value="D"> D. Tak terbatas</label>
+      </div>
+    </div>
+
+    <div class="question" data-q="10">
+      <div class="q">10. Saat ponsel kamu tidak menggunakan Wi-Fi dan terhubung ke jaringan seluler, biasanya IP yang didapat adalah...</div>
+      <div class="options">
+        <label><input type="radio" name="q10" value="A"> A. IP privat IPv4</label>
+        <label><input type="radio" name="q10" value="B"> B. IP publik IPv6</label>
+        <label><input type="radio" name="q10" value="C"> C. IP dinamis dari router rumah</label>
+        <label><input type="radio" name="q10" value="D"> D. IP statis IPv4</label>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" id="submitBtn">Kirim Jawaban</button>
+      <button type="button" id="resetBtn">Reset</button>
+      <div id="result" style="margin-left:auto"></div>
+    </div>
+  </form>
+</div>
+
+<div id="blockedOverlay">
+  <div class="msg">
+    <h2>Konten disembunyikan</h2>
+    <p>Kami mendeteksi alat pengembang / akses tidak diizinkan — konten disembunyikan untuk keamanan.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  const answers = {
+    q1:'B', q2:'B', q3:'D', q4:'B', q5:'B',
+    q6:'B', q7:'B', q8:'A', q9:'C', q10:'B'
+  };
+  const form = document.getElementById('quizForm');
+  const result = document.getElementById('result');
+  const submitBtn = document.getElementById('submitBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const blockedOverlay = document.getElementById('blockedOverlay');
+
+  function grade(){
+    let score = 0;
+    let total = Object.keys(answers).length;
+    for(const q in answers){
+      const el = form.querySelector('input[name="'+q+'"]:checked');
+      if(el && el.value === answers[q]) score++;
+    }
+    result.textContent = `Skor: ${score} / ${total}`;
+  }
+
+  submitBtn.addEventListener('click', grade);
+  resetBtn.addEventListener('click', function(){
+    form.reset(); result.textContent='';
+  });
+
+  // ====== Anti-devtools basic protection ======
+  function blockInteraction(e){ e.preventDefault(); e.stopPropagation(); }
+  document.addEventListener('contextmenu', blockInteraction);
+  document.addEventListener('selectstart', blockInteraction);
+  ['copy','cut','paste'].forEach(ev=>document.addEventListener(ev, blockInteraction));
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key==='I'||e.key==='J'||e.key==='C')) || (e.ctrlKey && e.key==='U')){
+      blockInteraction(e); showBlocked();
+    }
+  });
+
+  let devtoolsOpen=false; const threshold=160;
+  function checkDevtools(){
+    const widthDiff = window.outerWidth - window.innerWidth;
+    const heightDiff = window.outerHeight - window.innerHeight;
+    const open = widthDiff > threshold || heightDiff > threshold;
+    if(open && !devtoolsOpen){devtoolsOpen=true;showBlocked();}
+    if(!open && devtoolsOpen){devtoolsOpen=false;hideBlocked();}
+  }
+  setInterval(checkDevtools,1000);
+
+  function showBlocked(){
+    blockedOverlay.style.display='flex';
+    document.getElementById('quizCard').style.filter='blur(6px)';
+  }
+  function hideBlocked(){
+    blockedOverlay.style.display='none';
+    document.getElementById('quizCard').style.filter='none';
+  }
+
+})();
+</script>
+</body>
+</html>

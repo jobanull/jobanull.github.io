@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Quiz Pilihan Ganda — VLSM dan Subnetting</title>
+  <link rel="stylesheet" href="../css/cssquiz.css">
+</head>
+<body>
+  <div class="card" id="quizCard">
+    <h1>Quiz Singkat — VLSM dan Subnetting</h1>
+    <form id="quizForm">
+
+      <div class="question" data-q="1">
+        <div class="q">1. Apa tujuan utama dari penggunaan VLSM (Variable Length Subnet Mask)?</div>
+        <div class="options">
+          <label><input type="radio" name="q1" value="A"> A. Membagi jaringan menjadi subnet dengan ukuran yang sama</label>
+          <label><input type="radio" name="q1" value="B"> B. Membagi jaringan menjadi subnet dengan ukuran berbeda sesuai kebutuhan</label>
+          <label><input type="radio" name="q1" value="C"> C. Menggabungkan dua subnet menjadi satu</label>
+          <label><input type="radio" name="q1" value="D"> D. Menghapus subnet yang tidak terpakai</label>
+        </div>
+      </div>
+
+      <div class="question" data-q="2">
+        <div class="q">2. Dalam subnetting, semakin banyak bit yang digunakan untuk network, maka...</div>
+        <div class="options">
+          <label><input type="radio" name="q2" value="A"> A. Jumlah host yang tersedia berkurang</label>
+          <label><input type="radio" name="q2" value="B"> B. Jumlah host bertambah</label>
+          <label><input type="radio" name="q2" value="C"> C. Tidak ada perubahan</label>
+          <label><input type="radio" name="q2" value="D"> D. Broadcast address hilang</label>
+        </div>
+      </div>
+
+      <div class="question" data-q="3">
+        <div class="q">3. Sebuah perusahaan memiliki jaringan 10.10.5.0/24 dan ingin membuat beberapa subnet dengan jumlah host berbeda. Teknik yang digunakan adalah...</div>
+        <div class="options">
+          <label><input type="radio" name="q3" value="A"> A. CIDR</label>
+          <label><input type="radio" name="q3" value="B"> B. NAT</label>
+          <label><input type="radio" name="q3" value="C"> C. VLSM</label>
+          <label><input type="radio" name="q3" value="D"> D. Static routing</label>
+        </div>
+      </div>
+
+      <div class="question" data-q="4">
+        <div class="q">4. Jika sebuah subnet memiliki prefix /26, berapa jumlah host yang dapat digunakan?</div>
+        <div class="options">
+          <label><input type="radio" name="q4" value="A"> A. 30</label>
+          <label><input type="radio" name="q4" value="B"> B. 62</label>
+          <label><input type="radio" name="q4" value="C"> C. 126</label>
+          <label><input type="radio" name="q4" value="D"> D. 254</label>
+        </div>
+      </div>
+
+      <div class="question" data-q="5">
+        <div class="q">5. Mengapa subnet dengan kebutuhan host terbesar harus dibuat terlebih dahulu dalam VLSM?</div>
+        <div class="options">
+          <label><input type="radio" name="q5" value="A"> A. Agar IP tidak tumpang tindih antar subnet</label>
+          <label><input type="radio" name="q5" value="B"> B. Karena router tidak membaca subnet kecil</label>
+          <label><input type="radio" name="q5" value="C"> C. Supaya subnet besar lebih mudah dihapus</label>
+          <label><input type="radio" name="q5" value="D"> D. Karena semua subnet harus sama besar</label>
+        </div>
+      </div>
+
+      <div class="question" data-q="6">
+        <div class="q">6. Subnet mask 255.255.255.224 memiliki prefix berapa?</div>
+        <div class="options">
+          <label><input type="radio" name="q6" value="A"> A. /25</label>
+          <label><input type="radio" name="q6" value="B"> B. /26</label>
+          <label><input type="radio" name="q6" value="C"> C. /27</label>
+          <label><input type="radio" name="q6" value="D"> D. /28</label>
+        </div>
+      </div>
+
+      <div class="question" data-q="7">
+        <div class="q">7. Jika jaringan /24 dibagi menjadi dua subnet yang sama besar, prefix-nya menjadi...</div>
+        <div class="options">
+          <label><input type="radio" name="q7" value="A"> A. /25</label>
+          <label><input type="radio" name="q7" value="B"> B. /26</label>
+          <label><input type="radio" name="q7" value="C"> C. /27</label>
+          <label><input type="radio" name="q7" value="D"> D. /28</label>
+        </div>
+      </div>
+
+      <div class="question" data-q="8">
+        <div class="q">8. Subnet 192.168.20.0/27 memiliki increment sebesar...</div>
+        <div class="options">
+          <label><input type="radio" name="q8" value="A"> A. 8</label>
+          <label><input type="radio" name="q8" value="B"> B. 16</label>
+          <label><input type="radio" name="q8" value="C"> C. 32</label>
+          <label><input type="radio" name="q8" value="D"> D. 64</label>
+        </div>
+      </div>
+
+      <div class="question" data-q="9">
+        <div class="q">9. Tujuan utama dari subnetting adalah...</div>
+        <div class="options">
+          <label><input type="radio" name="q9" value="A"> A. Menghemat IP address dan mengatur jaringan lebih efisien</label>
+          <label><input type="radio" name="q9" value="B"> B. Menghapus broadcast domain</label>
+          <label><input type="radio" name="q9" value="C"> C. Menambah kecepatan transfer data</label>
+          <label><input type="radio" name="q9" value="D"> D. Menggandakan IP publik</label>
+        </div>
+      </div>
+
+      <div class="question" data-q="10">
+        <div class="q">10. Subnet mask 255.255.255.240 memiliki berapa banyak host usable?</div>
+        <div class="options">
+          <label><input type="radio" name="q10" value="A"> A. 16</label>
+          <label><input type="radio" name="q10" value="B"> B. 14</label>
+          <label><input type="radio" name="q10" value="C"> C. 30</label>
+          <label><input type="radio" name="q10" value="D"> D. 62</label>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" id="submitBtn">Kirim Jawaban</button>
+        <button type="button" id="resetBtn">Reset</button>
+        <div id="result" style="margin-left:auto"></div>
+      </div>
+    </form>
+</div>
+
+<div id="blockedOverlay">
+  <div class="msg">
+    <h2>Konten disembunyikan</h2>
+    <p>Kami mendeteksi alat pengembang / akses yang tidak diizinkan — konten disembunyikan untuk keamanan.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  // Jawaban benar
+  const answers = { 
+    q1:'B', q2:'A', q3:'C', q4:'B', q5:'A',
+    q6:'C', q7:'A', q8:'C', q9:'A', q10:'B'
+  };
+
+  const form = document.getElementById('quizForm');
+  const result = document.getElementById('result');
+  const submitBtn = document.getElementById('submitBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const blockedOverlay = document.getElementById('blockedOverlay');
+
+  function grade(){
+    let score = 0; let total = Object.keys(answers).length;
+    for(const q in answers){
+      const el = form.querySelector('input[name="'+q+'"]:checked');
+      if(el && el.value === answers[q]) score++;
+    }
+    result.textContent = `Skor: ${score} / ${total}`;
+  }
+
+  submitBtn.addEventListener('click', grade);
+  resetBtn.addEventListener('click', function(){form.reset(); result.textContent='';});
+
+  // ======= Pencegahan dasar: copy, select, contextmenu, shortcuts ========
+  function blockInteraction(e){ e.preventDefault(); e.stopPropagation(); }
+
+  document.addEventListener('selectstart', blockInteraction);
+  document.addEventListener('mousedown', function(ev){ if(ev.button===2) blockInteraction(ev); });
+  document.addEventListener('contextmenu', blockInteraction);
+  ['copy','cut','paste'].forEach(evName => document.addEventListener(evName, blockInteraction));
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key==='I' || e.key==='J' || e.key==='C')) || 
+       (e.ctrlKey && e.key==='U') || (e.ctrlKey && e.key==='S')){
+      blockInteraction(e);
+      showBlocked();
+    }
+  });
+
+  let devtoolsOpen = false;
+  const threshold = 160;
+  function checkDevtools(){
+    const widthDiff = window.outerWidth - window.innerWidth;
+    const heightDiff = window.outerHeight - window.innerHeight;
+    const open = widthDiff > threshold || heightDiff > threshold;
+    if(open && !devtoolsOpen){ devtoolsOpen = true; showBlocked(); }
+    if(!open && devtoolsOpen){ devtoolsOpen = false; hideBlocked(); }
+  }
+  setInterval(checkDevtools, 1000);
+
+  function showBlocked(){ blockedOverlay.style.display='flex'; document.getElementById('quizCard').style.filter='blur(6px)'; }
+  function hideBlocked(){ blockedOverlay.style.display='none'; document.getElementById('quizCard').style.filter='none'; }
+
+  document.addEventListener('touchstart', function(e){ if(e.touches.length>1) blockInteraction(e); }, {passive:false});
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden){ document.getElementById('quizCard').style.visibility='hidden'; }
+    else { document.getElementById('quizCard').style.visibility='visible'; }
+  });
+
+})();
+</script>
+</body>
+</html>

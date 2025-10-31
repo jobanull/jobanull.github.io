@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>End Device — Chat-style Readable (Dark)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #0b1020; /* overall background */
+      --panel: #0f1724; /* main panel */
+      --muted: #9aa6b2;
+      --text: #e6eef8;
+      --accent: #10a37f;
+      --bubble: #0e1320;
+      --assistant-bubble: linear-gradient(180deg,#133140,#0b2630);
+      --maxw:900px;
+      --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      padding:28px;display:flex;justify-content:center;align-items:flex-start;
+    }
+
+    .wrap{width:100%;max-width:var(--maxw);}
+    .header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+    .logo{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,#0f1724,#162532);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+    .logo strong{color:var(--accent);font-size:20px}
+    .title{line-height:1}
+    .title h1{margin:0;font-size:18px;font-weight:700}
+    .title p{margin:0;color:var(--muted);font-size:13px}
+
+    .panel{background:var(--panel);border-radius:12px;padding:18px;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+
+    /* chat-like flow */
+    .chat{display:flex;flex-direction:column;gap:12px}
+    .msg{max-width:85%;padding:14px 16px;border-radius:12px;line-height:1.6;font-size:16px}
+    .msg.assistant{align-self:flex-start;background:var(--assistant-bubble);color:var(--text);box-shadow:0 6px 18px rgba(2,6,23,0.5);border:1px solid rgba(255,255,255,0.02)}
+    .msg.user{align-self:flex-end;background:linear-gradient(180deg,#0b1520,#071018);color:var(--text);border:1px solid rgba(255,255,255,0.02)}
+
+    .msg p{margin:0 0 10px}
+    .msg .inline{display:inline}
+
+    .meta{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:13px;margin-bottom:14px}
+    .meta .dot{width:8px;height:8px;background:#0ab57a;border-radius:50%;box-shadow:0 0 8px rgba(16,163,127,0.18)}
+
+    .bubble-title{font-weight:700;margin-bottom:8px}
+
+    /* content formatting inside bubble */
+    .bullet{margin:6px 0;padding-left:14px}
+    .code{background:rgba(255,255,255,0.03);padding:10px;border-radius:8px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco,'Roboto Mono','Courier New',monospace;font-size:14px;color:var(--muted)}
+
+    /* small screens */
+    @media (max-width:640px){
+      body{padding:16px}
+      .msg{font-size:15px}
+      .msg{max-width:100%}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="logo" aria-hidden="true"><strong>GPT</strong></div>
+      <div class="title">
+        <h1>End Device — Ringkas & Santai</h1>
+        <p>Dark theme · gaya chat untuk baca cepat</p>
+      </div>
+    </div>
+
+    <section class="panel" aria-labelledby="heading">
+      <div class="meta"><span class="dot" aria-hidden="true"></span> <span>5 menit baca · oleh Kamu</span></div>
+
+      <div class="chat">
+        <div class="msg assistant" role="article">
+          <div class="bubble-title">🧠 Apa itu End Device?</div>
+          <p>End device itu kayak... ujung dunia jaringan. Dia bukan router, bukan switch, bukan firewall, tapi dia yang jadi alasan semua perangkat itu ada.</p>
+          <p><strong>Router?</strong> Cuma nyambungin jalan.<br>
+             <strong>Switch?</strong> Cuma nentuin paket lewat mana.<br>
+             <strong>Tapi end device?</strong> Dia yang beneran ngobrol. 💬</p>
+             <strong>Mereka itu the reason network exist</strong></p>
+
+          <p>Dia yang bilang,<br>
+          “Hey printer, gue mau nge-print tugas sebelum deadline!”<br>
+          atau<br>
+          “Hey server YouTube, kirim videonya cepat sebelum iklan muncul!” 😆</p>
+        </div>
+
+        <div class="msg assistant">
+          <div class="bubble-title">💻 Contohnya?</div>
+          <div class="bullet">• Komputer kamu</div>
+          <div class="bullet">• HP kamu</div>
+          <div class="bullet">• Printer kantor yang suka macet</div>
+          <div class="bullet">• CCTV di pojokan ruangan</div>
+          <div class="bullet">• Smart TV</div>
+          <div class="bullet">• Bahkan server di data center</div>
+
+          <p>Kalau dia mengirim atau menerima data, dan bukan cuma meneruskan paket — <strong>boom 💥</strong> — itu end device.</p>
+        </div>
+
+        <div class="msg assistant">
+          <div class="bubble-title">⚙️ Sedikit teknikal (karena kita tetap nerd 🤓)</div>
+          <p>Setiap end device punya:</p>
+          <div class="bullet">• <strong>IP Address</strong> — biar bisa dikenali di jaringan</div>
+          <div class="bullet">• <strong>MAC Address</strong> — identitas hardware uniknya</div>
+          <div class="bullet">• <strong>Network Interface</strong> — tempat konek, entah itu Wi-Fi atau kabel LAN</div>
+
+          <p>Ketika kamu klik “Enter”, data dikemas jadi paket, dikirim lewat switch, router, firewall… dan akhirnya mendarat di end device lain. Kayak kamu kirim pesan ke temen lewat 1000 pos satpam digital. 📦➡️📦➡️📦</p>
+        </div>
+
+        <div class="msg assistant">
+          <div class="bubble-title">🔥 Kenapa penting?</div>
+          <p>Karena semua yang kita pelajari di jaringan — subnetting, routing, DNS, VLAN — ujung-ujungnya cuma buat satu hal: biar end devices bisa ngobrol dengan lancar.</p>
+
+          <p>Tanpa mereka, jaringan itu cuma pipa kosong. Tapi dengan mereka… jaringan jadi hidup ⚡</p>
+        </div>
+
+        <div class="msg assistant">
+          <div class="bubble-title">☕ Penutup</div>
+          <p>Sambil nyeruput kopi: setiap kali kamu kirim email, buka YouTube, atau main game online — itu semua kerja keras jutaan end devices di seluruh dunia, yang lagi ngobrol satu sama lain di kecepatan cahaya. ⚡🌍</p>
+
+          <p>Mereka mungkin kecil, tapi mereka jantungnya jaringan. ❤️</p>
+        </div>
+
+        <div class="msg assistant"> 
+        <div class="bubble-title">💻 1. Client Devices – Sang Pengguna Jaringan</div>
+        <p>Inilah perangkat yang minta data.<br>
+        Mereka kayak pelanggan di restoran jaringan — duduk manis, pesen data, dan nunggu disajikan.</p>
+
+        <ul>
+            <li>Laptop</li>
+            <li>Smartphone</li>
+            <li>Tablet</li>
+            <li>PC kantor</li>
+            <li>Smart TV</li>
+        </ul>
+
+        <p>Client devices ini ngelakuin hal kayak:</p>
+        <blockquote>
+            “Hey server, kirim halaman web ini.”<br>
+            “Hey printer, cetak dokumen ini.”
+        </blockquote>
+        <p>Mereka menginisiasi komunikasi — artinya, mereka yang mulai duluan.</p>
+        </div>
+
+        <div class="msg assistant"> 
+        <div class="bubble-title">🖥️ 2. Server Devices – Sang Pemberi Data</div>
+        <p>Kalau client itu pelanggan, maka server adalah koki sekaligus dapurnya jaringan. 👨‍🍳<br>
+        Dia yang nyiapin semua permintaan yang client kirim.</p>
+
+        <ul>
+          <li>Web Server → nyajikan halaman website</li>
+          <li>Mail Server → kirim & terima email</li>
+          <li>File Server → simpan dokumen</li>
+          <li>Database Server → simpan dan olah data aplikasi</li>
+          <li>Game Server → tempat pemain saling terhubung online</li>
+        </ul>
+
+        <p>Server bisa berupa komputer fisik gede di data center, atau virtual machine di cloud.<br>
+        Mereka gak pernah istirahat — karena kalau mereka down, seluruh jaringan bisa nangis bareng. 😅</p>
+      </div>
+
+      <div class="msg assistant"> 
+      <div class="bubble-title">🖨️ 3. Peripherals - Sang Pembantu Setia</div>
+      <p>Ini perangkat yang kadang kita lupa, tapi perannya vital banget.<br>
+      Mereka bukan pusat data, tapi mereka bikin hidup lebih mudah.</p>
+
+      <ul>
+        <li>Printer jaringan 🖨️</li>
+        <li>Scanner 📠</li>
+        <li>Webcam 📷</li>
+        <li>Fax (iya, masih ada yang pakai 😆)</li>
+        <li>Speaker atau monitor jaringan</li>
+      </ul>
+
+      <p>Mereka bisa menerima dan kadang mengirim data,<br>
+      jadi tetap masuk kategori end device.</p>
+    </div>
+    <div class="msg assistant"> 
+      <div class="bubble-title">🧠 5. Virtual End Devices - Sang Bayangan Digital</div>
+      <p>Di era cloud, gak semua end device itu benda fisik.<br>
+      Ada juga <em>virtual end devices</em> — seperti virtual desktop, virtual server, atau container yang nyimpen aplikasi.</p>
+
+      <p>Mereka tetap end device karena mereka menghasilkan dan mengonsumsi data,<br>
+      cuma bedanya… mereka hidup di dunia maya. 🌩️</p>
+    </div>
+
+
+    
+        
+      <!-- End Section -->
+      </div>
+    </section>
+  </div>
+</body>
+</html>

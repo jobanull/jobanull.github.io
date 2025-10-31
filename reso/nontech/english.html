@@ -1,0 +1,1732 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>End Device — Chat-style Readable (Dark)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{ --bg:#0b1020; --panel:#0f1724; --muted:#9aa6b2; --text:#e6eef8; --accent:#10a37f; --assistant-bubble: linear-gradient(180deg,#133140,#0b2630); --maxw:900px; }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:28px;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+    }
+
+    /* single container that stacks the wraps vertically */
+    .container {
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:40px;
+      width:100%;
+    }
+
+    .wrap{width:100%;max-width:var(--maxw);}
+    .header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+    .logo{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,#0f1724,#162532);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+    .logo strong{color:var(--accent);font-size:20px}
+    .title h1{margin:0;font-size:18px;font-weight:700}
+    .title p{margin:0;color:var(--muted);font-size:13px}
+    .panel{background:var(--panel);border-radius:12px;padding:18px;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+    .chat{display:flex;flex-direction:column;gap:12px}
+    .msg{max-width:85%;padding:14px 16px;border-radius:12px;line-height:1.6;font-size:16px}
+    .msg.assistant{align-self:flex-start;background:var(--assistant-bubble);color:var(--text);box-shadow:0 6px 18px rgba(2,6,23,0.5);border:1px solid rgba(255,255,255,0.02)}
+    .meta{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:13px;margin-bottom:14px}
+    .meta .dot{width:8px;height:8px;background:#0ab57a;border-radius:50%;box-shadow:0 0 8px rgba(16,163,127,0.18)}
+    @media (max-width:640px){
+      body{padding:16px}
+      .msg{font-size:15px; max-width:100%}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="wrap">
+  <div class="header">
+    <div class="logo" aria-hidden="true"><strong>GPT</strong></div>
+    <div class="title">
+      <h1>Irregular Verbs — Tebak Verb 2 & 3 🎯</h1>
+      <p>Dark theme · gaya chat santai biar cepat nyantol</p>
+    </div>
+  </div>
+  <section class="panel" aria-labelledby="heading">
+    <div class="meta"><span class="dot" aria-hidden="true"></span> <span>5 menit baca · oleh Kamu</span></div>
+    <div class="chat">
+
+      <!-- Pengantar -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">📘 Apa itu Irregular Verb?</div>
+        <p>Oke, kita bahas dengan santai ya. Dalam bahasa Inggris, kata kerja (verb) itu kayak mesin waktu ⏳.  
+        Bisa ngomongin masa kini, masa lalu, atau hal yang udah selesai.</p>
+        <p>Masalahnya... nggak semua verb nurut. 😅  
+        Ada yang bentuk past tense-nya <em>nggak pakai -ed</em>. Nah, mereka ini yang disebut <strong>Irregular Verbs</strong>.</p>
+      </div>
+
+      <!-- Bentuk Verb -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🔤 3 Bentuk Dasar Verb</div>
+        <ul>
+          <li><strong>Verb 1</strong> → Base form (bentuk dasar) — dipakai di present tense. <br>Contoh: <em>go, eat, run</em></li>
+          <li><strong>Verb 2</strong> → Past tense — buat masa lalu. <br>Contoh: <em>went, ate, ran</em></li>
+          <li><strong>Verb 3</strong> → Past participle — buat perfect tense atau passive voice. <br>Contoh: <em>gone, eaten, run</em></li>
+        </ul>
+      </div>
+
+      <!-- Tujuan -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🎯 Tujuan Belajar</div>
+        <p>Biar kamu bisa ngenalin dan ngafalin bentuk Verb 2 dan Verb 3 dari kata kerja yang bandel alias <strong>Irregular</strong>.</p>
+        <p>Dan biar seru, kita pakai <strong>teknik tebak kata</strong> kayak main game!</p>
+      </div>
+
+      <!-- Teknik Belajar -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🧩 Teknik Belajar: Tebak Verbs</div>
+        <p>1️⃣ Lihat daftar <strong>Verb 1</strong> yang diacak.<br>
+           2️⃣ Tebak apa bentuk <strong>Verb 2</strong> dan <strong>Verb 3</strong>-nya.<br>
+           3️⃣ Cek jawaban di bawah dan lihat seberapa tajam instingmu. 😎</p>
+      </div>
+
+      <!-- Contoh -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">💬 Contoh Latihan</div>
+        <p><strong>Tebak dulu!</strong><br>
+        Dari daftar Verb 1 ini 👇</p>
+
+        <pre><code>arise  
+hang  
+have  
+hear  
+hide</code></pre>
+
+        <p>Udah ditebak? Nih jawabannya 👇</p>
+
+        <table border="1" cellpadding="5">
+          <tr><th>Verb 1</th><th>Verb 2</th><th>Verb 3</th></tr>
+          <tr><td>arise</td><td>arose</td><td>arisen</td></tr>
+          <tr><td>hang</td><td>hung</td><td>hung</td></tr>
+          <tr><td>have</td><td>had</td><td>had</td></tr>
+          <tr><td>hear</td><td>heard</td><td>heard</td></tr>
+          <tr><td>hide</td><td>hid</td><td>hidden</td></tr>
+        </table>
+      </div>
+
+      <!-- Tips -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">💡 Tips Ngafalin Irregular Verbs</div>
+        <ul>
+          <li><strong>Kelompokkan</strong> berdasarkan pola. Contoh:
+            <ul>
+              <li>Semua sama → <em>put – put – put</em></li>
+              <li>Verb 2 & 3 sama → <em>feed – fed – fed</em></li>
+              <li>Semua beda → <em>begin – began – begun</em></li>
+            </ul>
+          </li>
+          <li><strong>Buat cerita pendek.</strong>  
+              “I <em>begin</em> to learn, yesterday I <em>began</em>, and I’ve <em>begun</em> to enjoy it.”</li>
+          <li><strong>Main game atau flashcard.</strong>  
+              Cocokin Verb 1 dengan 2 & 3 kayak tebak-tebakan cepat ⚡</li>
+        </ul>
+      </div>
+
+      <!-- Latihan Tambahan -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🧠 Latihan Tambahan</div>
+        <p>Tebak bentuk Verb 2 & 3 dari daftar berikut dulu ya:</p>
+
+        <pre><code>bite  
+blow  
+build  
+catch  
+choose</code></pre>
+
+        <p>Udah? Nih jawabanmu 👇</p>
+
+        <table border="1" cellpadding="5">
+          <tr><th>Verb 1</th><th>Verb 2</th><th>Verb 3</th></tr>
+          <tr><td>bite</td><td>bit</td><td>bitten</td></tr>
+          <tr><td>blow</td><td>blew</td><td>blown</td></tr>
+          <tr><td>build</td><td>built</td><td>built</td></tr>
+          <tr><td>catch</td><td>caught</td><td>caught</td></tr>
+          <tr><td>choose</td><td>chose</td><td>chosen</td></tr>
+        </table>
+      </div>
+
+      <!-- Penutup -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🔥 Penutup</div>
+        <p>Jadi intinya, irregular verbs itu kayak teman yang unik — nggak bisa ditebak polanya, tapi kalau udah kenal, gampang banget diingat.</p>
+        <p>Next time kamu ngomong “I have eaten”, kamu bakal senyum dikit —  
+        karena kamu tahu, kamu baru saja menaklukkan satu lagi kata kerja bandel. 😎</p>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+
+<div class="wrap">
+  <div class="header">
+    <div class="logo" aria-hidden="true"><strong>GPT</strong></div>
+    <div class="title">
+      <h1>Plural Nouns — Tebak Bentuk Jamaknya 🧠</h1>
+      <p>Dark theme · gaya chat santai biar gampang hafal</p>
+    </div>
+  </div>
+  <section class="panel" aria-labelledby="heading">
+    <div class="meta"><span class="dot" aria-hidden="true"></span> <span>5 menit baca · oleh Kamu</span></div>
+    <div class="chat">
+
+      <!-- Pengantar -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">📘 Apa itu Plural Noun?</div>
+        <p>Plural noun itu bentuk <strong>jamak</strong> dari sebuah kata benda.  
+        Kalau <em>singular</em> artinya satu benda, maka <em>plural</em> artinya lebih dari satu.</p>
+        <p>Contoh gampang:<br>
+        <strong>one cat 🐈 → two cats 🐈🐈</strong></p>
+        <p>Tapi... nggak semua plural cukup tambah “s”. 😅  
+        Ada juga yang berubah total bentuknya. Nah, di sinilah kita latihan menebak!</p>
+      </div>
+
+      <!-- Tujuan -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🎯 Tujuan Latihan</div>
+        <p>Biar kamu makin cepat ngenalin pola kata benda jamak, baik yang <strong>regular</strong> (nambah -s / -es)  
+        maupun <strong>irregular</strong> (berubah bentuk total).</p>
+      </div>
+
+      <!-- Instruksi -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🧩 Cara Main</div>
+        <p>Acak urutan katanya, lalu isi bentuk pluralnya di kolom kosong.  
+        Jangan contek dulu ya 😆</p>
+      </div>
+
+      <!-- Latihan -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">✏️ Latihan Tebak Plural</div>
+        <p>Isi bentuk plural dari kata berikut:</p>
+
+        <table border="1" cellpadding="5">
+          <tr><th>Singular</th><th>Plural</th></tr>
+          <tr><td>Child</td><td>__________</td></tr>
+          <tr><td>Foot</td><td>__________</td></tr>
+          <tr><td>Mouse</td><td>__________</td></tr>
+          <tr><td>Person</td><td>__________</td></tr>
+          <tr><td>Sheep</td><td>__________</td></tr>
+        </table>
+      </div>
+
+      <!-- Tips -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">💡 Tips Cepat Hafal</div>
+        <ul>
+          <li><strong>Regular plural:</strong> cukup tambah “s” atau “es”  
+          → <em>car → cars, box → boxes</em></li>
+          <li><strong>Irregular plural:</strong> berubah bentuk total  
+          → <em>man → men, child → children</em></li>
+          <li><strong>Unchanging plural:</strong> bentuknya sama  
+          → <em>sheep → sheep, fish → fish</em></li>
+        </ul>
+      </div>
+
+      <!-- Penutup -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🔥 Penutup</div>
+        <p>Plural nouns itu kayak puzzle kecil di otakmu.  
+        Kadang mudah ditebak, kadang berubah total tanpa alasan logis. 😆  
+        Tapi semakin sering latihan, kamu bakal refleks sendiri!</p>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <div class="header">
+    <div class="logo" aria-hidden="true"><strong>GPT</strong></div>
+    <div class="title">
+      <h1>Latihan Translate — Fokus ke Plural Nouns 🌍</h1>
+      <p>Dark theme · gaya chat santai biar gampang nyantol</p>
+    </div>
+  </div>
+  <section class="panel" aria-labelledby="heading">
+    <div class="meta"><span class="dot" aria-hidden="true"></span> <span>5 menit latihan · oleh Kamu</span></div>
+    <div class="chat">
+
+      <!-- Pengantar -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">📘 Cara Latihan</div>
+        <p>Tugasmu simpel tapi bikin otak muter dikit 😄  
+        Aku kasih beberapa kalimat dalam Bahasa Indonesia, kamu translate ke Bahasa Inggris  
+        dengan memperhatikan penggunaan <strong>kata jamak (plural nouns)</strong>.</p>
+      </div>
+
+      <!-- Contoh -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">💬 Contoh</div>
+        <p>Indonesia ➜ Inggris</p>
+        <ul>
+          <li>Dia membeli tiga perabot baru. → <em>He bought three new pieces of furniture.</em></li>
+          <li>Anak-anak bermain dengan mainan mereka. → <em>The children are playing with their toys.</em></li>
+          <li>Rubah dikenal karena kelicikannya. → <em>Foxes are known for their cunning.</em></li>
+          <li>Aku punya dua sikat gigi. → <em>I have two toothbrushes.</em></li>
+          <li>Mereka memiliki banyak mobil. → <em>They have many cars.</em></li>
+        </ul>
+      </div>
+
+      <!-- Latihan Translate -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">✏️ Latihan Translate</div>
+        <p>Terjemahkan kalimat berikut ke Bahasa Inggris, pastikan kata benda jamaknya benar 👇</p>
+
+        <ol>
+          <li>Kucing-kucing itu tidur di sofa.</li>
+          <li>Mereka membaca buku di taman.</li>
+          <li>Guru itu memberikan PR yang sulit untuk para murid.</li>
+          <li>Teman-temanku selalu bermain bola basket bersama.</li>
+          <li>Pohon-pohon di hutan itu sangat tinggi.</li>
+        </ol>
+      </div>
+
+      <!-- Jawabanmu -->
+      <div class="msg user" role="article">
+        <div class="bubble-title">🧠 Jawabanmu:</div>
+        <ol>
+          <li>The cats sleep on the sofa.</li>
+          <li>They read books in the garden.</li>
+          <li>The teacher gave hard homework for the students.</li>
+          <li>My friends always play basketball together.</li>
+          <li>The trees in the forest are so tall.</li>
+        </ol>
+      </div>
+
+      <!-- Evaluasi -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">✅ Koreksi Cepat</div>
+        <p>Jawabanmu udah bagus banget, tapi ada beberapa hal kecil buat disempurnakan 👇</p>
+
+        <ul>
+          <li><strong>#1</strong> → “on the sofa” lebih natural daripada “in the sofa.” 👍</li>
+          <li><strong>#2</strong> ✅ Perfect!</li>
+          <li><strong>#3</strong> → “for the students” lebih tepat (tambah “the”).</li>
+          <li><strong>#4</strong> → “play” bukan “plays” karena <em>friends</em> plural → “My friends always play basketball together.” ✅</li>
+          <li><strong>#5</strong> → Tambahkan “are”: “The trees in the forest are so tall.” ✅</li>
+        </ul>
+      </div>
+
+      <!-- Penutup -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🔥 Kesimpulan</div>
+        <p>Kalimat plural gampang kelihatan dari kata benda yang berubah bentuk  
+        <em>(cats, friends, trees, students)</em> dan kata kerja yang ikut menyesuaikan.</p>
+        <p>Kamu udah di jalur yang benar — latihan kayak gini bikin grammar-mu makin natural 💪</p>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <div class="header">
+    <div class="logo" aria-hidden="true"><strong>GPT</strong></div>
+    <div class="title">
+      <h1>Latihan Pronouns — Tebak Jenisnya 🧩</h1>
+      <p>Dark theme · gaya chat cepat biar makin paham grammar</p>
+    </div>
+  </div>
+  <section class="panel" aria-labelledby="heading">
+    <div class="meta"><span class="dot" aria-hidden="true"></span> <span>5 menit latihan · oleh Kamu</span></div>
+    <div class="chat">
+
+      <!-- Pengantar -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">📘 Apa itu Pronoun?</div>
+        <p><strong>Pronoun</strong> adalah kata ganti — fungsinya buat menggantikan noun (kata benda) supaya kalimat nggak diulang-ulang terus.</p>
+        <p>Contoh: Daripada ngomong “<em>Ikhdan likes Ikhdan’s coffee</em>”,  
+        kita cukup bilang “<em>He likes his coffee</em>”. ☕</p>
+      </div>
+
+      <!-- Jenis Pronouns -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🧠 Jenis-jenis Pronoun</div>
+        <ul>
+          <li><strong>Subject Pronoun</strong> → pelaku tindakan (I, you, he, she, we, they)</li>
+          <li><strong>Object Pronoun</strong> → penerima tindakan (me, you, him, her, us, them)</li>
+          <li><strong>Possessive Adjective</strong> → menunjukkan kepemilikan + diikuti noun (my, your, his, her, our, their)</li>
+          <li><strong>Possessive Pronoun</strong> → menunjukkan kepemilikan tapi berdiri sendiri (mine, yours, his, hers, ours, theirs)</li>
+          <li><strong>Reflexive Pronoun</strong> → menunjukkan tindakan ke diri sendiri (myself, yourself, himself, herself, ourselves, themselves)</li>
+        </ul>
+      </div>
+
+      <!-- Instruksi -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🎯 Cara Main</div>
+        <p>Baca tiap kalimat di bawah ini dan isi jenis kata ganti yang muncul.  
+        Tulis jenisnya di kolom kosong ya (tanpa contek dulu 😆)</p>
+      </div>
+
+      <!-- Latihan -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">✏️ Tebak Jenis Pronoun</div>
+        <p>Isi bagian kosong dengan jenis pronoun yang tepat 👇</p>
+
+        <ol>
+          <li>I call you : _____</li>
+          <li>She loves her dog : _____</li>
+          <li>They gave him a gift : _____</li>
+          <li>I found my keys : _____</li>
+          <li>We should help ourselves : _____</li>
+          <li>This book is theirs : _____</li>
+        </ol>
+      </div>
+
+      <!-- Penutup -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🔥 Penutup</div>
+        <p>Kata ganti itu kayak shortcut dalam bahasa — kecil tapi penting banget.  
+        Kalau kamu bisa bedain “her” dan “hers”, atau “myself” dan “me”, grammar-mu udah naik level. 🚀</p>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+
+<div class="wrap">
+  <div class="header">
+    <div class="logo" aria-hidden="true"><strong>GPT</strong></div>
+    <div class="title">
+      <h1>Latihan Demonstrative Adjectives — This, That, These, Those 👆</h1>
+      <p>Dark theme · gaya chat santai biar grammar makin nempel</p>
+    </div>
+  </div>
+  <section class="panel" aria-labelledby="heading">
+    <div class="meta"><span class="dot" aria-hidden="true"></span> <span>5 menit latihan · oleh Kamu</span></div>
+    <div class="chat">
+
+      <!-- Pengantar -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">📘 Apa itu Demonstrative Adjective?</div>
+        <p>Kalimat kayak “<em>This book</em>” atau “<em>Those cars</em>” itu pakai <strong>demonstrative adjective</strong>.  
+        Kata penunjuk ini dipakai buat nunjuk <strong>benda tertentu</strong> berdasarkan jarak dan jumlah.</p>
+      </div>
+
+      <!-- Penjelasan -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🧠 Jenis Demonstrative Adjectives</div>
+        <ul>
+          <li><strong>This</strong> → tunggal, dekat</li>
+          <li><strong>That</strong> → tunggal, jauh</li>
+          <li><strong>These</strong> → jamak, dekat</li>
+          <li><strong>Those</strong> → jamak, jauh</li>
+        </ul>
+        <p>Contoh:<br>
+        👉 <em>This cat</em> is cute (kucing ini dekat)<br>
+        👉 <em>Those cats</em> are loud (kucing-kucing itu jauh)</p>
+      </div>
+
+      <!-- Instruksi -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🎯 Cara Latihan</div>
+        <p>Terjemahkan kalimat di bawah ini ke Bahasa Inggris,  
+        pastikan kamu pakai <strong>demonstrative adjective</strong> yang benar (this, that, these, those).</p>
+      </div>
+
+      <!-- Latihan -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">✏️ Latihan Translate</div>
+        <p>Terjemahkan kalimat berikut 👇</p>
+
+        <ol>
+          <li>Jawaban-jawaban ini benar.</li>
+          <li>Uang-uang ini dihabiskan dengan sia-sia.</li>
+          <li>Tas ini milik teman saya.</li>
+          <li>Mobil-mobil itu milik tetangga saya.</li>
+          <li>Ponsel pintar ini konyol.</li>
+        </ol>
+      </div>
+
+      <!-- Jawabanmu -->
+      <div class="msg user" role="article">
+        <div class="bubble-title">🧠 Jawabanmu:</div>
+        <ol>
+          <li>Those books very expensive.</li>
+          <li>Those foods look delicious.</li>
+          <li>This cake made by my mom.</li>
+          <li>Those houses are old.</li>
+          <li>This shoe is too big.</li>
+        </ol>
+      </div>
+
+      <!-- Koreksi -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">✅ Koreksi Cepat</div>
+        <ul>
+          <li><strong>#1</strong> → Tambahkan <em>are</em>: “Those books <strong>are</strong> very expensive.” ✅</li>
+          <li><strong>#2</strong> → “Foods” jarang dipakai dalam plural; lebih natural “That food looks delicious.”  
+              Tapi kalau maksudnya beberapa jenis makanan → “Those dishes look delicious.” 🍲</li>
+          <li><strong>#3</strong> → Tambahkan <em>is</em>: “This cake <strong>is</strong> made by my mom.” ✅</li>
+          <li><strong>#4</strong> ✅ Sudah benar!</li>
+          <li><strong>#5</strong> → Kalau cuma satu sepatu: “This shoe is too big.”  
+              Kalau sepasang: “These shoes are too big.” 👟✅</li>
+        </ul>
+      </div>
+
+      <!-- Penutup -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🔥 Penutup</div>
+        <p><em>This</em> dan <em>These</em> buat yang dekat.  
+        <em>That</em> dan <em>Those</em> buat yang jauh.  
+        Simple, tapi sering bikin bingung kalau nggak dibiasain 😆</p>
+        <p>Latihan kayak gini bikin refleks grammar-mu makin tajam 💪</p>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <div class="header">
+    <div class="logo" aria-hidden="true"><strong>GPT</strong></div>
+    <div class="title">
+      <h1>Latihan Quantifiers — Many vs Much 💡</h1>
+      <p>Dark theme · gaya chat santai biar gampang nempel</p>
+    </div>
+  </div>
+  <section class="panel" aria-labelledby="heading">
+    <div class="meta"><span class="dot" aria-hidden="true"></span> <span>5 menit latihan · oleh Kamu</span></div>
+    <div class="chat">
+
+      <!-- Pengantar -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">📘 Apa itu Quantifier?</div>
+        <p><strong>Quantifier</strong> adalah kata yang dipakai buat ngomongin jumlah.  
+        Nah, dua yang paling sering bikin bingung adalah <strong>many</strong> dan <strong>much</strong>.</p>
+      </div>
+
+      <!-- Penjelasan -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🧠 Bedanya Many dan Much</div>
+        <ul>
+          <li><strong>Many</strong> → buat <em>countable nouns</em> (benda yang bisa dihitung)  
+          <em>Example:</em> many books, many people</li>
+          <li><strong>Much</strong> → buat <em>uncountable nouns</em> (benda yang nggak bisa dihitung satu-satu)  
+          <em>Example:</em> much water, much money</li>
+        </ul>
+      </div>
+
+      <!-- Instruksi -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🎯 Cara Latihan</div>
+        <p>Isi titik-titik di kalimat berikut dengan <strong>many</strong> atau <strong>much</strong>.  
+        Jangan contek dulu — percaya sama feeling grammar-mu 😎</p>
+      </div>
+
+      <!-- Latihan -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">✏️ Latihan Fill in the Blank</div>
+        <ol>
+          <li>I have _____ information about that.</li>
+          <li>_____ men at the store buy smartphones.</li>
+          <li>How _____ water do you drink every day?</li>
+          <li>She writes _____ sentences.</li>
+          <li>She needs _____ money.</li>
+        </ol>
+      </div>
+
+      <!-- Jawabanmu -->
+      <div class="msg user" role="article">
+        <div class="bubble-title">🧠 Jawabanmu:</div>
+        <ol>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+        </ol>
+      </div>
+
+      <!-- Penutup -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🔥 Penutup</div>
+        <p>Latihan ini bantu kamu peka membedakan mana benda yang bisa dihitung dan mana yang nggak.  
+        Setelah beberapa kali latihan, kamu bakal otomatis tahu kapan pakai <em>many</em> dan kapan pakai <em>much</em>. 💪</p>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <div class="header">
+    <div class="logo" aria-hidden="true"><strong>GPT</strong></div>
+    <div class="title">
+      <h1>Latihan Prepositions — In · On · At 📍</h1>
+      <p>Dark theme · gaya chat santai · belajar dari contoh nyata</p>
+    </div>
+  </div>
+
+  <section class="panel" aria-labelledby="heading">
+    <div class="meta">
+      <span class="dot" aria-hidden="true"></span>
+      <span>7 menit baca · oleh Kamu</span>
+    </div>
+
+    <div class="chat">
+
+      <!-- Pembuka -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🌍 Yuk Belajar Prepositions!</div>
+        <p>Tiga kata kecil yang sering banget bikin bingung: <strong>in</strong>, <strong>on</strong>, dan <strong>at</strong>.  
+        Tapi setelah kamu lihat contoh-contohnya di bawah, dijamin nggak bakal ketuker lagi 😎</p>
+      </div>
+
+      <!-- IN -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🧩 1. <strong>“In”</strong> – Digunakan untuk waktu & tempat umum</div>
+
+        <p>⏰ <strong>Time</strong></p>
+        <ul>
+          <li><strong>in + year</strong> → I was born <u>in 1999</u>. <em>(General time reference)</em></li>
+          <li><strong>in + month</strong> → We have an examination <u>in February</u>. <em>(Specific month)</em></li>
+          <li><strong>in + the morning / afternoon / evening</strong> → The class is <u>in the morning</u>. <em>(Parts of the day)</em></li>
+          <li><strong>in + season</strong> → <u>In the winter</u>, it snows a lot. <em>(During a season)</em></li>
+          <li><strong>in + the future</strong> → We will meet <u>in the future</u>. <em>(General point ahead)</em></li>
+        </ul>
+
+        <p>📍 <strong>Place</strong></p>
+        <ul>
+          <li><strong>in + city/country</strong> → I live <u>in New York</u>. <em>(Large area)</em></li>
+          <li><strong>in + location</strong> → I live <u>in Bali</u>. <em>(Inside a place)</em></li>
+          <li><strong>in + book/movie</strong> → The quote is <u>in the book</u>. <em>(Inside media)</em></li>
+          <li><strong>in + language</strong> → She is fluent <u>in Spanish</u>. <em>(Language ability)</em></li>
+          <li><strong>in + clothing</strong> → She is dressed <u>in red</u>. <em>(Describing clothes)</em></li>
+          <li><strong>in + weather</strong> → We walked <u>in the rain</u>. <em>(Weather condition)</em></li>
+        </ul>
+      </div>
+
+      <!-- ON -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🧭 2. <strong>“On”</strong> – Digunakan untuk tanggal, hari, permukaan & platform</div>
+
+        <p>⏰ <strong>Time</strong></p>
+        <ul>
+          <li><strong>on + specific date</strong> → I was born <u>on February 5th</u>. <em>(Calendar date)</em></li>
+          <li><strong>on + day</strong> → Our agenda is <u>on Sunday</u>. <em>(Specific day)</em></li>
+          <li><strong>on + holiday</strong> → We are going on vacation <u>on Christmas</u>. <em>(Holiday)</em></li>
+        </ul>
+
+        <p>📍 <strong>Place / Position</strong></p>
+        <ul>
+          <li><strong>on + surface</strong> → A beautiful smile <u>on her face</u>. <em>(On top of a surface)</em></li>
+          <li><strong>on + mode of transport</strong> → He is <u>on the bus</u>. <em>(Public/shared transport)</em></li>
+          <li><strong>on + media/platform</strong> → This is my favorite program <u>on TV</u>. <em>(Media/platform)</em></li>
+          <li><strong>on + situation</strong> → She is <u>on the phone</u> right now. <em>(Ongoing communication)</em></li>
+          <li><strong>on + street</strong> → My office is <u>on Fifth Avenue</u>. <em>(Along a road)</em></li>
+          <li><strong>on + floor</strong> → She lives <u>on the second floor</u>. <em>(Specific floor)</em></li>
+          <li><strong>on + body part</strong> → She has a tattoo <u>on her arm</u>. <em>(Body location)</em></li>
+          <li><strong>on + internet</strong> → I found the information <u>on the internet</u>. <em>(Digital platform)</em></li>
+        </ul>
+      </div>
+
+      <!-- AT -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🎯 3. <strong>“At”</strong> – Digunakan untuk waktu & tempat yang spesifik</div>
+
+        <p>⏰ <strong>Time</strong></p>
+        <ul>
+          <li><strong>at + time</strong> → Our agenda is on Sunday <u>at 2 p.m.</u>. <em>(Exact time)</em></li>
+          <li><strong>at + night</strong> → Don’t call me <u>at night</u>. <em>(Nighttime reference)</em></li>
+          <li><strong>at + noon / midnight / lunchtime</strong> → They will call me <u>at noon</u>. <em>(Specific point of day)</em></li>
+        </ul>
+
+        <p>📍 <strong>Place / Location</strong></p>
+        <ul>
+          <li><strong>at + building</strong> → Meet me <u>at the library</u>. <em>(Specific building)</em></li>
+          <li><strong>at + event</strong> → I saw her <u>at the concert</u>. <em>(Event attendance)</em></li>
+          <li><strong>at + address</strong> → The package is <u>at 123 Main Street</u>. <em>(Exact address)</em></li>
+          <li><strong>at + company</strong> → He works <u>at Google</u>. <em>(Workplace)</em></li>
+          <li><strong>at + corner</strong> → She is standing <u>at the corner</u> of the street. <em>(Specific point)</em></li>
+          <li><strong>at + place</strong> → I’ll meet you <u>at the bus stop</u>. <em>(Specific location)</em></li>
+        </ul>
+      </div>
+
+      <!-- Latihan -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">📝 Latihan Isi Preposition</div>
+        <p>Isi titik-titik di bawah dengan <strong>in</strong>, <strong>on</strong>, atau <strong>at</strong>.</p>
+        <ol>
+          <li>I was born _____ 1998.</li>
+          <li>We have a meeting _____ Monday morning.</li>
+          <li>My office is _____ the second floor.</li>
+          <li>He works _____ Google as a software engineer.</li>
+          <li>Let’s meet _____ the bus stop near your house.</li>
+        </ol>
+      </div>
+
+      <!-- Jawaban -->
+      <div class="msg user" role="article">
+        <div class="bubble-title">🧠 Jawabanmu:</div>
+        <ol>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+        </ol>
+      </div>
+
+      <!-- Penutup -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">💬 Tips Penutup</div>
+        <p>Latihan “in / on / at” ini bisa kamu ulang tiap minggu.  
+        Baca keras-keras contoh-contohnya biar otakmu ngehafal secara natural — kayak native! 🇬🇧🔥</p>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <div class="header">
+    <div class="logo" aria-hidden="true"><strong>GPT</strong></div>
+    <div class="title">
+      <h1>Prepositions of Time — In · On · At ⏰</h1>
+      <p>Dark theme · gaya chat santai · contoh lengkap & kalimat Indonesia</p>
+    </div>
+  </div>
+
+  <section class="panel" aria-labelledby="heading">
+    <div class="meta">
+      <span class="dot" aria-hidden="true"></span>
+      <span>7 menit baca · oleh Kamu</span>
+    </div>
+
+    <div class="chat">
+
+      <!-- Pembuka -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🌍 Yuk pahami <strong>in / on / at</strong> untuk waktu</div>
+        <p>Tiga preposisi kecil tapi penting untuk menyatakan <strong>waktu</strong>.  
+        Di bawah ini penjelasan lengkap + contoh kalimat dalam Bahasa Indonesia (supaya kamu latihan terjemah sendiri).</p>
+      </div>
+
+      <!-- IN -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🧩 1. <strong>“In”</strong> — untuk waktu umum / rentang waktu</div>
+
+        <p>⏰ <strong>Time (waktu)</strong></p>
+        <ul>
+          <li><strong>in + year</strong>  
+            <div class="example">Contoh (ID): Saya lahir <strong>pada tahun 1999</strong>.</div>
+            <div class="example-eng">English: I was born <u>in 1999</u>.</div>
+            <div class="explain">Penjelasan: Menunjukkan tahun (waktu umum).</div>
+          </li>
+
+          <li><strong>in + month</strong>  
+            <div class="example">Contoh (ID): Kami akan ujian <strong>pada bulan Februari</strong>.</div>
+            <div class="example-eng">English: We have an examination <u>in February</u>.</div>
+            <div class="explain">Penjelasan: Menunjukkan bulan tertentu.</div>
+          </li>
+
+          <li><strong>in + the morning / afternoon / evening</strong>  
+            <div class="example">Contoh (ID): Kelas dimulai <strong>di pagi hari</strong>.</div>
+            <div class="example-eng">English: The class is <u>in the morning</u>.</div>
+            <div class="explain">Penjelasan: Bagian dari hari (morning/afternoon/evening).</div>
+          </li>
+
+          <li><strong>in + season</strong>  
+            <div class="example">Contoh (ID): <strong>Di musim hujan</strong>, jalan sering banjir.</div>
+            <div class="example-eng">English: <u>In the rainy season</u>, roads often flood.</div>
+            <div class="explain">Penjelasan: Waktu umum selama musim tertentu.</div>
+          </li>
+
+          <li><strong>in + the future</strong>  
+            <div class="example">Contoh (ID): Kita akan bertemu lagi <strong>di masa depan</strong>.</div>
+            <div class="example-eng">English: We will meet <u>in the future</u>.</div>
+            <div class="explain">Penjelasan: Titik waktu yang lebih umum/abstrak di masa depan.</div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ON -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🧭 2. <strong>“On”</strong> — untuk hari, tanggal, dan peristiwa tertentu</div>
+
+        <p>⏰ <strong>Time (waktu)</strong></p>
+        <ul>
+          <li><strong>on + specific date</strong>  
+            <div class="example">Contoh (ID): Saya lahir <strong>pada tanggal 5 Februari</strong>.</div>
+            <div class="example-eng">English: I was born <u>on February 5th</u>.</div>
+            <div class="explain">Penjelasan: Tanggal kalender yang spesifik.</div>
+          </li>
+
+          <li><strong>on + day</strong>  
+            <div class="example">Contoh (ID): Agenda kami <strong>pada hari Minggu</strong>.</div>
+            <div class="example-eng">English: Our agenda is <u>on Sunday</u>.</div>
+            <div class="explain">Penjelasan: Hari dalam minggu.</div>
+          </li>
+
+          <li><strong>on + holiday</strong>  
+            <div class="example">Contoh (ID): Kami akan berlibur <strong>pada saat Natal</strong>.</div>
+            <div class="example-eng">English: We are going on vacation <u>on Christmas</u>.</div>
+            <div class="explain">Penjelasan: Hari libur atau perayaan tertentu.</div>
+          </li>
+
+          <li><strong>on + weekday morning/afternoon</strong>  
+            <div class="example">Contoh (ID): Saya olahraga <strong>pada Senin pagi</strong>.</div>
+            <div class="example-eng">English: I exercise <u>on Monday morning</u>.</div>
+            <div class="explain">Penjelasan: Kombinasi hari + bagian hari.</div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- AT -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">🎯 3. <strong>“At”</strong> — untuk waktu yang sangat spesifik</div>
+
+        <p>⏰ <strong>Time (waktu)</strong></p>
+        <ul>
+          <li><strong>at + exact time</strong>  
+            <div class="example">Contoh (ID): Pertemuan dimulai <strong>pada pukul 3 sore</strong>.</div>
+            <div class="example-eng">English: The meeting starts <u>at 3 p.m.</u>.</div>
+            <div class="explain">Penjelasan: Waktu yang sangat tepat (jam).</div>
+          </li>
+
+          <li><strong>at + night</strong>  
+            <div class="example">Contoh (ID): Dia biasanya tidur <strong>di malam hari</strong>.</div>
+            <div class="example-eng">English: He usually sleeps <u>at night</u>.</div>
+            <div class="explain">Penjelasan: Referensi malam secara umum.</div>
+          </li>
+
+          <li><strong>at + noon / midnight / lunchtime</strong>  
+            <div class="example">Contoh (ID): Mereka akan menelepon <strong>pada siang hari</strong>.</div>
+            <div class="example-eng">English: They will call me <u>at noon</u>.</div>
+            <div class="explain">Penjelasan: Titik waktu tertentu di hari (noon, midnight, lunchtime).</div>
+          </li>
+
+          <li><strong>at + the weekend (BrE)</strong>  
+            <div class="example">Contoh (ID): Kami akan ke pantai <strong>pada akhir pekan</strong>.</div>
+            <div class="example-eng">English: We will go to the beach <u>at the weekend</u>. (BrE)</div>
+            <div class="explain">Penjelasan: Ungkapan khas British English.</div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Tabel ringkasan (lengkap) -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">📝 Tabel Lengkap (Time)</div>
+        <table border="0" cellpadding="8" cellspacing="0" style="width:100%; color:inherit;">
+          <thead>
+            <tr>
+              <th style="text-align:left">Preposition</th>
+              <th style="text-align:left">Digunakan Untuk</th>
+              <th style="text-align:left">Contoh (Indonesia)</th>
+              <th style="text-align:left">Contoh (Inggris)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>in</strong></td>
+              <td>Years, months, seasons, parts of the day, general future</td>
+              <td>Saya lahir pada tahun 1999.</td>
+              <td>I was born <u>in 1999</u>.</td>
+            </tr>
+            <tr>
+              <td><strong>on</strong></td>
+              <td>Days, specific dates, holidays, occasions</td>
+              <td>Agenda kami pada hari Minggu.</td>
+              <td>Our agenda is <u>on Sunday</u>.</td>
+            </tr>
+            <tr>
+              <td><strong>at</strong></td>
+              <td>Exact times, night, noon, lunchtime, specific points</td>
+              <td>Pertemuan dimulai pada pukul 3 sore.</td>
+              <td>The meeting starts <u>at 3 p.m.</u>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Latihan (optional) -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">✏️ Latihan (Terjemahkan sendiri)</div>
+        <p>Berikut 5 kalimat Bahasa Indonesia yang mengandung preposisi waktu — terjemahkan ke Bahasa Inggris menggunakan <strong>in / on / at</strong> yang tepat:</p>
+        <ol>
+          <li>Saya lahir pada bulan Mei.</li>
+          <li>Kami akan bertemu pada hari Sabtu.</li>
+          <li>Pertemuan dimulai pada pukul 3 sore.</li>
+          <li>Dia biasanya tidur di malam hari.</li>
+          <li>Kami akan berlibur pada saat Natal.</li>
+        </ol>
+        <p>Ketika sudah selesai, kirim jawabanmu — aku akan koreksi dan beri penjelasan singkat per kalimat.</p>
+      </div>
+
+      <!-- Penutup -->
+      <div class="msg assistant" role="article">
+        <div class="bubble-title">💬 Tips Cepat</div>
+        <ul>
+          <li>In → tahun/bulan/musim/bagian hari/masa depan (luas).</li>
+          <li>On → hari/tanggal/liburan/peristiwa (spesifik pada kalender).</li>
+          <li>At → jam/titik waktu tepat/nilai spesifik (sangat spesifik).</li>
+        </ul>
+        <p>Baca contoh-contoh di atas beberapa kali dan coba terjemahkan kalimat latihan. Kalau mau, aku bisa buatkan versi interaktif HTML (isian) yang bisa kamu isi langsung di browser.</p>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <div class="header">
+    <div class="logo"><strong>GPT</strong></div>
+    <div class="title">
+      <h1>Prepositions of Place — 📍 Posisi dan Tempat</h1>
+      <p>Dark theme · gaya chat santai · latihan translate</p>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="meta">
+      <span class="dot"></span>
+      <span>5 menit latihan · oleh Kamu</span>
+    </div>
+
+    <div class="chat">
+
+      <!-- Pengantar -->
+      <div class="msg assistant">
+        <div class="bubble-title">🏠 Apa itu Prepositions of Place?</div>
+        <p>Prepositions of Place adalah kata yang menunjukkan posisi atau lokasi suatu benda atau orang.</p>
+        <p>Misalnya: <strong>di dalam, di atas, di bawah, di depan, di dekat</strong>, dan sebagainya.</p>
+      </div>
+
+      <!-- Penjelasan & Contoh -->
+      <div class="msg assistant">
+        <div class="bubble-title">📚 Catatan Penting</div>
+        <table border="1" cellspacing="0" cellpadding="6">
+          <thead>
+            <tr>
+              <th>Preposisi</th>
+              <th>Penjelasan</th>
+              <th>Contoh (Bahasa Inggris)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>In</strong></td>
+              <td>Posisi di dalam sesuatu atau tempat tertutup</td>
+              <td>The book is in my bag.</td>
+            </tr>
+            <tr>
+              <td><strong>On</strong></td>
+              <td>Posisi di atas permukaan atau tempat</td>
+              <td>The books are on the table.</td>
+            </tr>
+            <tr>
+              <td><strong>At</strong></td>
+              <td>Posisi di suatu lokasi atau tempat</td>
+              <td>We do our homework at home.</td>
+            </tr>
+            <tr>
+              <td><strong>Beside</strong></td>
+              <td>Posisi di sebelah samping atau berdampingan</td>
+              <td>The cat is beside the table.</td>
+            </tr>
+            <tr>
+              <td><strong>Behind</strong></td>
+              <td>Posisi di belakang sesuatu</td>
+              <td>My house is behind your house.</td>
+            </tr>
+            <tr>
+              <td><strong>In front of</strong></td>
+              <td>Posisi di depan sesuatu</td>
+              <td>I am standing in front of you.</td>
+            </tr>
+            <tr>
+              <td><strong>Under</strong></td>
+              <td>Posisi di bawah sesuatu</td>
+              <td>The shoes are under the chair.</td>
+            </tr>
+            <tr>
+              <td><strong>Near</strong></td>
+              <td>Posisi dekat dengan sesuatu</td>
+              <td>She lives near the skyscraper.</td>
+            </tr>
+            <tr>
+              <td><strong>Between</strong></td>
+              <td>Posisi di antara dua objek atau lokasi</td>
+              <td>The store is between the bank and the bookstore.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Latihan -->
+      <div class="msg assistant">
+        <div class="bubble-title">🧩 Latihan — Terjemahkan ke Bahasa Inggris</div>
+        <p>Terjemahkan 5 kalimat berikut menggunakan preposisi tempat yang tepat:</p>
+        <ol>
+          <li>Buku itu ada di dalam tas saya.</li>
+          <li>Kucing itu duduk di bawah kursi.</li>
+          <li>Saya berdiri di depan kelas.</li>
+          <li>Toko itu berada di antara apotek dan restoran.</li>
+          <li>Dia tinggal di dekat sekolah.</li>
+        </ol>
+      </div>
+
+      <!-- Jawabanmu -->
+      <div class="msg user">
+        <div class="bubble-title">✏️ Jawabanmu:</div>
+        <ol>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+        </ol>
+      </div>
+
+      <!-- Penutup -->
+      <div class="msg assistant">
+        <div class="bubble-title">💡 Tips</div>
+        <p>Gunakan logika sederhana untuk membantu:</p>
+        <ul>
+          <li>🏠 <strong>In</strong> → di dalam sesuatu</li>
+          <li>🪟 <strong>On</strong> → di atas permukaan</li>
+          <li>📍 <strong>At</strong> → di lokasi spesifik</li>
+          <li>➡️ <strong>Beside / Near</strong> → di sebelah atau dekat</li>
+          <li>⬆️ <strong>Behind / In front of / Under</strong> → posisi relatif terhadap benda lain</li>
+        </ul>
+        <p>Latihan terus sampai kamu bisa membayangkan posisinya tanpa mikir dulu — itu tandanya kamu sudah <em>thinking in English</em> 😎</p>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <div class="header">
+    <div class="logo"><strong>GPT</strong></div>
+    <div class="title">
+      <h1>Modal Auxiliary Verbs — ⚙️ Kata Kerja Bantu Modal</h1>
+      <p>Dark theme · gaya chat santai · latihan translate</p>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="meta">
+      <span class="dot"></span>
+      <span>5 menit latihan · oleh Kamu</span>
+    </div>
+
+    <div class="chat">
+
+      <!-- Pengantar -->
+      <div class="msg assistant">
+        <div class="bubble-title">🤖 Apa itu Modal Auxiliary Verb?</div>
+        <p>
+          <strong>Modal Auxiliary Verbs</strong> adalah kata kerja bantu yang digunakan untuk menyatakan kemampuan, kemungkinan, izin, keharusan, atau rencana.
+        </p>
+        <p>Contohnya: <strong>can, could, may, might, must, shall, should, will, would</strong>.</p>
+      </div>
+
+      <!-- Penjelasan & Contoh -->
+      <div class="msg assistant">
+        <div class="bubble-title">📘 Contoh Umum</div>
+        <table border="1" cellspacing="0" cellpadding="6">
+          <thead>
+            <tr>
+              <th>Modal</th>
+              <th>Makna</th>
+              <th>Contoh (Bahasa Inggris)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Can</strong></td>
+              <td>Kemampuan atau izin</td>
+              <td>I can swim fast.</td>
+            </tr>
+            <tr>
+              <td><strong>Could</strong></td>
+              <td>Kemampuan di masa lalu atau kemungkinan</td>
+              <td>I could run faster when I was young.</td>
+            </tr>
+            <tr>
+              <td><strong>Will</strong></td>
+              <td>Keinginan atau rencana di masa depan</td>
+              <td>They will call you tomorrow.</td>
+            </tr>
+            <tr>
+              <td><strong>Must</strong></td>
+              <td>Keharusan atau kewajiban kuat</td>
+              <td>You must finish your homework.</td>
+            </tr>
+            <tr>
+              <td><strong>May / Might</strong></td>
+              <td>Kemungkinan atau izin sopan</td>
+              <td>She might be late.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Latihan -->
+      <div class="msg assistant">
+        <div class="bubble-title">🧩 Latihan — Terjemahkan ke Bahasa Inggris</div>
+        <p>Terjemahkan 5 kalimat berikut menggunakan modal auxiliary yang tepat:</p>
+        <ol>
+          <li>Saya bisa menyelesaikan tugas ini sebelum malam.</li>
+          <li>Apakah kamu akan datang ke pesta besok?</li>
+          <li>Kita harus berhati-hati saat menyeberang jalan.</li>
+          <li>Dia mungkin datang lebih awal hari ini.</li>
+          <li>Saya akan membantu kamu setelah makan malam.</li>
+        </ol>
+      </div>
+
+      <!-- Jawabanmu -->
+      <div class="msg user">
+        <div class="bubble-title">✏️ Jawabanmu:</div>
+        <ol>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+        </ol>
+      </div>
+
+      <!-- Penutup -->
+      <div class="msg assistant">
+        <div class="bubble-title">💡 Tips</div>
+        <ul>
+          <li>💪 <strong>Can/Could</strong> → kemampuan</li>
+          <li>🗓️ <strong>Will/Would</strong> → rencana, janji, atau kebiasaan</li>
+          <li>⚠️ <strong>Must/Should</strong> → keharusan atau saran</li>
+          <li>❓ <strong>May/Might</strong> → kemungkinan</li>
+          <li>🤝 <strong>Shall</strong> → bentuk sopan ajakan (lebih formal)</li>
+        </ul>
+        <p>Gunakan logika situasi: masa depan, kemampuan, izin, atau kemungkinan — itu kuncinya untuk memilih modal yang tepat 🔑</p>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <div class="header">
+    <div class="logo"><strong>GPT</strong></div>
+    <div class="title">
+      <h1>No vs Not — 🚫 Latihan Pemahaman</h1>
+      <p>Latihan translate: kapan gunakan <strong>no</strong>, kapan gunakan <strong>not</strong></p>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="meta">
+      <span class="dot"></span>
+      <span>5 menit latihan · oleh Kamu</span>
+    </div>
+
+    <div class="chat">
+
+      <!-- Penjelasan -->
+      <div class="msg assistant">
+        <div class="bubble-title">🤖 Penjelasan Singkat</div>
+        <p><strong>No</strong> digunakan untuk menyatakan “tidak ada” atau “tanpa” — biasanya diikuti oleh <em>noun</em> (kata benda).</p>
+        <p><strong>Not</strong> digunakan untuk membuat kalimat negatif — biasanya diikuti oleh <em>verb, adjective, atau adverb</em>.</p>
+      </div>
+
+      <!-- Tabel -->
+      <div class="msg assistant">
+        <div class="bubble-title">📘 Contoh Perbandingan</div>
+        <table border="1" cellspacing="0" cellpadding="6">
+          <thead>
+            <tr>
+              <th>Bentuk</th>
+              <th>Makna</th>
+              <th>Contoh</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>No</strong> + noun</td>
+              <td>menyatakan “tidak ada sesuatu”</td>
+              <td>There is <strong>no</strong> milk in the fridge.</td>
+            </tr>
+            <tr>
+              <td><strong>Not</strong> + verb/adjective/adverb</td>
+              <td>membuat kalimat negatif</td>
+              <td>I am <strong>not</strong> tired.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Latihan -->
+      <div class="msg assistant">
+        <div class="bubble-title">🧩 Latihan — Terjemahkan ke Bahasa Inggris</div>
+        <p>Gunakan “no” atau “not” dengan tepat dalam terjemahanmu:</p>
+        <ol>
+          <li>Tidak ada makanan di meja.</li>
+          <li>Saya tidak suka kopi hitam.</li>
+          <li>Tidak ada orang di rumah saat ini.</li>
+          <li>Dia tidak bahagia dengan hasilnya.</li>
+          <li>Tidak ada waktu untuk menunggu.</li>
+        </ol>
+      </div>
+
+      <!-- Jawabanmu -->
+      <div class="msg user">
+        <div class="bubble-title">✏️ Jawabanmu:</div>
+        <ol>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+        </ol>
+      </div>
+
+      <!-- Tips -->
+      <div class="msg assistant">
+        <div class="bubble-title">💡 Tips Cepat</div>
+        <ul>
+          <li>Gunakan <strong>no</strong> → “tidak ada sesuatu” (diikuti kata benda).</li>
+          <li>Gunakan <strong>not</strong> → menolak sifat, perbuatan, atau kondisi.</li>
+          <li>Ingat: <em>no sugar</em> ✅ tapi <em>not sugar</em> ❌</li>
+          <li><em>not good</em> ✅ tapi <em>no good</em> ❌ (kecuali dalam ekspresi idiomatik)</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <div class="header">
+    <div class="logo"><strong>GPT</strong></div>
+    <div class="title">
+      <h1>Bring vs Take — 🎒 Latihan Pemahaman</h1>
+      <p>Latihan translate: kapan gunakan <strong>bring</strong> dan kapan gunakan <strong>take</strong></p>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="meta">
+      <span class="dot"></span>
+      <span>5 menit latihan · oleh Kamu</span>
+    </div>
+
+    <div class="chat">
+
+      <!-- Penjelasan -->
+      <div class="msg assistant">
+        <div class="bubble-title">🤖 Penjelasan Singkat</div>
+        <p><strong>Bring</strong> berarti <em>membawa sesuatu ke arah pembicara atau tempat tujuan</em> (menuju ke sini).</p>
+        <p><strong>Take</strong> berarti <em>membawa sesuatu menjauh dari pembicara</em> (dari sini ke tempat lain).</p>
+      </div>
+
+      <!-- Tabel -->
+      <div class="msg assistant">
+        <div class="bubble-title">📘 Contoh Perbandingan</div>
+        <table border="1" cellspacing="0" cellpadding="6">
+          <thead>
+            <tr>
+              <th>Kata</th>
+              <th>Arah</th>
+              <th>Makna</th>
+              <th>Contoh</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Bring</strong></td>
+              <td>Menuju pembicara / lokasi pembicara</td>
+              <td>Membawa ke arah “sini”</td>
+              <td>Please bring your book to my office.</td>
+            </tr>
+            <tr>
+              <td><strong>Take</strong></td>
+              <td>Menjauh dari pembicara</td>
+              <td>Membawa ke arah “sana”</td>
+              <td>Take these files to Mr. John’s desk.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Latihan -->
+      <div class="msg assistant">
+        <div class="bubble-title">🧩 Latihan — Terjemahkan ke Bahasa Inggris</div>
+        <p>Gunakan <strong>bring</strong> atau <strong>take</strong> dengan tepat dalam terjemahanmu:</p>
+        <ol>
+          <li>Tolong bawa beberapa makanan ke pesta di rumah saya.</li>
+          <li>Bawa dokumen itu ke kantor besok pagi.</li>
+          <li>Ambil pakaianmu dan simpan di lemari.</li>
+          <li>Tolong bawa payungmu, hujan akan turun.</li>
+          <li>Bawa anjingmu menjauh dari taman ini.</li>
+        </ol>
+      </div>
+
+      <!-- Jawabanmu -->
+      <div class="msg user">
+        <div class="bubble-title">✏️ Jawabanmu:</div>
+        <ol>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+        </ol>
+      </div>
+
+      <!-- Tips -->
+      <div class="msg assistant">
+        <div class="bubble-title">💡 Tips Cepat</div>
+        <ul>
+          <li><strong>Bring →</strong> membawa ke arah pembicara (“ke sini”).</li>
+          <li><strong>Take →</strong> membawa menjauh dari pembicara (“ke sana”).</li>
+          <li>Trik mudah: pikirkan dari sudut pandang lokasi pembicara.</li>
+          <li>Contoh: “Bring it to me” (bawa ke aku) vs “Take it away” (bawa pergi).</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <div class="header">
+    <div class="logo"><strong>GPT</strong></div>
+    <div class="title">
+      <h1>Prepositions: By vs With ✈️🍴</h1>
+      <p>Latihan memahami kapan menggunakan <strong>by</strong> dan <strong>with</strong> dalam kalimat.</p>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="meta">
+      <span class="dot"></span>
+      <span>5 menit latihan · oleh Kamu</span>
+    </div>
+
+    <div class="chat">
+
+      <!-- Penjelasan -->
+      <div class="msg assistant">
+        <div class="bubble-title">🤖 Penjelasan Singkat</div>
+        <p><strong>By</strong> digunakan untuk menunjukkan <em>cara, alat transportasi, atau pelaku (agent)</em> dari suatu tindakan.</p>
+        <p><strong>With</strong> digunakan untuk menunjukkan <em>alat yang digunakan atau kebersamaan dengan seseorang</em>.</p>
+      </div>
+
+      <!-- Tabel Penjelasan -->
+      <div class="msg assistant">
+        <div class="bubble-title">📘 Perbandingan "By" dan "With"</div>
+        <table border="1" cellspacing="0" cellpadding="6">
+          <thead>
+            <tr>
+              <th>Preposisi</th>
+              <th>Digunakan Untuk</th>
+              <th>Contoh</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>By</strong></td>
+              <td>
+                <ul>
+                  <li>Menunjukkan cara melakukan sesuatu (by car, by bus, by hand)</li>
+                  <li>Menunjukkan siapa yang melakukan sesuatu (by John Smith)</li>
+                </ul>
+              </td>
+              <td>
+                <em>Her novel was written by J.K. Rowling.</em><br>
+                <em>He traveled by train.</em>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>With</strong></td>
+              <td>
+                <ul>
+                  <li>Menunjukkan alat yang digunakan (with a knife, with a spoon)</li>
+                  <li>Menunjukkan kebersamaan (with friends, with my family)</li>
+                </ul>
+              </td>
+              <td>
+                <em>He cut the bread with a knife.</em><br>
+                <em>She went to the party with her friends.</em>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Latihan -->
+      <div class="msg assistant">
+        <div class="bubble-title">🧩 Latihan — Terjemahkan ke Bahasa Inggris</div>
+        <p>Gunakan <strong>by</strong> atau <strong>with</strong> sesuai konteks dalam terjemahanmu:</p>
+        <ol>
+          <li>Dia melakukan perjalanan ke Jepang dengan kapal laut.</li>
+          <li>Lukisan itu dilukis oleh pelukis terkenal.</li>
+          <li>Dia menulis puisi dengan pensil.</li>
+          <li>Dia pergi ke bioskop dengan pacarnya.</li>
+          <li>Kue itu dipotong dengan pisau besar.</li>
+        </ol>
+      </div>
+
+      <!-- Jawabanmu -->
+      <div class="msg user">
+        <div class="bubble-title">✏️ Jawabanmu:</div>
+        <ol>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+        </ol>
+      </div>
+
+      <!-- Tips -->
+      <div class="msg assistant">
+        <div class="bubble-title">💡 Tips Cepat</div>
+        <ul>
+          <li><strong>By →</strong> siapa / bagaimana sesuatu dilakukan.</li>
+          <li><strong>With →</strong> alat atau kebersamaan.</li>
+          <li>Contoh mudah: <em>He goes by car</em> (cara bepergian), <em>He eats with a fork</em> (alat yang dipakai).</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <div class="header">
+    <div class="logo"><strong>GPT</strong></div>
+    <div class="title">
+      <h1>Prepositions: To vs For 🚶🎁</h1>
+      <p>Latihan membedakan penggunaan <strong>to</strong> dan <strong>for</strong> dengan gaya ringan dan contoh praktis</p>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="meta">
+      <span class="dot"></span>
+      <span>6 menit latihan · oleh Kamu</span>
+    </div>
+
+    <div class="chat">
+
+      <!-- Penjelasan -->
+      <div class="msg assistant">
+        <div class="bubble-title">📘 Penjelasan Singkat</div>
+        <p><strong>To</strong> digunakan untuk menunjukkan <em>arah, tujuan, atau penerima tindakan</em>.</p>
+        <p><strong>For</strong> digunakan untuk menunjukkan <em>alasan, manfaat, durasi, atau seseorang yang menerima manfaat</em>.</p>
+      </div>
+
+      <!-- Tabel Perbandingan -->
+      <div class="msg assistant">
+        <div class="bubble-title">📗 Perbandingan "To" dan "For"</div>
+        <table border="1" cellspacing="0" cellpadding="6">
+          <thead>
+            <tr>
+              <th>Preposisi</th>
+              <th>Digunakan Untuk</th>
+              <th>Contoh</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>To</strong></td>
+              <td>
+                <ul>
+                  <li>Menunjukkan arah atau tujuan (<em>go to the park</em>)</li>
+                  <li>Menunjukkan penerima tindakan (<em>give something to someone</em>)</li>
+                  <li>Menunjukkan waktu sebelum jam tertentu (<em>ten to nine</em>)</li>
+                  <li>Menunjukkan perbandingan (<em>prefer coffee to tea</em>)</li>
+                </ul>
+              </td>
+              <td>
+                <em>I gave the letter to my friend.</em><br>
+                <em>He walked to the station.</em><br>
+                <em>The meeting is at ten to nine.</em>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>For</strong></td>
+              <td>
+                <ul>
+                  <li>Menunjukkan penerima manfaat (<em>a gift for you</em>)</li>
+                  <li>Menunjukkan alasan atau tujuan (<em>for health</em>)</li>
+                  <li>Menunjukkan durasi waktu (<em>for two hours</em>)</li>
+                  <li>Menunjukkan fungsi (<em>a pen for writing</em>)</li>
+                </ul>
+              </td>
+              <td>
+                <em>I bought a gift for my sister.</em><br>
+                <em>She studied for three hours.</em><br>
+                <em>This knife is for cutting bread.</em>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Latihan -->
+      <div class="msg assistant">
+        <div class="bubble-title">🧩 Latihan — Terjemahkan ke Bahasa Inggris</div>
+        <p>Gunakan <strong>to</strong> atau <strong>for</strong> dengan tepat dalam terjemahanmu:</p>
+        <ol>
+          <li>Saya memberikan surat itu kepada guru saya.</li>
+          <li>Dia membeli hadiah untuk ibunya.</li>
+          <li>Mereka pergi ke bandara pagi ini.</li>
+          <li>Buku ini bagus untuk anak-anak.</li>
+          <li>Saya bekerja di sini selama dua tahun.</li>
+        </ol>
+      </div>
+
+      <!-- Jawaban -->
+      <div class="msg user">
+        <div class="bubble-title">✏️ Jawabanmu:</div>
+        <ol>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+          <li>_____</li>
+        </ol>
+      </div>
+
+      <!-- Tips -->
+      <div class="msg assistant">
+        <div class="bubble-title">💡 Tips Cepat</div>
+        <ul>
+          <li><strong>To →</strong> arah, tujuan, penerima.</li>
+          <li><strong>For →</strong> manfaat, alasan, durasi.</li>
+          <li>Contoh mudah: <em>I go to school</em> (arah), <em>I buy flowers for you</em> (penerima manfaat).</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+
+<div class="wrap">
+  <div class="header">
+    <div class="logo"><strong>GPT</strong></div>
+    <div class="title">
+      <h1>Latihan Prefix & Suffix ✍️</h1>
+      <p>Isi kolom yang kosong untuk melatih kemampuan membentuk kata dalam bahasa Inggris menggunakan awalan dan akhiran.</p>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="meta">
+      <span class="dot"></span>
+      <span>5 kata · latihan awalan & akhiran</span>
+    </div>
+
+    <div class="chat">
+
+      <!-- Penjelasan -->
+      <div class="msg assistant">
+        <div class="bubble-title">📘 Penjelasan Singkat</div>
+        <p>
+          <strong>Prefix</strong> (awalan) ditambahkan di awal kata untuk mengubah makna dasar, misalnya: <em>happy → unhappy</em>.<br>
+          <strong>Suffix</strong> (akhiran) ditambahkan di akhir kata untuk mengubah bentuk atau fungsi katanya, misalnya: <em>hope → hopeful</em>.
+        </p>
+      </div>
+
+      <!-- Tabel Latihan -->
+      <div class="msg assistant">
+        <div class="bubble-title">🧩 Latihan — Lengkapi Kolom 2 & 3</div>
+        <p>Isi kolom <strong>Prefix/Suffix</strong> dan <strong>English</strong> dengan benar.</p>
+
+        <table border="1" cellspacing="0" cellpadding="6">
+          <thead>
+            <tr>
+              <th>Bahasa Indonesia</th>
+              <th>Prefix / Suffix</th>
+              <th>English</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>tidak mungkin</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>kebaikan</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>berlebihan</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>tanpa harapan</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>ilmuwan</td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Contoh -->
+      <div class="msg assistant">
+        <div class="bubble-title">💡 Contoh</div>
+        <p><strong>tidak bahagia</strong> → Prefix: <em>un-</em> → English: <em>unhappy</em></p>
+      </div>
+
+    </div>
+  </section>
+</div>
+<div class="wrap">
+  <div class="header">
+    <div class="logo"><strong>GPT</strong></div>
+    <div class="title">
+      <h1>Latihan Near Future Tense ⏰</h1>
+      <p>Terjemahkan 10 kalimat berikut ke dalam Bahasa Inggris menggunakan bentuk <em>Near Future Tense</em>.</p>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="meta">
+      <span class="dot"></span>
+      <span>10 kalimat · latihan near future tense</span>
+    </div>
+
+    <div class="chat">
+
+      <!-- Penjelasan -->
+      <div class="msg assistant">
+        <div class="bubble-title">📘 Penjelasan Singkat</div>
+        <p>
+          <strong>Near Future Tense</strong> digunakan untuk menyatakan sesuatu yang akan terjadi dalam waktu dekat.
+          Bentuk umum yang digunakan:
+        </p>
+        <ul>
+          <li><code>be about to + V1</code> → akan segera melakukan sesuatu</li>
+          <li><code>be just about to + V1</code> → hampir melakukan sesuatu</li>
+          <li><code>be going to + V1</code> → akan (dalam waktu dekat)</li>
+          <li><code>present continuous</code> → untuk rencana yang akan segera dilakukan</li>
+        </ul>
+      </div>
+
+      <!-- Latihan -->
+      <div class="msg assistant">
+        <div class="bubble-title">✍️ Latihan Terjemahan</div>
+        <p>Terjemahkan kalimat berikut ke Bahasa Inggris menggunakan bentuk <em>Near Future Tense</em> yang tepat.</p>
+        <ol>
+          <li>Saya akan segera berangkat ke kantor.</li>
+          <li>Mereka hampir mulai rapatnya.</li>
+          <li>Kami akan menonton film sebentar lagi.</li>
+          <li>Dia akan meneleponmu dalam beberapa menit.</li>
+          <li>Aku hampir tertidur sekarang.</li>
+          <li>Lihat! Mobil itu hampir menabrak!</li>
+          <li>Kami akan makan malam di restoran malam ini.</li>
+          <li>Langit terlihat gelap, akan segera hujan.</li>
+          <li>Dia hampir menangis karena berita itu.</li>
+          <li>Aku akan pergi sekarang, sampai jumpa nanti!</li>
+        </ol>
+      </div>
+
+      <!-- Contoh -->
+      <div class="msg assistant">
+        <div class="bubble-title">💡 Contoh</div>
+        <p><strong>Awas! Gelasnya hampir jatuh!</strong> → <em>Watch out! The glass is about to fall!</em></p>
+      </div>
+
+    </div>
+  </section>
+</div>
+<div class="wrap">
+  <div class="header">
+    <div class="logo"><strong>GPT</strong></div>
+    <div class="title">
+      <h1>Latihan Contractions & Slang 💬</h1>
+      <p>Terjemahkan 10 kalimat berikut ke Bahasa Inggris menggunakan bentuk slang atau contraction yang sesuai.</p>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="meta">
+      <span class="dot"></span>
+      <span>10 kalimat · latihan informal English / slang</span>
+    </div>
+
+    <div class="chat">
+
+      <!-- Penjelasan -->
+      <div class="msg assistant">
+        <div class="bubble-title">📘 Penjelasan Singkat</div>
+        <p>
+          <strong>Contractions</strong> dan <strong>slang</strong> digunakan dalam percakapan sehari-hari (informal English).
+          Bentuk-bentuk ini sering digunakan oleh native speakers agar terdengar lebih natural dan santai.
+        </p>
+        <p>Contoh:</p>
+        <ul>
+          <li><code>going to → gonna</code> → I'm gonna sleep. (Aku akan tidur.)</li>
+          <li><code>want to → wanna</code> → I wanna eat. (Aku ingin makan.)</li>
+          <li><code>kind of → kinda</code> → It's kinda hard. (Ini agak sulit.)</li>
+          <li><code>have got to → gotta</code> → I gotta go. (Aku harus pergi.)</li>
+          <li><code>let me → lemme</code> → Lemme help you. (Biar aku bantu kamu.)</li>
+        </ul>
+      </div>
+
+      <!-- Latihan -->
+      <div class="msg assistant">
+        <div class="bubble-title">✍️ Latihan Terjemahan</div>
+        <p>Terjemahkan kalimat berikut ke Bahasa Inggris menggunakan bentuk slang yang tepat.</p>
+        <ol>
+          <li>Saya akan tidur sebentar lagi.</li>
+          <li>Ini agak sulit dipahami.</li>
+          <li>Saya ingin makan sesuatu.</li>
+          <li>Saya harus pergi sekarang.</li>
+          <li>Biar aku bantu kamu membawa barang itu.</li>
+          <li>Aku tidak tahu apa yang harus dikatakan.</li>
+          <li>Kita kehabisan waktu.</li>
+          <li>Dia seharusnya belajar tadi malam.</li>
+          <li>Ayo, kita mulai sekarang!</li>
+          <li>Kamu punya banyak teman ya.</li>
+        </ol>
+      </div>
+
+      <!-- Contoh -->
+      <div class="msg assistant">
+        <div class="bubble-title">💡 Contoh</div>
+        <p><strong>Ini agak sulit.</strong> → <em>It's kinda hard.</em></p>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+
+    <!-- Jangan dihapus div terakhir -->
+  </div>
+</body>
+</html>

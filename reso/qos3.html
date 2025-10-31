@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quality of Service (PCQ)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Quality of Service (PCQ)</h2>
+    <p class="note-paragraph">
+      <strong>PCQ (Per Connection Queue)</strong> adalah metode QoS di MikroTik yang secara otomatis membagi bandwidth
+      antar koneksi atau pengguna agar adil. Cocok untuk jaringan dengan banyak user yang membutuhkan distribusi bandwidth merata.
+    </p>
+
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Membagi bandwidth secara otomatis per koneksi, mudah setup, ideal untuk jaringan hotspot atau kantor.</li>
+      <li><strong>Keterbatasan:</strong> Satu koneksi bisa menggunakan lebih dari satu flow PCQ jika ada burst; kontrol granular per aplikasi terbatas.</li>
+      <li><strong>Gunakan Saat:</strong> Hotspot, kantor, warnet, atau jaringan multi-user agar tiap pengguna mendapat bandwidth adil.</li>
+    </ul>
+
+    
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+      <li>Tujuan: Mengimplementasikan <strong>PCQ (Per Connection Queue)</strong> untuk membagi bandwidth secara adil antar-client di jaringan LAN.</li>
+      <li>Topologi: Router R.PCQ menyediakan jaringan LAN via bridge <code>LAN</code> (ether2 & ether3), dan akses internet melalui ether1.</li>
+      <li>Catatan:
+        <ul>
+          <li>DHCP server memberikan IP dari range 192.168.1.2-192.168.1.6 untuk client di LAN.</li>
+          <li>PCQ digunakan untuk upload dan download dengan limit 254kb per koneksi dan max-limit 1M/1M untuk total client.</li>
+          <li>Bridge <code>LAN</code> menggabungkan interface ether2 dan ether3 untuk jaringan LAN.</li>
+          <li>NAT digunakan agar client LAN dapat mengakses internet melalui ether1.</li>
+          <li>Router diberi identitas unik dengan <code>/system identity</code> agar mudah dikenali.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <img src="img/qos.png" alt="Diagram jaringan" class="note-image" />
+    <h3 class="note-subtitle">R.PCQ</h3>
+    <pre class="note-codeblock"><code>
+/queue type
+add kind=pcq name=pcq-download pcq-rate=254k                           # PCQ download, limit per client 254 kbps
+add kind=pcq name=pcq-upload pcq-rate=254k                             # PCQ upload, limit per client 254 kbps
+
+/queue simple
+add max-limit=1M/1M name=PCQ_Client queue=pcq-upload/pcq-download \
+    target=192.168.1.0/29                                               # Queue utama 1Mbps/1Mbps, dibagi rata dengan PCQ
+
+/interface bridge port
+add bridge=LAN interface=ether2                                        # Tambah ether2 ke bridge LAN
+add bridge=LAN interface=ether3                                        # Tambah ether3 ke bridge LAN
+
+/ip address
+add address=192.168.1.1/29 interface=LAN network=192.168.1.0           # IP gateway LAN (192.168.1.1)
+
+/ip dhcp-client
+add disabled=no interface=ether1                                       # Interface WAN (ether1) dapat IP dari ISP
+
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1                # NAT agar client LAN bisa akses internet via ether1
+
+/system identity
+set name=R.PCQ                                                         # Nama router = R.PCQ
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan PCQ untuk distribusi bandwidth adil antar pengguna atau koneksi.</li>
+      <li>Sesuaikan pcq-rate sesuai kebutuhan; pastikan tidak lebih besar dari kapasitas link fisik.</li>
+      <li>PCQ cocok dipadukan dengan burst untuk fleksibilitas sementara saat trafik rendah.</li>
+      <li>Monitor antrean dengan `/queue simple print` untuk memastikan distribusi bandwidth merata.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      PCQ membagi bandwidth secara otomatis per koneksi atau per pengguna, memastikan distribusi adil di jaringan multi-user.
+      Ideal untuk hotspot, kantor, atau jaringan yang memerlukan fairness tanpa konfigurasi manual per user.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+  <script src="js/index.js"></script>
+</body>
+</html>

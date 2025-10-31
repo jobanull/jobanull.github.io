@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kumpulan Materi Bahasa</title>
+  <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+    background: #f9f9f9;
+    padding-top: 70px; /* sesuaikan tinggi navbar */
+    }
+    .note-container {
+      max-width: 1000px;   /* batas lebar konten */
+      margin: 0 auto;     /* supaya konten ke tengah */
+      padding: 30px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 40px;
+    }
+    .note-title {
+      color: #0070c9;
+      margin-bottom: 20px;
+    }
+    .note-image {
+      max-width: 100%;
+      cursor: pointer;
+      margin: 20px 0;
+      border-radius: 5px;
+    }
+    .expanded {
+      width: 100%;
+      height: auto;
+    }
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+
+    /* === Animasi dropdown === */
+    .dropdown-menu {
+      display: block;
+      opacity: 0;
+      transform: translateY(10px);
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    .dropdown-menu.show {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+    }
+  </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid justify-content-center">
+        <!-- <a class="navbar-brand" href="#">Definitions</a> -->
+        <div class="ms-auto">
+        <ul class="navbar-nav d-flex flex-row"> 
+    <ul class="navbar-nav">
+    <!-- Japan -->
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+          Japan
+          </a>
+          <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#general-japan">Pendahuluan</a></li>
+          <li><a class="dropdown-item" href="#hiragana">Hiragana</a></li>
+          <li><a class="dropdown-item" href="#katagana">Katagana</a></li>
+          <li><a class="dropdown-item" href="#kanji">Kanji</a></li>
+          </ul>
+      </li>
+    <!-- Japan -->
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+          Arab
+          </a>
+          <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#general-arab">Pendahuluan</a></li>
+          </ul>
+      </li>
+    <!-- English -->
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+          English
+          </a>
+          <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#general-inggris">Pendahuluan</a></li>
+          </ul>
+      </li>
+    <!-- Jawa -->
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+          Jawa
+          </a>
+          <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#general-jawa">Pendahuluan</a></li>
+          <li><a class="dropdown-item" href="#tingkatan-bahasa">Tingkatan bahasa</a></li>
+          </ul>
+      </li>
+    </ul>
+
+        </div>
+    </div>
+    </nav>
+
+<!-- General Japan -->
+<section id="general-japan" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Bahasa Jepang</h2>
+    <p class="note-paragraph">
+      <strong>Bahasa Jepang (日本語 / Nihongo)</strong> adalah bahasa resmi yang digunakan di Jepang. Bahasa ini memiliki tiga sistem penulisan utama:
+    </p>
+    <ul>
+      <li><strong>Hiragana (ひらがな)</strong> - digunakan untuk kata asli Jepang dan partikel tata bahasa.</li>
+      <li><strong>Katakana (カタカナ)</strong> - digunakan untuk kata serapan, nama asing, istilah ilmiah, dan onomatope.</li>
+      <li><strong>Kanji (漢字)</strong> - huruf Cina yang digunakan untuk akar kata (kata benda, kata kerja, kata sifat).</li>
+    </ul>
+    <p>
+      Struktur kalimat Jepang berbeda dari bahasa Indonesia atau Inggris, yaitu menggunakan pola <strong>S + O + V (Subjek - Objek - Predikat)</strong>. Contoh:
+    </p>
+    <blockquote>
+      日本語を勉強します。<br>
+      Nihongo o benkyou shimasu.<br>
+      (Saya belajar bahasa Jepang.)
+    </blockquote>
+
+    <h3 class="note-subtitle">🧭 Alur Belajar Bahasa Jepang</h3>
+    <p>Berikut urutan belajar yang efektif dari pemula hingga mahir:</p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Tahap</th>
+          <th>Materi Utama</th>
+          <th>Fokus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1. Dasar</td>
+          <td>Hiragana & Katakana</td>
+          <td>Mengenali huruf dan cara baca</td>
+        </tr>
+        <tr>
+          <td>2. Pemula</td>
+          <td>Tata bahasa dasar (～です, ～ます), kosakata sehari-hari, partikel dasar (は, が, を, に, で)</td>
+          <td>Membentuk kalimat sederhana</td>
+        </tr>
+        <tr>
+          <td>3. Menengah</td>
+          <td>Kanji dasar (±300), pola kalimat menengah, keigo dasar, kosakata lebih luas</td>
+          <td>Meningkatkan kemampuan baca & percakapan</td>
+        </tr>
+        <tr>
+          <td>4. Lanjutan</td>
+          <td>Kanji lanjutan, grammar lanjutan, mendengar native, membaca teks asli</td>
+          <td>Pemahaman teks & percakapan natural</td>
+        </tr>
+        <tr>
+          <td>5. Mahir</td>
+          <td>Keigo formal, idiom, slang, membaca novel/berita</td>
+          <td>Fasih seperti native / akademik</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      Target umum dalam pembelajaran adalah ujian <strong>JLPT (Japanese Language Proficiency Test)</strong>, dengan level dari N5 (paling dasar) hingga N1 (paling tinggi).
+    </p>
+
+    <h3 class="note-subtitle">📝 Cara Belajar Bahasa Jepang</h3>
+    <ul>
+      <li><strong>1. Belajar huruf terlebih dahulu</strong> — Hafalkan hiragana & katakana menggunakan flashcard atau tulisan tangan berulang.</li>
+      <li><strong>2. Grammar + Kosakata</strong> — Gunakan buku seperti <em>Minna no Nihongo</em> atau <em>Genki</em>.</li>
+      <li><strong>3. Latihan mendengar (listening)</strong> — Dengarkan anime, drama, atau podcast Jepang dengan subtitle.</li>
+      <li><strong>4. Latihan bicara (speaking)</strong> — Lakukan shadowing atau berbicara dengan partner bahasa.</li>
+      <li><strong>5. Membaca & menulis</strong> — Baca teks sederhana seperti NHK Easy News dan tulis diary dalam bahasa Jepang.</li>
+    </ul>
+
+    <h3 class="note-subtitle">⏰ Jam Belajar Ideal</h3>
+    <p>Waktu belajar tergantung tujuan. Berikut perkiraan waktu total dan saran harian:</p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Target</th>
+          <th>Durasi Total</th>
+          <th>Rekomendasi Harian</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>JLPT N5</td>
+          <td>±150 jam</td>
+          <td>30-45 menit / hari (3-5 bulan)</td>
+        </tr>
+        <tr>
+          <td>JLPT N4</td>
+          <td>±300 jam</td>
+          <td>1 jam / hari (6-8 bulan)</td>
+        </tr>
+        <tr>
+          <td>JLPT N3</td>
+          <td>±600 jam</td>
+          <td>1-1,5 jam / hari (8-12 bulan)</td>
+        </tr>
+        <tr>
+          <td>JLPT N2</td>
+          <td>±1000 jam</td>
+          <td>1,5-2 jam / hari (1-1,5 tahun)</td>
+        </tr>
+        <tr>
+          <td>JLPT N1</td>
+          <td>±2000 jam</td>
+          <td>2 jam+ / hari (2-3 tahun)</td>
+        </tr>
+      </tbody>
+    </table>
+    <p><strong>Kunci:</strong> Konsistensi lebih penting daripada durasi panjang yang jarang.</p>
+
+    <h3 class="note-subtitle">🌟 Tips Efektif Belajar Bahasa Jepang</h3>
+    <ul>
+      <li>Mulai dari huruf dan grammar paling dasar.</li>
+      <li>Gunakan <strong>Spaced Repetition System (SRS)</strong> seperti Anki untuk hafalan kosakata dan kanji.</li>
+      <li>Berlatih bicara sejak awal, meskipun terbata-bata.</li>
+      <li>Buat catatan dengan contoh kalimat sendiri.</li>
+      <li>Tetapkan target mingguan dan review secara rutin.</li>
+      <li>Gunakan konten asli Jepang (anime, vlog, berita) sebagai media belajar.</li>
+      <li>Nikmati prosesnya dan pelajari budaya Jepang juga.</li>
+    </ul>
+  </main>
+</section>
+
+<!-- Hiragana -->
+<section id="hiragana" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">🈴 Hiragana</h2>
+    <p class="note-paragraph">
+      <strong>Hiragana (ひらがな)</strong> adalah salah satu dari tiga sistem penulisan utama dalam bahasa Jepang (bersama Katakana dan Kanji).  
+      Hiragana digunakan untuk menulis kata-kata asli bahasa Jepang, partikel tata bahasa, serta akhiran kata kerja dan kata sifat.  
+      Berikut adalah tabel lengkap 46 huruf dasar Hiragana:
+    </p>
+
+    <h3 class="note-subtitle text-center">Tabel Huruf Dasar Hiragana (46 huruf)</h3>
+    <div class="table-responsive">
+      <table class="table table-bordered text-center">
+        <thead>
+          <tr>
+            <th></th>
+            <th>A</th>
+            <th>I</th>
+            <th>U</th>
+            <th>E</th>
+            <th>O</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>—</th>
+            <td>あ (a)</td>
+            <td>い (i)</td>
+            <td>う (u)</td>
+            <td>え (e)</td>
+            <td>お (o)</td>
+          </tr>
+          <tr>
+            <th>K</th>
+            <td>か (ka)</td>
+            <td>き (ki)</td>
+            <td>く (ku)</td>
+            <td>け (ke)</td>
+            <td>こ (ko)</td>
+          </tr>
+          <tr>
+            <th>S</th>
+            <td>さ (sa)</td>
+            <td>し (shi)</td>
+            <td>す (su)</td>
+            <td>せ (se)</td>
+            <td>そ (so)</td>
+          </tr>
+          <tr>
+            <th>T</th>
+            <td>た (ta)</td>
+            <td>ち (chi)</td>
+            <td>つ (tsu)</td>
+            <td>て (te)</td>
+            <td>と (to)</td>
+          </tr>
+          <tr>
+            <th>N</th>
+            <td>な (na)</td>
+            <td>に (ni)</td>
+            <td>ぬ (nu)</td>
+            <td>ね (ne)</td>
+            <td>の (no)</td>
+          </tr>
+          <tr>
+            <th>H</th>
+            <td>は (ha)</td>
+            <td>ひ (hi)</td>
+            <td>ふ (fu)</td>
+            <td>へ (he)</td>
+            <td>ほ (ho)</td>
+          </tr>
+          <tr>
+            <th>M</th>
+            <td>ま (ma)</td>
+            <td>み (mi)</td>
+            <td>む (mu)</td>
+            <td>め (me)</td>
+            <td>も (mo)</td>
+          </tr>
+          <tr>
+            <th>Y</th>
+            <td>や (ya)</td>
+            <td>—</td>
+            <td>ゆ (yu)</td>
+            <td>—</td>
+            <td>よ (yo)</td>
+          </tr>
+          <tr>
+            <th>R</th>
+            <td>ら (ra)</td>
+            <td>り (ri)</td>
+            <td>る (ru)</td>
+            <td>れ (re)</td>
+            <td>ろ (ro)</td>
+          </tr>
+          <tr>
+            <th>W</th>
+            <td>わ (wa)</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td>を (wo / o)</td>
+          </tr>
+          <tr>
+            <th>—</th>
+            <td>ん (n)</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table class="table table-bordered text-center">
+        <thead>
+          <tr>
+            <!-- <th></th>
+            <th>A</th>
+            <th>I</th>
+            <th>U</th>
+            <th>E</th>
+            <th>O</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <!-- <th>—</th> -->
+            <td>あ</td>
+            <td>い</td>
+            <td>う</td>
+            <td>え</td>
+            <td>お</td>
+          </tr>
+          <tr>
+            <!-- <th>K</th> -->
+            <td>か</td>
+            <td>き</td>
+            <td>く</td>
+            <td>け</td>
+            <td>こ</td>
+          </tr>
+          <tr>
+            <!-- <th>S</th> -->
+            <td>さ</td>
+            <td>し</td>
+            <td>す</td>
+            <td>せ</td>
+            <td>そ</td>
+          </tr>
+          <tr>
+            <!-- <th>T</th> -->
+            <td>た</td>
+            <td>ち</td>
+            <td>つ</td>
+            <td>て</td>
+            <td>と</td>
+          </tr>
+          <tr>
+            <!-- <th>N</th> -->
+            <td>な</td>
+            <td>に</td>
+            <td>ぬ</td>
+            <td>ね</td>
+            <td>の</td>
+          </tr>
+          <tr>
+            <!-- <th>H</th> -->
+            <td>は</td>
+            <td>ひ</td>
+            <td>ふ</td>
+            <td>へ</td>
+            <td>ほ</td>
+          </tr>
+          <tr>
+            <!-- <th>M</th> -->
+            <td>ま</td>
+            <td>み</td>
+            <td>む</td>
+            <td>め</td>
+            <td>も</td>
+          </tr>
+          <tr>
+            <!-- <th>Y</th> -->
+            <td>や</td>
+            <td>—</td>
+            <td>ゆ</td>
+            <td>—</td>
+            <td>よ</td>
+          </tr>
+          <tr>
+            <!-- <th>R</th> -->
+            <td>ら</td>
+            <td>り</td>
+            <td>る</td>
+            <td>れ</td>
+            <td>ろ</td>
+          </tr>
+          <tr>
+            <!-- <th>W</th> -->
+            <td>わ</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td>を</td>
+          </tr>
+          <tr>
+            <!-- <th>—</th> -->
+            <td>ん</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <h3 class="note-subtitle">📝 Catatan Penting</h3>
+    <ul>
+      <li>Huruf <strong>ん (n)</strong> adalah satu-satunya konsonan tunggal dalam Hiragana.</li>
+      <li>Huruf <strong>を (wo)</strong> biasanya dibaca sebagai “o” dan digunakan khusus sebagai <em>partikel</em> penanda objek.</li>
+      <li>Beberapa huruf memiliki bunyi khusus:
+        <ul>
+          <li><strong>し (shi)</strong> bukan “si”</li>
+          <li><strong>ち (chi)</strong> bukan “ti”</li>
+          <li><strong>つ (tsu)</strong> bukan “tu”</li>
+        </ul>
+      </li>
+      <li>Hiragana sering digunakan bersama Kanji untuk membuat kalimat lengkap.</li>
+    </ul>
+  </main>
+</section>
+
+<!-- Katakana -->
+<section id="katakana" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">🈯 Katakana</h2>
+    <p class="note-paragraph">
+      <strong>Katakana (カタカナ)</strong> adalah salah satu dari tiga sistem penulisan bahasa Jepang.  
+      Katakana digunakan untuk menuliskan <strong>kata serapan dari bahasa asing</strong>, nama orang atau tempat asing, <em>onomatope</em> (kata bunyi), serta istilah teknis dan ilmiah.  
+      Bentuk huruf Katakana cenderung <strong>tajam dan kaku</strong>, berbeda dengan Hiragana yang lebih melengkung.
+    </p>
+
+    <h3 class="note-subtitle text-center">Tabel Huruf Dasar Katakana (46 huruf)</h3>
+    <div class="table-responsive">
+      <table class="table table-bordered text-center">
+        <thead>
+          <tr>
+            <th></th>
+            <th>A</th>
+            <th>I</th>
+            <th>U</th>
+            <th>E</th>
+            <th>O</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>—</th>
+            <td>ア (a)</td>
+            <td>イ (i)</td>
+            <td>ウ (u)</td>
+            <td>エ (e)</td>
+            <td>オ (o)</td>
+          </tr>
+          <tr>
+            <th>K</th>
+            <td>カ (ka)</td>
+            <td>キ (ki)</td>
+            <td>ク (ku)</td>
+            <td>ケ (ke)</td>
+            <td>コ (ko)</td>
+          </tr>
+          <tr>
+            <th>S</th>
+            <td>サ (sa)</td>
+            <td>シ (shi)</td>
+            <td>ス (su)</td>
+            <td>セ (se)</td>
+            <td>ソ (so)</td>
+          </tr>
+          <tr>
+            <th>T</th>
+            <td>タ (ta)</td>
+            <td>チ (chi)</td>
+            <td>ツ (tsu)</td>
+            <td>テ (te)</td>
+            <td>ト (to)</td>
+          </tr>
+          <tr>
+            <th>N</th>
+            <td>ナ (na)</td>
+            <td>ニ (ni)</td>
+            <td>ヌ (nu)</td>
+            <td>ネ (ne)</td>
+            <td>ノ (no)</td>
+          </tr>
+          <tr>
+            <th>H</th>
+            <td>ハ (ha)</td>
+            <td>ヒ (hi)</td>
+            <td>フ (fu)</td>
+            <td>ヘ (he)</td>
+            <td>ホ (ho)</td>
+          </tr>
+          <tr>
+            <th>M</th>
+            <td>マ (ma)</td>
+            <td>ミ (mi)</td>
+            <td>ム (mu)</td>
+            <td>メ (me)</td>
+            <td>モ (mo)</td>
+          </tr>
+          <tr>
+            <th>Y</th>
+            <td>ヤ (ya)</td>
+            <td>—</td>
+            <td>ユ (yu)</td>
+            <td>—</td>
+            <td>ヨ (yo)</td>
+          </tr>
+          <tr>
+            <th>R</th>
+            <td>ラ (ra)</td>
+            <td>リ (ri)</td>
+            <td>ル (ru)</td>
+            <td>レ (re)</td>
+            <td>ロ (ro)</td>
+          </tr>
+          <tr>
+            <th>W</th>
+            <td>ワ (wa)</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td>ヲ (wo / o)</td>
+          </tr>
+          <tr>
+            <th>—</th>
+            <td>ン (n)</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Tanpa Head</h3>
+      <table class="table table-bordered text-center">
+        <thead>
+          <tr>
+            <!-- <th></th>
+            <th>A</th>
+            <th>I</th>
+            <th>U</th>
+            <th>E</th>
+            <th>O</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <!-- <th>—</th> -->
+            <td>ア</td>
+            <td>イ</td>
+            <td>ウ</td>
+            <td>エ</td>
+            <td>オ</td>
+          </tr>
+          <tr>
+            <!-- <th>K</th> -->
+            <td>カ</td>
+            <td>キ</td>
+            <td>ク</td>
+            <td>ケ</td>
+            <td>コ</td>
+          </tr>
+          <tr>
+            <!-- <th>S</th> -->
+            <td>サ</td>
+            <td>シ</td>
+            <td>ス</td>
+            <td>セ</td>
+            <td>ソ</td>
+          </tr>
+          <tr>
+            <!-- <th>T</th> -->
+            <td>タ</td>
+            <td>チ</td>
+            <td>ツ</td>
+            <td>テ</td>
+            <td>ト</td>
+          </tr>
+          <tr>
+            <!-- <th>N</th> -->
+            <td>ナ</td>
+            <td>ニ</td>
+            <td>ヌ</td>
+            <td>ネ</td>
+            <td>ノ</td>
+          </tr>
+          <tr>
+            <!-- <th>H</th> -->
+            <td>ハ</td>
+            <td>ヒ</td>
+            <td>フ</td>
+            <td>ヘ</td>
+            <td>ホ</td>
+          </tr>
+          <tr>
+            <!-- <th>M</th> -->
+            <td>マ</td>
+            <td>ミ</td>
+            <td>ム</td>
+            <td>メ</td>
+            <td>モ</td>
+          </tr>
+          <tr>
+            <!-- <th>Y</th> -->
+            <td>ヤ</td>
+            <td>—</td>
+            <td>ユ</td>
+            <td>—</td>
+            <td>ヨ</td>
+          </tr>
+          <tr>
+            <!-- <th>R</th> -->
+            <td>ラ</td>
+            <td>リ</td>
+            <td>ル</td>
+            <td>レ</td>
+            <td>ロ</td>
+          </tr>
+          <tr>
+            <!-- <th>W</th> -->
+            <td>ワ</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td>ヲ</td>
+          </tr>
+          <tr>
+            <!-- <th>—</th> -->
+            <td>ン</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <h3 class="note-subtitle">📝 Catatan Penting</h3>
+    <ul>
+      <li>Katakana digunakan untuk <strong>kata serapan asing</strong>, misalnya:
+        <ul>
+          <li>テーブル (tēburu) = table</li>
+          <li>コーヒー (kōhī) = coffee</li>
+          <li>タクシー (takushī) = taxi</li>
+        </ul>
+      </li>
+      <li>Huruf <strong>ン (n)</strong> adalah satu-satunya konsonan tunggal dalam Katakana, sama seperti ん di Hiragana.</li>
+      <li>Huruf <strong>ヲ (wo)</strong> biasanya dibaca sebagai “o” dan digunakan sebagai partikel.</li>
+      <li>Katakana sering digunakan untuk:
+        <ul>
+          <li>Nama orang atau tempat asing: アメリカ (Amerika)</li>
+          <li>Istilah teknis/ilmiah: ウイルス (uirusu = virus)</li>
+          <li>Kata bunyi (onomatope): ワンワン (wanwan = suara anjing)</li>
+        </ul>
+      </li>
+      <li>Bentuk Katakana cenderung lebih kaku dan tegas dibandingkan Hiragana.</li>
+    </ul>
+  </main>
+</section>
+
+<!-- Kanji -->
+<section id="kanji" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">🈶 Kanji</h2>
+    <p class="note-paragraph">
+      <strong>Kanji (漢字)</strong> adalah sistem penulisan bahasa Jepang yang menggunakan karakter Tionghoa.  
+      Setiap huruf Kanji mewakili satu <strong>makna (morfem)</strong> dan biasanya memiliki beberapa cara baca (pelafalan), tergantung konteks kalimat.  
+      Kanji digunakan untuk menuliskan kata benda, akar kata kerja, kata sifat, dan nama diri.
+    </p>
+
+    <h3 class="note-subtitle">📌 Ciri Khas Kanji</h3>
+    <ul>
+      <li>Berbeda dengan Hiragana & Katakana yang bersifat fonetik, Kanji bersifat <strong>logografis</strong> — satu karakter mewakili makna.</li>
+      <li>Setiap Kanji memiliki <strong>On’yomi (音読み)</strong> = pelafalan ala Tionghoa, dan <strong>Kun’yomi (訓読み)</strong> = pelafalan asli Jepang.</li>
+      <li>Terdapat ribuan karakter Kanji, namun sekitar <strong>2.136 huruf Kanji Jouyou</strong> (常用漢字) digunakan dalam kehidupan sehari-hari di Jepang.</li>
+      <li>Kanji sering digabung dengan Hiragana untuk membentuk kata lengkap (misalnya bentuk kata kerja atau partikel).</li>
+    </ul>
+
+    <h3 class="note-subtitle">📚 Klasifikasi Umum Kanji</h3>
+    <ul>
+      <li><strong>Kanji dasar (shougaku kanji)</strong> — dipelajari dari SD (kelas 1–6), sekitar 1.006 karakter.</li>
+      <li><strong>Kanji Jouyou (常用)</strong> — daftar resmi pemerintah Jepang untuk literasi umum (2.136 karakter).</li>
+      <li><strong>Kanji Jinmeiyou (人名用)</strong> — digunakan untuk nama orang, ±863 karakter tambahan.</li>
+      <li><strong>Kanji Non-standar</strong> — karakter langka atau klasik, sering muncul di literatur lama.</li>
+    </ul>
+
+    <h3 class="note-subtitle">📝 Contoh Kanji Dasar & Artinya</h3>
+    <div class="table-responsive">
+      <table class="table table-bordered text-center">
+        <thead>
+          <tr>
+            <th>Kanji</th>
+            <th>On’yomi</th>
+            <th>Kun’yomi</th>
+            <th>Arti</th>
+            <th>Contoh Penggunaan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>日</td>
+            <td>ニチ (nichi), ジツ (jitsu)</td>
+            <td>ひ (hi), -び, -か</td>
+            <td>hari, matahari</td>
+            <td>日本 (にほん, Nihon) = Jepang</td>
+          </tr>
+          <tr>
+            <td>人</td>
+            <td>ジン (jin), ニン (nin)</td>
+            <td>ひと (hito)</td>
+            <td>orang</td>
+            <td>日本人 (にほんじん, Nihonjin) = orang Jepang</td>
+          </tr>
+          <tr>
+            <td>水</td>
+            <td>スイ (sui)</td>
+            <td>みず (mizu)</td>
+            <td>air</td>
+            <td>水曜日 (すいようび, suiyoubi) = Rabu</td>
+          </tr>
+          <tr>
+            <td>木</td>
+            <td>モク (moku), ボク (boku)</td>
+            <td>き (ki)</td>
+            <td>pohon, kayu</td>
+            <td>木曜日 (もくようび, mokuyoubi) = Kamis</td>
+          </tr>
+          <tr>
+            <td>山</td>
+            <td>サン (san)</td>
+            <td>やま (yama)</td>
+            <td>gunung</td>
+            <td>富士山 (ふじさん, Fujisan) = Gunung Fuji</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="note-subtitle">💡 Tips Awal Belajar Kanji</h3>
+    <ul>
+      <li>Mulailah dari <strong>Kanji dasar (kelas 1 SD Jepang)</strong> seperti 日, 人, 木, 水, 山, 火, 口.</li>
+      <li>Gunakan metode <strong>mnemonik visual</strong> untuk mengingat bentuk karakter.</li>
+      <li>Latih menulis Kanji dengan urutan goresan (stroke order) yang benar.</li>
+      <li>Pelajari arti, bacaan On/Kun, dan contoh kata dalam satu paket.</li>
+      <li>Konsisten mengulang dan gunakan <strong>Spaced Repetition System (SRS)</strong> seperti Anki untuk menghafal.</li>
+    </ul>
+  </main>
+</section>
+
+<!-- ==================================================================================== -->
+<!-- General Arab -->
+<section id="general-arab" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Bahasa Arab</h2>
+    <p class="note-paragraph">
+      <strong>Bahasa Arab (العربية)</strong> adalah bahasa Semit yang digunakan secara luas di dunia Arab dan menjadi salah satu bahasa resmi PBB. Bahasa Arab memiliki sejarah panjang, digunakan dalam Al-Qur'an, sastra klasik, dan komunikasi modern di banyak negara.
+    </p>
+    <p>
+      Ciri khas bahasa Arab:
+    </p>
+    <ul>
+      <li>Ditulis dari <strong>kanan ke kiri</strong>.</li>
+      <li>Menggunakan <strong>huruf Arab (الأبجدية العربية)</strong> dengan 28 huruf dasar.</li>
+      <li>Memiliki sistem <strong>i‘rab</strong> (harakat akhir) yang menunjukkan peran kata dalam kalimat.</li>
+      <li>Struktur kalimat fleksibel, tetapi umumnya mengikuti pola <strong>VSO (Verb - Subject - Object)</strong> atau <strong>SVO</strong>.</li>
+    </ul>
+
+    <h3 class="note-subtitle">🧭 Alur Belajar Bahasa Arab</h3>
+    <p>Berikut alur belajar dari dasar hingga mahir:</p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Tahap</th>
+          <th>Materi Utama</th>
+          <th>Fokus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1. Dasar</td>
+          <td>Huruf Arab dan harakat (fathah, kasrah, dhammah), cara baca & tulis</td>
+          <td>Mengenali dan melafalkan huruf dengan benar</td>
+        </tr>
+        <tr>
+          <td>2. Pemula</td>
+          <td>Kosakata sehari-hari, isim (kata benda), fi’il (kata kerja), dhomir (kata ganti)</td>
+          <td>Membentuk kalimat sederhana</td>
+        </tr>
+        <tr>
+          <td>3. Menengah</td>
+          <td>Gramatika (nahwu & sharaf) dasar, pola fi’il madhi & mudhari‘, jumlah ismiyyah & fi‘liyyah</td>
+          <td>Memahami struktur kalimat dan perubahan bentuk kata</td>
+        </tr>
+        <tr>
+          <td>4. Lanjutan</td>
+          <td>Nahwu & sharaf lanjutan, kosakata tematik, membaca teks Arab berharakat</td>
+          <td>Meningkatkan kemampuan membaca dan memahami teks klasik</td>
+        </tr>
+        <tr>
+          <td>5. Mahir</td>
+          <td>Balaghah (retorika), sastra Arab klasik, teks tanpa harakat, percakapan formal & akademik</td>
+          <td>Fasih berbicara dan memahami teks tingkat tinggi</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="note-subtitle">📝 Cara Belajar Bahasa Arab</h3>
+    <ul>
+      <li><strong>1. Kuasai huruf & harakat terlebih dahulu</strong> — Latih membaca dan menulis huruf Arab hingga lancar.</li>
+      <li><strong>2. Bangun kosakata dasar</strong> — Fokus pada kata benda, kata kerja umum, dan kata ganti.</li>
+      <li><strong>3. Pelajari tata bahasa (nahwu & sharaf)</strong> — Ini inti dari kemampuan memahami teks Arab.</li>
+      <li><strong>4. Latihan membaca</strong> — Mulailah dari teks berharakat (misalnya Al-Qur’an atau buku anak) sebelum ke teks tanpa harakat.</li>
+      <li><strong>5. Latihan mendengar & berbicara</strong> — Gunakan audio atau video percakapan Arab, lalu tirukan pengucapan.</li>
+      <li><strong>6. Tulis kalimat sendiri</strong> — Buat catatan harian dalam bahasa Arab sederhana.</li>
+    </ul>
+
+    <h3 class="note-subtitle">⏰ Jam Belajar Ideal</h3>
+    <p>Estimasi waktu belajar tergantung tujuan:</p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Target</th>
+          <th>Durasi Total</th>
+          <th>Rekomendasi Harian</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Dasar Baca Tulis</td>
+          <td>±100 jam</td>
+          <td>30-45 menit / hari (2-4 bulan)</td>
+        </tr>
+        <tr>
+          <td>Percakapan & Kosakata Dasar</td>
+          <td>±250 jam</td>
+          <td>1 jam / hari (4-6 bulan)</td>
+        </tr>
+        <tr>
+          <td>Tingkat Menengah (Nahwu & Sharaf Dasar)</td>
+          <td>±500 jam</td>
+          <td>1-1,5 jam / hari (6-12 bulan)</td>
+        </tr>
+        <tr>
+          <td>Tingkat Lanjutan</td>
+          <td>±800-1000 jam</td>
+          <td>1,5-2 jam / hari (1-1,5 tahun)</td>
+        </tr>
+        <tr>
+          <td>Tingkat Mahir (Sastra, Balaghah, Akademik)</td>
+          <td>±1500 jam+</td>
+          <td>2 jam+ / hari (2 tahun lebih)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="note-subtitle">🌟 Tips Efektif Belajar Bahasa Arab</h3>
+    <ul>
+      <li>Pelajari huruf dan pelafalan dengan benar sejak awal.</li>
+      <li>Gunakan metode pengulangan bertahap (SRS) untuk hafalan kosakata.</li>
+      <li>Jangan lewatkan pelajaran nahwu & sharaf — ini fondasi utama.</li>
+      <li>Latihan membaca teks Arab berharakat sebelum naik ke teks tanpa harakat.</li>
+      <li>Dengarkan percakapan Arab modern dan tirukan intonasinya.</li>
+      <li>Tetapkan target harian & mingguan untuk konsistensi.</li>
+      <li>Pelajari juga budaya Arab untuk memahami konteks bahasa.</li>
+    </ul>
+  </main>
+</section>
+<!-- ==================================================================================== -->
+
+<!-- General Inggris -->
+<section id="general-inggris" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Bahasa Inggris</h2>
+    <p class="note-paragraph">
+      <strong>Bahasa Inggris (English)</strong> adalah bahasa internasional yang digunakan secara luas di seluruh dunia dalam bidang komunikasi, pendidikan, bisnis, teknologi, dan diplomasi. Bahasa ini termasuk dalam rumpun bahasa Jermanik dan menjadi bahasa utama di banyak negara seperti Amerika Serikat, Inggris, Kanada, Australia, dan lainnya.
+    </p>
+    <p>
+      Ciri khas Bahasa Inggris:
+    </p>
+    <ul>
+      <li>Struktur kalimat utama menggunakan pola <strong>S + V + O (Subjek - Predikat - Objek)</strong>.</li>
+      <li>Menggunakan <strong>alfabet Latin</strong> dengan 26 huruf.</li>
+      <li>Memiliki banyak <strong>kosakata serapan</strong dari bahasa Latin, Prancis, dan lainnya.</li>
+      <li>Tata bahasanya relatif sederhana (tidak ada gender gramatikal), tetapi kaya variasi tenses.</li>
+    </ul>
+
+    <h3 class="note-subtitle">🧭 Alur Belajar Bahasa Inggris</h3>
+    <p>Berikut alur belajar Bahasa Inggris dari dasar hingga mahir:</p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Tahap</th>
+          <th>Materi Utama</th>
+          <th>Fokus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1. Dasar</td>
+          <td>Alfabet & pelafalan, kosakata dasar, kalimat sederhana (to be, simple present), pengenalan pronoun</td>
+          <td>Mengenali bunyi huruf, membangun kalimat dasar, memahami struktur sederhana</td>
+        </tr>
+        <tr>
+          <td>2. Pemula</td>
+          <td>Simple tenses (present, past, future), basic questions, numbers, days, prepositions in/on/at, adjectives</td>
+          <td>Berkomunikasi dalam percakapan sehari-hari dan memahami teks sederhana</td>
+        </tr>
+        <tr>
+          <td>3. Menengah</td>
+          <td>Tenses lebih kompleks (present perfect, continuous), modal verbs, comparative, quantifiers, relative clauses</td>
+          <td>Memahami struktur kalimat menengah dan meningkatkan kemampuan baca-tulis</td>
+        </tr>
+        <tr>
+          <td>4. Lanjutan</td>
+          <td>Passive voice, reported speech, conditional sentences, idioms, academic vocabulary</td>
+          <td>Meningkatkan kemampuan berbicara dan menulis secara formal dan lancar</td>
+        </tr>
+        <tr>
+          <td>5. Mahir</td>
+          <td>Advanced grammar, collocations, phrasal verbs, academic writing, listening native speed</td>
+          <td>Berkomunikasi setara penutur asli dalam konteks profesional & akademik</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="note-subtitle">📝 Cara Belajar Bahasa Inggris</h3>
+    <ul>
+      <li><strong>1. Kuasai alfabet & pelafalan</strong> — Latih pengucapan setiap huruf dan bunyi unik (misalnya /θ/ dan /ð/).</li>
+      <li><strong>2. Bangun kosakata dasar</strong> — Fokus pada kata benda, kata kerja umum, angka, waktu, dan sapaan.</li>
+      <li><strong>3. Pelajari grammar bertahap</strong> — Mulai dari to be, simple present, lalu tenses lainnya.</li>
+      <li><strong>4. Latihan listening</strong> — Gunakan lagu, film, podcast, atau video dengan subtitle Inggris.</li>
+      <li><strong>5. Latihan speaking</strong> — Lakukan self-talk, shadowing, atau percakapan dengan partner.</li>
+      <li><strong>6. Membaca & menulis</strong> — Mulai dari teks pendek, lalu ke artikel atau cerita panjang.</li>
+      <li><strong>7. Gunakan bahasa Inggris dalam aktivitas sehari-hari</strong> — Misalnya menulis catatan, list belanja, atau reminder dalam bahasa Inggris.</li>
+    </ul>
+
+    <h3 class="note-subtitle">⏰ Jam Belajar Ideal</h3>
+    <p>Waktu belajar dapat disesuaikan dengan tujuan:</p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Target</th>
+          <th>Durasi Total</th>
+          <th>Rekomendasi Harian</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Pengenalan Dasar</td>
+          <td>±100 jam</td>
+          <td>30-45 menit / hari (2-4 bulan)</td>
+        </tr>
+        <tr>
+          <td>Percakapan Sehari-hari</td>
+          <td>±300 jam</td>
+          <td>45-60 menit / hari (4-6 bulan)</td>
+        </tr>
+        <tr>
+          <td>Tingkat Menengah (B1-B2)</td>
+          <td>±600 jam</td>
+          <td>1 jam / hari (8-12 bulan)</td>
+        </tr>
+        <tr>
+          <td>Tingkat Lanjutan (C1)</td>
+          <td>±1000 jam</td>
+          <td>1,5 jam / hari (1-1,5 tahun)</td>
+        </tr>
+        <tr>
+          <td>Tingkat Mahir (C2)</td>
+          <td>±2000 jam+</td>
+          <td>2 jam+ / hari (2 tahun lebih)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="note-subtitle">🌟 Tips Efektif Belajar Bahasa Inggris</h3>
+    <ul>
+      <li>Konsisten setiap hari, meskipun hanya 15-30 menit.</li>
+      <li>Jangan takut salah saat berbicara — fokus pada komunikasi, bukan kesempurnaan.</li>
+      <li>Gunakan <strong>Spaced Repetition System (SRS)</strong> seperti Anki atau aplikasi vocab.</li>
+      <li>Gabungkan <strong>input (listening & reading)</strong> dan <strong>output (speaking & writing)</strong>.</li>
+      <li>Tetapkan target yang jelas: misalnya skor TOEFL/IELTS, level CEFR, atau kemampuan percakapan tertentu.</li>
+      <li>Tonton konten asli (native) untuk membiasakan telinga dengan kecepatan dan ekspresi alami.</li>
+      <li>Gunakan bahasa Inggris dalam aktivitas sehari-hari untuk membangun kebiasaan.</li>
+    </ul>
+  </main>
+</section>
+
+<!-- ==================================================================================== -->
+<!-- General -Jawa -->
+<section id="general-jawa" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Bahasa Jawa</h2>
+    <p class="note-paragraph">
+      <strong>Bahasa Jawa</strong> adalah bahasa daerah yang digunakan oleh masyarakat Jawa, terutama di wilayah Jawa Tengah, Yogyakarta, dan Jawa Timur. Bahasa ini merupakan salah satu bahasa dengan jumlah penutur terbanyak di Indonesia. Bahasa Jawa memiliki sistem tingkat tutur yang unik, mencerminkan kesopanan dan hubungan sosial antara penutur.
+    </p>
+    <p>
+      Bahasa Jawa memiliki beberapa ciri khas:
+    </p>
+    <ul>
+      <li>Memiliki <strong>tingkatan bahasa</strong>: Ngoko (kasual), Madya (menengah), dan Krama (sopan/resmi).</li>
+      <li>Memiliki sistem penulisan sendiri, yaitu <strong>Aksara Jawa</strong>, selain huruf latin.</li>
+      <li>Struktur kalimatnya mirip bahasa Indonesia (S-P-O), tetapi banyak perbedaan kosakata dan tata bahasa.</li>
+      <li>Kaya akan <strong>ungkapan, peribahasa, dan tembung kawi</strong> (kosakata klasik).</li>
+    </ul>
+
+    <h3 class="note-subtitle">🧭 Alur Belajar Bahasa Jawa</h3>
+    <p>Berikut alur belajar Bahasa Jawa dari dasar hingga mahir:</p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Tahap</th>
+          <th>Materi Utama</th>
+          <th>Fokus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1. Dasar</td>
+          <td>Penguasaan alfabet Latin & pengenalan Aksara Jawa, kosakata dasar (kata benda, kata kerja, sapaan)</td>
+          <td>Mengenal bunyi, kosakata, dan ejaan dasar</td>
+        </tr>
+        <tr>
+          <td>2. Pemula</td>
+          <td>Pola kalimat dasar (S-P-O), kata ganti, kata tanya, ungkapan sehari-hari</td>
+          <td>Menyusun kalimat sederhana dan percakapan dasar</td>
+        </tr>
+        <tr>
+          <td>3. Menengah</td>
+          <td>Tingkatan bahasa (Ngoko - Madya - Krama), kosakata tematik, struktur kalimat lebih kompleks</td>
+          <td>Menyesuaikan tutur bahasa dengan konteks sosial</td>
+        </tr>
+        <tr>
+          <td>4. Lanjutan</td>
+          <td>Aksara Jawa dasar, idiom, peribahasa, teks sastra sederhana</td>
+          <td>Membaca & menulis dalam Aksara Jawa serta memahami konteks budaya</td>
+        </tr>
+        <tr>
+          <td>5. Mahir</td>
+          <td>Aksara Jawa lanjutan, sastra klasik, tembang Jawa, Krama Inggil dan bahasa resmi</td>
+          <td>Penggunaan bahasa Jawa yang halus, resmi, dan sastra</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="note-subtitle">📝 Cara Belajar Bahasa Jawa</h3>
+    <ul>
+      <li><strong>1. Kuasai kosakata dasar & pelafalan</strong> — Fokus pada sapaan, kata kerja, dan benda sehari-hari.</li>
+      <li><strong>2. Pelajari pola kalimat sederhana</strong> — Latih membuat kalimat dengan struktur S-P-O.</li>
+      <li><strong>3. Kenali tingkat tutur</strong> — Bedakan penggunaan Ngoko, Madya, dan Krama dalam percakapan.</li>
+      <li><strong>4. Latihan percakapan</strong> — Berlatih dengan penutur asli atau menggunakan audio/video berbahasa Jawa.</li>
+      <li><strong>5. Pelajari Aksara Jawa</strong> — Mulai dari bentuk dasar huruf, pasangan, sandhangan, dan angka.</li>
+      <li><strong>6. Baca teks Jawa sederhana</strong> — Misalnya dialog pendek atau peribahasa.</li>
+    </ul>
+
+    <h3 class="note-subtitle">⏰ Jam Belajar Ideal</h3>
+    <p>Waktu belajar bisa disesuaikan dengan tujuan:</p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Target</th>
+          <th>Durasi Total</th>
+          <th>Rekomendasi Harian</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Pengenalan Dasar</td>
+          <td>±50-100 jam</td>
+          <td>20-30 menit / hari (2-3 bulan)</td>
+        </tr>
+        <tr>
+          <td>Percakapan Sehari-hari (Ngoko)</td>
+          <td>±200 jam</td>
+          <td>30-45 menit / hari (4-6 bulan)</td>
+        </tr>
+        <tr>
+          <td>Tingkat Menengah (Madya & Krama)</td>
+          <td>±400-500 jam</td>
+          <td>1 jam / hari (6-12 bulan)</td>
+        </tr>
+        <tr>
+          <td>Aksara Jawa Dasar</td>
+          <td>±150 jam</td>
+          <td>30-45 menit / hari (3-5 bulan)</td>
+        </tr>
+        <tr>
+          <td>Tingkat Mahir (Sastra & Krama Inggil)</td>
+          <td>±800 jam+</td>
+          <td>1,5 jam+ / hari (1-2 tahun)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="note-subtitle">🌟 Tips Efektif Belajar Bahasa Jawa</h3>
+    <ul>
+      <li>Mulai dari percakapan sehari-hari agar cepat terbiasa dengan logat dan struktur.</li>
+      <li>Pelajari tingkat tutur secara bertahap — mulai dari Ngoko, lalu Madya, baru Krama.</li>
+      <li>Gunakan media lokal seperti lagu, wayang, tembang, atau acara TV Jawa untuk latihan listening.</li>
+      <li>Berlatih dengan penutur asli jika memungkinkan, terutama untuk Krama Inggil.</li>
+      <li>Belajar Aksara Jawa dengan konsisten dan bertahap, jangan sekaligus semua.</li>
+      <li>Pelajari budaya Jawa agar memahami konteks penggunaan bahasanya.</li>
+      <li>Tetapkan target mingguan dan lakukan review rutin.</li>
+    </ul>
+  </main>
+</section>
+
+<!-- General -Jawa -->
+<section id="tingkatan-bahasa" class="note-container container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Tingkatan Bahasa</h2>
+    <p class="note-paragraph">
+      <strong>Bahasa Jawa</strong> adalah bahasa daerah yang digunakan oleh masyarakat Jawa, terutama di wilayah Jawa Tengah, Yogyakarta, dan Jawa Timur. Bahasa ini merupakan salah satu bahasa dengan jumlah penutur terbanyak di Indonesia. Bahasa Jawa memiliki sistem tingkat tutur yang unik, mencerminkan kesopanan dan hubungan sosial antara penutur. Tingkatan bahasa Jawa dibagi menjadi tiga, yaitu:
+      <ul>
+        <li><strong>Ngoko:</strong> Digunakan untuk berbicara dengan teman sebaya, orang yang lebih muda, atau dalam suasana informal. Contoh: "Kowe arep menyang endi?"</li>
+        <li><strong>Madya:</strong> Tingkatan menengah antara ngoko dan krama, digunakan saat berbicara dengan orang yang lebih tua tapi masih santai. Contoh: "Sampeyan badhé menyang pundi?"</li>
+        <li><strong>Krama:</strong> Tingkatan formal atau sopan, digunakan kepada orang yang lebih tua, atasan, atau dalam situasi resmi. Contoh: "Panjenengan badhé dhateng pundi?"</li>
+      </ul>
+    </p>
+
+    <p>
+      Bahasa Jawa memiliki beberapa ciri khas:
+    </p>
+    <ul>
+      <li>Memiliki <strong>tingkatan bahasa</strong>: Ngoko (kasual), Madya (menengah), dan Krama (sopan/resmi).</li>
+      <li>Memiliki sistem penulisan sendiri, yaitu <strong>Aksara Jawa</strong>, selain huruf latin.</li>
+      <li>Struktur kalimatnya mirip bahasa Indonesia (S-P-O), tetapi banyak perbedaan kosakata dan tata bahasa.</li>
+      <li>Kaya akan <strong>ungkapan, peribahasa, dan tembung kawi</strong> (kosakata klasik).</li>
+    </ul>
+
+  <h3 class="note-subtitle">👤 Kata Ganti Orang</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Makna</th>
+        <th>Ngoko</th>
+        <th>Madya</th>
+        <th>Krama</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Aku / saya</td>
+        <td>aku</td>
+        <td>kula</td>
+        <td>kula / kawula</td>
+      </tr>
+      <tr>
+        <td>Kamu / engkau</td>
+        <td>kowe</td>
+        <td>sampeyan</td>
+        <td>panjenengan</td>
+      </tr>
+      <tr>
+        <td>Dia / ia (laki-laki)</td>
+        <td>dhèwèké</td>
+        <td>piyambakipun</td>
+        <td>panjenenganipun</td>
+      </tr>
+      <tr>
+        <td>Dia / ia (perempuan)</td>
+        <td>dhèwèké</td>
+        <td>piyambakipun</td>
+        <td>panjenenganipun</td>
+      </tr>
+      <tr>
+        <td>Kita / kami</td>
+        <td>kita</td>
+        <td>kita</td>
+        <td>kita / kawula</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <h3 class="note-subtitle">🍽 Kata Kerja Umum</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Makna</th>
+        <th>Ngoko</th>
+        <th>Madya</th>
+        <th>Krama</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>makan</td>
+        <td>mangan</td>
+        <td>dhahar</td>
+        <td>nedha</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>minum</td>
+        <td>ngombe</td>
+        <td>ngunjuk</td>
+        <td>ngunjuki</td>
+      </tr>
+          <tr><td>3</td><td>tidur</td><td>turu</td><td>sare</td><td>sare</td></tr>
+    <tr><td>4</td><td>pergi</td><td>lunga</td><td>tindak</td><td>tindak</td></tr>
+    <tr><td>5</td><td>datang</td><td>teka</td><td>rawuh</td><td>rawuh</td></tr>
+    <tr><td>6</td><td>melihat</td><td>ndeleng</td><td>mirsani</td><td>pirsani</td></tr>
+    <tr><td>7</td><td>mendengar</td><td>krungu</td><td>mirsani</td><td>pirsani</td></tr>
+    <tr><td>8</td><td>berkata</td><td>ngomong</td><td>ngendika</td><td>sesarengan</td></tr>
+    <tr><td>9</td><td>menulis</td><td>nulis</td><td>nyerat</td><td>nyerat</td></tr>
+    <tr><td>10</td><td>membaca</td><td>maca</td><td>maos</td><td>maos</td></tr>
+    <tr><td>11</td><td>membeli</td><td>tuku</td><td>tumbas</td><td>tumbas</td></tr>
+    <tr><td>12</td><td>menjual</td><td>adol</td><td>adol</td><td>adol</td></tr>
+    <tr><td>13</td><td>belajar</td><td>sinau</td><td>sinau</td><td>sinau</td></tr>
+    <tr><td>14</td><td>mengajar</td><td>mulang</td><td>mulang</td><td>mulang</td></tr>
+    <tr><td>15</td><td>bekerja</td><td>gawe</td><td>nyambut gawe</td><td>nyambut gawe</td></tr>
+    <tr><td>16</td><td>bermain</td><td>dolanan</td><td>dolanan</td><td>dolanan</td></tr>
+    <tr><td>17</td><td>berdiri</td><td>ngadeg</td><td>ngadeg</td><td>ngadeg</td></tr>
+    <tr><td>18</td><td>duduk</td><td>lungguh</td><td>lenggah</td><td>lenggah</td></tr>
+    <tr><td>19</td><td>membawa</td><td>nggawa</td><td>nggawa</td><td>nggawa</td></tr>
+    <tr><td>20</td><td>membawa pergi</td><td>nggawa lunga</td><td>nggawa tindak</td><td>nggawa tindak</td></tr>
+    <tr><td>21</td><td>membuka</td><td>mbukak</td><td>mbukak</td><td>mbukak</td></tr>
+    <tr><td>22</td><td>menutup</td><td>nutup</td><td>nutup</td><td>nutup</td></tr>
+    <tr><td>23</td><td>memasak</td><td>masak</td><td>masak</td><td>masak</td></tr>
+    <tr><td>24</td><td>mencuci</td><td>adus / ngumbah</td><td>adus / ngumbah</td><td>adus / ngumbah</td></tr>
+    <tr><td>25</td><td>membersihkan</td><td>resik-resik</td><td>resik-resik</td><td>resik-resik</td></tr>
+    <tr><td>26</td><td>menunggu</td><td>ngenteni</td><td>ngenteni</td><td>ngenteni</td></tr>
+    <tr><td>27</td><td>membantu</td><td>nulungi</td><td>paring pitulung</td><td>paring pitulung</td></tr>
+    <tr><td>28</td><td>menolong</td><td>nulungi</td><td>paring pitulung</td><td>paring pitulung</td></tr>
+    <tr><td>29</td><td>memanggil</td><td>nelpon</td><td>nyuwun rawuh</td><td>nyuwun rawuh</td></tr>
+    <tr><td>30</td><td>tidur siang</td><td>turu</td><td>sare</td><td>sare</td></tr>
+    <tr><td>31</td><td>berjalan</td><td>mlaku</td><td>mlampah</td><td>mlampah</td></tr>
+    <tr><td>32</td><td>lari</td><td>mlayu</td><td>mlampah cepet</td><td>mlampah cepet</td></tr>
+    <tr><td>33</td><td>menangis</td><td>nangis</td><td>nyuwun</td><td>nyuwun</td></tr>
+    <tr><td>34</td><td>tertawa</td><td>ngguyu</td><td>ngguyu</td><td>ngguyu</td></tr>
+    <tr><td>35</td><td>bersedih</td><td>sedih</td><td>sedih</td><td>sedih</td></tr>
+    <tr><td>36</td><td>membeli</td><td>tuku</td><td>tumbas</td><td>tumbas</td></tr>
+    <tr><td>37</td><td>membayar</td><td>mbayar</td><td>mbayar</td><td>mbayar</td></tr>
+    <tr><td>38</td><td>membuka pintu</td><td>mbukak lawang</td><td>mbukak lawang</td><td>mbukak lawang</td></tr>
+    <tr><td>39</td><td>menutup pintu</td><td>nutup lawang</td><td>nutup lawang</td><td>nutup lawang</td></tr>
+    <tr><td>40</td><td>menonton</td><td>nonton</td><td>nyemak</td><td>nyemak</td></tr>
+    <tr><td>41</td><td>mendekati</td><td>nyedhaki</td><td>nyedhaki</td><td>nyedhaki</td></tr>
+    <tr><td>42</td><td>menjauhi</td><td>adoh</td><td>adoh</td><td>adoh</td></tr>
+    <tr><td>43</td><td>memeluk</td><td>ngglenggak</td><td>ngglenggak</td><td>ngglenggak</td></tr>
+    <tr><td>44</td><td>menendang</td><td>nyepak</td><td>nyepak</td><td>nyepak</td></tr>
+    <tr><td>45</td><td>memukul</td><td>nyambut</td><td>nyambut</td><td>nyambut</td></tr>
+    <tr><td>46</td><td>menari</td><td>joged</td><td>joged</td><td>joged</td></tr>
+    <tr><td>47</td><td>bernyanyi</td><td>nyanyi</td><td>nyanyi</td><td>nyanyi</td></tr>
+    <tr><td>48</td><td>menunggu</td><td>ngenteni</td><td>ngenteni</td><td>ngenteni</td></tr>
+    <tr><td>49</td><td>menyanyi</td><td>nyanyi</td><td>nyanyi</td><td>nyanyi</td></tr>
+    <tr><td>50</td><td>berdoa</td><td>ndedonga</td><td>ndedonga</td><td>ndedonga</td></tr>
+        <tr><td>51</td><td>membuka buku</td><td>mbukak buku</td><td>mbukak buku</td><td>mbukak buku</td></tr>
+    <tr><td>52</td><td>menutup buku</td><td>nutup buku</td><td>nutup buku</td><td>nutup buku</td></tr>
+    <tr><td>53</td><td>menulis surat</td><td>nulis layang</td><td>nyerat layang</td><td>nyerat layang</td></tr>
+    <tr><td>54</td><td>membaca surat</td><td>maca layang</td><td>maos layang</td><td>maos layang</td></tr>
+    <tr><td>55</td><td>membeli makanan</td><td>tuku panganan</td><td>tumbas panganan</td><td>tumbas panganan</td></tr>
+    <tr><td>56</td><td>menjual makanan</td><td>adol panganan</td><td>adol panganan</td><td>adol panganan</td></tr>
+    <tr><td>57</td><td>menyiapkan</td><td>nyiapake</td><td>nyiapake</td><td>nyiapake</td></tr>
+    <tr><td>58</td><td>memasukkan</td><td>mlebuake</td><td>mlebuake</td><td>mlebuake</td></tr>
+    <tr><td>59</td><td>mengeluarkan</td><td>metuake</td><td>metuake</td><td>metuake</td></tr>
+    <tr><td>60</td><td>memotong</td><td>motong</td><td>motong</td><td>motong</td></tr>
+    <tr><td>61</td><td>memetik</td><td>nyokot</td><td>nyokot</td><td>nyokot</td></tr>
+    <tr><td>62</td><td>menyiram</td><td>nyiram</td><td>nyiram</td><td>nyiram</td></tr>
+    <tr><td>63</td><td>menanam</td><td>nandur</td><td>nandur</td><td>nandur</td></tr>
+    <tr><td>64</td><td>menyapu</td><td>nyapu</td><td>nyapu</td><td>nyapu</td></tr>
+    <tr><td>65</td><td>mengepel</td><td>ngepel</td><td>ngepel</td><td>ngepel</td></tr>
+    <tr><td>66</td><td>menyetrika</td><td>nyetrika</td><td>nyetrika</td><td>nyetrika</td></tr>
+    <tr><td>67</td><td>mencuci pakaian</td><td>ngumbah klambi</td><td>ngumbah klambi</td><td>ngumbah klambi</td></tr>
+    <tr><td>68</td><td>menggantung</td><td>nggantung</td><td>nggantung</td><td>nggantung</td></tr>
+    <tr><td>69</td><td>menaruh</td><td>nyeleh</td><td>nyeleh</td><td>nyeleh</td></tr>
+    <tr><td>70</td><td>meletakkan</td><td>nyelehake</td><td>nyelehake</td><td>nyelehake</td></tr>
+    <tr><td>71</td><td>mengambil</td><td>njupuk</td><td>nyuwun</td><td>nyuwun</td></tr>
+    <tr><td>72</td><td>membawa pulang</td><td>nggawa mulih</td><td>nggawa mulih</td><td>nggawa mulih</td></tr>
+    <tr><td>73</td><td>mengantar</td><td>ngantar</td><td>ngantar</td><td>ngantar</td></tr>
+    <tr><td>74</td><td>menggendong</td><td>nggendong</td><td>nggendong</td><td>nggendong</td></tr>
+    <tr><td>75</td><td>membangunkan</td><td>tangiake</td><td>tangiake</td><td>tangiake</td></tr>
+    <tr><td>76</td><td>menyentuh</td><td>nyentuh</td><td>nyentuh</td><td>nyentuh</td></tr>
+    <tr><td>77</td><td>memelihara</td><td>nresnani</td><td>nresnani</td><td>nresnani</td></tr>
+    <tr><td>78</td><td>memancing</td><td>mancing</td><td>mancing</td><td>mancing</td></tr>
+    <tr><td>79</td><td>berbicara</td><td>ngomong</td><td>ngendika</td><td>sesarengan</td></tr>
+    <tr><td>80</td><td>mendiskusikan</td><td>rembug</td><td>rembug</td><td>rembug</td></tr>
+    <tr><td>81</td><td>bertanya</td><td>takon</td><td>nyuwun pirsa</td><td>nyuwun pirsa</td></tr>
+    <tr><td>82</td><td>menjawab</td><td>wangsul</td><td>wangsul</td><td>wangsul</td></tr>
+    <tr><td>83</td><td>menolong orang</td><td>nulungi</td><td>paring pitulung</td><td>paring pitulung</td></tr>
+    <tr><td>84</td><td>membawa barang</td><td>nggawa barang</td><td>nggawa barang</td><td>nggawa barang</td></tr>
+    <tr><td>85</td><td>memasang</td><td>masang</td><td>masang</td><td>masang</td></tr>
+    <tr><td>86</td><td>melepaskan</td><td>ngeculake</td><td>ngeculake</td><td>ngeculake</td></tr>
+    <tr><td>87</td><td>menaruh di atas</td><td>nyeleh ing ndhuwur</td><td>nyeleh ing ndhuwur</td><td>nyeleh ing ndhuwur</td></tr>
+    <tr><td>88</td><td>menaruh di bawah</td><td>nyeleh ing ngisor</td><td>nyeleh ing ngisor</td><td>nyeleh ing ngisor</td></tr>
+    <tr><td>89</td><td>mengangkat</td><td>ngangkat</td><td>ngangkat</td><td>ngangkat</td></tr>
+    <tr><td>90</td><td>menurunkan</td><td>nurunake</td><td>nurunake</td><td>nurunake</td></tr>
+    <tr><td>91</td><td>menutup mata</td><td>nutup mripat</td><td>nutup mripat</td><td>nutup mripat</td></tr>
+    <tr><td>92</td><td>membuka mata</td><td>mbukak mripat</td><td>mbukak mripat</td><td>mbukak mripat</td></tr>
+    <tr><td>93</td><td>menunggu teman</td><td>ngenteni kanca</td><td>ngenteni rencang</td><td>ngenteni rencang</td></tr>
+    <tr><td>94</td><td>bertemu</td><td>ketemu</td><td>patepungan</td><td>patepungan</td></tr>
+    <tr><td>95</td><td>berpisah</td><td>pisah</td><td>pamit</td><td>pamit</td></tr>
+    <tr><td>96</td><td>memaafkan</td><td>ngapura</td><td>ngapura</td><td>ngapura</td></tr>
+    <tr><td>97</td><td>memuji</td><td>muji</td><td>muji</td><td>muji</td></tr>
+    <tr><td>98</td><td>menghina</td><td>ngina</td><td>ngina</td><td>ngina</td></tr>
+    <tr><td>99</td><td>menangkap</td><td>nangkep</td><td>nyekel</td><td>nyekel</td></tr>
+    <tr><td>100</td><td>melempar</td><td>nglempar</td><td>nglempar</td><td>nglempar</td></tr>
+    <tr><td>101</td><td>menolong hewan</td><td>nulungi kéwan</td><td>paring pitulung kéwan</td><td>paring pitulung kéwan</td></tr>
+    <tr><td>102</td><td>memberi makan</td><td>menehi mangan</td><td>paring dhahar</td><td>paring dhahar</td></tr>
+    <tr><td>103</td><td>mengambil air</td><td>njupuk banyu</td><td>nyuwun banyu</td><td>nyuwun banyu</td></tr>
+    <tr><td>104</td><td>menuang</td><td>ngeculake</td><td>ngeculake</td><td>ngeculake</td></tr>
+    <tr><td>105</td><td>mencampur</td><td>ngcampur</td><td>ngcampur</td><td>ngcampur</td></tr>
+    <tr><td>106</td><td>menambahkan</td><td>nambahake</td><td>nambahake</td><td>nambahake</td></tr>
+    <tr><td>107</td><td>mengurangi</td><td>nyuda</td><td>nyuda</td><td>nyuda</td></tr>
+    <tr><td>108</td><td>menimbang</td><td>nimbang</td><td>nimbang</td><td>nimbang</td></tr>
+    <tr><td>109</td><td>memetik buah</td><td>nyokot woh</td><td>nyokot woh</td><td>nyokot woh</td></tr>
+    <tr><td>110</td><td>memotong sayur</td><td>motong sayur</td><td>motong sayur</td><td>motong sayur</td></tr>
+    <tr><td>111</td><td>memanaskan</td><td>panasake</td><td>panasake</td><td>panasake</td></tr>
+    <tr><td>112</td><td>mendinginkan</td><td>adhemake</td><td>adhemake</td><td>adhemake</td></tr>
+    <tr><td>113</td><td>menyalakan lampu</td><td>nyalakake lampu</td><td>nyalakake lampu</td><td>nyalakake lampu</td></tr>
+    <tr><td>114</td><td>mematikan lampu</td><td>mateni lampu</td><td>mateni lampu</td><td>mateni lampu</td></tr>
+    <tr><td>115</td><td>membuka jendela</td><td>mbukak jendhela</td><td>mbukak jendhela</td><td>mbukak jendhela</td></tr>
+    <tr><td>116</td><td>menutup jendela</td><td>nutup jendhela</td><td>nutup jendhela</td><td>nutup jendhela</td></tr>
+    <tr><td>117</td><td>mengangkat telepon</td><td>ngangkat telpon</td><td>ngangkat telpon</td><td>ngangkat telpon</td></tr>
+    <tr><td>118</td><td>menaruh di meja</td><td>nyeleh ing meja</td><td>nyeleh ing meja</td><td>nyeleh ing meja</td></tr>
+    <tr><td>119</td><td>mengambil dari meja</td><td>njupuk saka meja</td><td>nyuwun saka meja</td><td>nyuwun saka meja</td></tr>
+    <tr><td>120</td><td>menyalakan kompor</td><td>nyalakake kompor</td><td>nyalakake kompor</td><td>nyalakake kompor</td></tr>
+    <tr><td>121</td><td>mematikan kompor</td><td>mateni kompor</td><td>mateni kompor</td><td>mateni kompor</td></tr>
+    <tr><td>122</td><td>memasukkan ke lemari</td><td>mlebuake ing lemari</td><td>mlebuake ing lemari</td><td>mlebuake ing lemari</td></tr>
+    <tr><td>123</td><td>mengambil dari lemari</td><td>njupuk saka lemari</td><td>nyuwun saka lemari</td><td>nyuwun saka lemari</td></tr>
+    <tr><td>124</td><td>menimbang bahan</td><td>nimbang bahan</td><td>nimbang bahan</td><td>nimbang bahan</td></tr>
+    <tr><td>125</td><td>mengaduk</td><td>ngaduk</td><td>ngaduk</td><td>ngaduk</td></tr>
+    <tr><td>126</td><td>memotong kertas</td><td>motong kertas</td><td>motong kertas</td><td>motong kertas</td></tr>
+    <tr><td>127</td><td>menempel</td><td>nempel</td><td>nempel</td><td>nempel</td></tr>
+    <tr><td>128</td><td>menulis nama</td><td>nulis jeneng</td><td>nyerat jeneng</td><td>nyerat jeneng</td></tr>
+    <tr><td>129</td><td>membaca nama</td><td>maca jeneng</td><td>maos jeneng</td><td>maos jeneng</td></tr>
+    <tr><td>130</td><td>membuka kotak</td><td>mbukak kothak</td><td>mbukak kothak</td><td>mbukak kothak</td></tr>
+    <tr><td>131</td><td>menutup kotak</td><td>nutup kothak</td><td>nutup kothak</td><td>nutup kothak</td></tr>
+    <tr><td>132</td><td>memeriksa</td><td>mriksa</td><td>mriksa</td><td>mriksa</td></tr>
+    <tr><td>133</td><td>memperbaiki</td><td>ndandani</td><td>ndandani</td><td>ndandani</td></tr>
+    <tr><td>134</td><td>merusak</td><td>ngrusak</td><td>ngrusak</td><td>ngrusak</td></tr>
+    <tr><td>135</td><td>mengambil uang</td><td>njupuk dhuwit</td><td>nyuwun dhuwit</td><td>nyuwun dhuwit</td></tr>
+    <tr><td>136</td><td>membayar tagihan</td><td>mbayar tagihan</td><td>mbayar tagihan</td><td>mbayar tagihan</td></tr>
+    <tr><td>137</td><td>membeli tiket</td><td>tuku tiket</td><td>tumbas tiket</td><td>tumbas tiket</td></tr>
+    <tr><td>138</td><td>membeli bensin</td><td>tuku bensin</td><td>tumbas bensin</td><td>tumbas bensin</td></tr>
+    <tr><td>139</td><td>menyalakan kendaraan</td><td>nyalakake kendharaan</td><td>nyalakake kendharaan</td><td>nyalakake kendharaan</td></tr>
+    <tr><td>140</td><td>mematikan kendaraan</td><td>mateni kendharaan</td><td>mateni kendharaan</td><td>mateni kendharaan</td></tr>
+    <tr><td>141</td><td>mengendarai sepeda</td><td>numpak sepeda</td><td>numpak sepeda</td><td>numpak sepeda</td></tr>
+    <tr><td>142</td><td>mengendarai motor</td><td>numpak motor</td><td>numpak motor</td><td>numpak motor</td></tr>
+    <tr><td>143</td><td>mengendarai mobil</td><td>numpak mobil</td><td>numpak mobil</td><td>numpak mobil</td></tr>
+    <tr><td>144</td><td>menyalakan radio</td><td>nyalakake radio</td><td>nyalakake radio</td><td>nyalakake radio</td></tr>
+    <tr><td>145</td><td>mematikan radio</td><td>mateni radio</td><td>mateni radio</td><td>mateni radio</td></tr>
+    <tr><td>146</td><td>menonton televisi</td><td>nonton TV</td><td>nyemak TV</td><td>nyemak TV</td></tr>
+    <tr><td>147</td><td>menutup televisi</td><td>mateni TV</td><td>mateni TV</td><td>mateni TV</td></tr>
+    <tr><td>148</td><td>menghidupkan AC</td><td>nyalakake AC</td><td>nyalakake AC</td><td>nyalakake AC</td></tr>
+    <tr><td>149</td><td>mematikan AC</td><td>mateni AC</td><td>mateni AC</td><td>mateni AC</td></tr>
+    <tr><td>150</td><td>membersihkan lantai</td><td>nyapu lantai</td><td>nyapu lantai</td><td>nyapu lantai</td></tr>
+    <tr><td>151</td><td>membersihkan meja</td><td>ngresiki meja</td><td>ngresiki meja</td><td>ngresiki meja</td></tr>
+    <tr><td>152</td><td>membersihkan kamar</td><td>ngresiki kamar</td><td>ngresiki kamar</td><td>ngresiki kamar</td></tr>
+    <tr><td>153</td><td>menata barang</td><td>natas barang</td><td>natas barang</td><td>natas barang</td></tr>
+    <tr><td>154</td><td>menyapu halaman</td><td>nyapu halaman</td><td>nyapu halaman</td><td>nyapu halaman</td></tr>
+    <tr><td>155</td><td>mengepel lantai</td><td>ngepel lantai</td><td>ngepel lantai</td><td>ngepel lantai</td></tr>
+    <tr><td>156</td><td>membuka pintu gerbang</td><td>mbukak gapura</td><td>mbukak gapura</td><td>mbukak gapura</td></tr>
+    <tr><td>157</td><td>menutup pintu gerbang</td><td>nutup gapura</td><td>nutup gapura</td><td>nutup gapura</td></tr>
+    <tr><td>158</td><td>menyalakan lampu taman</td><td>nyalakake lampu taman</td><td>nyalakake lampu taman</td><td>nyalakake lampu taman</td></tr>
+    <tr><td>159</td><td>mematikan lampu taman</td><td>mateni lampu taman</td><td>mateni lampu taman</td><td>mateni lampu taman</td></tr>
+    <tr><td>160</td><td>menyalakan kompor gas</td><td>nyalakake kompor gas</td><td>nyalakake kompor gas</td><td>nyalakake kompor gas</td></tr>
+    <tr><td>161</td><td>mematikan kompor gas</td><td>mateni kompor gas</td><td>mateni kompor gas</td><td>mateni kompor gas</td></tr>
+    <tr><td>162</td><td>menanak nasi</td><td>masak sega</td><td>masak sega</td><td>masak sega</td></tr>
+    <tr><td>163</td><td>merebus air</td><td>godhok banyu</td><td>godhok banyu</td><td>godhok banyu</td></tr>
+    <tr><td>164</td><td>menggoreng</td><td>goreng</td><td>goreng</td><td>goreng</td></tr>
+    <tr><td>165</td><td>menumis</td><td>numis</td><td>nummis</td><td>nummis</td></tr>
+    <tr><td>166</td><td>memotong daging</td><td>motong daging</td><td>motong daging</td><td>motong daging</td></tr>
+    <tr><td>167</td><td>mencuci piring</td><td>ngumbah piring</td><td>ngumbah piring</td><td>ngumbah piring</td></tr>
+    <tr><td>168</td><td>menjemur pakaian</td><td>ngangin-angini klambi</td><td>ngangin-angini klambi</td><td>ngangin-angini klambi</td></tr>
+    <tr><td>169</td><td>menata pakaian</td><td>natas klambi</td><td>natas klambi</td><td>natas klambi</td></tr>
+    <tr><td>170</td><td>menyetrika pakaian</td><td>nyetrika klambi</td><td>nyetrika klambi</td><td>nyetrika klambi</td></tr>
+    <tr><td>171</td><td>membuka kulkas</td><td>mbukak kulkas</td><td>mbukak kulkas</td><td>mbukak kulkas</td></tr>
+    <tr><td>172</td><td>menutup kulkas</td><td>nutup kulkas</td><td>nutup kulkas</td><td>nutup kulkas</td></tr>
+    <tr><td>173</td><td>mengambil makanan dari kulkas</td><td>njupuk panganan saka kulkas</td><td>nyuwun panganan saka kulkas</td><td>nyuwun panganan saka kulkas</td></tr>
+    <tr><td>174</td><td>menaruh makanan di kulkas</td><td>nyeleh panganan ing kulkas</td><td>nyeleh panganan ing kulkas</td><td>nyeleh panganan ing kulkas</td></tr>
+    <tr><td>175</td><td>menyalakan lampu dapur</td><td>nyalakake lampu pawon</td><td>nyalakake lampu pawon</td><td>nyalakake lampu pawon</td></tr>
+    <tr><td>176</td><td>mematikan lampu dapur</td><td>mateni lampu pawon</td><td>mateni lampu pawon</td><td>mateni lampu pawon</td></tr>
+    <tr><td>177</td><td>menyalakan mesin cuci</td><td>nyalakake mesin cuci</td><td>nyalakake mesin cuci</td><td>nyalakake mesin cuci</td></tr>
+    <tr><td>178</td><td>mematikan mesin cuci</td><td>mateni mesin cuci</td><td>mateni mesin cuci</td><td>mateni mesin cuci</td></tr>
+    <tr><td>179</td><td>menaruh baju kotor di mesin cuci</td><td>nyeleh klambi reged ing mesin cuci</td><td>nyeleh klambi reged ing mesin cuci</td><td>nyeleh klambi reged ing mesin cuci</td></tr>
+    <tr><td>180</td><td>menjemur baju</td><td>ngangin-angini klambi</td><td>ngangin-angini klambi</td><td>ngangin-angini klambi</td></tr>
+    <tr><td>181</td><td>menonton film</td><td>nonton film</td><td>nyemak film</td><td>nyemak film</td></tr>
+    <tr><td>182</td><td>mendengarkan musik</td><td>ngrungokake musik</td><td>ngrungokake musik</td><td>ngrungokake musik</td></tr>
+    <tr><td>183</td><td>membaca buku cerita</td><td>maca buku crita</td><td>maos buku crita</td><td>maos buku crita</td></tr>
+    <tr><td>184</td><td>menulis catatan</td><td>nulis cathetan</td><td>nyerat cathetan</td><td>nyerat cathetan</td></tr>
+    <tr><td>185</td><td>belajar pelajaran</td><td>sinau pelajaran</td><td>sinau pelajaran</td><td>sinau pelajaran</td></tr>
+    <tr><td>186</td><td>mengerjakan PR</td><td>nggarap PR</td><td>nggarap PR</td><td>nggarap PR</td></tr>
+    <tr><td>187</td><td>menulis surat</td><td>nulis layang</td><td>nyerat layang</td><td>nyerat layang</td></tr>
+    <tr><td>188</td><td>mengirim surat</td><td>ngirim layang</td><td>ngirim layang</td><td>ngirim layang</td></tr>
+    <tr><td>189</td><td>menerima surat</td><td>nampa layang</td><td>nampi layang</td><td>nampi layang</td></tr>
+    <tr><td>190</td><td>membaca koran</td><td>maca koran</td><td>maos koran</td><td>maos koran</td></tr>
+    <tr><td>191</td><td>menulis artikel</td><td>nulis artikel</td><td>nyerat artikel</td><td>nyerat artikel</td></tr>
+    <tr><td>192</td><td>berbicara dengan teman</td><td>ngomong karo kanca</td><td>ngendika karo rencang</td><td>sesarengan karo rencang</td></tr>
+    <tr><td>193</td><td>menanyakan kabar</td><td>takon kabar</td><td>nyuwun kabar</td><td>nyuwun kabar</td></tr>
+    <tr><td>194</td><td>menjawab pertanyaan</td><td>wangsul pitakon</td><td>wangsul pitakon</td><td>wangsul pitakon</td></tr>
+    <tr><td>195</td><td>menolong orang tua</td><td>nulungi wong tuwa</td><td>paring pitulung dhumateng tiyang sepuh</td><td>paring pitulung dhumateng tiyang sepuh</td></tr>
+    <tr><td>196</td><td>membersihkan halaman</td><td>nyapu halaman</td><td>nyapu halaman</td><td>nyapu halaman</td></tr>
+    <tr><td>197</td><td>menanam bunga</td><td>nandur kembang</td><td>nandur kembang</td><td>nandur kembang</td></tr>
+    <tr><td>198</td><td>menyiram tanaman</td><td>nyiram tanduran</td><td>nyiram tanduran</td><td>nyiram tanduran</td></tr>
+    <tr><td>199</td><td>memangkas tanaman</td><td>motong tanduran</td><td>motong tanduran</td><td>motong tanduran</td></tr>
+    <tr><td>200</td><td>merawat tanaman</td><td>ngopeni tanduran</td><td>ngopeni tanduran</td><td>ngopeni tanduran</td></tr>
+    </tbody>
+  </table>
+
+  
+  <h3 class="note-subtitle">🍽 Kata Benda</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Makna</th>
+        <th>Ngoko</th>
+        <th>Madya</th>
+        <th>Krama</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>meja</td><td>meja</td><td>meja</td><td>pawon / mejah</td></tr>
+<tr><td>2</td><td>kursi</td><td>kursi</td><td>kursi</td><td>dhapuran</td></tr>
+<tr><td>3</td><td>rumah</td><td>omah</td><td>griya</td><td>dalem</td></tr>
+<tr><td>4</td><td>pintu</td><td>lawang</td><td>lawang</td><td>lawang</td></tr>
+<tr><td>5</td><td>jendela</td><td>jendhela</td><td>jendhela</td><td>jendhela</td></tr>
+<tr><td>6</td><td>lemari</td><td>lemari</td><td>almari</td><td>almari</td></tr>
+<tr><td>7</td><td>tempat tidur</td><td>amben</td><td>amben</td><td>kasur</td></tr>
+<tr><td>8</td><td>bantal</td><td>bantal</td><td>guling</td><td>guling</td></tr>
+<tr><td>9</td><td>selimut</td><td>selimut</td><td>selimut</td><td>selimut</td></tr>
+<tr><td>10</td><td>pakaian</td><td>klambi</td><td>busana</td><td>busana</td></tr>
+<tr><td>11</td><td>sepatu</td><td>sepatu</td><td>sepatu</td><td>sepatu</td></tr>
+<tr><td>12</td><td>sandal</td><td>sandal</td><td>sandal</td><td>sandal</td></tr>
+<tr><td>13</td><td>topi</td><td>topi</td><td>topi</td><td>topi</td></tr>
+<tr><td>14</td><td>tas</td><td>tas</td><td>tas</td><td>tas</td></tr>
+<tr><td>15</td><td>kunci</td><td>kunci</td><td>kunci</td><td>kunci</td></tr>
+<tr><td>16</td><td>telepon</td><td>telpon</td><td>telpon</td><td>telepon</td></tr>
+<tr><td>17</td><td>televisi</td><td>TV</td><td>TV</td><td>TV</td></tr>
+<tr><td>18</td><td>radio</td><td>radio</td><td>radio</td><td>radio</td></tr>
+<tr><td>19</td><td>komputer</td><td>komputer</td><td>komputer</td><td>komputer</td></tr>
+<tr><td>20</td><td>buku</td><td>buku</td><td>buku</td><td>serat</td></tr>
+<tr><td>21</td><td>pensil</td><td>pensil</td><td>pensil</td><td>pensil</td></tr>
+<tr><td>22</td><td>pulpen</td><td>bolpoin</td><td>bolpoin</td><td>bolpoin</td></tr>
+<tr><td>23</td><td>kertas</td><td>kertas</td><td>kertas</td><td>kertas</td></tr>
+<tr><td>24</td><td>alat tulis</td><td>alat tulis</td><td>alat tulis</td><td>piranti nyerat</td></tr>
+<tr><td>25</td><td>tas sekolah</td><td>tas sekolah</td><td>tas sekolah</td><td>tas sekolah</td></tr>
+<tr><td>26</td><td>mobil</td><td>mobil</td><td>mobil</td><td>montor</td></tr>
+<tr><td>27</td><td>sepeda motor</td><td>motor</td><td>motor</td><td>montor</td></tr>
+<tr><td>28</td><td>sepeda</td><td>sepeda</td><td>sepeda</td><td>pit</td></tr>
+<tr><td>29</td><td>makanan</td><td>pangan</td><td>dhaharan</td><td>dhaharan</td></tr>
+<tr><td>30</td><td>minuman</td><td>omben</td><td>ombenan</td><td>toya</td></tr>
+<tr><td>31</td><td>nasi</td><td>sega</td><td>dhaharan</td><td>dhaharan</td></tr>
+<tr><td>32</td><td>daging</td><td>daging</td><td>daging</td><td>daging</td></tr>
+<tr><td>33</td><td>ikan</td><td>iwak</td><td>iwak</td><td>iwak</td></tr>
+<tr><td>34</td><td>sayur</td><td>sayur</td><td>sayur</td><td>sayur</td></tr>
+<tr><td>35</td><td>buah</td><td>woh</td><td>woh</td><td>woh</td></tr>
+<tr><td>36</td><td>gula</td><td>gula</td><td>gula</td><td>gula</td></tr>
+<tr><td>37</td><td>garam</td><td>uyah</td><td>uyah</td><td>uyah</td></tr>
+<tr><td>38</td><td>air</td><td>banyu</td><td>toya</td><td>toya</td></tr>
+<tr><td>39</td><td>teh</td><td>teh</td><td>teh</td><td>teh</td></tr>
+<tr><td>40</td><td>kopi</td><td>kopi</td><td>kopi</td><td>kopi</td></tr>
+<tr><td>41</td><td>susu</td><td>susu</td><td>susu</td><td>susu</td></tr>
+<tr><td>42</td><td>telur</td><td>endhog</td><td>endhog</td><td>endhog</td></tr>
+<tr><td>43</td><td>ayam</td><td>pitik</td><td>pitik</td><td>pitik</td></tr>
+<tr><td>44</td><td>sapi</td><td>sapi</td><td>sapi</td><td>sapi</td></tr>
+<tr><td>45</td><td>kambing</td><td>wedhus</td><td>wedhus</td><td>wedhus</td></tr>
+<tr><td>46</td><td>anjing</td><td>asu</td><td>asu</td><td>asu</td></tr>
+<tr><td>47</td><td>kucing</td><td>kucing</td><td>kucing</td><td>kucing</td></tr>
+<tr><td>48</td><td>burung</td><td>manuk</td><td>manuk</td><td>manuk</td></tr>
+<tr><td>49</td><td>bunga</td><td>kembang</td><td>kembang</td><td>kembang</td></tr>
+<tr><td>50</td><td>pohon</td><td>wit</td><td>wit</td><td>wit</td></tr>
+<tr><td>51</td><td>sekolah</td><td>sekolah</td><td>sekolah</td><td>pawiyatan</td></tr>
+<tr><td>52</td><td>guru</td><td>guru</td><td>guru</td><td>guru</td></tr>
+<tr><td>53</td><td>murid</td><td>murid</td><td>murid</td><td>siswa</td></tr>
+<tr><td>54</td><td>kelas</td><td>kelas</td><td>kelas</td><td>pawiyatan</td></tr>
+<tr><td>55</td><td>meja belajar</td><td>meja belajar</td><td>meja belajar</td><td>mejah sinau</td></tr>
+<tr><td>56</td><td>kursi belajar</td><td>kursi belajar</td><td>kursi belajar</td><td>dhapuran sinau</td></tr>
+<tr><td>57</td><td>papan tulis</td><td>papan tulis</td><td>papan tulis</td><td>papan tulis</td></tr>
+<tr><td>58</td><td>kapur</td><td>kapur</td><td>kapur</td><td>kapur</td></tr>
+<tr><td>59</td><td>buku pelajaran</td><td>buku pelajaran</td><td>buku pelajaran</td><td>serat sinau</td></tr>
+<tr><td>60</td><td>tas sekolah</td><td>tas sekolah</td><td>tas sekolah</td><td>tas sekolah</td></tr>
+<tr><td>61</td><td>pensil warna</td><td>pensil warna</td><td>pensil warna</td><td>pensil warna</td></tr>
+<tr><td>62</td><td>penghapus</td><td>penghapus</td><td>penghapus</td><td>penghapus</td></tr>
+<tr><td>63</td><td>gunting</td><td>gunting</td><td>gunting</td><td>gunting</td></tr>
+<tr><td>64</td><td>lem</td><td>lem</td><td>lem</td><td>lem</td></tr>
+<tr><td>65</td><td>spidol</td><td>spidol</td><td>spidol</td><td>spidol</td></tr>
+<tr><td>66</td><td>papan pengumuman</td><td>papan pengumuman</td><td>papan pengumuman</td><td>papan pangumuman</td></tr>
+<tr><td>67</td><td>teman</td><td>kanca</td><td>rencang</td><td>rerencangan</td></tr>
+<tr><td>68</td><td>kakak</td><td>kakang / mbak</td><td>mas / mbak</td><td>mas / mbak</td></tr>
+<tr><td>69</td><td>adik</td><td>adhik / mbakyu</td><td>mas / mbakyu</td><td>mas / mbakyu</td></tr>
+<tr><td>70</td><td>orang tua</td><td>wong tuwa</td><td>tiyang sepuh</td><td>sesepuh</td></tr>
+<tr><td>71</td><td>nenek</td><td>eyang putri</td><td>eyang putri</td><td>sesepuh putri</td></tr>
+<tr><td>72</td><td>kakek</td><td>eyang kakung</td><td>eyang kakung</td><td>sesepuh kakung</td></tr>
+<tr><td>73</td><td>saudara</td><td>sedulur</td><td>sedulur</td><td>para sedulur</td></tr>
+<tr><td>74</td><td>tetangga</td><td>tangga</td><td>tangga</td><td>tangga</td></tr>
+<tr><td>75</td><td>teman dekat</td><td>kanca cedhak</td><td>rencang cedhak</td><td>rerencangan cedhak</td></tr>
+<tr><td>76</td><td>jalan</td><td>dalan</td><td>dalan</td><td>dalan</td></tr>
+<tr><td>77</td><td>pasar</td><td>pasar</td><td>pasar</td><td>pasar</td></tr>
+<tr><td>78</td><td>toko</td><td>toko</td><td>toko</td><td>toko</td></tr>
+<tr><td>79</td><td>warung</td><td>warung</td><td>warung</td><td>warung</td></tr>
+<tr><td>80</td><td>kantor</td><td>kantor</td><td>kantor</td><td>kantor</td></tr>
+<tr><td>81</td><td>rumah sakit</td><td>rumah sakit</td><td>rumah sakit</td><td>griya sehat</td></tr>
+<tr><td>82</td><td>apotek</td><td>apotek</td><td>apotek</td><td>apotek</td></tr>
+<tr><td>83</td><td>bank</td><td>bank</td><td>bank</td><td>bank</td></tr>
+<tr><td>84</td><td>kendaraan</td><td>kendharaan</td><td>kendharaan</td><td>montor</td></tr>
+<tr><td>85</td><td>mobil</td><td>mobil</td><td>mobil</td><td>montor</td></tr>
+<tr><td>86</td><td>motor</td><td>motor</td><td>motor</td><td>montor</td></tr>
+<tr><td>87</td><td>sepeda</td><td>sepeda</td><td>sepeda</td><td>pit</td></tr>
+<tr><td>88</td><td>jalan raya</td><td>dalan raya</td><td>dalan raya</td><td>dalan ageng</td></tr>
+<tr><td>89</td><td>lampu</td><td>lampu</td><td>lampu</td><td>lampu</td></tr>
+<tr><td>90</td><td>jembatan</td><td>jembatan</td><td>jembatan</td><td>jembatan</td></tr>
+<tr><td>91</td><td>sungai</td><td>kali</td><td>kali</td><td>kali</td></tr>
+<tr><td>92</td><td>danau</td><td>danau</td><td>danau</td><td>danau</td></tr>
+<tr><td>93</td><td>gunung</td><td>gunung</td><td>gunung</td><td>gunung</td></tr>
+<tr><td>94</td><td>bukit</td><td>bukit</td><td>bukit</td><td>bukit</td></tr>
+<tr><td>95</td><td>hutan</td><td>alas</td><td>alas</td><td>alas</td></tr>
+<tr><td>96</td><td>taman</td><td>taman</td><td>taman</td><td>taman</td></tr>
+<tr><td>97</td><td>pohon</td><td>wit</td><td>wit</td><td>wit</td></tr>
+<tr><td>98</td><td>bunga</td><td>kembang</td><td>kembang</td><td>kembang</td></tr>
+<tr><td>99</td><td>rumput</td><td>suket</td><td>suket</td><td>suket</td></tr>
+<tr><td>100</td><td>tanah</td><td>lemah</td><td>lemah</td><td>lemah</td></tr>
+<tr><td>101</td><td>langit</td><td>langit</td><td>langit</td><td>langit</td></tr>
+<tr><td>102</td><td>awan</td><td>mega</td><td>mega</td><td>mega</td></tr>
+<tr><td>103</td><td>matahari</td><td>srengenge</td><td>srengéngé</td><td>srengéngé</td></tr>
+<tr><td>104</td><td>bulan</td><td>rembulan</td><td>rembulan</td><td>rembulan</td></tr>
+<tr><td>105</td><td>bintang</td><td>lintang</td><td>lintang</td><td>lintang</td></tr>
+<tr><td>106</td><td>hujan</td><td>udan</td><td>udan</td><td>udan</td></tr>
+<tr><td>107</td><td>angin</td><td>angin</td><td>angin</td><td>angin</td></tr>
+<tr><td>108</td><td>petir</td><td>petir</td><td>petir</td><td>petir</td></tr>
+<tr><td>109</td><td>guntur</td><td>guntur</td><td>guntur</td><td>guntur</td></tr>
+<tr><td>110</td><td>salju</td><td>salju</td><td>salju</td><td>salju</td></tr>
+<tr><td>111</td><td>es</td><td>es</td><td>es</td><td>es</td></tr>
+<tr><td>112</td><td>sungai kecil</td><td>kali cilik</td><td>kali cilik</td><td>kali cilik</td></tr>
+<tr><td>113</td><td>laut</td><td>segara</td><td>segara</td><td>segara</td></tr>
+<tr><td>114</td><td>pantai</td><td>pantai</td><td>pantai</td><td>pantai</td></tr>
+<tr><td>115</td><td>pulau</td><td>pulo</td><td>pulo</td><td>pulo</td></tr>
+<tr><td>116</td><td>desa</td><td>desa</td><td>desa</td><td>desa</td></tr>
+<tr><td>117</td><td>kota</td><td>kutha</td><td>kutha</td><td>kutha</td></tr>
+<tr><td>118</td><td>ibu kota</td><td>ibukota</td><td>ibukota</td><td>ibukota</td></tr>
+<tr><td>119</td><td>jalan setapak</td><td>dalan cilik</td><td>dalan cilik</td><td>dalan cilik</td></tr>
+<tr><td>120</td><td>lapangan</td><td>lapangan</td><td>lapangan</td><td>lapangan</td></tr>
+<tr><td>121</td><td>stadion</td><td>stadion</td><td>stadion</td><td>stadion</td></tr>
+<tr><td>122</td><td>sekolah dasar</td><td>sekolah dasar</td><td>sekolah dasar</td><td>pawiyatan dasar</td></tr>
+<tr><td>123</td><td>sekolah menengah</td><td>sekolah menengah</td><td>sekolah menengah</td><td>pawiyatan menengah</td></tr>
+<tr><td>124</td><td>universitas</td><td>universitas</td><td>universitas</td><td>universitas</td></tr>
+<tr><td>125</td><td>perpustakaan</td><td>perpustakaan</td><td>perpustakaan</td><td>perpustakaan</td></tr>
+<tr><td>126</td><td>museum</td><td>museum</td><td>museum</td><td>museum</td></tr>
+<tr><td>127</td><td>bioskop</td><td>bioskop</td><td>bioskop</td><td>bioskop</td></tr>
+<tr><td>128</td><td>taman bermain</td><td>taman dolanan</td><td>taman dolanan</td><td>taman dolanan</td></tr>
+<tr><td>129</td><td>pasar tradisional</td><td>pasar tradisional</td><td>pasar tradisional</td><td>pasar tradisional</td></tr>
+<tr><td>130</td><td>supermarket</td><td>supermarket</td><td>supermarket</td><td>supermarket</td></tr>
+<tr><td>131</td><td>toko kelontong</td><td>toko</td><td>toko</td><td>toko</td></tr>
+<tr><td>132</td><td>warung makan</td><td>warung</td><td>warung</td><td>warung</td></tr>
+<tr><td>133</td><td>restoran</td><td>restoran</td><td>restoran</td><td>restoran</td></tr>
+<tr><td>134</td><td>kafe</td><td>kafe</td><td>kafe</td><td>kafe</td></tr>
+<tr><td>135</td><td>hotel</td><td>hotel</td><td>hotel</td><td>hotel</td></tr>
+<tr><td>136</td><td>rumah sakit</td><td>rumah sakit</td><td>rumah sakit</td><td>griya sehat</td></tr>
+<tr><td>137</td><td>klinik</td><td>klinik</td><td>klinik</td><td>klinik</td></tr>
+<tr><td>138</td><td>apotek</td><td>apotek</td><td>apotek</td><td>apotek</td></tr>
+<tr><td>139</td><td>gereja</td><td>gereja</td><td>gereja</td><td>griya ibadah</td></tr>
+<tr><td>140</td><td>masjid</td><td>masjid</td><td>masjid</td><td>masjid</td></tr>
+<tr><td>141</td><td>pura</td><td>pura</td><td>pura</td><td>pura</td></tr>
+<tr><td>142</td><td>vihara</td><td>vihara</td><td>vihara</td><td>vihara</td></tr>
+<tr><td>143</td><td>kuil</td><td>candi</td><td>candi</td><td>candi</td></tr>
+<tr><td>144</td><td>museum sejarah</td><td>museum sejarah</td><td>museum sejarah</td><td>museum sejarah</td></tr>
+<tr><td>145</td><td>monumen</td><td>monumen</td><td>monumen</td><td>monumen</td></tr>
+<tr><td>146</td><td>taman kota</td><td>taman kutha</td><td>taman kutha</td><td>taman kutha</td></tr>
+<tr><td>147</td><td>jalan raya</td><td>dalan raya</td><td>dalan raya</td><td>dalan ageng</td></tr>
+<tr><td>148</td><td>jembatan</td><td>jembatan</td><td>jembatan</td><td>jembatan</td></tr>
+<tr><td>149</td><td>terminal</td><td>terminal</td><td>terminal</td><td>terminal</td></tr>
+<tr><td>150</td><td>stasiun</td><td>stasiun</td><td>stasiun</td><td>stasiun</td></tr>
+<tr><td>151</td><td>kendaraan pribadi</td><td>kendharaan pribadi</td><td>kendharaan pribadi</td><td>montor pribadi</td></tr>
+<tr><td>152</td><td>sepeda motor</td><td>motor</td><td>motor</td><td>montor</td></tr>
+<tr><td>153</td><td>mobil</td><td>mobil</td><td>mobil</td><td>montor</td></tr>
+<tr><td>154</td><td>sepeda</td><td>sepeda</td><td>sepeda</td><td>pit</td></tr>
+<tr><td>155</td><td>truk</td><td>truk</td><td>truk</td><td>truk</td></tr>
+<tr><td>156</td><td>bus</td><td>bis</td><td>bis</td><td>bis</td></tr>
+<tr><td>157</td><td>kereta api</td><td>sepur</td><td>sepur</td><td>sepur</td></tr>
+<tr><td>158</td><td>kapal</td><td>kapal</td><td>kapal</td><td>kapal</td></tr>
+<tr><td>159</td><td>pesawat</td><td>pesawat</td><td>pesawat</td><td>pesawat</td></tr>
+<tr><td>160</td><td>motor air</td><td>motor air</td><td>motor air</td><td>motor air</td></tr>
+<tr><td>161</td><td>taman bermain</td><td>taman dolanan</td><td>taman dolanan</td><td>taman dolanan</td></tr>
+<tr><td>162</td><td>taman kota</td><td>taman kutha</td><td>taman kutha</td><td>taman kutha</td></tr>
+<tr><td>163</td><td>kebun</td><td>kebon</td><td>kebon</td><td>kebon</td></tr>
+<tr><td>164</td><td>sawah</td><td>sawah</td><td>sawah</td><td>sawah</td></tr>
+<tr><td>165</td><td>ladang</td><td>ladang</td><td>ladang</td><td>ladang</td></tr>
+<tr><td>166</td><td>hutan</td><td>alas</td><td>alas</td><td>alas</td></tr>
+<tr><td>167</td><td>bukit</td><td>bukit</td><td>bukit</td><td>bukit</td></tr>
+<tr><td>168</td><td>gunung</td><td>gunung</td><td>gunung</td><td>gunung</td></tr>
+<tr><td>169</td><td>sungai</td><td>kali</td><td>kali</td><td>kali</td></tr>
+<tr><td>170</td><td>danau</td><td>danau</td><td>danau</td><td>danau</td></tr>
+<tr><td>171</td><td>laut</td><td>segara</td><td>segara</td><td>segara</td></tr>
+<tr><td>172</td><td>pantai</td><td>pantai</td><td>pantai</td><td>pantai</td></tr>
+<tr><td>173</td><td>pulau</td><td>pulo</td><td>pulo</td><td>pulo</td></tr>
+<tr><td>174</td><td>air terjun</td><td>grojogan</td><td>grojogan</td><td>grojogan</td></tr>
+<tr><td>175</td><td>gua</td><td>guwa</td><td>guwa</td><td>guwa</td></tr>
+<tr><td>176</td><td>jalan</td><td>dalan</td><td>dalan</td><td>dalan</td></tr>
+<tr><td>177</td><td>jembatan</td><td>jembatan</td><td>jembatan</td><td>jembatan</td></tr>
+<tr><td>178</td><td>lampu jalan</td><td>lampu dalan</td><td>lampu dalan</td><td>lampu dalan</td></tr>
+<tr><td>179</td><td>halte</td><td>halte</td><td>halte</td><td>halte</td></tr>
+<tr><td>180</td><td>terminal</td><td>terminal</td><td>terminal</td><td>terminal</td></tr>
+<tr><td>181</td><td>stasiun kereta</td><td>stasiun</td><td>stasiun</td><td>stasiun</td></tr>
+<tr><td>182</td><td>bandara</td><td>bandara</td><td>bandara</td><td>bandara</td></tr>
+<tr><td>183</td><td>pelabuhan</td><td>pelabuhan</td><td>pelabuhan</td><td>pelabuhan</td></tr>
+<tr><td>184</td><td>pasar</td><td>pasar</td><td>pasar</td><td>pasar</td></tr>
+<tr><td>185</td><td>toko</td><td>toko</td><td>toko</td><td>toko</td></tr>
+<tr><td>186</td><td>warung</td><td>warung</td><td>warung</td><td>warung</td></tr>
+<tr><td>187</td><td>supermarket</td><td>supermarket</td><td>supermarket</td><td>supermarket</td></tr>
+<tr><td>188</td><td>restoran</td><td>restoran</td><td>restoran</td><td>restoran</td></tr>
+<tr><td>189</td><td>kafe</td><td>kafe</td><td>kafe</td><td>kafe</td></tr>
+<tr><td>190</td><td>hotel</td><td>hotel</td><td>hotel</td><td>hotel</td></tr>
+<tr><td>191</td><td>rumah</td><td>omah</td><td>griya</td><td>dalem</td></tr>
+<tr><td>192</td><td>pintu</td><td>lawang</td><td>lawang</td><td>lawang</td></tr>
+<tr><td>193</td><td>jendela</td><td>jendhela</td><td>jendhela</td><td>jendhela</td></tr>
+<tr><td>194</td><td>lemari</td><td>lemari</td><td>almari</td><td>almari</td></tr>
+<tr><td>195</td><td>kursi</td><td>kursi</td><td>kursi</td><td>dhapuran</td></tr>
+<tr><td>196</td><td>meja</td><td>meja</td><td>meja</td><td>pawon / mejah</td></tr>
+<tr><td>197</td><td>tempat tidur</td><td>amben</td><td>amben</td><td>kasur</td></tr>
+<tr><td>198</td><td>bantal</td><td>bantal</td><td>guling</td><td>guling</td></tr>
+<tr><td>199</td><td>selimut</td><td>selimut</td><td>selimut</td><td>selimut</td></tr>
+<tr><td>200</td><td>pakaian</td><td>klambi</td><td>busana</td><td>busana</td></tr>
+
+    </tbody>
+  </table>
+
+
+
+  
+  <h3 class="note-subtitle">🍽 Kata Benda</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Makna</th>
+        <th>Ngoko</th>
+        <th>Madya</th>
+        <th>Krama</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>besar</td><td>gedhe</td><td>ageng</td><td>ageng</td></tr>
+<tr><td>2</td><td>kecil</td><td>cilik</td><td>alit</td><td>alit</td></tr>
+<tr><td>3</td><td>panjang</td><td>dawa</td><td>dawa</td><td>dawa</td></tr>
+<tr><td>4</td><td>pendek</td><td>cekak</td><td>cekak</td><td>cekak</td></tr>
+<tr><td>5</td><td>tinggi</td><td>dhuwur</td><td>inggil</td><td>inggil</td></tr>
+<tr><td>6</td><td>rendah</td><td>endhek</td><td>andhek</td><td>andhek</td></tr>
+<tr><td>7</td><td>bagus</td><td>apik</td><td>sae</td><td>sae</td></tr>
+<tr><td>8</td><td>jelek</td><td>ala</td><td>awon</td><td>awon</td></tr>
+<tr><td>9</td><td>cantik</td><td>ayu</td><td>ayu</td><td>ayu</td></tr>
+<tr><td>10</td><td>tampan</td><td>gagah</td><td>gagah</td><td>gagah</td></tr>
+<tr><td>11</td><td>cepat</td><td>cepet</td><td>enggal</td><td>enggal</td></tr>
+<tr><td>12</td><td>lambat</td><td>alon</td><td>alon</td><td>alon</td></tr>
+<tr><td>13</td><td>panas</td><td>panas</td><td>anget</td><td>anget</td></tr>
+<tr><td>14</td><td>dingin</td><td>adhem</td><td>adhem</td><td>adhem</td></tr>
+<tr><td>15</td><td>senang</td><td>seneng</td><td>remen</td><td>remen</td></tr>
+<tr><td>16</td><td>sedih</td><td>sedhih</td><td>sedhih</td><td>sedhih</td></tr>
+<tr><td>17</td><td>kuat</td><td>kuwat</td><td>kiyat</td><td>kiyat</td></tr>
+<tr><td>18</td><td>lemah</td><td>ringkih</td><td>ringkih</td><td>ringkih</td></tr>
+<tr><td>19</td><td>mahal</td><td>larang</td><td>larang</td><td>larang</td></tr>
+<tr><td>20</td><td>murah</td><td>murah</td><td>mirah</td><td>mirah</td></tr>
+<tr><td>21</td><td>kotor</td><td>reged</td><td>reged</td><td>reged</td></tr>
+<tr><td>22</td><td>bersih</td><td>resik</td><td>resik</td><td>resik</td></tr>
+<tr><td>23</td><td>sibuk</td><td>sibuk</td><td>sibuk</td><td>sibuk</td></tr>
+<tr><td>24</td><td>kosong</td><td>kosong</td><td>kosong</td><td>kosong</td></tr>
+<tr><td>25</td><td>ramai</td><td>rame</td><td>rame</td><td>rame</td></tr>
+<tr><td>26</td><td>sepi</td><td>sepi</td><td>sepi</td><td>sepi</td></tr>
+<tr><td>27</td><td>terang</td><td>padhang</td><td>padhang</td><td>padhang</td></tr>
+<tr><td>28</td><td>gelap</td><td>peteng</td><td>peteng</td><td>peteng</td></tr>
+<tr><td>29</td><td>enak</td><td>enak</td><td>nikmat</td><td>nikmat</td></tr>
+<tr><td>30</td><td>pahit</td><td>pait</td><td>pait</td><td>pait</td></tr>
+<tr><td>31</td><td>manis</td><td>legi</td><td>legi</td><td>legi</td></tr>
+<tr><td>32</td><td>asam</td><td>asem</td><td>asem</td><td>asem</td></tr>
+<tr><td>33</td><td>pedas</td><td>pedhes</td><td>pedhes</td><td>pedhes</td></tr>
+<tr><td>34</td><td>berat</td><td>abot</td><td>abot</td><td>abot</td></tr>
+<tr><td>35</td><td>ringan</td><td>entheng</td><td>entheng</td><td>entheng</td></tr>
+<tr><td>36</td><td>panjang umur</td><td>dawa yuswa</td><td>dawa yuswa</td><td>dawa yuswa</td></tr>
+<tr><td>37</td><td>muda</td><td>enom</td><td>enom</td><td>enom</td></tr>
+<tr><td>38</td><td>tua</td><td>tuwa</td><td>sepuh</td><td>sepuh</td></tr>
+<tr><td>39</td><td>rajin</td><td>rajin</td><td>tekun</td><td>tekun</td></tr>
+<tr><td>40</td><td>malas</td><td>males</td><td>males</td><td>males</td></tr>
+<tr><td>41</td><td>sehat</td><td>waras</td><td>waras</td><td>waras</td></tr>
+<tr><td>42</td><td>sakit</td><td>lara</td><td>lara</td><td>lara</td></tr>
+<tr><td>43</td><td>licik</td><td>licik</td><td>licik</td><td>licik</td></tr>
+<tr><td>44</td><td>jujur</td><td>jujur</td><td>jujur</td><td>jujur</td></tr>
+<tr><td>45</td><td>pintar</td><td>pinter</td><td>pinter</td><td>pinter</td></tr>
+<tr><td>46</td><td>bodoh</td><td>bodho</td><td>bodho</td><td>bodho</td></tr>
+<tr><td>47</td><td>cantik alami</td><td>ayu alami</td><td>ayu alami</td><td>ayu alami</td></tr>
+<tr><td>48</td><td>rapi</td><td>rapi</td><td>rapi</td><td>rapi</td></tr>
+<tr><td>49</td><td>berantakan</td><td>amburadul</td><td>amburadul</td><td>amburadul</td></tr>
+<tr><td>50</td><td>hangat</td><td>anget</td><td>anget</td><td>anget</td></tr>
+<tr><td>51</td><td>lebar</td><td>amba</td><td>amba</td><td>amba</td></tr>
+<tr><td>52</td><td>sempit</td><td>sempit</td><td>sempit</td><td>sempit</td></tr>
+<tr><td>53</td><td>tebal</td><td>kandel</td><td>kandel</td><td>kandel</td></tr>
+<tr><td>54</td><td>tipis</td><td>tipis</td><td>tipis</td><td>tipis</td></tr>
+<tr><td>55</td><td>luas</td><td>amba</td><td>ageng</td><td>ageng</td></tr>
+<tr><td>56</td><td>sempit</td><td>sempit</td><td>sempit</td><td>sempit</td></tr>
+<tr><td>57</td><td>panjang</td><td>dawa</td><td>dawa</td><td>dawa</td></tr>
+<tr><td>58</td><td>pendek</td><td>cekak</td><td>cekak</td><td>cekak</td></tr>
+<tr><td>59</td><td>tajam</td><td>landhep</td><td>landhep</td><td>landhep</td></tr>
+<tr><td>60</td><td>tumpul</td><td>tumpul</td><td>tumpul</td><td>tumpul</td></tr>
+<tr><td>61</td><td>keras</td><td>keras</td><td>kiyat</td><td>kiyat</td></tr>
+<tr><td>62</td><td>lembut</td><td>alus</td><td>alus</td><td>alus</td></tr>
+<tr><td>63</td><td>ringan</td><td>entheng</td><td>entheng</td><td>entheng</td></tr>
+<tr><td>64</td><td>berat</td><td>abot</td><td>abot</td><td>abot</td></tr>
+<tr><td>65</td><td>hangat</td><td>anget</td><td>anget</td><td>anget</td></tr>
+<tr><td>66</td><td>dingin</td><td>adhem</td><td>adhem</td><td>adhem</td></tr>
+<tr><td>67</td><td>basah</td><td>teles</td><td>teles</td><td>teles</td></tr>
+<tr><td>68</td><td>kering</td><td>garing</td><td>garing</td><td>garing</td></tr>
+<tr><td>69</td><td>luas</td><td>amba</td><td>ageng</td><td>ageng</td></tr>
+<tr><td>70</td><td>sempit</td><td>sempit</td><td>sempit</td><td>sempit</td></tr>
+<tr><td>71</td><td>tinggi</td><td>dhuwur</td><td>inggil</td><td>inggil</td></tr>
+<tr><td>72</td><td>rendah</td><td>endhek</td><td>andhek</td><td>andhek</td></tr>
+<tr><td>73</td><td>jernih</td><td>resik</td><td>resik</td><td>resik</td></tr>
+<tr><td>74</td><td>keruh</td><td>reged</td><td>reged</td><td>reged</td></tr>
+<tr><td>75</td><td>terang</td><td>padhang</td><td>padhang</td><td>padhang</td></tr>
+<tr><td>76</td><td>gelap</td><td>peteng</td><td>peteng</td><td>peteng</td></tr>
+<tr><td>77</td><td>enak</td><td>enak</td><td>nikmat</td><td>nikmat</td></tr>
+<tr><td>78</td><td>pahit</td><td>pait</td><td>pait</td><td>pait</td></tr>
+<tr><td>79</td><td>manis</td><td>legi</td><td>legi</td><td>legi</td></tr>
+<tr><td>80</td><td>asam</td><td>asem</td><td>asem</td><td>asem</td></tr>
+<tr><td>81</td><td>pedas</td><td>pedhes</td><td>pedhes</td><td>pedhes</td></tr>
+<tr><td>82</td><td>nyaman</td><td>nyaman</td><td>nyaman</td><td>nyaman</td></tr>
+<tr><td>83</td><td>sakit</td><td>lara</td><td>lara</td><td>lara</td></tr>
+<tr><td>84</td><td>sehat</td><td>waras</td><td>waras</td><td>waras</td></tr>
+<tr><td>85</td><td>malas</td><td>males</td><td>males</td><td>males</td></tr>
+<tr><td>86</td><td>rajin</td><td>rajin</td><td>tekun</td><td>tekun</td></tr>
+<tr><td>87</td><td>pintar</td><td>pinter</td><td>pinter</td><td>pinter</td></tr>
+<tr><td>88</td><td>bodoh</td><td>bodho</td><td>bodho</td><td>bodho</td></tr>
+<tr><td>89</td><td>jujur</td><td>jujur</td><td>jujur</td><td>jujur</td></tr>
+<tr><td>90</td><td>licik</td><td>licik</td><td>licik</td><td>licik</td></tr>
+<tr><td>91</td><td>baik hati</td><td>becik ati</td><td>sae ati</td><td>sae ati</td></tr>
+<tr><td>92</td><td>jahat</td><td>ala</td><td>awon</td><td>awon</td></tr>
+<tr><td>93</td><td>ramah</td><td>ramah</td><td>ramah</td><td>ramah</td></tr>
+<tr><td>94</td><td>sombong</td><td>sombong</td><td>sombong</td><td>sombong</td></tr>
+<tr><td>95</td><td>pemalu</td><td>isin</td><td>isin</td><td>isin</td></tr>
+<tr><td>96</td><td>berani</td><td>wani</td><td>wani</td><td>wani</td></tr>
+<tr><td>97</td><td>takut</td><td>wedi</td><td>ajrih</td><td>ajrih</td></tr>
+<tr><td>98</td><td>kuat</td><td>kuwat</td><td>kiyat</td><td>kiyat</td></tr>
+<tr><td>99</td><td>lemah</td><td>ringkih</td><td>ringkih</td><td>ringkih</td></tr>
+<tr><td>100</td><td>rapi</td><td>rapi</td><td>rapi</td><td>rapi</td></tr>
+<tr><td>101</td><td>sibuk</td><td>sibuk</td><td>sibuk</td><td>sibuk</td></tr>
+<tr><td>102</td><td>santai</td><td>santai</td><td>santai</td><td>santai</td></tr>
+<tr><td>103</td><td>kuat</td><td>kuwat</td><td>kiyat</td><td>kiyat</td></tr>
+<tr><td>104</td><td>lemah</td><td>ringkih</td><td>ringkih</td><td>ringkih</td></tr>
+<tr><td>105</td><td>tenang</td><td>tentrem</td><td>tentrem</td><td>tentrem</td></tr>
+<tr><td>106</td><td>gelisah</td><td>gelisah</td><td>gelisah</td><td>gelisah</td></tr>
+<tr><td>107</td><td>mudah</td><td>gampang</td><td>gampil</td><td>gampil</td></tr>
+<tr><td>108</td><td>sulit</td><td>angel</td><td>angel</td><td>angel</td></tr>
+<tr><td>109</td><td>senang</td><td>seneng</td><td>remen</td><td>remen</td></tr>
+<tr><td>110</td><td>sedih</td><td>sedhih</td><td>sedhih</td><td>sedhih</td></tr>
+<tr><td>111</td><td>marah</td><td>nesu</td><td>nesu</td><td>nesu</td></tr>
+<tr><td>112</td><td>lega</td><td>lega</td><td>lega</td><td>lega</td></tr>
+<tr><td>113</td><td>sempit</td><td>sempit</td><td>sempit</td><td>sempit</td></tr>
+<tr><td>114</td><td>luas</td><td>amba</td><td>ageng</td><td>ageng</td></tr>
+<tr><td>115</td><td>ringan</td><td>entheng</td><td>entheng</td><td>entheng</td></tr>
+<tr><td>116</td><td>berat</td><td>abot</td><td>abot</td><td>abot</td></tr>
+<tr><td>117</td><td>tajam</td><td>landhep</td><td>landhep</td><td>landhep</td></tr>
+<tr><td>118</td><td>tumpul</td><td>tumpul</td><td>tumpul</td><td>tumpul</td></tr>
+<tr><td>119</td><td>kotor</td><td>reged</td><td>reged</td><td>reged</td></tr>
+<tr><td>120</td><td>bersih</td><td>resik</td><td>resik</td><td>resik</td></tr>
+<tr><td>121</td><td>baru</td><td>anyar</td><td>enggal</td><td>enggal</td></tr>
+<tr><td>122</td><td>lama</td><td>lawas</td><td>lawas</td><td>lawas</td></tr>
+<tr><td>123</td><td>muda</td><td>enom</td><td>enom</td><td>enom</td></tr>
+<tr><td>124</td><td>tua</td><td>tuwa</td><td>sepuh</td><td>sepuh</td></tr>
+<tr><td>125</td><td>hangat</td><td>anget</td><td>anget</td><td>anget</td></tr>
+<tr><td>126</td><td>dingin</td><td>adhem</td><td>adhem</td><td>adhem</td></tr>
+<tr><td>127</td><td>lembut</td><td>alus</td><td>alus</td><td>alus</td></tr>
+<tr><td>128</td><td>keras</td><td>keras</td><td>kiyat</td><td>kiyat</td></tr>
+<tr><td>129</td><td>halus</td><td>alus</td><td>alus</td><td>alus</td></tr>
+<tr><td>130</td><td>kasar</td><td>kasar</td><td>kasar</td><td>kasar</td></tr>
+<tr><td>131</td><td>manis</td><td>legi</td><td>legi</td><td>legi</td></tr>
+<tr><td>132</td><td>pahit</td><td>pait</td><td>pait</td><td>pait</td></tr>
+<tr><td>133</td><td>pedas</td><td>pedhes</td><td>pedhes</td><td>pedhes</td></tr>
+<tr><td>134</td><td>asam</td><td>asem</td><td>asem</td><td>asem</td></tr>
+<tr><td>135</td><td>enak</td><td>enak</td><td>nikmat</td><td>nikmat</td></tr>
+<tr><td>136</td><td>buruk</td><td>ala</td><td>awon</td><td>awon</td></tr>
+<tr><td>137</td><td>bagus</td><td>apik</td><td>sae</td><td>sae</td></tr>
+<tr><td>138</td><td>cantik</td><td>ayu</td><td>ayu</td><td>ayu</td></tr>
+<tr><td>139</td><td>tampan</td><td>gagah</td><td>gagah</td><td>gagah</td></tr>
+<tr><td>140</td><td>jujur</td><td>jujur</td><td>jujur</td><td>jujur</td></tr>
+<tr><td>141</td><td>licik</td><td>licik</td><td>licik</td><td>licik</td></tr>
+<tr><td>142</td><td>baik hati</td><td>becik ati</td><td>sae ati</td><td>sae ati</td></tr>
+<tr><td>143</td><td>jahat</td><td>ala</td><td>awon</td><td>awon</td></tr>
+<tr><td>144</td><td>ramah</td><td>ramah</td><td>ramah</td><td>ramah</td></tr>
+<tr><td>145</td><td>sombong</td><td>sombong</td><td>sombong</td><td>sombong</td></tr>
+<tr><td>146</td><td>pemalu</td><td>isin</td><td>isin</td><td>isin</td></tr>
+<tr><td>147</td><td>berani</td><td>wani</td><td>wani</td><td>wani</td></tr>
+<tr><td>148</td><td>takut</td><td>wedi</td><td>ajrih</td><td>ajrih</td></tr>
+<tr><td>149</td><td>kaya</td><td>sugih</td><td>sugih</td><td>sugih</td></tr>
+<tr><td>150</td><td>miskin</td><td>mlarat</td><td>mlarat</td><td>mlarat</td></tr>
+<tr><td>151</td><td>ramah</td><td>ramah</td><td>ramah</td><td>ramah</td></tr>
+<tr><td>152</td><td>kasar</td><td>kasar</td><td>kasar</td><td>kasar</td></tr>
+<tr><td>153</td><td>halus</td><td>alus</td><td>alus</td><td>alus</td></tr>
+<tr><td>154</td><td>cepat</td><td>cepet</td><td>enggal</td><td>enggal</td></tr>
+<tr><td>155</td><td>lambat</td><td>alon</td><td>alon</td><td>alon</td></tr>
+<tr><td>156</td><td>licin</td><td>licin</td><td>licin</td><td>licin</td></tr>
+<tr><td>157</td><td>kasar (tekstur)</td><td>kasar</td><td>kasar</td><td>kasar</td></tr>
+<tr><td>158</td><td>lembek</td><td>lembek</td><td>lembek</td><td>lembek</td></tr>
+<tr><td>159</td><td>keras (tekstur)</td><td>keras</td><td>kiyat</td><td>kiyat</td></tr>
+<tr><td>160</td><td>kaku</td><td>kaku</td><td>kaku</td><td>kaku</td></tr>
+<tr><td>161</td><td>lentur</td><td>lentur</td><td>lentur</td><td>lentur</td></tr>
+<tr><td>162</td><td>berat</td><td>abot</td><td>abot</td><td>abot</td></tr>
+<tr><td>163</td><td>ringan</td><td>entheng</td><td>entheng</td><td>entheng</td></tr>
+<tr><td>164</td><td>panas</td><td>panas</td><td>anget</td><td>anget</td></tr>
+<tr><td>165</td><td>dingin</td><td>adhem</td><td>adhem</td><td>adhem</td></tr>
+<tr><td>166</td><td>hangat</td><td>anget</td><td>anget</td><td>anget</td></tr>
+<tr><td>167</td><td>lembap</td><td>lembab</td><td>lembab</td><td>lembab</td></tr>
+<tr><td>168</td><td>kering</td><td>garing</td><td>garing</td><td>garing</td></tr>
+<tr><td>169</td><td>tajam</td><td>landhep</td><td>landhep</td><td>landhep</td></tr>
+<tr><td>170</td><td>tumpul</td><td>tumpul</td><td>tumpul</td><td>tumpul</td></tr>
+<tr><td>171</td><td>tipis</td><td>tipis</td><td>tipis</td><td>tipis</td></tr>
+<tr><td>172</td><td>tebal</td><td>kandel</td><td>kandel</td><td>kandel</td></tr>
+<tr><td>173</td><td>kecil</td><td>cilik</td><td>alit</td><td>alit</td></tr>
+<tr><td>174</td><td>besar</td><td>gedhe</td><td>ageng</td><td>ageng</td></tr>
+<tr><td>175</td><td>panjang</td><td>dawa</td><td>dawa</td><td>dawa</td></tr>
+<tr><td>176</td><td>pendek</td><td>cekak</td><td>cekak</td><td>cekak</td></tr>
+<tr><td>177</td><td>tinggi</td><td>dhuwur</td><td>inggil</td><td>inggil</td></tr>
+<tr><td>178</td><td>rendah</td><td>endhek</td><td>andhek</td><td>andhek</td></tr>
+<tr><td>179</td><td>luas</td><td>amba</td><td>ageng</td><td>ageng</td></tr>
+<tr><td>180</td><td>sempit</td><td>sempit</td><td>sempit</td><td>sempit</td></tr>
+<tr><td>181</td><td>bersih</td><td>resik</td><td>resik</td><td>resik</td></tr>
+<tr><td>182</td><td>kotor</td><td>reged</td><td>reged</td><td>reged</td></tr>
+<tr><td>183</td><td>indah</td><td>ayu</td><td>sae</td><td>sae</td></tr>
+<tr><td>184</td><td>jelek</td><td>ala</td><td>awon</td><td>awon</td></tr>
+<tr><td>185</td><td>manis</td><td>legi</td><td>legi</td><td>legi</td></tr>
+<tr><td>186</td><td>pahit</td><td>pait</td><td>pait</td><td>pait</td></tr>
+<tr><td>187</td><td>pedas</td><td>pedhes</td><td>pedhes</td><td>pedhes</td></tr>
+<tr><td>188</td><td>asam</td><td>asem</td><td>asem</td><td>asem</td></tr>
+<tr><td>189</td><td>enak</td><td>enak</td><td>nikmat</td><td>nikmat</td></tr>
+<tr><td>190</td><td>buruk</td><td>ala</td><td>awon</td><td>awon</td></tr>
+<tr><td>191</td><td>bagus</td><td>apik</td><td>sae</td><td>sae</td></tr>
+<tr><td>192</td><td>senang</td><td>seneng</td><td>remen</td><td>remen</td></tr>
+<tr><td>193</td><td>sedih</td><td>sedhih</td><td>sedhih</td><td>sedhih</td></tr>
+<tr><td>194</td><td>marah</td><td>nesu</td><td>nesu</td><td>nesu</td></tr>
+<tr><td>195</td><td>takut</td><td>wedi</td><td>ajrih</td><td>ajrih</td></tr>
+<tr><td>196</td><td>berani</td><td>wani</td><td>wani</td><td>wani</td></tr>
+<tr><td>197</td><td>rajin</td><td>rajin</td><td>tekun</td><td>tekun</td></tr>
+<tr><td>198</td><td>malas</td><td>males</td><td>males</td><td>males</td></tr>
+<tr><td>199</td><td>jujur</td><td>jujur</td><td>jujur</td><td>jujur</td></tr>
+<tr><td>200</td><td>licik</td><td>licik</td><td>licik</td><td>licik</td></tr>
+
+    </tbody>
+  </table>
+
+  </main>
+</section>
+
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/index.js"></script>
+</body>
+</html>

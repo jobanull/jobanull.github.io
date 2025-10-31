@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Load Balancing (Bonding)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Load Balancing (Bonding)</h2>
+    <p class="note-paragraph">
+      Bonding menggabungkan beberapa interface fisik menjadi satu interface logis untuk <em>throughput</em> dan/atau
+      <em>redundansi</em>. Biasa menggunakan <strong>IEEE 802.3ad (LACP)</strong> di switch/router.
+      <em>Hashing</em> (MAC/IP/port) menentukan ke link mana suatu flow dikirim: satu flow umumnya tetap pada satu link.
+    </p>
+    <ul class="note-list">
+      <li><strong>Mode umum:</strong> active-backup (mode 1), balance-xor (mode 2), 802.3ad/LACP (mode 4), balance-rr (mode 0).</li>
+      <li><strong>Kelebihan:</strong> Agregasi bandwidth multi-flow, failover antarlink, standar luas (LACP).</li>
+      <li><strong>Keterbatasan:</strong> Satu flow ≈ terbatas kecepatan 1 link; butuh dukungan switch yang sama (LACP).</li>
+      <li><strong>Gunakan Saat:</strong> Uplink ke switch/core, server-to-switch, backbone L2.</li>
+    </ul>
+
+    <pre class="note-codeblock"><code>
+# MikroTik: membuat bond LACP (802.3ad) dari ether1 & ether2
+/interface bonding
+add mode=802.3ad name=bond1 slaves=ether1,ether2 lacp-rate=1sec mii-interval=100ms
+
+# Assign IP/VLAN pada bond, bukan pada slave
+/ip address add address=10.10.10.2/30 interface=bond1
+
+# Switch sisi lawan: pastikan port-channel/LAG LACP untuk port yang sama
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Di Bonding LACP, pastikan <em>hash policy</em> konsisten di kedua sisi; pahami batas 1-flow≈1-link.</li>
+      <li>Gunakan mode bonding sesuai kebutuhan: active-backup untuk failover, 802.3ad untuk agregasi multi-flow.</li>
+      <li>Dokumentasikan konfigurasi bond agar mudah di-troubleshoot.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      <strong>Bonding</strong> mengagregasi link Layer-2 untuk meningkatkan throughput dan/atau menyediakan failover.
+      Satu flow biasanya terbatas pada satu link; banyak flow paralel memanfaatkan agregasi penuh.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+  <script src="js/index.js"></script>
+</body>
+</html>

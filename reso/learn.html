@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bahan Ajar Networking</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root{--bg:#0f172a;--card:#0b1220;--accent:#06b6d4;--muted:#94a3b8;--glass: rgba(255,255,255,0.03)}
+    *{box-sizing:border-box}
+    body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; margin:0; min-height:100vh; background:linear-gradient(180deg,#071129 0%, #071a2a 60%); color:#e6eef6; padding:28px}
+    .container{max-width:1100px;margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
+    h1{font-size:20px;margin:0}
+    p.lead{margin:0;color:var(--muted)}
+
+    .section{margin-bottom:32px}
+    .section-title{font-size:18px;font-weight:600;margin-bottom:12px;color:var(--accent)}
+
+    .weeks{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:18px}
+    .week-card{background:var(--card);padding:10px;border-radius:10px;box-shadow:0 6px 18px rgba(2,6,23,0.6);display:flex;align-items:center;justify-content:space-between}
+
+    .btn{appearance:none;border:0;padding:10px 12px;border-radius:8px;background:var(--glass);color:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),#3b82f6);color:#042028;font-weight:600}
+    .btn:focus{outline:2px solid rgba(6,182,212,0.25);outline-offset:3px}
+
+    .dropdown{position:relative}
+    .menu{position:absolute;right:0;top:calc(100% + 8px);min-width:160px;background:#051222;border-radius:8px;padding:6px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 8px 24px rgba(2,6,23,0.7);display:none;z-index:50}
+    .menu.show{display:block}
+    .menu button{width:100%;text-align:left;padding:8px 10px;border-radius:6px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+    .menu button:hover{background:rgba(255,255,255,0.02);color:inherit}
+
+    footer{margin-top:26px;color:var(--muted);font-size:13px}
+
+    .week-label{font-weight:700}
+    @media (max-width:420px){.btn{padding:8px 10px}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Bahan Ajar Networking</h1>
+        <p class="lead">Pilih minggu untuk melihat Slide, Quiz, atau Script pengajaran.</p>
+      </div>
+      <div aria-hidden="true">Jumlah minggu: 12</div>
+    </header>
+
+    <main id="main-content">
+      <!-- Sections will be injected here -->
+    </main>
+
+    <footer>
+      <div>Tip: Klik "Slide", "Quiz", atau "Script" untuk membuka placeholder—ganti URL di skrip sesuai bahan Anda.</div>
+    </footer>
+  </div>
+
+  <!-- Template -->
+  <template id="week-template">
+    <div class="week-card">
+      <div>
+        <div class="week-label"></div>
+        <div class="week-desc" style="font-size:12px;color:var(--muted)">Dokumentasi &amp; bahan ajar</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="dropdown">
+          <button class="btn" data-action="open" aria-haspopup="true" aria-expanded="false">Open ▾</button>
+          <div class="menu" role="menu">
+            <button data-type="slide" role="menuitem">Slide</button>
+            <button data-type="quiz" role="menuitem">Quiz</button>
+            <button data-type="script" role="menuitem">Script</button>
+          </div>
+        </div>
+        <!-- <button class="btn primary" data-action="download"><i class="fa-solid fa-download"></i></button> -->
+      </div>
+    </div>
+  </template>
+
+  <script>
+    (function(){
+      const WEEKS_PER_SECTION = 4;
+      const TOTAL_WEEKS = 12;
+
+      // Array dinamis untuk judul tiap section
+      const SECTION_TITLES = [
+        "Pengenalan Jaringan",
+        "Routing & Switching",
+        "Keamanan Jaringan",
+        "Cloud & Virtualization"
+      ];
+
+      // 🔹 Array baru: deskripsi / dokumentasi tiap minggu (bisa beda-beda)
+      const WEEK_DOCS = [
+        "Pengenalan End Devices",
+        "Model OSI & perangkat jaringan",
+        "IP Addressing dan subnetting",
+        "Simulasi dasar dengan Packet Tracer",
+        "Static routing dan konsep VLAN",
+        "Dynamic Routing (RIP, OSPF)",
+        "Switching, Trunking, dan STP",
+        "Inter-VLAN Routing",
+        "Firewall dasar dan ACL",
+        "IDS/IPS & konsep keamanan jaringan",
+        "Virtualisasi server & cloud dasar",
+        "Implementasi cloud networking"
+      ];
+
+      const main = document.getElementById('main-content');
+      const tpl = document.getElementById('week-template');
+
+      function createWeek(n){
+        const clone = tpl.content.cloneNode(true);
+        const card = clone.querySelector('.week-card');
+        const label = clone.querySelector('.week-label');
+        const desc = clone.querySelector('.week-desc');
+        label.textContent = 'Day ' + n;
+
+        // 🔹 Set teks deskripsi dari array WEEK_DOCS
+        desc.textContent = WEEK_DOCS[n - 1] || "Dokumentasi & bahan ajar";
+
+        const dropdownBtn = clone.querySelector('.dropdown > .btn');
+        const menu = clone.querySelector('.menu');
+        // const downloadBtn = clone.querySelector('[data-action="download"]');
+
+        dropdownBtn.addEventListener('click', ()=>{
+          const expanded = dropdownBtn.getAttribute('aria-expanded') === 'true';
+          dropdownBtn.setAttribute('aria-expanded', String(!expanded));
+          menu.classList.toggle('show');
+        });
+
+        document.addEventListener('click', (ev)=>{
+          if (!card.contains(ev.target)){
+            menu.classList.remove('show');
+            dropdownBtn.setAttribute('aria-expanded','false');
+          }
+        });
+
+      menu.addEventListener('click', (ev) => {
+      const type = ev.target.getAttribute('data-type');
+      if (!type) return;
+
+      const baseURLs = {
+        slide: 'https://jobanull-github-io.vercel.app/reso/present/slides/',
+        quiz: 'https://jobanull-github-io.vercel.app/reso/present/quiz/',
+        script: 'https://jobanull-github-io.vercel.app/reso/present/scripts/'
+      };
+
+      let url = '';
+      if (type === 'slide' || type === 'quiz' || type === 'script') {
+        url = `${baseURLs[type]}${n}.html`;
+      } else {
+        url = `${baseURLs[type]}${n}`;
+      }
+
+      window.open(url, '_blank');
+    });
+
+        // downloadBtn.addEventListener('click', ()=>{
+        //   const downloadUrl = 'https://example.com/downloads/week-' + n + '.zip';
+        //   window.open(downloadUrl, '_blank');
+        // });
+
+        return clone;
+      }
+
+      function createSection(title, startWeek, endWeek){
+        const section = document.createElement('section');
+        section.className = 'section';
+        const titleEl = document.createElement('div');
+        titleEl.className = 'section-title';
+        titleEl.textContent = title;
+        const weeksDiv = document.createElement('div');
+        weeksDiv.className = 'weeks';
+
+        for(let w = startWeek; w <= endWeek; w++){
+          weeksDiv.appendChild(createWeek(w));
+        }
+
+        section.appendChild(titleEl);
+        section.appendChild(weeksDiv);
+        return section;
+      }
+
+      const totalSections = Math.ceil(TOTAL_WEEKS / WEEKS_PER_SECTION);
+      for(let s = 0; s < totalSections; s++){
+        const start = s * WEEKS_PER_SECTION + 1;
+        const end = Math.min((s + 1) * WEEKS_PER_SECTION, TOTAL_WEEKS);
+        const title = SECTION_TITLES[s] || `Section ${s + 1}`;
+        main.appendChild(createSection(title, start, end));
+      }
+
+      document.addEventListener('keydown', (e)=>{
+        if (e.key === 'Escape'){
+          document.querySelectorAll('.menu.show').forEach(m=>m.classList.remove('show'));
+          document.querySelectorAll('[aria-expanded]')?.forEach(b=>b.setAttribute('aria-expanded','false'));
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iframe Full Page</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background: #000;
+      color: #fff;
+    }
+
+    header {
+      background-color: #222;
+      padding: 10px 20px;
+      text-align: center;
+      font-size: 1.1em;
+      font-weight: bold;
+      position: relative;
+      z-index: 10;
+    }
+
+    iframe {
+      width: 100%;
+      height: calc(100% - 50px);
+      border: none;
+      display: block;
+    }
+
+    .controls {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      z-index: 11;
+    }
+
+    button {
+      background-color: #00bcd4;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #0097a7;
+    }
+
+    /* Lapisan transparan untuk blokir klik kanan pada iframe */
+    #proteksi {
+    display: none;
+      position: absolute;
+      top: 50px;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 50px);
+      background: rgba(0,0,0,0);
+      z-index: 5;
+    }
+  </style>
+</head>
+<body oncontextmenu="return false;">
+
+  <header>
+    Iframe Full Page
+    <div class="controls">
+      <button onclick="gantiHalaman('https://jobanull-github-io.vercel.app/reso/slides/1.html')">End Devices</button>
+      <button onclick="gantiHalaman('https://jobanull-github-io.vercel.app/reso/slides/2.html')">IP Address</button>
+      <button onclick="gantiHalaman('https://www.google.com')">Google</button>
+    </div>
+  </header>
+
+  <!-- iframe utama -->
+  <iframe id="halaman" src="https://www.wikipedia.org" title="Iframe"></iframe>
+
+  <!-- lapisan transparan untuk blokir klik kanan di iframe -->
+  <div id="proteksi"></div>
+
+  <script>
+    // Ganti halaman iframe
+    function gantiHalaman(url) {
+      document.getElementById('halaman').src = url;
+    }
+  </script>
+  <script src="../js/lock.js"></script>
+
+</body>
+</html>

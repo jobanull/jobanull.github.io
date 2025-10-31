@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF Grid Card Preview</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/pdf-style.css">
+</head>
+<body class="pdf-container">
+<main class="pdf-main">
+  <h1 class="pdf-title">Daftar PDF</h1>
+  <div id="folders-container"></div>
+</main>
+
+<!-- Modal Preview PDF -->
+<div class="modal fade" id="pdfModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content modal-pdf">
+      <div class="modal-header">
+        <h5 class="modal-title" id="pdfModalTitle">Preview PDF</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <iframe id="pdfFrame" src="" frameborder="0"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Data folder & PDF
+const data = [
+  {
+    folderName: "Cisco General Modules",
+    files: [
+      { name: "CCNA 1 - Introduction to Network", url: "https://drive.google.com/file/d/1yJxm28aCaDk_rgVlMFiCAZAEJXtWGW-U/preview", cover: "img/cisco-module.png" },
+      { name: "CCNA 2 - Routing n Switching Essentials", url: "https://drive.google.com/file/d/1cTAdyfxCua6xjdrtz8ZBnxOWrf3IyZaS/preview", cover: "img/cisco-module.png" },
+      { name: "CCNA 3 - Switched Network", url: "https://drive.google.com/file/d/1fHqnF4NFY8nlIhSlyM5o9188mX-0rjrg/preview", cover: "img/cisco-module.png" },
+      { name: "CCNA 4 - Scaling Network", url: "https://drive.google.com/file/d/1YHzgOSpAJw_TClGzp_hrSxYgFKuAFWtL/preview", cover: "img/cisco-module.png" }
+    ]
+  },
+  {
+    folderName: "Cisco Nixtrain",
+    files: [
+    { name: "001. Basic Router Configuration", url: "https://drive.google.com/file/d/1y6LfCZHtfDR_0FbW0dZg_I1v8DOojNjC/preview", cover: "img/cisco-module.png" },
+    { name: "002. Remote Access Telnet Router", url: "https://drive.google.com/file/d/1dGaKrAconZwlZx8LBkJEHSadgYIlKrTE/preview", cover: "img/cisco-module.png" },
+    { name: "003. Managing Router Configuration", url: "https://drive.google.com/file/d/1X6fqE1c-e0vUFB6YcbghHYjiC7bBmL-t//preview", cover: "img/cisco-module.png" },
+    { name: "004. Static Routing", url: "https://drive.google.com/file/d/103U3uS7CmMgfrM1FjX5UvBUAWeSoez7x/preview", cover: "img/cisco-module.png" },
+    { name: "005. Static Default Route", url: "https://drive.google.com/file/d/162D79Tv7l4O2F3YVPBMa0KeT4dkCZDMo/preview", cover: "img/cisco-module.png" },
+    { name: "006. RIPv2", url: "https://drive.google.com/file/d/1cFQR8_T5uU4i20n2GxAXEYzlNiMMu45v/preview", cover: "img/cisco-module.png" },
+    { name: "007. EIGRP", url: "https://drive.google.com/file/d/1dEsNwE26_TbFb6nM6H4_SPy3UDo_nZRL/preview", cover: "img/cisco-module.png" },
+    { name: "008. OSPF", url: "https://drive.google.com/file/d/1xP5kav8Zyqoid7MYCWLzChreltJiowxL/preview", cover: "img/cisco-module.png" },
+    { name: "009. ACL Standar", url: "https://drive.google.com/file/d/1eqwVHA46QcscnzLsH5jz0nV5SCzFARhE/preview", cover: "img/cisco-module.png" },
+    { name: "010. ACL Extended", url: "https://drive.google.com/file/d/1A_xWjnGkyahHIxDi9f0-XA87FqLvnBQI/preview", cover: "img/cisco-module.png" },
+    { name: "011. NAT Static", url: "https://drive.google.com/file/d/1U4_2ifuKRycxgivql-GgwN0fCDkoeBvK/preview", cover: "img/cisco-module.png" },
+    { name: "012. NAT Dynamic", url: "https://drive.google.com/file/d/1DYNJvyU_AN6WTdyYy8ULp8Dej912uAe9/preview", cover: "img/cisco-module.png" },
+    { name: "013. NAT Dynamic Overload (PAT)", url: "https://drive.google.com/file/d/15Kf9nA3K956rM93NsTdeNdmnXsQ1eQEE/preview", cover: "img/cisco-module.png" },
+    { name: "014. NAT Dynamic Overload (PAT with Exit-Interface)", url: "https://drive.google.com/file/d/1a4JR6Nl93BHpOr6lbbveeATdV4xF-jlH/preview", cover: "img/cisco-module.png" },
+    { name: "015. Basic Switch Configuration", url: "https://drive.google.com/file/d/1qhyDy_j5tdVeB_dCL3dXnvuXJgsSvPBd/preview", cover: "img/cisco-module.png" },
+    { name: "016. VLAN", url: "https://drive.google.com/file/d/1_SSuGc9KZXbF_Zkq06HXCcl-1FJFzKfR/preview", cover: "img/cisco-module.png" },
+    { name: "017. VLAN Trunking", url: "https://drive.google.com/file/d/1CwS5KxQwLhX2FOHYZOhGwvFicGF9Nhml/preview", cover: "img/cisco-module.png" },
+    { name: "018. InterVLAN Routing", url: "https://drive.google.com/file/d/1Mt7J40l8jljPk-HLiPUOSSN6SgFaI1QP/preview", cover: "img/cisco-module.png" },
+    { name: "019. STP", url: "https://drive.google.com/file/d/135uGWN19bbdZ4-SRL0QalFBP8Mz5XbrU/preview", cover: "img/cisco-module.png" },
+    { name: "020. EtherChannel", url: "https://drive.google.com/file/d/1_qcH8Q91ja9cyndyIKAWn3F1Q6me6L7B/preview", cover: "img/cisco-module.png" },
+    { name: "021. HSRP", url: "https://drive.google.com/file/d/1nGvBrRn1XLDx_X0BdzETd0jF4ofgRiVQ/preview", cover: "img/cisco-module.png" },
+    { name: "022. DHCP", url: "https://drive.google.com/file/d/1ifBRiKN1nsxantDp8asocvzwtlf36lEF/preview", cover: "img/cisco-module.png" },
+    { name: "023. PPP", url: "https://drive.google.com/file/d/1WGJd9cl-ByHTLZb28LImmEdnqfbRD-g_/preview", cover: "img/cisco-module.png" }
+    ]
+  },
+];
+
+const container = document.getElementById('folders-container');
+const pdfModal = new bootstrap.Modal(document.getElementById('pdfModal'));
+const pdfFrame = document.getElementById('pdfFrame');
+const pdfModalTitle = document.getElementById('pdfModalTitle');
+
+data.forEach(folder => {
+  folder.files.sort((a,b)=> a.name.localeCompare(b.name));
+
+  const folderCard = document.createElement('div');
+  folderCard.className = 'pdf-card-folder';
+
+  const header = document.createElement('div');
+  header.className = 'pdf-card-header';
+  header.innerHTML = `<span>${folder.folderName}</span><span class="toggle-btn">&#9660;</span>`;
+
+  const content = document.createElement('div');
+  content.className = 'pdf-card-content pdf-grid';
+
+  folder.files.forEach(file => {
+  const pdfCard = document.createElement('div');
+  pdfCard.className = 'pdf-card-item';
+  
+  pdfCard.innerHTML = `
+    <img src="${file.cover}" alt="${file.name}">
+    <span>${file.name}</span>
+  `;
+
+  pdfCard.addEventListener('click', () => {
+    pdfModalTitle.textContent = file.name;
+    pdfFrame.src = file.url;
+    pdfModal.show();
+  });
+  content.appendChild(pdfCard);
+});
+
+
+    header.addEventListener('click', () => {
+  folderCard.classList.toggle('expanded');
+  const content = folderCard.querySelector('.pdf-card-content');
+  if(folderCard.classList.contains('expanded')){
+      content.style.maxHeight = content.scrollHeight + "px"; // tetap maxHeight untuk animasi
+  } else {
+      content.style.maxHeight = "0px";
+  }
+});
+
+
+
+
+  folderCard.appendChild(header);
+  folderCard.appendChild(content);
+  container.appendChild(folderCard);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Load Balancing (ECMP)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Load Balancing (ECMP)</h2>
+    <p class="note-paragraph">
+      <strong>ECMP (Equal-Cost Multi-Path)</strong> adalah teknik load balancing pada layer 3, yang membagi trafik
+      ke beberapa jalur dengan biaya (cost) yang sama. Ideal untuk jaringan dengan beberapa gateway atau link ke
+      tujuan yang sama.
+    </p>
+    <ul class="note-list">
+      <li><strong>Kelebihan:</strong> Membagi beban trafik secara merata antar-gateway/link, meningkatkan throughput, dan memanfaatkan jalur redundan.</li>
+      <li><strong>Keterbatasan:</strong> Satu flow biasanya tetap pada satu jalur; perlu routing protocol atau static route dengan cost sama.</li>
+      <li><strong>Gunakan Saat:</strong> Multi-WAN, backbone dengan banyak jalur, link ke ISP/core yang setara.</li>
+    </ul>
+
+    
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+      <li>Tujuan: Mengimplementasikan <strong>ECMP (Equal-Cost Multi-Path)</strong> untuk membagi trafik keluar ke dua ISP sekaligus menggunakan MikroTik Router.</li>
+      <li>Topologi: Router R.ECMP memiliki dua jalur keluar ke ISP berbeda melalui interface <code>ether1</code> dan <code>ether2</code>, serta menyediakan DHCP untuk jaringan LAN via <code>ether5</code>.</li>
+      <li>Catatan:
+        <ul>
+          <li>Marking connection & routing digunakan agar paket keluar melalui ISP yang sesuai.</li>
+          <li>Routing default dibuat dengan dua gateway agar terjadi <em>load balancing</em> secara ECMP.</li>
+          <li>DHCP server memberikan IP kepada client di jaringan LAN.</li>
+          <li>DNS diset ke Google DNS (8.8.8.8 & 8.8.4.4) agar client dapat resolve nama domain.</li>
+          <li>NAT digunakan untuk mengakses internet melalui kedua ISP.</li>
+        </ul>
+      </li>
+    </ul>
+
+
+
+    <img src="img/lb2.png" alt="Diagram jaringan" class="note-image" />
+    <p class="note-subtitle">R.ECMP</p>
+    <pre class="note-codeblock"><code>
+/ip pool
+add name=dhcp_pool0 ranges=10.10.10.2                # Pool DHCP untuk client LAN
+
+/ip dhcp-server
+add address-pool=dhcp_pool0 disabled=no interface=ether5 name=dhcp1  # DHCP server di LAN
+
+/ip address
+add address=192.168.1.2/30 interface=ether1 network=192.168.1.0  # IP ke ISP1
+add address=172.16.1.2/30 interface=ether2 network=172.16.1.0     # IP ke ISP2
+add address=10.10.10.1/30 interface=ether5 network=10.10.10.0     # IP LAN gateway
+
+/ip dhcp-server network
+add address=10.10.10.0/30 gateway=10.10.10.1       # Default gateway DHCP client
+
+/ip dns
+set servers=8.8.8.8,8.8.4.4                         # DNS Google
+
+/ip firewall mangle
+add action=mark-connection chain=input in-interface=ether1 new-connection-mark=ISP1  # Tandai koneksi masuk ISP1
+add action=mark-connection chain=input in-interface=ether2 new-connection-mark=ISP2  # Tandai koneksi masuk ISP2
+add action=mark-routing chain=output connection-mark=ISP1 new-routing-mark=ISP1       # Routing berdasarkan tanda ISP1
+add action=mark-routing chain=output connection-mark=ISP2 new-routing-mark=ISP2       # Routing berdasarkan tanda ISP2
+
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1  # NAT ke ISP1
+add action=masquerade chain=srcnat out-interface=ether2  # NAT ke ISP2
+
+/ip route
+add check-gateway=ping distance=1 gateway=192.168.1.1 routing-mark=ISP1  # Default route ISP1
+add check-gateway=ping distance=1 gateway=172.16.1.1 routing-mark=ISP2   # Default route ISP2
+add distance=1 gateway=192.168.1.1,172.16.1.1                        # ECMP: kedua gateway untuk load balancing
+
+/system identity
+set name=R.ECMP                                           # Nama router
+
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Pastikan semua gateway/link yang digunakan ECMP memiliki cost yang sama.</li>
+      <li>Per-connection balancing lebih stabil untuk trafik TCP, hindari per-packet agar tidak terjadi reordering.</li>
+      <li>Monitor kesehatan jalur dengan <em>check-gateway</em> atau IP SLA untuk failover otomatis jika salah satu link putus.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      ECMP membagi trafik IP secara merata ke beberapa jalur dengan cost sama, meningkatkan throughput dan memanfaatkan jalur redundan.
+      Cocok untuk multi-WAN atau backbone dengan banyak link setara. Satu flow biasanya tetap pada jalur yang sama.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+
+  <script src="js/index.js"></script>
+</body>
+</html>

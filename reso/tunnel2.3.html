@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>PPTP VPN</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">PPTP (Point-to-Point Tunneling Protocol) - VPN</h2>
+    <p class="note-paragraph">
+      <strong>PPTP</strong> adalah protokol VPN Layer 2 yang menggunakan GRE untuk tunneling dan MPPE untuk enkripsi. 
+      Mudah dikonfigurasi, tetapi saat ini <strong>tidak direkomendasikan untuk produksi</strong> karena keamanan yang rendah.
+    </p>
+
+    <ul class="note-list">
+      <li><strong>Tujuan:</strong> Membuat koneksi VPN sederhana antar site atau untuk remote user.</li>
+      <li><strong>VPN:</strong> Data dienkripsi dengan MPPE, termasuk autentikasi username/password.</li>
+      <li><strong>Use Case:</strong> Lab/testing, pembelajaran, atau skenario legacy yang tidak membutuhkan keamanan tinggi.</li>
+      <li><strong>Kelebihan:</strong> Konfigurasi cepat dan mudah, kompatibel dengan banyak platform.</li>
+      <li><strong>Keterbatasan:</strong> Enkripsi lemah, mudah diserang, tidak cocok untuk data sensitif.</li>
+    </ul>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li>Menghubungkan dua router menggunakan tunnel VPN PPTP.</li>
+        <li>RB1 bertindak sebagai PPTP Server, RB2 sebagai PPTP Client.</li>
+        <li>Digunakan untuk menghubungkan network 192.168.1.0/30 dengan 192.168.2.0/30.</li>
+    </ul>
+    <img src="img/tunnel2.png" alt="Diagram jaringan" class="note-image" />
+    
+    <h3 class="note-subtitle">PPTP-RB1 (Server)</h3>
+    <pre class="note-codeblock"><code>
+/ip pool
+add name=pptp_pool ranges=10.10.10.2                         # Pool IP untuk PPTP client (RB2 akan mendapat IP ini)
+
+/ppp profile
+add local-address=10.10.10.1 name=pptp_profile \
+    remote-address=pptp_pool                                 # Profil PPP: RB1 = 10.10.10.1, client ambil dari pool
+
+/interface pptp-server server
+set enabled=yes                                              # Aktifkan PPTP server (tanpa IPsec, enkripsi lemah)
+
+/ip address
+add address=192.168.190.100/24 interface=ether1              # IP WAN RB1
+add address=192.168.1.1/30 interface=ether2                  # IP LAN RB1
+
+/ip route
+add distance=1 dst-address=192.168.2.0/30 gateway=10.10.10.2 # Routing ke LAN RB2 via IP PPTP client
+
+/ppp secret
+add name=pptp1 password=pptp1 profile=pptp_profile \
+    service=pptp                                             # User & password autentikasi PPTP client
+
+/system identity
+set name=PPTP-R1                                             # Nama router
+    </code></pre>
+
+    <h3 class="note-subtitle">PPTP-RB2 (Client)</h3>
+    <pre class="note-codeblock"><code>
+/interface pptp-client
+add connect-to=192.168.190.100 disabled=no name=pptp-out1 \
+    user=pptp1 password=pptp1                                # PPTP client ke IP WAN RB1 dengan kredensial
+
+/ip address
+add address=192.168.190.101/24 interface=ether1              # IP WAN RB2
+add address=192.168.2.1/30 interface=ether2                  # IP LAN RB2
+
+/ip dhcp-server network
+add address=192.168.2.0/30 gateway=192.168.2.1               # DHCP network LAN RB2
+
+/ip route
+add distance=1 dst-address=192.168.1.0/30 gateway=10.10.10.1 # Routing ke LAN RB1 via IP PPTP server
+
+/system identity
+set name=PPTP-R2                                             # Nama router
+    </code></pre>
+
+
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Hanya gunakan PPTP untuk lab atau testing; jangan untuk produksi karena keamanan lemah.</li>
+      <li>Pastikan port TCP 1723 dan protokol GRE (47) dibuka di firewall/NAT.</li>
+      <li>Gunakan L2TP/IPsec atau OpenVPN untuk koneksi yang aman.</li>
+    </ul>
+
+    <hr class="note-divider" />
+  </main>
+  <script src="js/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dynamic Host Configuration Protocol (DHCP)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Dynamic Host Configuration Protocol (DHCP)</h2>
+    <p class="note-paragraph">
+      DHCP (Dynamic Host Configuration Protocol) adalah protokol jaringan yang digunakan untuk 
+      memberikan alamat IP dan informasi konfigurasi jaringan lainnya secara otomatis kepada perangkat klien.
+      Dengan DHCP, administrator tidak perlu mengatur IP secara manual pada setiap perangkat, sehingga menghemat waktu
+      dan mengurangi kesalahan konfigurasi.
+    </p>
+
+    <h3 class="note-subtitle">Fungsi Utama DHCP</h3>
+    <ul class="note-list">
+      <li>Memberikan alamat IP secara otomatis kepada perangkat yang terhubung ke jaringan.</li>
+      <li>Mengatur parameter jaringan seperti subnet mask, default gateway, dan DNS server.</li>
+      <li>Mempermudah manajemen jaringan terutama pada lingkungan dengan banyak perangkat.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Proses Kerja DHCP (DORA)</h3>
+    <ol class="note-list">
+      <li><strong>Discover</strong> – Klien mengirim broadcast untuk mencari server DHCP.</li>
+      <li><strong>Offer</strong> – Server DHCP menawarkan alamat IP beserta informasi konfigurasi.</li>
+      <li><strong>Request</strong> – Klien meminta alamat IP tertentu dari penawaran server.</li>
+      <li><strong>Acknowledge</strong> – Server mengonfirmasi dan memberikan alamat IP kepada klien.</li>
+    </ol>
+
+    <h3 class="note-subtitle">Jenis-jenis Alokasi DHCP</h3>
+    <ul class="note-list">
+      <li><strong>Dynamic Allocation</strong> – Server memberikan IP untuk jangka waktu tertentu (lease time).</li>
+      <li><strong>Automatic Allocation</strong> – Server memberikan IP permanen (tetap) dari pool yang tersedia.</li>
+      <li><strong>Static Allocation (Reservation)</strong> – Server memberikan IP tertentu kepada perangkat berdasarkan MAC address.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Komponen dalam DHCP</h3>
+    <ul class="note-list">
+      <li><strong>DHCP Client</strong> – Perangkat (PC, laptop, smartphone, dll.) yang meminta alamat IP dan konfigurasi jaringan dari server DHCP.</li>
+      <li><strong>DHCP Server</strong> – Perangkat atau layanan yang menyediakan alamat IP, subnet mask, gateway, DNS, dan konfigurasi jaringan lainnya kepada klien.</li>
+      <li><strong>DHCP Relay</strong> – Perangkat perantara (biasanya router) yang meneruskan permintaan DHCP dari klien ke server DHCP di jaringan lain (berbeda subnet).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kelebihan DHCP</h3>
+    <ul class="note-list">
+      <li>Mengurangi pekerjaan konfigurasi manual.</li>
+      <li>Menghindari konflik IP.</li>
+      <li>Mudah diatur untuk jaringan berskala besar.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Kekurangan DHCP</h3>
+    <ul class="note-list">
+      <li>Jika server DHCP gagal, perangkat baru tidak akan mendapatkan IP.</li>
+      <li>Kurang cocok untuk perangkat yang membutuhkan IP tetap tanpa reservasi.</li>
+      <li>Berpotensi disalahgunakan jika ada rogue DHCP server.</li>
+    </ul>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+      <li>Tujuan: Mengonfigurasi <strong>DHCP</strong> pada MikroTik dan Cisco agar klien mendapatkan IP secara otomatis.</li>
+      <li>MikroTik: Membuat IP pool, DHCP server di ether2, serta konfigurasi gateway dan DHCP client di ether1.</li>
+      <li>Cisco: Menentukan IP excluded, membuat DHCP pool DHCP_LAN, mengatur default-router, DNS, dan interface yang terhubung ke jaringan klien.</li>
+    </ul>
+
+    <img src="img/dhcp1.png" alt="Diagram jaringan" class="note-image" />
+    <p class="note-subtitle">Mikrotik</p>
+    <p class="note-subtitle">Router DHCP Server</p>
+    <pre class="note-codeblock"><code>
+/ip pool
+add name=dhcp_pool ranges=192.168.1.10-192.168.1.20                # Pool DHCP: range 192.168.1.10 - 192.168.1.20
+
+/ip dhcp-server
+add address-pool=dhcp_pool disabled=no interface=ether2 lease-time=30s name=dhcp-server relay=192.168.1.1   # DHCP server di ether2 untuk LAN, lease time 30s
+
+/ip address
+add address=10.10.10.1/30 interface=ether2 network=10.10.10.0       # IP statis LAN atau point-to-point pada ether2
+
+/ip dhcp-client
+add disabled=no interface=ether1                                     # Interface WAN (ether1) menerima IP dari ISP via DHCP
+
+/ip dhcp-server network
+add address=192.168.1.0/24 dns-server=8.8.8.8,8.8.4.4 gateway=192.168.1.1   # Pengaturan jaringan DHCP: gateway dan DNS untuk client
+
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1             # NAT untuk mengakses internet melalui WAN (ether1)
+
+/system identity
+set name=R.MTIK.SERVER                                               # Nama device
+
+    </code></pre>
+
+    <p class="note-subtitle">Router DHCP Relay</p>
+    <pre class="note-codeblock"><code>
+/ip address
+add address=10.10.10.2/30 interface=ether1 network=10.10.10.0       # IP statis WAN/point-to-point ke router utama
+add address=192.168.1.1/24 interface=ether2 network=192.168.1.0     # IP LAN sebagai gateway untuk client
+
+/ip dhcp-relay
+add dhcp-server=10.10.10.1 disabled=no interface=ether2 local-address=192.168.1.1 name=dhcp-relay  # Relay DHCP dari LAN ke server 10.10.10.1
+
+/ip dns
+set servers=8.8.8.8,8.8.4.4                                        # DNS server untuk router dan client
+
+/ip firewall nat
+add chain=srcnat out-interface=ether1 action=masquerade             # NAT untuk akses internet melalui WAN
+
+/ip route
+add distance=1 gateway=10.10.10.1                                   # Default route ke gateway WAN
+
+/system identity
+set name=R.MTIK.RELAY                                               # Nama device
+
+    </code></pre>
+
+    <p class="note-subtitle">Cisco</p>
+    <p class="note-subtitle">Router DHCP Server</p>
+    <pre class="note-codeblock"><code>
+hostname R.CISCO.SERVER                       # Nama hostname router
+
+! DHCP Configuration
+ip dhcp excluded-address 192.168.1.1 192.168.1.10   # IP yang tidak diberikan DHCP (gateway & reserved)
+ip dhcp pool DHCP_LAN                                # Pool DHCP untuk LAN
+ network 192.168.1.0 255.255.255.0                  # Jaringan LAN DHCP
+ default-router 192.168.1.1                          # Gateway default DHCP
+ dns-server 8.8.8.8                                  # DNS server untuk DHCP client
+
+! Interface WAN
+interface FastEthernet0/0
+ ip address dhcp                                      # Mendapat IP dari ISP via DHCP
+ ip nat outside                                      # Menandai interface sebagai NAT luar (WAN)
+ duplex half                                         # Set duplex mode
+
+! Interface LAN
+interface FastEthernet1/0
+ ip address 10.10.10.1 255.255.255.252              # IP statis LAN/point-to-point
+ ip nat inside                                       # Menandai interface sebagai NAT dalam (LAN)
+ duplex half                                         # Set duplex mode
+
+! Routing
+ip route 0.0.0.0 0.0.0.0 192.168.190.1             # Default route ke ISP
+ip route 192.168.1.0 255.255.255.0 10.10.10.2      # Route ke jaringan LAN di sisi lain
+
+! NAT Configuration
+ip nat inside source list 1 interface FastEthernet0/0 overload  # NAT overload untuk LAN ke WAN
+
+! Access List
+access-list 1 permit 192.168.1.0 0.0.0.255          # ACL untuk NAT, memperbolehkan subnet LAN
+
+    </code></pre>
+    
+    <p class="note-subtitle">Router DHCP Relay</p>
+    <pre class="note-codeblock"><code>
+hostname R.CISCO.RELAY                        # Nama hostname router
+
+! Interface WAN / Point-to-Point
+interface FastEthernet0/0
+ ip address 10.10.10.2 255.255.255.252       # IP statis point-to-point ke router utama
+ duplex half                                 # Set duplex mode
+
+! Interface LAN
+interface FastEthernet1/0
+ ip address 192.168.1.1 255.255.255.0       # IP LAN untuk client
+ ip helper-address 10.10.10.1               # Relay DHCP ke server di 10.10.10.1
+ duplex half                                 # Set duplex mode
+
+! Routing
+ip route 0.0.0.0 0.0.0.0 10.10.10.1         # Default route ke router utama / gateway WAN
+
+    </code></pre>
+    
+
+    <p class="note-subtitle">Juniper</p>
+    <pre class="note-codeblock"><code>
+<!-- root> show configuration 
+## Last commit: 2025-08-25 23:05:53 UTC by root
+version 14.1R4.8;
+system {
+    root-authentication {
+        encrypted-password "$1$qMLCNOZR$.YKMsjP/Kkhd6MUZrlgWH1"; ## SECRET-DATA
+    }
+    services {
+        dhcp-local-server {
+            group DHCP-LAN {
+                interface em2.0;
+            }
+        }
+    }
+    syslog {
+        user * {
+            any emergency;
+        }
+        file messages {
+            any notice;
+            authorization info;
+        }
+        file interactive-commands {
+            interactive-commands any;
+        }                               
+    }
+}
+interfaces {
+    em2 {
+        unit 0 {
+            family inet {
+                address 192.168.1.1/24;
+            }
+        }
+    }
+}
+access {
+    address-assignment {
+        ##
+        ## Warning: requires 'subscriber-address-assignment' license
+        ##
+        pool LAN-DHCP {
+            family inet {
+                network 192.168.1.0/24;
+                range R1 {
+                    low 192.168.1.15;
+                    high 192.168.1.250;
+                }                       
+                dhcp-attributes {
+                    name-server {
+                        8.8.4.4;
+                    }
+                    router {
+                        192.168.1.1;
+                    }
+                }
+            }
+        }
+    }
+} -->
+    </code></pre>
+    
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Gunakan <strong>IP reservation</strong> untuk perangkat penting seperti server dan printer.</li>
+      <li>Pastikan hanya ada satu DHCP server aktif di satu segmen jaringan untuk menghindari konflik.</li>
+      <li>Monitor lease time agar sesuai dengan kebutuhan jaringan.</li>
+      <li>Gunakan DHCP relay (IP helper) untuk melayani klien di jaringan berbeda.</li>
+    </ul>
+
+    <hr class="note-divider" />
+
+  </main>
+
+  <script src="js/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Multiprotocol Label Switching (MPLS)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="note-container">
+  <main class="note-main">
+    <h2 class="note-title text-center">Multiprotocol Label Switching (MPLS)</h2>
+    <p class="note-paragraph">
+      MPLS adalah teknologi forwarding paket yang menggunakan <strong>label</strong> sebagai pengenal aliran lalu lintas, 
+      bukan hanya berdasarkan alamat IP. MPLS bekerja di antara Layer 2 dan Layer 3, sehingga sering disebut 
+      <em>Layer 2.5</em>. Teknologi ini digunakan untuk mempercepat proses forwarding, mendukung QoS, dan 
+      mengimplementasikan VPN skala besar.
+    </p>
+
+    <h3 class="note-subtitle">Konsep Dasar</h3>
+    <ul class="note-list">
+      <li><strong>Label:</strong> ID 20-bit yang ditambahkan pada header MPLS untuk mengidentifikasi aliran paket.</li>
+      <li><strong>Label Stack:</strong> MPLS dapat membawa beberapa label secara berurutan (label stacking).</li>
+      <li><strong>LSP (Label Switched Path):</strong> jalur forwarding yang telah ditentukan untuk paket berlabel.</li>
+      <li><strong>FEC (Forwarding Equivalence Class):</strong> sekumpulan paket yang diperlakukan sama oleh MPLS.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Posisi dan Perbandingan Layer</h3>
+    <p class="note-paragraph">
+      MPLS dikenal sebagai <strong>Layer 2.5</strong> karena posisinya berada di antara Layer 2 (Data Link) dan Layer 3 (Network).
+    </p>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Layer</th>
+          <th>Kelebihan</th>
+          <th>Kekurangan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Layer 2 (Data Link)</td>
+          <td>Sangat cepat, tidak butuh resource besar.</td>
+          <td>Bisa looping, tidak fleksibel (tidak ada metrik, path, best path).</td>
+        </tr>
+        <tr>
+          <td>Layer 3 (Network)</td>
+          <td>Fleksibel, mengenal IP address, ada metrik & prioritas paket.</td>
+          <td>Lebih lambat, memakan resource besar.</td>
+        </tr>
+        <tr>
+          <td>MPLS (Layer 2.5)</td>
+          <td>Gabungan kecepatan Layer 2 dan fleksibilitas Layer 3.</td>
+          <td>Tidak ada enkripsi bawaan, rawan jika tanpa VPN/IPSec.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="note-subtitle">Komponen Utama</h3>
+    <ul class="note-list">
+      <li><strong>LER (Label Edge Router / PE):</strong> Router di tepi domain MPLS. Menambahkan label pada ingress, menghapus label pada egress.</li>
+      <li><strong>LSR (Label Switch Router / P):</strong> Router di tengah domain MPLS yang hanya mengganti label sesuai tabel LFIB.</li>
+      <li><strong>CE (Customer Edge Router):</strong> Router di sisi pelanggan, tidak menjalankan MPLS, hanya routing biasa (static/dynamic).</li>
+      <li><strong>LDP (Label Distribution Protocol):</strong> Protokol untuk distribusi label.</li>
+      <li><strong>RSVP-TE:</strong> Signaling protocol untuk Traffic Engineering.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Header MPLS</h3>
+    <ul class="note-list">
+      <li><strong>Label:</strong> 20 bit.</li>
+      <li><strong>EXP:</strong> 3 bit (QoS/CoS).</li>
+      <li><strong>S:</strong> 1 bit (Bottom of Stack indicator).</li>
+      <li><strong>TTL:</strong> 8 bit (Time To Live).</li>
+    </ul>
+
+    <h3 class="note-subtitle">Jenis Layanan MPLS</h3>
+    <ul class="note-list">
+      <li><strong>MPLS L3VPN:</strong> VPN berbasis IP yang memisahkan routing antar pelanggan.</li>
+      <li><strong>MPLS L2VPN:</strong> Menghubungkan site secara Layer 2 (contoh: VPLS, VPWS).</li>
+      <li><strong>MPLS TE (Traffic Engineering):</strong> Mengatur jalur lalu lintas untuk optimasi kapasitas.</li>
+      <li><strong>MPLS QoS:</strong> Memberikan prioritas layanan berdasarkan label EXP.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Apakah MPLS ke arah CE harus menggunakan VRF?</h3>
+    <p class="note-paragraph">
+      Tidak selalu, tergantung jenis layanan MPLS yang digunakan:
+    </p>
+    <ul class="note-list">
+      <li><strong>MPLS L3VPN:</strong> Wajib menggunakan <em>VRF</em> di sisi PE untuk memisahkan routing antar pelanggan. 
+      Setiap interface PE yang terhubung ke CE harus diikat ke VRF tertentu. Hal ini memungkinkan pelanggan berbeda tetap bisa menggunakan IP address yang sama tanpa konflik.</li>
+      <li><strong>MPLS L2VPN:</strong> Tidak memerlukan VRF, karena PE hanya meneruskan frame Layer 2 secara transparan tanpa ikut campur di routing.</li>
+      <li><strong>MPLS Transport Backbone:</strong> Jika MPLS hanya digunakan di internal provider (misalnya untuk Traffic Engineering atau Fast Reroute), tidak diperlukan VRF ke arah CE, kecuali ada layanan VPN tambahan.</li>
+    </ul>
+    <p class="note-paragraph">
+      <strong>Kesimpulan:</strong> VRF ke arah CE <em>wajib</em> bila menggunakan MPLS L3VPN, 
+      sedangkan pada L2VPN atau backbone transport, VRF tidak diperlukan.
+    </p>
+
+    <h3 class="note-subtitle">Proses Forwarding MPLS</h3>
+    <ol class="note-list">
+      <li>Paket masuk ke LER ingress → dicocokkan dengan FEC → diberi label.</li>
+      <li>LSR di tengah jaringan mengganti label sesuai tabel LFIB (Label Forwarding Information Base).</li>
+      <li>Paket sampai di LER egress → label dihapus → paket diteruskan ke tujuan akhir.</li>
+    </ol>
+
+    <h3 class="note-subtitle">Keuntungan dan Kelemahan MPLS</h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Kelebihan</th>
+          <th>Kekurangan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Stabil dan memiliki kinerja tinggi.</td>
+          <td>Tidak ada enkripsi bawaan → rawan.</td>
+        </tr>
+        <tr>
+          <td>Efisien dalam penggunaan bandwidth.</td>
+          <td>Tergeser oleh teknologi baru (SD-WAN, Cloud-based).</td>
+        </tr>
+        <tr>
+          <td>Mengurangi kepadatan traffic → meningkatkan user experience.</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td>Forwarding cepat dengan label switching.</td>
+          <td>-</td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+        <li>Topologi menggunakan MPLS dengan protokol OSPF untuk distribusi routing antar router (RB1-RB7).</li>
+        <li>RB1:
+            <ul>
+                <li>IP: <code>10.1.1.1/30</code> (ether1), <code>11.1.1.1/30</code> (ether2)</li>
+                <li>ether1 & ether2 diikutkan OSPF area backbone, ether5 sebagai DHCP client.</li>
+            </ul>
+        </li>
+        <li>RB2 hingga RB7: Setiap router memiliki interface dan network OSPF sesuai area masing-masing (backbone, area2, area3).</li>
+        <li>Tujuan: Membuat jalur MPLS antar router dan memastikan routing OSPF berjalan di semua interface.</li>
+    </ul>
+
+
+
+    <img src="img/mpls.png" alt="Diagram jaringan" class="note-image" />
+
+    <p class="note-subtitle">RB1</p>
+    <pre class="note-codeblock"><code>
+/ip address
+add address=10.1.1.1/30 interface=ether1 network=10.1.1.0   # IP ke neighbor OSPF
+add address=11.1.1.1/30 interface=ether2 network=11.1.1.0   # IP ke neighbor OSPF
+
+/ip dhcp-client
+add disabled=no interface=ether5  # ether5 untuk mendapatkan IP dari upstream
+
+/routing ospf interface
+add interface=ether1
+add interface=ether2   # Menambahkan interface ke OSPF area backbone
+
+/routing ospf network
+add area=backbone network=10.1.1.0/30
+add area=backbone network=11.1.1.0/30  # Menetapkan network OSPF di area backbone
+
+/system identity
+set name=R1  # Nama router
+
+    </code></pre>
+
+    <p class="note-subtitle">RB2</p>
+    <pre class="note-codeblock"><code>
+/routing ospf area
+add area-id=2.2.2.2 name=area2  # Membuat area2 OSPF
+
+/ip address
+add address=10.1.1.2/30 interface=ether1 network=10.1.1.0
+add address=12.1.1.1/30 interface=ether2 network=12.1.1.0
+add address=16.1.1.1/30 interface=ether3 network=16.1.1.0
+add address=17.1.1.1/30 interface=ether4 network=17.1.1.0  # IP tiap interface
+
+/routing ospf interface
+add interface=ether1
+add interface=ether2
+add interface=ether3
+add interface=ether4  # Semua interface ikut OSPF
+
+/routing ospf network
+add area=backbone network=10.1.1.0/30
+add area=backbone network=12.1.1.0/30
+add area=area2 network=16.1.1.0/30
+add area=area2 network=17.1.1.0/30  # Network mapping ke area OSPF
+
+/system identity
+set name=R2
+
+    </code></pre>
+
+    <p class="note-subtitle">RB3</p>
+    <pre class="note-codeblock"><code>
+/routing ospf area
+add area-id=3.3.3.3 name=area3  # Membuat area3 OSPF
+
+/ip address
+add address=11.1.1.2/30 interface=ether1 network=11.1.1.0
+add address=12.1.1.2/30 interface=ether2 network=12.1.1.0
+add address=13.1.1.1/30 interface=ether3 network=13.1.1.0
+add address=14.1.1.1/30 interface=ether4 network=14.1.1.0
+
+/routing ospf interface
+add interface=ether1
+add interface=ether2
+add interface=ether3
+add interface=ether4
+
+/routing ospf network
+add area=backbone network=12.1.1.0/30
+add area=backbone network=11.1.1.0/30
+add area=area3 network=13.1.1.0/30
+add area=area3 network=14.1.1.0/30
+
+/system identity
+set name=R3
+
+    </code></pre>
+
+    <p class="note-subtitle">RB4</p>
+    <pre class="note-codeblock"><code>
+/routing ospf area
+add area-id=3.3.3.3 name=area3
+
+/ip address
+add address=13.1.1.2/30 interface=ether1 network=13.1.1.0
+add address=15.1.1.1/30 interface=ether2 network=15.1.1.0
+
+/routing ospf interface
+add interface=ether1
+add interface=ether2
+
+/routing ospf network
+add area=area3 network=13.1.1.0/30
+add area=area3 network=15.1.1.0/30
+
+/system identity
+set name=R4
+
+    </code></pre>
+
+    <p class="note-subtitle">RB5</p>
+    <pre class="note-codeblock"><code>
+/routing ospf area
+add area-id=3.3.3.3 name=area3
+
+/ip address
+add address=14.1.1.2/30 interface=ether1 network=14.1.1.0
+add address=15.1.1.2/30 interface=ether2 network=15.1.1.0
+add address=192.168.2.1/30 interface=ether3 network=192.168.2.0
+
+/routing ospf interface
+add interface=ether1
+add interface=ether2
+
+/routing ospf network
+add area=area3 network=15.1.1.0/30
+add area=area3 network=14.1.1.0/30
+add area=area3 network=192.168.2.0/30
+
+/system identity
+set name=R5
+
+    </code></pre>
+
+    <p class="note-subtitle">RB6</p>
+    <pre class="note-codeblock"><code>
+/routing ospf area
+add area-id=2.2.2.2 name=area2
+
+/ip address
+add address=16.1.1.2/30 interface=ether1 network=16.1.1.0
+add address=18.1.1.1/30 interface=ether2 network=18.1.1.0
+
+/routing ospf interface
+add interface=ether1
+add interface=ether2
+
+/routing ospf network
+add area=area2 network=16.1.1.0/30
+add area=area2 network=18.1.1.0/30
+
+/system identity
+set name=R6
+
+    </code></pre>
+
+    <p class="note-subtitle">RB7</p>
+    <pre class="note-codeblock"><code>
+/routing ospf area
+add area-id=2.2.2.2 name=area2
+
+/ip address
+add address=17.1.1.2/30 interface=ether1 network=17.1.1.0
+add address=18.1.1.2/30 interface=ether2 network=18.1.1.0
+add address=192.168.1.1/30 interface=ether3 network=192.168.1.0
+
+/routing ospf interface
+add interface=ether1
+add interface=ether2
+
+/routing ospf network
+add area=area2 network=17.1.1.0/30
+add area=area2 network=18.1.1.0/30
+add area=area2 network=192.168.1.0/30
+
+/system identity
+set name=R7
+
+    </code></pre>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      MPLS adalah teknologi backbone modern yang digunakan oleh ISP dan perusahaan besar untuk 
+      mengoptimalkan forwarding, mendukung VPN, dan memastikan QoS. Fleksibilitasnya dalam 
+      mendukung berbagai protokol menjadikannya pilihan utama di jaringan skala besar.
+    </p>
+
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+    <hr class="note-divider" />
+
+
+    <!-- MPLS Overview & Labs -->
+<div class="note-card">
+  <div class="note-card-header">
+    <h2 class="note-title">📌 MPLS Overview & Labs</h2>
+    <span class="toggle-btn">&#9660;</span>
+  </div>
+  <div class="note-card-content">
+    <section class="note-section">
+
+      <h4 class="note-subtitle">📌 1. Konsep Dasar MPLS</h4>
+      <p class="note-paragraph">
+        MPLS (Multiprotocol Label Switching) = teknologi forwarding berbasis label untuk percepat routing di jaringan besar.
+      </p>
+      <h5 class="note-subsubtitle">Cara Kerja</h5>
+      <ul class="note-list">
+        <li>Paket data diberi <strong>label</strong> saat masuk ke jaringan MPLS</li>
+        <li>Router core (<strong>LSR</strong>) meneruskan paket berdasarkan label, bukan IP</li>
+      </ul>
+      <h5 class="note-subsubtitle">Terminologi Penting</h5>
+      <ul class="note-list">
+        <li><strong>FEC</strong>: Forwarding Equivalence Class, kelompok paket yang diperlakukan sama</li>
+        <li><strong>LER</strong>: Label Edge Router, memberi/menghapus label di edge</li>
+        <li><strong>LSR</strong>: Label Switch Router, swap label di core</li>
+      </ul>
+      <h5 class="note-subsubtitle">Label Operations</h5>
+      <ul class="note-list">
+        <li><strong>Push</strong>: menambahkan label (ingress)</li>
+        <li><strong>Swap</strong>: mengganti label lama dengan baru (core)</li>
+        <li><strong>Pop</strong>: menghapus label (egress)</li>
+      </ul>
+
+      <h4 class="note-subtitle">📌 2. Arsitektur MPLS</h4>
+      <ul class="note-list">
+        <li><strong>PE</strong> (Provider Edge): hubungkan jaringan pelanggan ke MPLS core</li>
+        <li><strong>P</strong> (Provider/Core Router): forward paket MPLS di backbone</li>
+      </ul>
+      <p class="note-paragraph">
+        Forwarding MPLS: paket masuk → PE push label → LSR swap label → PE egress pop label → paket sampai CE
+      </p>
+
+      <h4 class="note-subtitle">📌 3. Mekanisme Labeling</h4>
+      <h5 class="note-subsubtitle">Label Distribution</h5>
+      <ul class="note-list">
+        <li><strong>LDP</strong>: distribusi label otomatis</li>
+        <li><strong>RSVP-TE</strong>: jalur spesifik untuk traffic engineering</li>
+      </ul>
+      <h5 class="note-subsubtitle">Traffic Engineering & QoS</h5>
+      <p class="note-paragraph">
+        Memastikan jalur optimal untuk aplikasi kritikal
+      </p>
+
+      <h4 class="note-subtitle">📌 4. MPLS VPN</h4>
+      <h5 class="note-subsubtitle">Jenis</h5>
+      <ul class="note-list">
+        <li><strong>Layer 3 VPN (L3VPN)</strong>: routing antar site pelanggan via MPLS</li>
+        <li><strong>Layer 2 VPN (L2VPN)</strong>: transparan Layer 2 antar site</li>
+      </ul>
+      <h5 class="note-subsubtitle">Routing PE-CE</h5>
+      <ul class="note-list">
+        <li>Static Routing</li>
+        <li>Dynamic Routing (OSPF, EIGRP, BGP)</li>
+      </ul>
+
+      <h4 class="note-subtitle">📌 5. Lab MPLS</h4>
+      <h5 class="note-subsubtitle">Lab 1 - MPLS Backbone</h5>
+      <ul class="note-list">
+        <li>Membangun MPLS core antara P & PE router</li>
+        <li>Konfigurasi LDP & verifikasi label</li>
+      </ul>
+
+      <h5 class="note-subsubtitle">Lab 2 - MPLS VPN</h5>
+      <ul class="note-list">
+        <li>Membuat L3VPN antar beberapa PE-CE</li>
+        <li>Menghubungkan beberapa site pelanggan</li>
+      </ul>
+
+      <h5 class="note-subsubtitle">Lab 3 - MPLS VPN PE-CE Static Routing</h5>
+      <ul class="note-list">
+        <li>Gunakan static route untuk PE-CE</li>
+        <li>Pastikan paket pelanggan bisa saling reach via MPLS</li>
+      </ul>
+
+    </section>
+  </div>
+</div>
+
+
+<!-- Lab 1 - MPLS Backbone -->
+<div class="note-card">
+  <div class="note-card-header">
+    <h2 class="note-title">📌 Lab 1 - MPLS Backbone</h2>
+    <span class="toggle-btn">&#9660;</span>
+  </div>
+  <div class="note-card-content">
+    <section class="note-section">
+
+      <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+      <p class="note-paragraph">
+        Jaringan MPLS sederhana dengan 3 core router dan 2 edge router:
+      </p>
+      <pre class="note-codeblock"><code>
+CE1 --- PE1 --- P1 --- P2 --- PE2 --- CE2
+      </code></pre>
+      <ul class="note-list">
+        <li><strong>PE1 & PE2</strong>: Provider Edge Router</li>
+        <li><strong>P1 & P2</strong>: Core Router (LSR)</li>
+        <li><strong>CE1 & CE2</strong>: Customer Edge Router (IP routing biasa)</li>
+      </ul>
+
+      <h4 class="note-subtitle">🎯 Goal Lab</h4>
+      <ul class="note-list">
+        <li>Membangun MPLS backbone antara PE1, P1, P2, PE2</li>
+        <li>Aktifkan LDP untuk distribusi label</li>
+        <li>Verifikasi label & konektivitas antar router MPLS</li>
+      </ul>
+
+      <h4 class="note-subtitle">🌐 IP Addressing (Contoh)</h4>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Link</th>
+            <th>IP PE1</th>
+            <th>IP P1</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>PE1-P1</td>
+            <td>10.0.12.1/30</td>
+            <td>10.0.12.2/30</td>
+          </tr>
+          <tr>
+            <td>P1-P2</td>
+            <td>10.0.23.1/30</td>
+            <td>10.0.23.2/30</td>
+          </tr>
+          <tr>
+            <td>P2-PE2</td>
+            <td>10.0.24.1/30</td>
+            <td>10.0.24.2/30</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4 class="note-subtitle">⚙️ Konfigurasi MPLS Backbone</h4>
+
+      <h5 class="note-subsubtitle">Step 1 - Aktifkan MPLS di Core Router (P1 & P2)</h5>
+      <pre class="note-codeblock"><code>
+interface FastEthernet0/0
+ ip address 10.0.12.2 255.255.255.252
+ mpls ip
+!
+interface FastEthernet0/1
+ ip address 10.0.23.1 255.255.255.252
+ mpls ip
+!
+mpls label protocol ldp
+      </code></pre>
+
+      <h5 class="note-subsubtitle">Step 2 - Aktifkan MPLS di PE Router</h5>
+      <p class="note-paragraph"><strong>PE1</strong></p>
+      <pre class="note-codeblock"><code>
+interface FastEthernet0/0
+ ip address 10.0.12.1 255.255.255.252
+ mpls ip
+!
+interface FastEthernet0/1
+ ip address 192.168.1.1 255.255.255.0  ! Link ke CE1
+!
+mpls label protocol ldp
+      </code></pre>
+
+      <p class="note-paragraph"><strong>PE2</strong></p>
+      <pre class="note-codeblock"><code>
+interface FastEthernet0/0
+ ip address 10.0.24.2 255.255.255.252
+ mpls ip
+!
+interface FastEthernet0/1
+ ip address 192.168.2.1 255.255.255.0  ! Link ke CE2
+!
+mpls label protocol ldp
+      </code></pre>
+
+      <h5 class="note-subsubtitle">Step 3 - Routing di Core & PE</h5>
+      <p class="note-paragraph">Bisa pakai OSPF di MPLS core agar semua router tahu jalur ke PE:</p>
+      <pre class="note-codeblock"><code>
+router ospf 1
+ network 10.0.0.0 0.0.255.255 area 0
+      </code></pre>
+
+      <h5 class="note-subsubtitle">Step 4 - Verifikasi</h5>
+      <p class="note-paragraph"><strong>Periksa label LDP</strong></p>
+      <pre class="note-codeblock"><code>
+show mpls ldp neighbor
+show mpls forwarding-table
+      </code></pre>
+      <p class="note-paragraph"><strong>Tes konektivitas antar PE</strong></p>
+      <pre class="note-codeblock"><code>
+ping 10.0.24.2  ! dari PE1 ke PE2
+      </code></pre>
+
+      <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+      <ul class="note-list">
+        <li>PE1 bisa reach PE2 melalui MPLS core</li>
+        <li>Core router hanya swap label, tidak mengubah IP paket</li>
+        <li>LDP neighbor terbentuk di PE1-P1, P1-P2, P2-PE2</li>
+      </ul>
+
+    </section>
+  </div>
+</div>
+
+
+
+<!-- Lab 2 - MPLS VPN (L3VPN) -->
+<div class="note-card">
+  <div class="note-card-header">
+    <h2 class="note-title">📌 Lab 2 - MPLS VPN (L3VPN)</h2>
+    <span class="toggle-btn">&#9660;</span>
+  </div>
+  <div class="note-card-content">
+    <section class="note-section">
+
+      <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+      <p class="note-paragraph">
+        Menghubungkan dua site pelanggan melalui MPLS backbone (Lab 1):
+      </p>
+      <pre class="note-codeblock"><code>
+CE1 --- PE1 --- P1 --- P2 --- PE2 --- CE2
+      </code></pre>
+
+      <ul class="note-list">
+        <li><strong>PE1 & PE2</strong>: Provider Edge Router</li>
+        <li><strong>P1 & P2</strong>: Core MPLS Router</li>
+        <li><strong>CE1 & CE2</strong>: Customer Edge Router</li>
+        <li>MPLS backbone sudah aktif (Lab 1)</li>
+      </ul>
+
+      <h4 class="note-subtitle">🎯 Goal Lab</h4>
+      <ul class="note-list">
+        <li>Membuat Layer 3 VPN agar CE1 & CE2 saling ping</li>
+        <li>Gunakan VRF di PE untuk memisahkan routing pelanggan</li>
+        <li>Distribusi prefix via MP-BGP antar PE</li>
+      </ul>
+
+      <h4 class="note-subtitle">🌐 IP Addressing Contoh</h4>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Device</th>
+            <th>Interface</th>
+            <th>IP Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>CE1</td><td>Fa0/0</td><td>192.168.10.1/24</td></tr>
+          <tr><td>PE1</td><td>Fa0/1</td><td>192.168.10.254/24</td></tr>
+          <tr><td>PE1</td><td>Fa0/0</td><td>10.0.12.1/30</td></tr>
+          <tr><td>PE2</td><td>Fa0/0</td><td>10.0.24.2/30</td></tr>
+          <tr><td>PE2</td><td>Fa0/1</td><td>192.168.20.254/24</td></tr>
+          <tr><td>CE2</td><td>Fa0/0</td><td>192.168.20.1/24</td></tr>
+        </tbody>
+      </table>
+
+      <h4 class="note-subtitle">⚙️ Konfigurasi MPLS L3VPN</h4>
+
+      <h5 class="note-subsubtitle">Step 1 - Buat VRF di PE Router</h5>
+      <p><strong>PE1</strong></p>
+      <pre class="note-codeblock"><code>
+ip vrf CUSTOMER1
+ rd 100:1
+ route-target export 100:1
+ route-target import 100:1
+!
+interface FastEthernet0/1  ! link ke CE1
+ ip vrf forwarding CUSTOMER1
+ ip address 192.168.10.254 255.255.255.0
+!
+interface FastEthernet0/0  ! link ke MPLS core
+ ip address 10.0.12.1 255.255.255.252
+ mpls ip
+      </code></pre>
+
+      <p><strong>PE2</strong></p>
+      <pre class="note-codeblock"><code>
+ip vrf CUSTOMER1
+ rd 100:1
+ route-target export 100:1
+ route-target import 100:1
+!
+interface FastEthernet0/1  ! link ke CE2
+ ip vrf forwarding CUSTOMER1
+ ip address 192.168.20.254 255.255.255.0
+!
+interface FastEthernet0/0  ! link ke MPLS core
+ ip address 10.0.24.2 255.255.255.252
+ mpls ip
+      </code></pre>
+
+      <h5 class="note-subsubtitle">Step 2 - Routing PE-CE</h5>
+      <p>Contoh static routing:</p>
+      <pre class="note-codeblock"><code>
+CE1
+ip route 0.0.0.0 0.0.0.0 192.168.10.254
+
+CE2
+ip route 0.0.0.0 0.0.0.0 192.168.20.254
+      </code></pre>
+
+      <h5 class="note-subsubtitle">Step 3 - Aktifkan MP-BGP di PE</h5>
+      <p><strong>PE1</strong></p>
+      <pre class="note-codeblock"><code>
+router bgp 65001
+ bgp log-neighbor-changes
+ neighbor 10.0.12.2 remote-as 65000
+ neighbor 10.0.12.2 update-source FastEthernet0/0
+ !
+ address-family vpnv4
+  neighbor 10.0.12.2 activate
+ exit-address-family
+      </code></pre>
+
+      <p><strong>PE2</strong></p>
+      <pre class="note-codeblock"><code>
+router bgp 65002
+ bgp log-neighbor-changes
+ neighbor 10.0.24.1 remote-as 65000
+ neighbor 10.0.24.1 update-source FastEthernet0/0
+ !
+ address-family vpnv4
+  neighbor 10.0.24.1 activate
+ exit-address-family
+      </code></pre>
+
+      <p><em>Catatan: P1 & P2 hanya core MPLS, tidak perlu BGP VPN.</em></p>
+
+      <h5 class="note-subsubtitle">Step 4 - Verifikasi</h5>
+      <ul class="note-list">
+        <li>Cek VRF: <code>show ip route vrf CUSTOMER1</code></li>
+        <li>Cek konektivitas CE1 ↔ CE2: <code>ping 192.168.20.1 source 192.168.10.1</code></li>
+        <li>Cek MPLS VPN label: <code>show mpls forwarding-table</code></li>
+      </ul>
+
+      <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+      <ul class="note-list">
+        <li>CE1 bisa ping CE2 melalui MPLS VPN</li>
+        <li>Traffic pelanggan dipisahkan oleh VRF</li>
+        <li>Core MPLS hanya swap label, tidak menyentuh IP CE</li>
+      </ul>
+
+    </section>
+  </div>
+</div>
+
+
+
+<!-- Lab 3 - MPLS VPN: PE-CE Static Routing -->
+<div class="note-card">
+  <div class="note-card-header">
+    <h2 class="note-title">📌 Lab 3 - MPLS VPN: PE-CE Static Routing</h2>
+    <span class="toggle-btn">&#9660;</span>
+  </div>
+  <div class="note-card-content">
+    <section class="note-section">
+
+      <h4 class="note-subtitle">🖥️ Contoh Kasus</h4>
+      <p class="note-paragraph">Topologi sama dengan Lab 2:</p>
+      <pre class="note-codeblock"><code>
+CE1 --- PE1 --- P1 --- P2 --- PE2 --- CE2
+      </code></pre>
+      <ul class="note-list">
+        <li>Membuat MPLS VPN agar CE1 dan CE2 saling reach menggunakan static route</li>
+        <li>Menghubungkan beberapa site pelanggan melalui VRF</li>
+        <li>Core MPLS (P1 & P2) hanya swap label, tidak perlu tahu prefix pelanggan</li>
+      </ul>
+
+      <h4 class="note-subtitle">🌐 IP Addressing Contoh</h4>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Device</th>
+            <th>Interface</th>
+            <th>IP Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>CE1</td><td>Fa0/0</td><td>192.168.10.1/24</td></tr>
+          <tr><td>PE1</td><td>Fa0/1</td><td>192.168.10.254/24</td></tr>
+          <tr><td>PE1</td><td>Fa0/0</td><td>10.0.12.1/30</td></tr>
+          <tr><td>PE2</td><td>Fa0/0</td><td>10.0.24.2/30</td></tr>
+          <tr><td>PE2</td><td>Fa0/1</td><td>192.168.20.254/24</td></tr>
+          <tr><td>CE2</td><td>Fa0/0</td><td>192.168.20.1/24</td></tr>
+        </tbody>
+      </table>
+
+      <h4 class="note-subtitle">⚙️ Konfigurasi MPLS VPN - Static Routing</h4>
+
+      <h5 class="note-subsubtitle">Step 1 - Buat VRF di PE Router</h5>
+      <p><strong>PE1</strong></p>
+      <pre class="note-codeblock"><code>
+ip vrf CUSTOMER1
+ rd 100:1
+ route-target export 100:1
+ route-target import 100:1
+!
+interface FastEthernet0/1  ! link ke CE1
+ ip vrf forwarding CUSTOMER1
+ ip address 192.168.10.254 255.255.255.0
+!
+interface FastEthernet0/0  ! link ke MPLS core
+ ip address 10.0.12.1 255.255.255.252
+ mpls ip
+      </code></pre>
+
+      <p><strong>PE2</strong></p>
+      <pre class="note-codeblock"><code>
+ip vrf CUSTOMER1
+ rd 100:1
+ route-target export 100:1
+ route-target import 100:1
+!
+interface FastEthernet0/1  ! link ke CE2
+ ip vrf forwarding CUSTOMER1
+ ip address 192.168.20.254 255.255.255.0
+!
+interface FastEthernet0/0  ! link ke MPLS core
+ ip address 10.0.24.2 255.255.255.252
+ mpls ip
+      </code></pre>
+
+      <h5 class="note-subsubtitle">Step 2 - Routing PE-CE Static</h5>
+      <pre class="note-codeblock"><code>
+CE1
+ip route 0.0.0.0 0.0.0.0 192.168.10.254
+
+CE2
+ip route 0.0.0.0 0.0.0.0 192.168.20.254
+
+PE1
+ip route vrf CUSTOMER1 192.168.20.0 255.255.255.0 10.0.12.2
+
+PE2
+ip route vrf CUSTOMER1 192.168.10.0 255.255.255.0 10.0.24.1
+      </code></pre>
+      <p><em>Catatan: 10.0.12.2 di PE1 adalah next-hop ke PE2 melalui core MPLS.</em></p>
+
+      <h5 class="note-subsubtitle">Step 3 - Aktifkan MPLS di Core</h5>
+      <p><strong>P1</strong></p>
+      <pre class="note-codeblock"><code>
+interface FastEthernet0/0
+ ip address 10.0.12.2 255.255.255.252
+ mpls ip
+!
+interface FastEthernet0/1
+ ip address 10.0.23.1 255.255.255.252
+ mpls ip
+!
+mpls label protocol ldp
+      </code></pre>
+
+      <p><strong>P2</strong></p>
+      <pre class="note-codeblock"><code>
+interface FastEthernet0/0
+ ip address 10.0.23.2 255.255.255.252
+ mpls ip
+!
+interface FastEthernet0/1
+ ip address 10.0.24.1 255.255.255.252
+ mpls ip
+!
+mpls label protocol ldp
+      </code></pre>
+
+      <h5 class="note-subsubtitle">Step 4 - Verifikasi</h5>
+      <ul class="note-list">
+        <li>Cek VRF di PE: <code>show ip route vrf CUSTOMER1</code></li>
+        <li>Ping CE1 ↔ CE2: <code>ping 192.168.20.1 source 192.168.10.1</code></li>
+        <li>Cek MPLS label forwarding: <code>show mpls forwarding-table</code></li>
+      </ul>
+
+      <h4 class="note-subtitle">✅ Hasil yang Diharapkan</h4>
+      <ul class="note-list">
+        <li>CE1 bisa ping CE2 melalui MPLS VPN</li>
+        <li>Routing antar site menggunakan static route di PE</li>
+        <li>Core MPLS tetap hanya swap label</li>
+        <li>Tidak perlu dynamic routing antara PE-CE</li>
+      </ul>
+
+    </section>
+  </div>
+</div>
+
+
+
+
+    <hr class="note-divider" />
+
+  </main>
+
+  <script src="js/index.js"></script>
+</body>
+</html>

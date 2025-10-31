@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Quiz Pilihan Ganda — Alamat IP</title>
+  <link rel="stylesheet" href="../css/cssquiz.css">
+</head>
+<body>
+  <div class="card" id="quizCard">
+    <h1>Quiz Singkat — Alamat IP dan Subnet Dasar</h1>
+    <form id="quizForm">
+
+      <div class="question" data-q="1">
+        <div class="q">1. Alamat IP bisa diibaratkan seperti apa dalam kehidupan sehari-hari?</div>
+        <div class="options">
+          <label><input type="radio" name="q1" value="A"> A. Nomor antrean di bank</label>
+          <label><input type="radio" name="q1" value="B"> B. Nomor telepon perangkat</label>
+          <label><input type="radio" name="q1" value="C"> C. Nomor rekening</label>
+          <label><input type="radio" name="q1" value="D"> D. Nomor pelat kendaraan</label>
+        </div>
+      </div>
+
+      <div class="question" data-q="2">
+        <div class="q">2. Tanpa alamat IP, apa yang akan terjadi pada perangkat dalam jaringan?</div>
+        <div class="options">
+          <label><input type="radio" name="q2" value="A"> A. Tetap bisa berkomunikasi</label>
+          <label><input type="radio" name="q2" value="B"> B. Tidak bisa saling berkomunikasi</label>
+          <label><input type="radio" name="q2" value="C"> C. Langsung terhubung ke internet</label>
+          <label><input type="radio" name="q2" value="D"> D. Menggunakan Bluetooth sebagai gantinya</label>
+        </div>
+      </div>
+
+      <div class="question" data-q="3">
+        <div class="q">3. Perintah apa yang digunakan untuk melihat alamat IP di sistem Windows?</div>
+        <div class="options">
+          <label><input type="radio" name="q3" value="A"> A. netstat</label>
+          <label><input type="radio" name="q3" value="B"> B. ping</label>
+          <label><input type="radio" name="q3" value="C"> C. ipconfig</label>
+          <label><input type="radio" name="q3" value="D"> D. ifconfig</label>
+        </div>
+      </div>
+
+      <div class="question" data-q="4">
+        <div class="q">4. Siapa yang biasanya memberikan alamat IP ke perangkat di jaringan rumah?</div>
+        <div class="options">
+          <label><input type="radio" name="q4" value="A"> A. ISP</label>
+          <label><input type="radio" name="q4" value="B"> B. DHCP pada router</label>
+          <label><input type="radio" name="q4" value="C"> C. Modem</label>
+          <label><input type="radio" name="q4" value="D"> D. Firewall</label>
+        </div>
+      </div>
+
+      <div class="question" data-q="5">
+        <div class="q">5. Apa arti angka 255 pada Subnet Mask seperti 255.255.255.0?</div>
+        <div class="options">
+          <label><input type="radio" name="q5" value="A"> A. Menandakan bagian IP yang tetap (network)</label>
+          <label><input type="radio" name="q5" value="B"> B. Menandakan host portion</label>
+          <label><input type="radio" name="q5" value="C"> C. Menunjukkan jumlah perangkat</label>
+          <label><input type="radio" name="q5" value="D"> D. Tidak memiliki makna khusus</label>
+        </div>
+      </div>
+
+      <div class="question" data-q="6">
+        <div class="q">6. Pada jaringan 192.168.1.0/24, berapa total alamat IP yang tersedia?</div>
+        <div class="options">
+          <label><input type="radio" name="q6" value="A"> A. 254</label>
+          <label><input type="radio" name="q6" value="B"> B. 250</label>
+          <label><input type="radio" name="q6" value="C"> C. 256</label>
+          <label><input type="radio" name="q6" value="D"> D. 253</label>
+        </div>
+      </div>
+
+      <div class="question" data-q="7">
+        <div class="q">7. Berapa banyak alamat IP yang dapat digunakan oleh perangkat (usable host) dalam jaringan 192.168.1.0/24?</div>
+        <div class="options">
+          <label><input type="radio" name="q7" value="A"> A. 254</label>
+          <label><input type="radio" name="q7" value="B"> B. 253</label>
+          <label><input type="radio" name="q7" value="C"> C. 250</label>
+          <label><input type="radio" name="q7" value="D"> D. 252</label>
+        </div>
+      </div>
+
+      <div class="question" data-q="8">
+        <div class="q">8. Dalam analogi “alamat rumah”, siapa yang berperan sebagai kurir yang mengirim paket keluar kompleks?</div>
+        <div class="options">
+          <label><input type="radio" name="q8" value="A"> A. DHCP</label>
+          <label><input type="radio" name="q8" value="B"> B. DNS</label>
+          <label><input type="radio" name="q8" value="C"> C. Router (Default Gateway)</label>
+          <label><input type="radio" name="q8" value="D"> D. Subnet Mask</label>
+        </div>
+      </div>
+
+      <div class="question" data-q="9">
+        <div class="q">9. Mengapa banyak IP lokal yang dimulai dengan 192.168.1.x?</div>
+        <div class="options">
+          <label><input type="radio" name="q9" value="A"> A. Karena diberikan langsung oleh ISP</label>
+          <label><input type="radio" name="q9" value="B"> B. Karena router biasanya diatur dengan subnet default seperti itu</label>
+          <label><input type="radio" name="q9" value="C"> C. Karena IP tersebut lebih cepat</label>
+          <label><input type="radio" name="q9" value="D"> D. Karena ditentukan oleh perangkat pengguna</label>
+        </div>
+      </div>
+
+      <div class="question" data-q="10">
+        <div class="q">10. Manakah pernyataan yang benar tentang Network Address dan Broadcast Address?</div>
+        <div class="options">
+          <label><input type="radio" name="q10" value="A"> A. Network address digunakan untuk satu perangkat tertentu</label>
+          <label><input type="radio" name="q10" value="B"> B. Broadcast address digunakan untuk mengirim ke satu tujuan</label>
+          <label><input type="radio" name="q10" value="C"> C. Network address menandai seluruh jaringan</label>
+          <label><input type="radio" name="q10" value="D"> D. Broadcast address tidak pernah digunakan</label>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" id="submitBtn">Kirim Jawaban</button>
+        <button type="button" id="resetBtn">Reset</button>
+        <div id="result" style="margin-left:auto"></div>
+      </div>
+    </form>
+</div>
+
+<div id="blockedOverlay">
+  <div class="msg">
+    <h2>Konten disembunyikan</h2>
+    <p>Kami mendeteksi alat pengembang / akses yang tidak diizinkan — konten disembunyikan untuk keamanan.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  // Jawaban benar
+  const answers = { 
+    q1:'B', q2:'B', q3:'C', q4:'B', q5:'A',
+    q6:'C', q7:'C', q8:'C', q9:'B', q10:'C'
+  };
+
+  const form = document.getElementById('quizForm');
+  const result = document.getElementById('result');
+  const submitBtn = document.getElementById('submitBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const blockedOverlay = document.getElementById('blockedOverlay');
+
+  function grade(){
+    let score = 0; let total = Object.keys(answers).length;
+    for(const q in answers){
+      const el = form.querySelector('input[name="'+q+'"]:checked');
+      if(el && el.value === answers[q]) score++;
+    }
+    result.textContent = `Skor: ${score} / ${total}`;
+  }
+
+  submitBtn.addEventListener('click', grade);
+  resetBtn.addEventListener('click', function(){form.reset(); result.textContent='';});
+
+  // ======= Pencegahan dasar: copy, select, contextmenu, shortcuts ========
+  function blockInteraction(e){ e.preventDefault(); e.stopPropagation(); }
+
+  document.addEventListener('selectstart', blockInteraction);
+  document.addEventListener('mousedown', function(ev){ if(ev.button===2) blockInteraction(ev); });
+  document.addEventListener('contextmenu', blockInteraction);
+  ['copy','cut','paste'].forEach(evName => document.addEventListener(evName, blockInteraction));
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key==='I' || e.key==='J' || e.key==='C')) || 
+       (e.ctrlKey && e.key==='U') || (e.ctrlKey && e.key==='S')){
+      blockInteraction(e);
+      showBlocked();
+    }
+  });
+
+  let devtoolsOpen = false;
+  const threshold = 160;
+  function checkDevtools(){
+    const widthDiff = window.outerWidth - window.innerWidth;
+    const heightDiff = window.outerHeight - window.innerHeight;
+    const open = widthDiff > threshold || heightDiff > threshold;
+    if(open && !devtoolsOpen){ devtoolsOpen = true; showBlocked(); }
+    if(!open && devtoolsOpen){ devtoolsOpen = false; hideBlocked(); }
+  }
+  setInterval(checkDevtools, 1000);
+
+  function showBlocked(){ blockedOverlay.style.display='flex'; document.getElementById('quizCard').style.filter='blur(6px)'; }
+  function hideBlocked(){ blockedOverlay.style.display='none'; document.getElementById('quizCard').style.filter='none'; }
+
+  document.addEventListener('touchstart', function(e){ if(e.touches.length>1) blockInteraction(e); }, {passive:false});
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden){ document.getElementById('quizCard').style.visibility='hidden'; }
+    else { document.getElementById('quizCard').style.visibility='visible'; }
+  });
+
+})();
+</script>
+</body>
+</html>

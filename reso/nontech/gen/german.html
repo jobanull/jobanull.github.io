@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Deutsch Words</title>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
+
+	<style>
+		h1 {
+  text-align: center;
+}
+
+h3 {
+  text-align: center;
+  position: relative;
+  display: block;
+  cursor: pointer;
+  color: white;
+  margin: 10px 0;
+  transition: transform 0.2s ease, color 0.2s ease;
+
+  font-size: 1.8em;
+  font-family: 'Noto Sans', 'Arial', 'Helvetica', 'Segoe UI', sans-serif;
+  direction: ltr; /* karena Jerman, bukan Arab */
+  line-height: 1.5;
+}
+
+/* Efek hover ringan */
+h3:hover {
+  color: #ffeb3b;
+  transform: scale(1.05);
+}
+
+/* Tooltip Bahasa Indonesia muncul di bawah teks */
+h3::after {
+  content: attr(title);
+  position: absolute;
+  top: 110%; /* muncul di bawah teks */
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  text-transform: none;
+  font-size: 0.8em;
+  z-index: 5;
+}
+
+/* Efek muncul halus */
+h3:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(5px);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  padding-bottom: 1000px;
+  background: linear-gradient(45deg, #191a22, #525152);
+  overflow-x: hidden;
+  overflow-y: auto;
+  line-height: 1.65;
+  text-transform: uppercase;
+}
+
+/* Grid tetap rapi dan seimbang */
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  text-align: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Link antar kategori */
+.terjemah {
+  color: black;
+  text-align: right;
+  text-decoration: none;
+}
+
+
+/* Tooltip versi dinamis (pakai JS) */
+.tooltip {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.8em;
+  text-transform: none;
+  pointer-events: none; /* biar nggak ganggu hover */
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 1000;
+}
+
+	</style>
+</head>
+<body>
+<div class="container">
+		<div>
+         <h1>1</h1>
+				<hr>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+		</div>
+		<div>
+        <h1>2</h1>
+				<hr>
+ 				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+		</div>
+		<div>
+      <h1>3</h1>
+			<hr>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+				<h3></h3>
+	</div>
+</div>
+<script src="js/german.js"></script>
+</body>
+</html>

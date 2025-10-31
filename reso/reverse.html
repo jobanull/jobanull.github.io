@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Reverse Subnetting Calculator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 40px;
+      background-color: #f8fafc;
+      color: #111827;
+    }
+    h1 {
+      color: #2563eb;
+    }
+    input {
+      padding: 8px;
+      width: 250px;
+      margin-right: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+    }
+    button {
+      background-color: #2563eb;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1d4ed8;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 16px;
+      background-color: #f1f5f9;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+    pre {
+      background-color: #e2e8f0;
+      padding: 10px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔢 Reverse Subnetting Calculator</h1>
+  <p>Masukkan IP Address dan prefix, misal: <code>192.168.1.1/26</code></p>
+  <input type="text" id="ipInput" placeholder="192.168.1.1/26">
+  <button onclick="calculate()">Hitung</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function calculate() {
+      const input = document.getElementById('ipInput').value.trim();
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = "";
+
+      if (!input.includes('/')) {
+        resultDiv.innerHTML = "⚠️ Format salah. Gunakan format: 192.168.1.1/26";
+        return;
+      }
+
+      const [ip, prefix] = input.split('/');
+      const prefixNum = parseInt(prefix);
+
+      if (prefixNum < 0 || prefixNum > 32) {
+        resultDiv.innerHTML = "⚠️ Prefix harus antara 0 dan 32.";
+        return;
+      }
+
+      const octets = ip.split('.').map(Number);
+      if (octets.length !== 4 || octets.some(o => o < 0 || o > 255)) {
+        resultDiv.innerHTML = "⚠️ IP tidak valid.";
+        return;
+      }
+
+      const ipBinary = octets.map(o => o.toString(2).padStart(8, '0')).join('');
+      const networkBinary = ipBinary.substring(0, prefixNum).padEnd(32, '0');
+      const broadcastBinary = ipBinary.substring(0, prefixNum).padEnd(32, '1');
+
+      const networkOctets = [];
+      const broadcastOctets = [];
+      for (let i = 0; i < 4; i++) {
+        networkOctets.push(parseInt(networkBinary.substr(i * 8, 8), 2));
+        broadcastOctets.push(parseInt(broadcastBinary.substr(i * 8, 8), 2));
+      }
+
+      const subnetMaskBinary = '1'.repeat(prefixNum).padEnd(32, '0');
+      const subnetMaskOctets = [];
+      for (let i = 0; i < 4; i++) {
+        subnetMaskOctets.push(parseInt(subnetMaskBinary.substr(i * 8, 8), 2));
+      }
+
+      const hostBits = 32 - prefixNum;
+      const totalHosts = Math.pow(2, hostBits);
+      const usableHosts = totalHosts - 2;
+
+      const firstHost = [...networkOctets];
+      firstHost[3] += 1;
+
+      const lastHost = [...broadcastOctets];
+      lastHost[3] -= 1;
+
+      const steps = `
+1️⃣ Prefix /${prefixNum} → 32 - ${prefixNum} = ${hostBits} bit untuk host
+2️⃣ 2^${hostBits} = ${totalHosts} total IP
+3️⃣ ${totalHosts} - 2 = ${usableHosts} usable host
+4️⃣ Network Address: ${networkOctets.join('.')}
+5️⃣ Broadcast Address: ${broadcastOctets.join('.')}
+6️⃣ Range Host: ${firstHost.join('.')} - ${lastHost.join('.')}
+7️⃣ Subnet Mask: ${subnetMaskOctets.join('.')}
+`;
+
+      resultDiv.innerHTML = `
+        <h3>Hasil Perhitungan:</h3>
+        <pre>${steps}</pre>
+      `;
+    }
+  </script>
+
+</body>
+</html>

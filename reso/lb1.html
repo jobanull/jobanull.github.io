@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Load Balancing (Bonding)</title>
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="note-container">
+
+  <main class="note-main">
+    <h2 class="note-title text-center">Load Balancing (Bonding)</h2>
+    <p class="note-paragraph">
+      Bonding menggabungkan beberapa interface fisik menjadi satu interface logis untuk <em>throughput</em> dan/atau
+      <em>redundansi</em>. Biasa menggunakan <strong>IEEE 802.3ad (LACP)</strong> di switch/router.
+      <em>Hashing</em> (MAC/IP/port) menentukan ke link mana suatu flow dikirim: satu flow umumnya tetap pada satu link.
+    </p>
+    <ul class="note-list">
+      <li><strong>Mode umum:</strong> active-backup (mode 1), balance-xor (mode 2), 802.3ad/LACP (mode 4), balance-rr (mode 0).</li>
+      <li><strong>Kelebihan:</strong> Agregasi bandwidth multi-flow, failover antarlink, standar luas (LACP).</li>
+      <li><strong>Keterbatasan:</strong> Satu flow ≈ terbatas kecepatan 1 link; butuh dukungan switch yang sama (LACP).</li>
+      <li><strong>Gunakan Saat:</strong> Uplink ke switch/core, server-to-switch, backbone L2.</li>
+    </ul>
+
+    <h3 class="note-subtitle">CONTOH KASUS</h3>
+    <ul class="note-list">
+      <li>Tujuan: Menggabungkan beberapa interface fisik menjadi satu interface logis menggunakan <strong>Bonding</strong> untuk meningkatkan <em>redundansi dan bandwidth</em>.</li>
+      <li>Catatan:
+        <ul>
+          <li>Interface <code>bond1</code> menggabungkan <code>ether1</code> dan <code>ether2</code> untuk failover/load balance.</li>
+          <li>Alamat IP diberikan ke interface fisik (ether1, ether2) dan interface bonding untuk koneksi antar-router.</li>
+          <li>Setiap router diberi identitas unik melalui <code>/system identity</code>.</li>
+          <li>Wireless security profile di R.Bonding2 menggunakan default supplicant-identity Mikrotik (jika ada Wi-Fi).</li>
+        </ul>
+      </li>
+    </ul>
+
+
+    <img src="img/lb1.png" alt="Diagram jaringan" class="note-image" />
+    
+    <p class="note-subtitle">R.Bonding1</p>
+
+    <pre class="note-codeblock"><code>
+/interface bonding
+add name=bond1 slaves=ether1,ether2             # Gabungkan ether1 & ether2 menjadi bond1
+
+/ip address
+add address=10.10.10.1/30 interface=ether1 network=10.10.10.0  # IP link ke R.Bonding2
+add address=192.168.1.1/30 interface=ether2 network=192.168.1.0 # IP link alternatif / backup
+add address=172.16.1.1/30 interface=bond1 network=172.16.1.0    # IP di interface bonding
+
+/system identity
+set name=R.Bonding1                               # Nama router
+
+    </code></pre>
+    
+    <p class="note-subtitle">R.Bonding2</p>
+
+    <pre class="note-codeblock"><code>
+
+/interface bonding
+add name=bond1 slaves=ether1,ether2             # Gabungkan ether1 & ether2 menjadi bond1
+
+/interface wireless security-profiles
+set [ find default=yes ] supplicant-identity=MikroTik   # Profil Wi-Fi default (jika ada)
+
+/ip address
+add address=10.10.10.2/30 interface=ether1 network=10.10.10.0  # IP link ke R.Bonding1
+add address=192.168.1.2/30 interface=ether2 network=192.168.1.0 # IP link alternatif / backup
+add address=172.16.1.2/30 interface=bond1 network=172.16.1.0    # IP di interface bonding
+
+/system identity
+set name=R.Bonding2                               # Nama router
+
+
+    </code></pre>
+
+    <h3 class="note-subtitle">Tips Praktis</h3>
+    <ul class="note-list">
+      <li>Di Bonding LACP, pastikan <em>hash policy</em> konsisten di kedua sisi; pahami batas 1-flow≈1-link.</li>
+      <li>Gunakan mode bonding sesuai kebutuhan: active-backup untuk failover, 802.3ad untuk agregasi multi-flow.</li>
+      <li>Dokumentasikan konfigurasi bond agar mudah di-troubleshoot.</li>
+    </ul>
+
+    <h3 class="note-subtitle">Ringkasan</h3>
+    <p class="note-paragraph">
+      <strong>Bonding</strong> mengagregasi link Layer-2 untuk meningkatkan throughput dan/atau menyediakan failover.
+      Satu flow biasanya terbatas pada satu link; banyak flow paralel memanfaatkan agregasi penuh.
+    </p>
+
+    <hr class="note-divider" />
+  </main>
+  <script src="js/index.js"></script>
+
+</body>
+</html>
