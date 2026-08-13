@@ -1,0 +1,66 @@
+            <!-- SHUT INTERFACE -->
+            <article id="shut-interface">
+                <h3><span class="vendor-tag cisco-tag">ZTE OLT</span>C320 & C620</h3>
+                    <pre class="tree">
+# configure terminal
+# interface gpon-olt_1/1/8
+# shutdown 
+# no shutdown
+# commit (opsional)
+</pre>
+                    
+                
+                <h3><span class="vendor-tag huawei-tag">Huawei OLT</span>EA5800-X2, MA5801S-GP16</h3>
+                    <pre class="tree">
+Frame=0, Slot=1, Port=2
+
+# enable
+# config
+(config)# interface gpon 0/1
+(config-if-gpon-0/1)# shutdown 2
+(config-if-gpon-0/1)# undo shutdown 2</pre>
+                
+                <h3><span class="vendor-tag huawei-tag">Huawei PE</span>NE 8000 M1D / NE 8000 F1A-8H20Q, CE 6730</h3>
+                    <pre class="tree">
+# display interface description
+# system-view
+interface 100GE 0/0/1
+[100GE0/0/1] shutdown
+[100GE0/0/1] undo shutdown
+</pre>
+                                <h3><span class="vendor-tag alcatel-tag">Alcatel PE</span> 6250, 6450-10, 6450-24, 6900 X20, 6900 X72, 8680 </h3>
+                    <pre class="tree">
+# show interfaces port 
+Legends: WTR - Wait To Restore
+         #   - WTR Timer is Running & Port is in wait-to-restore state
+         *   - Permanent Shutdown
+
+Slot/    Admin     Link    Violations  Recovery   Recovery      WTR            Alias
+Port     Status   Status                 Time       Max        (sec)
+------+----------+---------+----------+----------+----------+----------+-----------------------------------------
+  1/1    enable      down      none           300         10          0 "AP-Lobby-GF"
+  1/2    enable      down      none           300         10          0 ""
+
+# interfaces 1/2 admin down
+# interfaces 1/2 admin up
+# interfaces 1/1/12 admin-state disable 
+</pre>
+
+                <h3><span class="vendor-tag cisco-tag">Cisco PE</span>ASR9K / 9901 / 9903, NCS 540 / 5501 / 55A1-24H / 55A1-36H, <span class="cmd-bold-1">SW 2950</span> / 3850</h3>
+                    <pre class="tree">
+# configure terminal
+# interface gpon-olt_1/1/8
+# shutdown 
+# no shutdown
+</pre>
+
+                 <h3><span class="vendor-tag cisco-tag">BDCOM PE</span>??</h3>
+                    <pre class="tree">
+??
+</pre>       
+
+                 <h3><span class="vendor-tag cisco-tag">RAISECOM PE</span>??</h3>
+                    <pre class="tree">
+??
+</pre> 
+            </article>

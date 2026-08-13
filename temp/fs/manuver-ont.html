@@ -1,0 +1,301 @@
+<article id="manuver-ont">
+    <h2>MANEUVER PON SAME OLT</h2>
+    
+    <div class="manuver-section">
+        <h3 class="manuver-subtitle">REQUEST :</h3>
+        
+        <div class="manuver-info">
+            <div class="manuver-row">
+                <span class="manuver-label">FROM</span>
+                <span class="manuver-value"><br>
+CRT : CRT2007004458 <br>
+GPON : gpon-onu_1/2/13:5 <br>
+TYPE : ZTEG-F609 <br>
+SN : ZTEGDAD0000 
+</span>
+            </div>
+            <div class="manuver-row">
+                <span class="manuver-label">TO</span>
+                <span class="manuver-value"> <br>
+GPON : gpon-onu_1/2/12:16 <br>
+TYPE : ZTEG-F679D <br>
+SN : ZTEGDAD944DE</span>
+            </div>
+        </div>
+        
+        <details class="manuver-step">
+            <summary>CHECK AND ADD TYPE ZTE</summary>
+            <div class="manuver-content">
+                <pre>
+CHECK TYPE ZTE
+JB-NPH-01-LT2-BTJR#show running-config | b onu-type
+  onu-type-if ZTEG-F609 wifi_0/1
+  onu-type-if ZTEG-F609 wifi_0/2
+  onu-type-if ZTEG-F609 wifi_0/3
+  onu-type-if ZTEG-F609 wifi_0/4
+  onu-type-if ZTEG-F609 eth_0/1
+  onu-type-if ZTEG-F609 eth_0/2
+  onu-type-if ZTEG-F609 eth_0/3
+  onu-type-if ZTEG-F609 eth_0/4
+
+ADD TYPE ZTEG :
+(config)#pon (C620)
+(config)#gpon (C320)
+  onu-type ZTEG-F679D gpon description ZTEG-F679D,2GE,8WIFI max-tcont 8 max-iphost 10
+
+  onu-type-if ZTEG-F679D eth_0/1
+  onu-type-if ZTEG-F679D eth_0/2
+  onu-type-if ZTEG-F679D wifi_0/1
+  onu-type-if ZTEG-F679D wifi_0/2
+  onu-type-if ZTEG-F679D wifi_0/3
+  onu-type-if ZTEG-F679D wifi_0/4
+  onu-type-if ZTEG-F679D wifi_0/5
+  onu-type-if ZTEG-F679D wifi_0/6
+  onu-type-if ZTEG-F679D wifi_0/7
+  onu-type-if ZTEG-F679D wifi_0/8
+</pre>
+            </div>
+        </details>
+        
+        <details class="manuver-step">
+            <summary>SHOW CONFIGURATION ONU EXISTING</summary>
+            <div class="manuver-content">
+                <pre>
+SHOW CONFIGURATION ONU EXISTING (C320)
+
+# show running-config interface gpon-onu_1/2/13:5
+
+Building configuration...
+interface gpon-onu_1/2/13:5
+  name CRT2007004458
+  description FSB-600M
+  tcont 1 profile FOB-600M
+  tcont 6 profile FOB-5M
+  gemport 1 tcont 1
+  gemport 1 traffic-limit upstream 600M downstream 600M 
+  gemport 6 tcont 6
+  gemport 6 traffic-limit upstream 5M downstream 5M 
+  service-port 1 vport 1 user-vlan 2511 vlan 2511 
+  service-port 6 vport 6 user-vlan 60 vlan 60 
+!
+end
+JK-JKT-05-LT4-PIK#show onu running config gpon-onu_1/2/13:5
+pon-onu-mng gpon-onu_1/2/13:5
+  service 1 gemport 1 iphost 1 vlan 2511
+  service 6 gemport 6 vlan 60
+  wan-ip 1 mode pppoe username hermantosuwarko password dHDdee3z vlan-profile vlan2511 host 1
+  wan-ip 2 mode dhcp vlan-profile wan60 host 2
+  vlan port eth_0/1 mode tag vlan 2511
+  dhcp-ip ethuni eth_0/1 from-internet
+  veip 1 port udp 10301 host 2
+  tr069-mgmt 1 acs http://acs.fiberstar.co.id:10301/onu/tr069 validate basic username onu-fs password F1b3r*-onu
+  security-mgmt 1 state enable mode forward protocol web 
+!
+
+SHOW ONU CONFIGURATION EXISTING (C620)
+
+# show collection pon-onu gpon_onu-1/2/13:5 config 
+.Sub-command [show gpon onu baseinfo gpon_olt-1/2/13 5]
+OnuIndex            Type        Mode    AuthInfo                State
+-------------------------------------------------------------------------------
+gpon_onu-1/2/13:5    ZTEG-F609   sn      SN:ZTEGDAD0000         ready
+Sub-command [show pon onu onu-profile gpon_onu-1/2/13:5]
+Profile                          Type      Configure result   Last handle
+----------------------------------------------------------------
+N/A                              N/A       N/A                 N/A
+N/A                              N/A       N/A                 N/A
+Sub-command [show running-config-interface gpon_onu-12/13:5]
+!
+interface gpon_onu-1/2/13:5
+$
+!
+!
+interface gpon_onu-1/2/13:5
+  name CRT2007004458
+  description FSB-100M
+  tcont 1 profile FOB-100M
+  tcont 6 profile FOB-5M
+  gemport 1 tcont 1
+  gemport 6 tcont 6
+$
+pon-onu-mng gpon_onu-1/2/13:5
+  interface eth eth_0/3 state lock
+  interface eth eth_0/4 state lock
+  dhcp-ip ethuni eth_0/1 from-internet
+  dhcp-ip ethuni eth_0/2 from-onu
+  service 1 gemport 1 vlan 216
+  service 6 gemport 6 vlan 62
+  veip 1 port 10301 ipv4 host 2
+  wan-ip ipv4 mode dhcp vlan-profile wan62 host 2
+  vlan port eth_0/1 mode tag vlan 216
+  tr069-mgmt 1 acs http://acs.fiberstar.co.id:10301/onu/tr069 validate basic username onu-fs password F1b3r*-onu
+$
+!
+Sub-command [show running-config-interface vport-1/2/13.5:1]
+!
+interface vport-1/2/13.5:1
+$
+!
+!
+interface vport-1/2/13.5:1
+  service-port 1 user-vlan 216 vlan 216
+  qos traffic-policy FOB-100M direction egress
+  qos traffic-policy FOB-100M direction ingress
+$
+!
+Sub-command [show running-config-interface vport-1/2/13.5:6]
+!
+interface vport-1/2/13.5:6
+$
+!
+!  
+interface vport-1/2/13.5:6
+  service-port 6 user-vlan 62 vlan 62
+  qos traffic-policy FOB-100M direction egress
+  qos traffic-policy FOB-100M direction ingress
+$
+!
+
+                </pre>
+            </div>
+        </details>
+        
+        <details class="manuver-step">
+            <summary>SHOW ONU WILL REGISTER</summary>
+            <div class="manuver-content">
+                <pre>
+#show pon onu uncfg 
+OltIndex            Model                SN                 PW         
+-------------------------------------------------------------------------
+gpon-olt_1/2/16     F679DV9.2            ZTEGDAD944DE       GDAD944DE
+</pre>
+            </div>
+        </details>
+        
+        <details class="manuver-step">
+            <summary>CHECK AVAILABLE ONU ID</summary>
+            <div class="manuver-content">
+                <pre>
+CHECK AVAILABLE ONU ID (C320)
+# show running-config interface gpon-olt_1/2/16
+interface gpon-olt_1/2/16
+  onu 8 type ZTEG-F670L sn ZTEGD7795547 -> ONU 9 AVAILABLE
+!
+end
+
+CHECK AVAILABLE ONU ID (C620)
+# show running-config-interface gpon_olt-1/2/16
+interface gpon_olt-1/2/16
+  onu 8 type ZTEG-F670L sn ZTEGD7795547 -> ONU 9 AVAILABLE
+!
+end
+
+</pre>
+            </div>
+        </details>
+        
+        <details class="manuver-step">
+            <summary>REMOVE ONU CONFIGURATION EXISTING</summary>
+            <div class="manuver-content">
+                <pre>
+# configure terminal
+(config)# interface gpon_olt-1/2/13
+(config-if-gpon_olt-1/1/1)# no onu 5
+</pre>
+            </div>
+        </details>
+        
+        <details class="manuver-step">
+            <summary>CONFIGURATION NEW ONU</summary>
+            <div class="manuver-content">
+                <pre>
+# configure terminal
+(config)# interface gpon_olt-1/2/16
+(config-if-gpon_olt-1/1/11)# onu 9 type ZTEG-F679D sn ZTEGD7795547
+(config-if-gpon_olt-1/1/11)# exit
+(config)# COPAS ONU CONFIGURATION EXISTING, CHANGE PON & ONT FIRST
+(C320)
+interface gpon-onu_1/2/16:59
+  name CRT2007004458
+  description FSB-600M
+  tcont 1 profile FOB-600M
+  tcont 6 profile FOB-5M
+  gemport 1 tcont 1
+  gemport 1 traffic-limit upstream 600M downstream 600M 
+  gemport 6 tcont 6
+  gemport 6 traffic-limit upstream 5M downstream 5M 
+  service-port 1 vport 1 user-vlan 2511 vlan 2511 
+  service-port 6 vport 6 user-vlan 60 vlan 60 
+!
+pon-onu-mng gpon-onu_1/2/16:9
+  service 1 gemport 1 iphost 1 vlan 2511
+  service 6 gemport 6 vlan 60
+  wan-ip 1 mode pppoe username hermantosuwarko password dHDdee3z vlan-profile vlan2511 host 1
+  wan-ip 2 mode dhcp vlan-profile wan60 host 2
+  vlan port eth_0/1 mode tag vlan 2511
+  dhcp-ip ethuni eth_0/1 from-internet
+  veip 1 port udp 10301 host 2
+  tr069-mgmt 1 acs http://acs.fiberstar.co.id:10301/onu/tr069 validate basic username onu-fs password F1b3r*-onu
+  security-mgmt 1 state enable mode forward protocol web 
+!
+
+(C620)
+interface gpon_onu-1/2/16:9
+  name CRT2007004458
+  description FSB-100M
+  tcont 1 profile FOB-100M
+  tcont 6 profile FOB-5M
+  gemport 1 tcont 1
+  gemport 6 tcont 6
+$
+pon-onu-mng gpon_onu-1/2/16:9
+  interface eth eth_0/3 state lock
+  interface eth eth_0/4 state lock
+  dhcp-ip ethuni eth_0/1 from-internet
+  dhcp-ip ethuni eth_0/2 from-onu
+  service 1 gemport 1 vlan 216
+  service 6 gemport 6 vlan 62
+  veip 1 port 10301 ipv4 host 2
+  wan-ip ipv4 mode dhcp vlan-profile wan62 host 2
+  vlan port eth_0/1 mode tag vlan 216
+  tr069-mgmt 1 acs http://acs.fiberstar.co.id:10301/onu/tr069 validate basic username onu-fs password F1b3r*-onu
+$
+interface vport-1/2/16.9:1
+  service-port 1 user-vlan 216 vlan 216
+  qos traffic-policy FOB-100M direction egress
+  qos traffic-policy FOB-100M direction ingress
+$
+interface vport-1/2/16.9:6
+  service-port 6 user-vlan 62 vlan 62
+  qos traffic-policy FOB-100M direction egress
+  qos traffic-policy FOB-100M direction ingress
+$
+</pre>
+            </div>
+        </details>
+        
+        <details class="manuver-step">
+            <summary>VERIFICATION </summary>
+            <div class="manuver-content">
+                <pre>
+# show gpon onu detail-info gpon_onu-1/1/11:9
+
+ONU interface:          gpon_onu-1/3/16:9
+  Name:                 CRT2007004458
+  Splitter:             
+  Type:                 ZTEG-F679D
+  Configured speed mode:GPON
+  Current speed mode:   GPON
+  Admin state:          enable
+  Phase state:          working
+  Config state:         success
+  Authentication mode:  sn
+  SN Bind:              enable with SN check
+  Serial number:        ZTEGDAD944DE
+</pre>
+            </div>
+        </details>
+    </div>
+    
+    
+</article>

@@ -1,0 +1,72 @@
+<!-- CEK TYPE SFP -->
+            <article id="cek-sfp">
+                <h3><span class="vendor-tag zte-tag">ZTE OLT</span>C320 & C620</h3>        
+<pre class="tree">
+# <span class="cmd-bold">show interface optical-module-info gpon-olt_1/1/13 -> C320</span>
+  Optical module information:gpon-olt_1/1/13
+  Basic-info:
+   Vendor-Name    : SOURCEPHOTONICS          Vendor-Pn      : SPS4348HCPCDFDM1
+   Vendor-Sn      : HBJ2012760               Version-Lev    : 1         
+   Production-Date: 171018                   Module-Type    : SFP/SFP+  
+   Wavelength     : 1490      (nm)           Connector      : SC        
+   OTDR           : NON-OTDR                 OTDR-Version   : N/A       
+
+# <span class="cmd-bold">show optical-module-info gpon_olt-1/1/1 -> C620</span>
+Optical Module Information:
+--------------------------------------------------------------------------------
+Module-Type    : SFP/SFP+            Supply-Vol     : 3.268(v)    
+Module-Type-Mismatch: Matched        I2C-State      : Ready
+Connector      : SC                  Temperature    : 41.320(c)   
+Fiber-Type     : SM               
+OTDR           : NON-OTDR            OTDR-Version   :           
+Module-Class   : GPON/C+
+</pre>
+                <h3><span class="vendor-tag huawei-tag">HUAWEI OLT</span>EA5800-X2, MA5801S-GP16</h3>        
+<pre class="tree">
+??
+</pre>
+
+                <h3><span class="vendor-tag huawei-tag">huawei pe</span>NE 8000 M1D / NE 8000 F1A-8H20Q, CE 6730</h3>
+                    <pre class="tree">
+# <span class="cmd-bold">display transceiver interface XGigabitEthernet 0/0/47</span>
+XGigabitEthernet0/0/47 transceiver information:
+-------------------------------------------------------------
+Common information:
+  Transceiver Type               : 10GBASE_LR_SFP  -> Type SFP
+  Connector Type                 : LC
+  Wavelength(nm)                 : 1310
+  Transfer Distance(m)           : 10000(9um)
+  Digital Diagnostic Monitoring  : YES
+  Vendor Name                    : CISCO-FINISAR   
+</pre>
+         
+                <h3><span class="vendor-tag alcatel-tag">Alcatel PE</span> 6250, 6450-10, 6450-24, 6900 X20, 6900 X72, 8680 </h3>
+                    <pre class="tree">
+# <span class="cmd-bold">show interfaces 1/1/38</span>
+Type                   : Ethernet,
+ SFP/XFP                : SFP_PLUS_SR,
+
+# show transceiver
+</pre>
+                
+                <h3><span class="vendor-tag cisco-tag">CISCO PE</span>ASR9K / 9901 / 9903, NCS 540 / 5501 / 55A1-24H / 55A1-36H, <span class="cmd-bold-1">SW 2950</span> / 3850</h3>        
+<pre class="tree">
+# show inventory
+NAME: "HundredGigE0/0/1/0", DESCR: "Cisco QSFP28 100G ER4 Pluggable Optics Module"
+
+# show inventory | i HundredGigE0/0/1/0
+NAME: "HundredGigE0/0/1/0", DESCR: "Cisco QSFP28 100G ER4 Pluggable Optics Module"
+
+# show controllers optics 0/0/1/0
+</pre>
+ 
+                 <h3><span class="vendor-tag cisco-tag">BDCOM PE</span>??</h3>
+                    <pre class="tree">
+??
+</pre>       
+
+                 <h3><span class="vendor-tag cisco-tag">RAISECOM PE</span>??</h3>
+                    <pre class="tree">
+??
+</pre> 
+            </article>

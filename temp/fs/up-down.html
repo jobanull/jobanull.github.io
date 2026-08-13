@@ -1,0 +1,34 @@
+<!-- OLT UP / DOWN -->
+<article id="up-down">
+    <div class="konverter-container">
+        <div class="container">
+            <div class="content">
+                <div class="input-section">
+                    <h3>ALL PON INCIDENT</h3>
+                    <textarea id="inputUpDown1" class="input-textarea" placeholder="Paste the complete OLT data here..."></textarea>
+                    
+                    <h3>INACTIVE PON</h3>
+                    <textarea id="inputUpDown2" class="input-textarea" placeholder="Paste the data for the OLT that is still down here..."></textarea>
+                    
+                    
+                    <div class="button-container">
+                        <button id="processBtnUpDown">
+                            <i class="fas fa-exchange-alt"></i> Processing Data
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="output-section">
+                    <div class="comparison-result-container">
+                        <span id="comparisonResultText"></span>
+                        <div class="comparison-stats">
+                            <span class="up-count" id="upCount">UP: 0</span>
+                            <span class="down-count" id="downCount">DOWN: 0</span>
+                        </div>
+                    </div>
+                    <textarea id="outputUpDown" class="output-textarea" readonly placeholder="The comparison results will appear here..."></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>

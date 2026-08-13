@@ -1,0 +1,84 @@
+<!-- CEK Uptime -->
+            <article id="cek-uptime">
+                <h3><span class="vendor-tag zte-tag">ZTE OLT</span>C320 & C620</h3>        
+<pre class="tree">
+# show system-group (C320)
+Started before: 680 days, 21 hours, 49 minutes
+
+# show software (C620)
+System uptime is 0 day(s), 1 hour(s), 5 minute(s)
+
+
+# show gpon onu detail-info gpon-onu_1/1/9:15 -> Uptime Port
+------------------------------------------
+       Authpass Time          OfflineTime             Cause
+   1   2025-11-28 07:49:20    2025-11-29 09:08:09     DyingGasp 
+   2  <span class="cmd-bold"> 2025-11-29 10:49:15</span>     0000-00-00 00:00:00 
+</pre>
+                
+                <h3><span class="vendor-tag huawei-tag">HUAWEI OLT</span>EA5800-X2, MA5801S-GP16</h3>        
+<pre class="tree">
+> display version -> Uptime Device
+  Command:
+          display version
+  --------------------------------------------------
+  Uptime is 455 day(s), 6 hour(s), 39 minute(s), 4 second(s)
+
+
+# display ont info summary 0/1/1 -> Uptime Port
+  ------------------------------------------------------------------------------
+  ONT  Run     Last                Last                Last                   
+  ID   State   UpTime              DownTime            DownCause
+  ------------------------------------------------------------------------------
+  0    online  <span class="cmd-bold">2025-12-31 17:06:45</span> 2025-12-31 17:05:01 dying-gasp
+
+# display ont info 0 1 1 0
+  Last down cause         : dying-gasp
+  Last up time            : 2026-04-21 16:38:00+07:00
+  Last down time          : 2026-04-21 16:36:11+07:00
+  Last dying gasp time    : 2026-04-21 16:36:11+07:00
+</pre>
+
+                <h3><span class="vendor-tag huawei-tag">HUAWEI PE</span>NE 8000 M1D / NE 8000 F1A-8H20Q, CE 6730</h3>        
+<pre class="tree">
+> display version -> Uptime Perangkat
+IPU (Master) 1 : uptime is 1318 days, 6 hours, 55 minutes
+
+> display interface 100GE 0/2/27 -> Uptime Port
+Last physical up time   : 2025-10-03 12:21:07+07:00
+</pre>
+                
+                <h3><span class="vendor-tag alcatel-tag">Alcatel PE</span>6250, 6450-10, 6450-24, 6900 X20, 6900 X72, 8680</h3>
+
+                    <pre class="tree">
+# show system -> Uptime Perangkat
+Up Time:      22 days 20 hours 37 minutes and 59 seconds,
+
+#  show interface 1/1/37 -> Uptime Port
+Last Time Link Changed    : Tue Dec 16 09:55:43 2025
+</pre> 
+       
+
+                
+                <h3><span class="vendor-tag cisco-tag">CISCO PE</span>ASR9K / 9901 / 9903, NCS 540 / 5501 / 55A1-24H / 55A1-36H, <span class="cmd-bold-1">SW 2950</span> / 3850</h3>        
+<pre class="tree">
+# show version -> Uptime Device
+System uptime is 1 year 30 weeks 4 days 5 hours 27 minutes
+
+# show interfaces GigabitEthernet 0/0/4 - > Uptime Port
+Last input 25w2d, output 00:00:24, output hang never
+
+# show log | include 0/0/1 lebih detail - > Uptime Port
+</pre>
+
+                 <h3><span class="vendor-tag cisco-tag">BDCOM PE</span>??</h3>
+                    <pre class="tree">
+??
+</pre>       
+
+                 <h3><span class="vendor-tag cisco-tag">RAISECOM PE</span>??</h3>
+                    <pre class="tree">
+??
+</pre> 
+
+            </article>

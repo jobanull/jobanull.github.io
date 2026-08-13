@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FS Documentation</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="https://ikhdanjoban.vercel.app/nontech/fs/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://ikhdanjoban.vercel.app/nontech/fs/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://ikhdanjoban.vercel.app/nontech/fs/favicon/favicon-16x16.png">
+    <link rel="stylesheet" href="https://ikhdanjoban.vercel.app/nontech/fs/css/style.min.css">
+    <link rel="stylesheet" href="https://ikhdanjoban.vercel.app/nontech/fs/css/md.min.css">
+    <link rel="stylesheet" href="https://ikhdanjoban.vercel.app/nontech/fs/css/sidebar.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>   
+    <button class="burger-menu" id="burgerMenu" aria-label="Toggle navigation">
+        <div class="burger-icon">
+            <span class="burger-line"></span>
+            <span class="burger-line"></span>
+            <span class="burger-line"></span>
+        </div>
+    </button>
+   
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+   
+    <main>
+        <nav class="card" aria-label="Navigation">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span>G</span>
+                </div>
+                <div class="sidebar-title">
+                    <h2>
+                       G-BONE
+                    </h2>
+                    <p class="sidebar-subtitle">FS Documentation</p>
+                </div>
+            </div>
+
+           <!-- <div class="quick-md-access">
+                <button id="goToMdBtn">
+                    <i class="fas fa-server"></i> Master Device
+                </button>
+            </div> -->
+           
+            <h3>CONVERTER</h3>
+            <ul class="nav-list">
+                <li><button data-target="konverter-olt">OLT</button></li>
+                <li><button data-target="up-down">Inactive OLT</button></li>
+                <li><button data-target="sns-shut-noshut">SNS</button></li>  
+                <li><button data-target="power">Power</button></li>
+                <li><button data-target="prtg" class="active">PRTG Recti</button></li>
+            </ul>
+            <h3>Case Categories</h3>
+            <ul class="nav-list">
+                <li><button data-target="cek-users">Check List User ONT</button></li>
+                <li><button data-target="cek-int-stat">Check Interface Status PE</button></li>
+                <li><button data-target="cek-mac">Check MAC Address</button></li>
+                <li><button data-target="cek-desc-port">Check Description Port</button></li>
+                <li><button data-target="cek-uptime">Check Uptime</button></li>
+                <li><button data-target="cek-power">Check Power RX/TX</button></li>
+                <li><button data-target="cek-sfp">Check Type SFP</button></li>
+                <li><button data-target="change-sn">Change SN ONT</button></li>
+                <li><button data-target="cek-crc">Check & Clear CRC</button></li>
+                <li><button data-target="shut-interface">Shut/No Shut Interface</button></li>
+                <li><button data-target="cbn">Under CBN</button></li>
+                <li><button data-target="dwdm">Under DWDM</button></li>
+                <li><button data-target="lms">Under LMS</button></li>
+                <li><button data-target="ptt">Add</button></li>
+            </ul>
+
+            <h3>MPLS</h3>
+            <ul class="nav-list">
+                <li><button data-target="cisco">Cisco</button></li>  
+                <li><button data-target="huawei">Huawei</button></li>  
+                <li><button data-target="mikrotik">Mikrotik</button></li>  
+            </ul>
+        </nav>
+       
+        <section class="card content" id="content">
+            <div id="loading">Loading content...</div>
+        </section>
+    </main>
+   
+    <div class="master-overlay" id="masterOverlay">
+        <div class="master-overlay-content" id="masterOverlayContent">
+            <button class="master-overlay-close" id="masterOverlayClose" aria-label="Tutup">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="masterOverlayBody">
+            </div>
+        </div>
+    </div>
+        <script src="https://ikhdanjoban.vercel.app/nontech/fs/js/loader.min.js"></script> 
+    <!-- <script src="https://ikhdanjoban.vercel.app/nontech/fs/js/backup/loader-backup.js"></script> -->
+    
+    <!-- Tambahkan script untuk override loadContent dan initialize PRTG ulang -->
+    <script>
+    (function() {
+        'use strict';
+        
+        // Simpan referensi fungsi asli
+        const originalLoadContent = window.loadContent;
+        
+        // Override loadContent
+        window.loadContent = function(target) {
+            // Jika target adalah PRTG, re-initialize
+            if (target === 'prtg') {
+                console.log('🔄 Loading PRTG content...');
+                
+                // Panggil fungsi initializePrtg jika ada
+                if (typeof initializePrtg === 'function') {
+                    // Reset flag initialized agar bisa diinisialisasi ulang
+                    window._prtgInitialized = false;
+                    
+                    // Kosongkan content terlebih dahulu
+                    const content = document.getElementById('content');
+                    if (content) {
+                        content.innerHTML = '<div id="loading">Loading PRTG...</div>';
+                    }
+                    
+                    // Inisialisasi PRTG dengan delay kecil
+                    setTimeout(function() {
+                        initializePrtg();
+                        console.log('✅ PRTG re-initialized');
+                    }, 100);
+                } else {
+                    console.warn('⚠️ initializePrtg function not found');
+                    // Fallback: panggil fungsi asli
+                    if (originalLoadContent) {
+                        originalLoadContent(target);
+                    }
+                }
+                return;
+            }
+            
+            // Untuk target lain, gunakan fungsi asli
+            if (originalLoadContent) {
+                originalLoadContent(target);
+            }
+        };
+        
+        // Tambahkan event listener untuk semua tombol PRTG
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cari semua tombol dengan data-target="prtg"
+            const prtgButtons = document.querySelectorAll('button[data-target="prtg"]');
+            prtgButtons.forEach(function(btn) {
+                // Tambahkan event listener klik
+                btn.addEventListener('click', function(e) {
+                    // Reset flag PRTG
+                    window._prtgInitialized = false;
+                    
+                    // Hapus class active dari semua tombol
+                    document.querySelectorAll('.nav-list button').forEach(function(b) {
+                        b.classList.remove('active');
+                    });
+                    
+                    // Tambahkan class active ke tombol yang diklik
+                    this.classList.add('active');
+                });
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

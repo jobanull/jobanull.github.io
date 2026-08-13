@@ -1,0 +1,469 @@
+            <article id="add">
+                <h2>ADDITIONAL COMMAND</h2>
+<h3>OLT ZTE</h3>
+<pre class="tree">
+# display ont version 0 1 14 1 -> Check Versi ONT
+# display ont capability 0 1 14 1 -> Check Peripheral ONT
+# display current-configuration ont 0/1/7 1 -> Check Konfigurasi ONT
+# display ont wan-info 0/1 7 7 -> Check IP ONT
+# display board 0/1 -> Check Card Service
+# show gpon remote-onu interface eth gpon-onu_1/1/4:8
+# show gpon onu by sn 
+# show ip interface brief -> Check IP yang terpasang
+# show logging alarmlog | include gpon-onu_1/2/2:1 -> Check log OLT
+# show security mac-move-log -> Check Broadcast
+# clear security mac-move-log all -> Clear History Broadcast
+# show card-temperature -> Check temperature
+# show fan
+# mac delete gpon gpon-onu_1/1/9:53 vport 1 => Delete Mac-Address
+# mac delete dynamic interface vport-1/1/15.53:1 => Delete Mac-Address (C620)
+# show temperature detail => Cek Temperature
+
+##### <span class="cmd-bold">CHANGE PORT ONT KE MODE BRIDGE</span> #####
+(config)#pon-onu-mng gpon-onu_1/1/15:32
+(gpon-onu-mng 1/1/15:32)#dhcp-ip ethuni eth_0/1 from-internet
+(gpon-onu-mng 1/1/15:32)#vlan port eth_0/1 mode tag vlan 3562
+# show mac gpon onu gpon-onu_1/1/15:32
+
+##### <span class="cmd-bold">UNLOCK ALL POR</span> #####
+# show onu running config gpon-onu_1/1/5:2
+pon-onu-mng gpon-onu_1/1/5:2
+  interface eth eth_0/2 state lock
+  interface eth eth_0/3 state lock
+  interface eth eth_0/4 state lock
+  dhcp-ip ethuni eth_0/1 from-internet
+
+# configure terminal 
+# pon-onu-mng gpon-onu_1/1/5:2
+# interface eth eth_0/2 state unlock
+# interface eth eth_0/3 state unlock
+# interface eth eth_0/4 state unlock
+# dhcp-ip ethuni eth_0/2 from-onu
+# dhcp-ip ethuni eth_0/3 from-onu
+# dhcp-ip ethuni eth_0/4 from-onu
+
+##### <span class="cmd-bold">CHANGE VLAN</span> #####
+## Check Interface dan vport
+# show running-config-interface gpon_onu-1/2/8:99 ==> Check Interface & onu management
+# show running-config-interface vport-1/2/8.99:1 ==> Chek Vport
+
+## Change Vlan existing ( 1350 )
+(config)# pon-onu-mng gpon_onu-1/2/8:99
+(config-gpon-onu-mng)# no service 1
+(config-gpon-onu-mng)# service 1 gemport 1 vlan 1350
+(config-gpon-onu-mng)# exit
+(config)#interface vport-1/2/8.99:1
+(config-if-vport-1/2/8.99:1)# no service-port 1
+(config-if-vport-1/2/8.99:1)# service-port 1 user-vlan 1350 vlan 1350
+(config)# mac delete dynamic interface vport-1/2/8.99:1
+(config)# exit
+# show mac interface gpon_onu-1/2/8:99
+Total mac address : 1
+
+Mac address      Vlan  Type      Port                   Vc                                 
+-------------------------------------------------------------------------------
+b0b1.9469.4168   1350   Dynamic   vport-1/2/8.99:1           
+
+
+</pre> 
+
+<h3>OLT HUAWEI</h3>
+<pre class="tree">
+> display ont info 0 1 7 all => Check Jumlah PON
+> display current-configuration ont 0/1/7 7 => Check Configuration
+> display ont wan-info 0/1 7 7   => Check IP
+> display ont-lineprofile gpon all => Check line-profile
+> display ont-srvprofile gpon all => Check servis provile
+> display ont  info by-sn 4857*****AF=> Find PON By SN
+
+##### <span class="cmd-bold">cek traffic table yang digunakan</span> #####
+> display current-confienaguration | begin traffic table
+show config ont
+display current-configuration ont 0/1/7 0  
+
+##### <span class="cmd-bold">Reboot ONT</span> #####
+> enable 
+# config 
+(config)# interface 0/1/7
+(config-if-gpon-0/1)# ont reset 7 1
+
+
+##### <span class="cmd-bold">Reboot OLT</span> #####
+> enable 
+# config 
+(config)# diagnose 
+(diagnose)%%erase flash data   
+  Are you sure to continue? (y/n)[n]: y            
+  Are you sure to continue? (y/n)[n]: y                           
+(diagnose)%%reboot system                     
+system? (y/n)[n]: y
+
+##### DIAL PPPOE #####
+# config 
+# interface gpon 0/1 
+# ont ipconfig 7 7  pppoe vlan 1206  priority 7 user-account username 123 password 123
+# service-port 18 vlan 1127 gpon 0/1/3 ont 2 gemport 1 multi-service user-vlan 1127 tag-transform translate inbound traffic-table index 24 outbound traffic-table index 24
+# service-port 19 vlan 61 gpon 0/1/3 ont 2 gemport 3 multi-service user-vlan 61 tag-transform translate inbound traffic-table index 5 outbound traffic-table index 5
+
+##### REMOTE ONT HUAWEI #####
+> enable
+# diagnose
+%% ont wan-access http 0/2/2 0 enable
+
+##### VLAN TAGGING #####
+# config
+# vlan 916 smart
+# vlan desc 916 description Mgt_CBN
+# vlan 2082 smart
+# vlan desc 2082  description  CRT24********0-fs-ktglamlx
+# port vlan 2082 0/3 0 
+# port vlan 916 0/3 0
+
+##### USER OLT ACTIVATION #####
+## Create vlan & tag to uplink
+> enable 
+# config 
+(config)# vlan 2570 smart   => Create Vlan
+(config)# vlan desc 2570 description testing  => Naming Vlan
+(config)# quit
+# display  mac-address vlan 5  => show vlan managament
+(config)# port vlan 2570 0/3 0
+
+2. creata ont-lineprofile
+# config 
+(config)# ont-lineprofile gpon profile-id 2 profile-name "CRT********"
+(config)# omcc encrypt on
+(config)# tcont 1 dba-profile-id 44
+(config)# gem add 1 eth tcont 1 encrypt on
+(config)# gem mapping 1 1 vlan 2570
+(config)# commit
+(config)# quit
+
+Note: 
+# untuk profile id di input 2 karena ont-lineprofile nya baru di create sampe angka 1. Untuk ngeceknya sperti ini 
+# display current-configuration | include ont-lineprofile 
+
+3. creata ont-srvprofile
+#config
+(config)# ont-srvprofile gpon profile-id 2 profile-name "CRT********"
+(config)# ont-port pots 1 eth adaptive 4 wifi 1 
+(config)# port vlan eth 1 translation 2570 user-vlan 2570
+(config)# commit
+
+4. Register onu sn in gpon
+
+# display ont autofind all 
+# config 
+(config)# interface gpon 0/2
+(config-if-gpon-0/2)# ont add 3 0 sn-auth 485********9 omci ont-lineprofile-id 2 ont-srvprofile-id 2 desc "CRT********
+
+Note : ont add 3 0, => 0 nya ini karena di gpon 0/2/3 belum pernah keregist, jadi dimulai nya dari 0 kalo di zte di mulai nya di onu 1
+Contoh kalo udah ada onu nya, di [bbs-config] ada list nya, kalo belum ada [bbs-config] brarti belum pernah regist
+
+LT1-TEST > display current-configuration port 0/1/3
+
+5. Tag vlan mode access di port 1
+interface gpon 0/2 
+ ont port native-vlan 3 0 eth 1 vlan 2570 
+ ont port attribute 3 0 eth 2 operational-state off 
+ ont port attribute 3 0 eth 3 operational-state off 
+ ont port attribute 3 0 eth 4 operational-state off
+
+
+6. Verifikasi
+# display ont info 0 2 3 0 
+
+7. Check Power
+# display ont info option all 0 2 3 0 
+</pre> 
+
+<h3>ROUTER CISCO</h3>
+<pre class="tree">
+# sh mac add | in 0/1/4
+# show mac address-table | include 0/1/4
+# show isis neighbor detail -> Check
+# show system -> Check Uptime Device
+# show running-config full | section 1130
+# show log | include 0/0/1
+# show link-state-tracking group 1 => 
+# show interfaces bundle-ether 1 => Show Status Aggregate Link
+Sun Apr 26 16:44:51.229 WIB
+Bundle-Ether1 is up, line protocol is up 
+  Interface state transitions: 81
+  Hardware is Aggregated Ethernet interface(s), address is 94ae.f0aa.8ce3
+  Description: to_JI-********-NGJK_BE2_5x10G_DF&UJB_060225
+  Internet address is 10.**.**.202/30
+  Last link flapped 19w4d
+  ARP type ARPA, ARP timeout 04:00:00
+    No. of members in this bundle: 5
+      TenGigE0/0/0/16              Full-duplex  10000Mb/s    Active          
+      TenGigE0/0/0/17              Full-duplex  10000Mb/s    Active          
+      TenGigE0/0/0/18              Full-duplex  10000Mb/s    Active          
+      TenGigE0/0/0/19              Full-duplex  10000Mb/s    Active          
+      TenGigE0/0/0/20              Full-duplex  10000Mb/s    Configured 
+
+NCS-540# monitor interface bundle-ether 1 bundle-ether 2 => Monitor Utility Traffic
+JI-BDW-01-PE1-K      Monitor Time: 00:00:44          SysUptime: 12910:50:13
+
+Protocol:General
+Interface             In(bps)      Out(bps)     InBytes/Delta  OutBytes/Delta
+BE1                    5.2G/  5%   731.2M/  0%   834.5T/1.2G     336.8T/169.9M
+BE2                   11000/  0%    11000/  0%   12316T/9276           
+
+</pre> 
+
+
+<h3>ROUTER HUAWEI</h3>
+<pre class="tree">
+> display isis peer verbose => Check ISIS
+> display logbuffer | include 100G 0/0/1 => Check Uptime
+> <span class="cmd-bold">display interface Eth-Trunk4</span> => Show Status Aggregate Link
+Eth-Trunk4 current state : UP (ifindex: 294)
+Line protocol current state : UP 
+Last line protocol up time : 2026-04-19 15:08:37+07:00
+Link quality grade : GOOD
+Description: to_BA-******_ETH1_2X100G_201125
+Route Port,Hash arithmetic : According to packet all, Maximal BW: 200Gbps, Current BW: 200Gbps, The Maximum Transmit Unit is 9216
+Internet Address is 10.132.36.13/30
+IP Sending Frames' Format is PKTFMT_ETHNT_2, Hardware address is e86d-e9b9-bd5c
+Current system time: 2026-04-26 16:02:41+07:00
+----------------------------------------------------------
+PortName                      Status              Weight   
+----------------------------------------------------------
+100GE0/1/53                   UP                  1        
+100GE0/1/54                   UP                  1        
+----------------------------------------------------------
+The Number of Ports in Trunk : 2
+The Number of UP Ports in Trunk : 2
+
+> <span class="cmd-bold">display interface brief | i 100G</span> => show utility traffic usage
+InUti/OutUti: input utility/output utility
+Interface                   PHY   Protocol  InUti OutUti   inErrors  outErrors
+100GE0/1/48                 *down down         0%     0%          0          0
+100GE0/1/49                 up    up        3.62% 19.60%          6          0
+100GE0/1/50                 up    up        0.44%  3.15%          0          0
+100GE0/1/51                 *down down         0%     0%          0          0
+  100GE0/1/52               up    up        4.30%  2.32%          0          0
+  100GE0/1/55               up    up        4.25%  2.48%          0          0
+  100GE0/1/53               up    up        9.94%  1.93%       5869          0
+  100GE0/1/54               up    up        9.94%  1.92%      65465          0
+
+[~HUAWEI-100GE0/1/49] <span class="cmd-bold">display this</span> => Show Configuration This Interface
+#
+interface 100GE0/1/49
+ description to_SU-*****_100GE0/1/43
+ undo shutdown
+ eth-trunk 11
+ 
+
+##### ADD VSI PE #####
+cek vsi dulu
+> display current-configuration configuration vsi 1000068
+>system-view
+> vsi 1000068
+> description NUSANET-MEDAN-BROADBAND
+> pwsignal ldp
+> vsi-id 1000068
+> peer 10.109.4.149
+> commit 
+
+cek ldp peer nya sudah running atau belum
+> display mpls ldp remote-peer 10.109.4.149
+
+
+##### ADD VSI SUB INTERFACE #####
+cek vsi dulu
+> display current-configuration configuration vsi 1000068
+>system-view
+> vsi 1000068
+> description NUSANET-MEDAN-BROADBAND
+> pwsignal ldp
+> vsi-id 1000068
+> peer 10.109.4.149
+> commit 
+
+cek ldp peer nya sudah running atau belum
+> display mpls ldp remote-peer 10.109.4.149
+
+##### PELURUSAN VLAN #####
+ICI
+> vsi 1000519
+> pwsignal ldp
+> vsi-id 1000519
+> peer 10.109.3.16
+
+> display current-configuration configuration vsi 1000519
+> display mpls ldp remote-peer 10.109.3.16
+
+PE
+# interface GigabitEthernet0/1/20.1000519
+#  vlan-type dot1q 519
+#  description Global Lintas Solusi FSB-300M
+#  statistic enable
+#  l2 binding vsi 1000519
+# 
+# com  
+# commit 
+
+> display current-configuration configuration vsi 1000519
+> display mpls ldp remote-peer
+
+OLT
+(config)#interface xgei-1/4/1
+(config-if-xgei-1/4/1)#switchport vlan 519 tag  
+(config)#show running-config-interface xgei-1/4/1
+
+##### CREATE VSI SUB INTERFACE #####
+
+vsi 1003386
+ description CRT**********
+ pwsignal ldp
+  vsi-id 1003386
+  peer 10.109.1.7
+ mtu 1530
+ encapsulation ethernet
+#
+vsi 1003387
+ description CRT**********
+ pwsignal ldp
+  vsi-id 1003387
+  peer 10.109.1.7
+ mtu 1530
+ encapsulation ethernet
+#
+vsi 1003388
+ description CRT**********
+ pwsignal ldp
+  vsi-id 1003388
+  peer 10.109.1.7
+ mtu 1530
+ encapsulation ethernet
+#
+
+Create config interface
+
+interface GigabitEthernet0/1/13
+ portswitch
+ description CRT**********
+ undo shutdown
+ port link-type trunk
+ dcn
+ negotiation auto
+#
+
+Create sub interface di HW
+
+interface GigabitEthernet0/1/13.1003386
+ description CRT**********
+ undo shutdown
+ l2 binding vsi 1003386
+ dcn
+ statistic enable
+#
+ interface GigabitEthernet0/1/13.1003387
+ description CRT**********
+ undo shutdown
+ l2 binding vsi 1003387
+ dcn
+ statistic enable
+#
+interface GigabitEthernet0/1/13.1003388
+ description CRT**********
+ undo shutdown
+ l2 binding vsi 1003388
+ dcn
+ statistic enable
+ #
+
+>>>>>>>>>>>>>>>
+
+Nambahin sub interface peer di NCS
+NCS
+
+l2vpn
+ bridge group 1003386
+  bridge-domain 1003386
+   storm-control unknown-unicast pps 900
+   storm-control multicast pps 900
+   storm-control broadcast pps 900
+   mtu 1530
+   interface Bundle-Ether11.1003386
+    storm-control unknown-unicast pps 900
+    storm-control multicast pps 900
+   !
+   interface TenGigE0/0/0/32.1003386
+   !
+   vfi 1003386
+
+    neighbor 10.109.4.178 pw-id 1003386
+
+    l2vpn
+ bridge group 1003387
+  bridge-domain 1003387
+   storm-control unknown-unicast pps 900
+   storm-control multicast pps 900
+   storm-control broadcast pps 900
+   mtu 1530
+   interface Bundle-Ether11.1003387
+    storm-control unknown-unicast pps 900
+    storm-control multicast pps 900
+   !
+   interface TenGigE0/0/0/32.1003387
+   !
+   vfi 1003387
+       neighbor 10.109.4.178 pw-id 1003387
+
+       l2vpn
+ bridge group 1003388
+  bridge-domain 1003388
+   storm-control unknown-unicast pps 900
+   storm-control multicast pps 900
+   storm-control broadcast pps 900
+   mtu 1530
+   interface Bundle-Ether11.1003388
+    storm-control unknown-unicast pps 900
+    storm-control multicast pps 900
+   !
+   interface TenGigE0/0/0/32.1003388
+   !
+   vfi 1003388
+
+    neighbor 10.109.4.178 pw-id 1003388
+
+cek untuk tag vlan di olt zte 620
+(config-if-smartgroup1)#show this 
+  switchport mode hybrid
+  switchport vlan 5,53,61,97,443,499 tag
+  switchport vlan 555,861-862,1393 tag
+  switchport vlan 1613,1769,2050 tag
+  switchport vlan 2110,2190,2551 tag
+  switchport vlan 2997,3086,3171 tag
+  switchport vlan 3283 tag
+
+kemudian tambahkan switchport tag nya
+
+(config-if-smartgroup1)# switchport vlan 1394 tag
+
+kemudian cek lagi vlan nya
+
+# show vlan 1394
+vlanid          :1394
+name            :VLAN1394
+</pre>        
+
+
+<h3>SWITCH ALCATEL</h3>
+<pre class="tree">
+# show int port
+# show interfaces description => Cek Deskripsi
+# show interfaces status ==> Cek status Down/UP
+# show interfaces switchport ethernet e8 => Cek Interface port
+# show fiber-ports optical-transceiver g2 detailed => Cek Power
+# show bridge address-table ethernet e3 => Cek Vlan (Part 1)
+# show bridge address-table vlan 3698  => Cek Vlan  (Part 2)
+# show bridge address-table vlan 291 => Cek Vlan (juga)
+# sh interfaces capability -> Cek capacity port
+</pre> 
+
+            </article>  
+            

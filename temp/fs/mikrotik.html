@@ -1,0 +1,285 @@
+<article id="huawei">
+    <style>
+        /* inline styles for the article */
+        .case-highlight-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 24px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 14px 0;
+        }
+        .case-highlight-list li {
+            display: block;
+        }
+        .case-highlight-link {
+            display: block;
+            text-decoration: none;
+            font-family: 'Segoe UI', 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            cursor: pointer;
+            color: #ebebeb;
+            padding: 6px 0 6px 12px;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+            letter-spacing: 0.3px;
+        }
+        .case-highlight-link:hover {
+            color: #1a4d8c;
+            border-left-color: #1a4d8c;
+            padding-left: 18px;
+        }
+        h3 {
+            scroll-margin-top: 20px;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #fafafc;
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 6px;
+            margin-top: 28px;
+        }
+        .example {
+            margin-bottom: 20px;
+        }
+        .example strong {
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 600;
+            color: #fafafc;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .tree {
+            background: #1e1e2e;  /* latar gelap seperti terminal */
+            padding: 16px;
+            border-radius: 8px;
+            color: #f8f8f2;       /* teks terang */
+            font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            margin: 12px 0;
+            border-left: 3px solid #1a4d8c;
+        }
+        .cmd-bold {
+            font-weight: 700;
+            color: #c7254e;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        /* style untuk gambar - ukuran tetap 500px x 350px */
+        img.case-image,
+        img[class*="case-img"],
+        .case-image {
+            width: 800px;
+            height: 500px;
+            object-fit: contain;
+            display: block;
+            margin: 16px 0;
+            border-radius: 6px;
+            
+        }
+        
+        /* alternatif: pakai data attribute */
+        img[data-size="fixed"] {
+            width: 500px;
+            height: 350px;
+            object-fit: cover;
+        }
+        
+        /* biar responsif di layar kecil */
+        @media (max-width: 600px) {
+            img.case-image,
+            img[class*="case-img"],
+            .case-image {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 500 / 350;
+            }
+        }
+    </style>
+    <!-- <img class="case-image" src="https://ikhdanjoban.vercel.app/reso/nontech/konten/image.png" alt="contoh gambar case 0"> -->
+    <!-- <h2><span class="vendor-tag ptt-tag"></span>HUAWEI</h2> -->
+    <div class="example">
+        <strong>⚡ HIGHLIGHT</strong>
+        <ul class="case-highlight-list">
+            <li><a class="case-highlight-link" onclick="document.getElementById('case0').scrollIntoView({behavior: 'smooth'}); return false;">📌 MIKROTIK MPLS, & ISIS</a></li>
+        </ul>
+    </div>
+
+    <h3 id="case0">MIKROTIK MPLS, & ISIS</h3>
+
+<!-- Perbaikan: teks konfigurasi dimasukkan ke dalam <pre class="tree"> -->
+<pre class="tree">
+# ISIS & MPLS CONFIGURATION
+# TOPOLOGY
+# R1 <> R2 <> R3
+
+# ==========================================
+# R1
+# ==========================================
+
+# ================================
+# SYSTEM IDENTITY
+# ================================
+/system identity
+set name=R1
+
+# ================================
+# LOOPBACK CONFIGURATION
+# ================================
+/interface bridge
+add name=lo1
+
+/ip address
+add address=1.1.1.1/32 interface=lo1
+
+# ================================
+# CORE INTERFACE CONFIGURATION
+# ================================
+/ip address
+add address=10.10.12.1/30 interface=ether1
+
+# ================================
+# ROUTER-ID CONFIGURATION
+# ================================
+/routing id
+add id=1.1.1.1 name=RID
+
+# ================================
+# ISIS CONFIGURATION
+# ================================
+/routing isis instance
+add name=CORE afi=ip areas=49.0001 system-id=0000.0000.0001
+
+/routing isis interface-template
+add interfaces=ether1 instance=CORE levels=l2
+add interfaces=lo1 instance=CORE passive levels=l2
+
+# ================================
+# MPLS CONFIGURATION
+# ================================
+/mpls interface
+add interface=ether1
+
+/mpls ldp
+add lsr-id=1.1.1.1 transport-addresses=1.1.1.1
+
+/mpls ldp interface
+add interface=ether1
+
+# ==========================================
+# R2
+# ==========================================
+
+# ================================
+# SYSTEM IDENTITY
+# ================================
+/system identity
+set name=R2
+
+# ================================
+# LOOPBACK CONFIGURATION
+# ================================
+/interface bridge
+add name=lo1
+
+/ip address
+add address=2.2.2.2/32 interface=lo1
+
+# ================================
+# CORE INTERFACE CONFIGURATION
+# ================================
+/ip address
+add address=10.10.12.2/30 interface=ether1
+add address=10.10.23.1/30 interface=ether2
+
+# ================================
+# ROUTER-ID CONFIGURATION
+# ================================
+/routing id
+add id=2.2.2.2 name=RID
+
+# ================================
+# ISIS CONFIGURATION
+# ================================
+/routing isis instance
+add name=CORE afi=ip areas=49.0001 system-id=0000.0000.0002
+
+/routing isis interface-template
+add interfaces=ether1 instance=CORE levels=l2
+add interfaces=ether2 instance=CORE levels=l2
+add interfaces=lo1 instance=CORE passive levels=l2
+
+# ================================
+# MPLS CONFIGURATION
+# ================================
+/mpls interface
+add interface=ether1
+add interface=ether2
+
+/mpls ldp
+add lsr-id=2.2.2.2 transport-addresses=2.2.2.2
+
+/mpls ldp interface
+add interface=ether1
+add interface=ether2
+
+# ==========================================
+# R3
+# ==========================================
+
+# ================================
+# SYSTEM IDENTITY
+# ================================
+/system identity
+set name=R3
+
+# ================================
+# LOOPBACK CONFIGURATION
+# ================================
+/interface bridge
+add name=lo1
+
+/ip address
+add address=3.3.3.3/32 interface=lo1
+
+# ================================
+# CORE INTERFACE CONFIGURATION
+# ================================
+/ip address
+add address=10.10.23.2/30 interface=ether1
+
+# ================================
+# ROUTER-ID CONFIGURATION
+# ================================
+/routing id
+add id=3.3.3.3 name=RID
+
+# ================================
+# ISIS CONFIGURATION
+# ================================
+/routing isis instance
+add name=CORE afi=ip areas=49.0001 system-id=0000.0000.0003
+
+/routing isis interface-template
+add interfaces=ether1 instance=CORE levels=l2
+add interfaces=lo1 instance=CORE passive levels=l2
+
+# ================================
+# MPLS CONFIGURATION
+# ================================
+/mpls interface
+add interface=ether1
+
+/mpls ldp
+add lsr-id=3.3.3.3 transport-addresses=3.3.3.3
+
+/mpls ldp interface
+add interface=ether1
+</pre>
+</article>

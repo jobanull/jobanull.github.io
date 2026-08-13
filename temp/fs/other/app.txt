@@ -1,0 +1,762 @@
+from flask import Flask, request, jsonify, render_template_string
+import os
+import glob
+from datetime import datetime
+import socket
+
+app = Flask(__name__)
+
+# Konfigurasi folder
+BASE_DIR = r'D:\Joban\daily'
+DAILY_FOLDER = BASE_DIR
+
+# Template HTML dengan dark theme dan tanpa container
+HTML_TEMPLATE = '''
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📁 Daily Files Manager Pro</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #0a0e1a; 
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
+        
+        .main-card { 
+            background: #1a1f36; 
+            border-radius: 20px; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8); 
+            padding: 30px; 
+            margin-bottom: 20px;
+            border: 1px solid #2a2f4a;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 30px; 
+            padding-bottom: 20px; 
+            border-bottom: 2px solid #2a2f4a; 
+        }
+        
+        .header h1 { 
+            font-size: 28px; 
+            color: #e0e0e0; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        }
+        
+        .header h1 i { 
+            color: #7c9bf5; 
+        }
+        
+        .header-info { 
+            color: #8892b0; 
+            font-size: 14px; 
+        }
+        
+        .stats { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+            gap: 15px; 
+            margin-bottom: 25px; 
+        }
+        
+        .stat-card { 
+            background: linear-gradient(135deg, #1e2642 0%, #2a2f4a 100%); 
+            padding: 15px; 
+            border-radius: 12px; 
+            text-align: center;
+            border: 1px solid #2a2f4a;
+        }
+        
+        .stat-card .number { 
+            font-size: 24px; 
+            font-weight: bold; 
+            color: #e0e0e0; 
+        }
+        
+        .stat-card .label { 
+            font-size: 12px; 
+            color: #8892b0; 
+            margin-top: 5px; 
+        }
+        
+        .file-list-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 15px; 
+        }
+        
+        .file-list-header h3 {
+            color: #e0e0e0;
+        }
+        
+        .search-box { 
+            display: flex; 
+            gap: 10px; 
+            align-items: center; 
+        }
+        
+        .search-box input { 
+            padding: 8px 12px; 
+            border: 2px solid #2a2f4a; 
+            border-radius: 8px; 
+            font-size: 14px;
+            background: #0a0e1a;
+            color: #e0e0e0;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #7c9bf5;
+        }
+        
+        .btn { 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px; 
+            font-size: 14px; 
+        }
+        
+        .btn-primary { 
+            background: #7c9bf5; 
+            color: white; 
+        }
+        .btn-primary:hover { 
+            background: #6a8ae8; 
+            transform: translateY(-2px); 
+            box-shadow: 0 5px 15px rgba(124, 155, 245, 0.3); 
+        }
+        
+        .btn-success { 
+            background: #48bb78; 
+            color: white; 
+        }
+        .btn-success:hover { 
+            background: #38a169; 
+            transform: translateY(-2px); 
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.3); 
+        }
+        
+        .btn-danger { 
+            background: #fc8181; 
+            color: white; 
+        }
+        .btn-danger:hover { 
+            background: #f56565; 
+            transform: translateY(-2px); 
+            box-shadow: 0 5px 15px rgba(252, 129, 129, 0.3); 
+        }
+        
+        .btn-warning { 
+            background: #f6ad55; 
+            color: white; 
+        }
+        .btn-warning:hover { 
+            background: #ed8936; 
+            transform: translateY(-2px); 
+            box-shadow: 0 5px 15px rgba(246, 173, 85, 0.3); 
+        }
+        
+        .btn-info { 
+            background: #63b3ed; 
+            color: white; 
+        }
+        .btn-info:hover { 
+            background: #4299e1; 
+            transform: translateY(-2px); 
+            box-shadow: 0 5px 15px rgba(99, 179, 237, 0.3); 
+        }
+        
+        .btn-sm { 
+            padding: 6px 12px; 
+            font-size: 12px; 
+        }
+        
+        .file-grid { 
+            display: grid; 
+            gap: 10px; 
+        }
+        
+        .file-item { 
+            background: #0a0e1a; 
+            border: 2px solid #2a2f4a; 
+            border-radius: 12px; 
+            padding: 15px 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            transition: all 0.3s; 
+            cursor: pointer; 
+        }
+        
+        .file-item:hover { 
+            border-color: #7c9bf5; 
+            transform: translateX(5px); 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+        }
+        
+        .file-info { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            flex: 1; 
+        }
+        
+        .file-icon { 
+            font-size: 24px; 
+            color: #7c9bf5; 
+        }
+        
+        .file-name { 
+            font-weight: 600; 
+            color: #e0e0e0; 
+        }
+        
+        .file-meta { 
+            font-size: 12px; 
+            color: #8892b0; 
+            display: flex; 
+            gap: 15px; 
+            align-items: center; 
+        }
+        
+        .file-actions { 
+            display: flex; 
+            gap: 8px; 
+        }
+        
+        .modal-overlay { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0, 0, 0, 0.9); 
+            z-index: 1000; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px; 
+            backdrop-filter: blur(10px); 
+        }
+        
+        .modal-overlay.active { 
+            display: flex; 
+            animation: fadeIn 0.3s ease; 
+        }
+        
+        @keyframes fadeIn { 
+            from { opacity: 0; } 
+            to { opacity: 1; } 
+        }
+        
+        .modal-content { 
+            background: #1a1f36; 
+            border-radius: 20px; 
+            width: 100%; 
+            max-width: 900px; 
+            max-height: 90vh; 
+            padding: 30px; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8); 
+            animation: slideUp 0.3s ease; 
+            overflow-y: auto;
+            border: 1px solid #2a2f4a;
+        }
+        
+        @keyframes slideUp { 
+            from { transform: translateY(30px); opacity: 0; } 
+            to { transform: translateY(0); opacity: 1; } 
+        }
+        
+        .modal-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 20px; 
+            padding-bottom: 15px; 
+            border-bottom: 2px solid #2a2f4a; 
+        }
+        
+        .modal-header h2 { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            color: #e0e0e0; 
+            font-size: 24px; 
+        }
+        
+        .modal-header h2 i { 
+            color: #7c9bf5; 
+        }
+        
+        .modal-body { 
+            margin-bottom: 20px; 
+        }
+        
+        .modal-body textarea { 
+            width: 100%; 
+            padding: 15px; 
+            border: 2px solid #2a2f4a; 
+            border-radius: 8px; 
+            font-size: 14px; 
+            font-family: 'Consolas', monospace; 
+            resize: vertical; 
+            min-height: 400px; 
+            transition: all 0.3s; 
+            line-height: 1.6;
+            background: #0a0e1a;
+            color: #e0e0e0;
+        }
+        
+        .modal-body textarea:focus { 
+            outline: none; 
+            border-color: #7c9bf5; 
+            box-shadow: 0 0 0 3px rgba(124, 155, 245, 0.1); 
+        }
+        
+        .modal-footer { 
+            display: flex; 
+            gap: 10px; 
+            flex-wrap: wrap; 
+            justify-content: flex-end; 
+            border-top: 2px solid #2a2f4a; 
+            padding-top: 20px; 
+        }
+        
+        .close-modal { 
+            background: #2a2f4a; 
+            color: #e0e0e0; 
+        }
+        .close-modal:hover { 
+            background: #3a3f5a; 
+            transform: translateY(-2px); 
+        }
+        
+        .toast { 
+            position: fixed; 
+            bottom: 20px; 
+            right: 20px; 
+            background: #1a1f36; 
+            color: #e0e0e0; 
+            padding: 15px 25px; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            display: none; 
+            animation: slideUp 0.3s ease; 
+            z-index: 2000;
+            border: 1px solid #2a2f4a;
+        }
+        
+        .toast.success { 
+            background: #1a3a2a; 
+            border-color: #48bb78;
+        }
+        .toast.error { 
+            background: #3a1a1a; 
+            border-color: #fc8181;
+        }
+        .toast.info { 
+            background: #1a2a3a; 
+            border-color: #63b3ed;
+        }
+        
+        .loading { 
+            display: none; 
+            text-align: center; 
+            padding: 20px; 
+        }
+        
+        .spinner { 
+            border: 3px solid #2a2f4a; 
+            border-top: 3px solid #7c9bf5; 
+            border-radius: 50%; 
+            width: 40px; 
+            height: 40px; 
+            animation: spin 1s linear infinite; 
+            margin: 0 auto; 
+        }
+        
+        @keyframes spin { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
+        
+        .empty-state { 
+            text-align: center; 
+            padding: 40px; 
+            color: #8892b0; 
+        }
+        
+        .empty-state i { 
+            font-size: 48px; 
+            margin-bottom: 15px; 
+            color: #2a2f4a;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #0a0e1a;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #2a2f4a;
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3a3f5a;
+        }
+        
+        @media (max-width: 768px) {
+            .file-item { 
+                flex-direction: column; 
+                align-items: stretch; 
+                gap: 10px; 
+            }
+            .file-actions { 
+                justify-content: flex-end; 
+            }
+            .header { 
+                flex-direction: column; 
+                gap: 10px; 
+                text-align: center; 
+            }
+            .search-box { 
+                width: 100%; 
+            }
+            .search-box input { 
+                flex: 1; 
+            }
+            .modal-content { 
+                padding: 20px; 
+                max-height: 95vh; 
+            }
+            .modal-header h2 { 
+                font-size: 18px; 
+            }
+            .modal-footer { 
+                flex-direction: column; 
+            }
+            .modal-footer .btn { 
+                width: 100%; 
+                justify-content: center; 
+            }
+            .modal-body textarea { 
+                min-height: 300px; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-card">
+        <div class="header">
+            <h1><i class="fas fa-folder-open"></i> Daily Files Manager</h1>
+            <div class="header-info">
+                <i class="fas fa-calendar-alt"></i>
+                <span id="currentDateTime"></span>
+            </div>
+        </div>
+        <div class="stats" id="stats">
+            <div class="stat-card"><div class="number" id="totalFiles">0</div><div class="label">Total Files</div></div>
+            <div class="stat-card"><div class="number" id="totalSize">0 KB</div><div class="label">Total Size</div></div>
+            <div class="stat-card"><div class="number" id="lastModified">-</div><div class="label">Last Modified</div></div>
+        </div>
+        <div class="file-list-header">
+            <h3><i class="fas fa-list"></i> File List</h3>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Cari file..." oninput="filterFiles()">
+                <button class="btn btn-info btn-sm" onclick="loadFiles()"><i class="fas fa-sync"></i> Refresh</button>
+            </div>
+        </div>
+        <div id="loading" class="loading"><div class="spinner"></div><p>Loading files...</p></div>
+        <div id="fileList" class="file-grid"></div>
+    </div>
+    
+    <div id="fileModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-file-alt"></i> <span id="modalFilename">file.txt</span></h2>
+                <button class="btn btn-warning btn-sm" onclick="closeModal()"><i class="fas fa-times"></i> Close</button>
+            </div>
+            <div class="modal-body">
+                <textarea id="editContent" placeholder="Edit konten file di sini..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" onclick="updateFile()"><i class="fas fa-save"></i> Update</button>
+                <button class="btn btn-danger" onclick="deleteFile()"><i class="fas fa-trash"></i> Delete</button>
+                <button class="btn btn-primary" onclick="downloadFile()"><i class="fas fa-download"></i> Download</button>
+                <button class="btn close-modal" onclick="closeModal()"><i class="fas fa-times"></i> Close</button>
+            </div>
+        </div>
+    </div>
+    <div id="toast" class="toast"></div>
+    <script>
+        let currentFile = null, allFiles = [];
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('currentDateTime').textContent = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+        async function loadFiles() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+            try {
+                const response = await fetch('/api/files');
+                const files = await response.json();
+                allFiles = files;
+                renderFiles(files);
+                updateStats(files);
+            } catch (error) {
+                showToast('Gagal memuat file', 'error');
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+        function renderFiles(files) {
+            const fileList = document.getElementById('fileList');
+            if (files.length === 0) {
+                fileList.innerHTML = `<div class="empty-state"><i class="fas fa-folder-open"></i><p>Tidak ada file</p><small>Folder kosong</small></div>`;
+                return;
+            }
+            fileList.innerHTML = files.map(f => `
+                <div class="file-item" onclick="openModal('${f}')">
+                    <div class="file-info">
+                        <i class="fas fa-file-alt file-icon"></i>
+                        <div>
+                            <div class="file-name">${f}</div>
+                            <div class="file-meta">
+                                <span><i class="far fa-calendar-alt"></i> ${getFileDate(f)}</span>
+                                <span><i class="far fa-file"></i> ${getFileSize(f)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="file-actions" onclick="event.stopPropagation();">
+                        <button class="btn btn-danger btn-sm" onclick="deleteFileQuick('${f}')"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        function filterFiles() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allFiles.filter(f => f.toLowerCase().includes(search));
+            renderFiles(filtered);
+        }
+        function getFileDate(filename) { return new Date().toLocaleDateString('id-ID'); }
+        function getFileSize(filename) {
+            const sizes = ['1.2 KB', '3.5 KB', '8.7 KB', '15.3 KB', '42.1 KB'];
+            return sizes[Math.floor(Math.random() * sizes.length)];
+        }
+        function updateStats(files) {
+            document.getElementById('totalFiles').textContent = files.length;
+            const totalSize = files.length * 2.5;
+            document.getElementById('totalSize').textContent = totalSize > 1024 ? (totalSize/1024).toFixed(1) + ' MB' : totalSize.toFixed(1) + ' KB';
+            if (files.length > 0) {
+                const now = new Date();
+                document.getElementById('lastModified').textContent = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            } else {
+                document.getElementById('lastModified').textContent = '-';
+            }
+        }
+        async function openModal(filename) {
+            currentFile = filename;
+            document.getElementById('modalFilename').textContent = filename;
+            document.getElementById('fileModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            try {
+                const response = await fetch(`/api/files/${filename}`);
+                const data = await response.json();
+                document.getElementById('editContent').value = data.content;
+            } catch (error) {
+                showToast('Gagal memuat file', 'error');
+            }
+        }
+        function closeModal() {
+            document.getElementById('fileModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            currentFile = null;
+        }
+        async function updateFile() {
+            const content = document.getElementById('editContent').value;
+            try {
+                const response = await fetch(`/api/files/${currentFile}`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({content})
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    showToast(`File ${currentFile} berhasil diupdate!`, 'success');
+                    loadFiles();
+                } else {
+                    showToast(result.error || 'Gagal update', 'error');
+                }
+            } catch (error) {
+                showToast('Gagal update file', 'error');
+            }
+        }
+        async function deleteFile() {
+            if (!confirm(`Yakin ingin menghapus file "${currentFile}"?`)) return;
+            await deleteFileAPI(currentFile);
+        }
+        async function deleteFileQuick(filename) {
+            if (!confirm(`Yakin ingin menghapus file "${filename}"?`)) return;
+            await deleteFileAPI(filename);
+        }
+        async function deleteFileAPI(filename) {
+            try {
+                const response = await fetch(`/api/files/${filename}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    showToast(`File ${filename} berhasil dihapus!`, 'success');
+                    if (currentFile === filename) { closeModal(); }
+                    loadFiles();
+                } else {
+                    showToast(result.error || 'Gagal hapus', 'error');
+                }
+            } catch (error) {
+                showToast('Gagal hapus file', 'error');
+            }
+        }
+        function downloadFile() {
+            const content = document.getElementById('editContent').value;
+            const blob = new Blob([content], {type: 'text/plain'});
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = currentFile;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            showToast(`Downloading ${currentFile}`, 'info');
+        }
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        }
+        loadFiles();
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('fileModal').classList.contains('active')) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
+'''
+
+@app.route('/')
+def index():
+    return render_template_string(HTML_TEMPLATE)
+
+@app.route('/api/files', methods=['GET'])
+def list_files():
+    try:
+        files = glob.glob(os.path.join(DAILY_FOLDER, '*.txt'))
+        filenames = [os.path.basename(f) for f in files]
+        return jsonify(sorted(filenames))
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/files/<filename>', methods=['GET'])
+def get_file(filename):
+    try:
+        filepath = os.path.join(DAILY_FOLDER, filename)
+        if not os.path.abspath(filepath).startswith(os.path.abspath(DAILY_FOLDER)):
+            return jsonify({'error': 'Invalid path'}), 403
+        if not os.path.exists(filepath):
+            return jsonify({'error': 'File not found'}), 404
+        with open(filepath, 'r', encoding='utf-8') as f:
+            content = f.read()
+        return jsonify({'filename': filename, 'content': content})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/files/<filename>', methods=['PUT'])
+def update_file(filename):
+    try:
+        data = request.json
+        content = data.get('content', '')
+        filepath = os.path.join(DAILY_FOLDER, filename)
+        if not os.path.abspath(filepath).startswith(os.path.abspath(DAILY_FOLDER)):
+            return jsonify({'error': 'Invalid path'}), 403
+        if not os.path.exists(filepath):
+            return jsonify({'error': 'File not found'}), 404
+        with open(filepath, 'w', encoding='utf-8') as f:
+            f.write(content)
+        return jsonify({'message': f'File {filename} updated successfully'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/files/<filename>', methods=['DELETE'])
+def delete_file(filename):
+    try:
+        filepath = os.path.join(DAILY_FOLDER, filename)
+        if not os.path.abspath(filepath).startswith(os.path.abspath(DAILY_FOLDER)):
+            return jsonify({'error': 'Invalid path'}), 403
+        if not os.path.exists(filepath):
+            return jsonify({'error': 'File not found'}), 404
+        os.remove(filepath)
+        return jsonify({'message': f'File {filename} deleted successfully'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+def get_local_ip():
+    try:
+        hostname = socket.gethostname()
+        local_ip = socket.gethostbyname(hostname)
+        return local_ip
+    except:
+        return "127.0.0.1"
+
+if __name__ == '__main__':
+    if not os.path.exists(DAILY_FOLDER):
+        os.makedirs(DAILY_FOLDER)
+        print(f"📁 Folder created: {DAILY_FOLDER}")
+    
+    local_ip = get_local_ip()
+    
+    print("\n" + "="*50)
+    print("🚀 SERVER STARTED SUCCESSFULLY!")
+    print("="*50)
+    print(f"📁 Managing files in: {DAILY_FOLDER}")
+    print("\n📍 ACCESS URLs:")
+    print(f"   → Local:        http://localhost:5000")
+    print(f"   → Local IP:     http://127.0.0.1:5000")
+    print(f"   → Network IP:   http://{local_ip}:5000")
+    print("\n💡 TIPS:")
+    print("   • Untuk akses dari perangkat lain, gunakan Network IP")
+    print("   • Pastikan firewall mengizinkan port 5000")
+    print("   • Perangkat lain harus dalam network yang sama")
+    print("="*50 + "\n")
+    
+    app.run(debug=True, host='0.0.0.0', port=5000, threaded=True)
+

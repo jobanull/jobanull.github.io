@@ -1,0 +1,72 @@
+<!-- CEK INTERACE STATUS -->
+            <article id="cek-int-stat">
+                 <h3><span class="vendor-tag alcatel-tag">Alcatel SW</span> 6900 X72, 6860</h3>
+                    <pre class="tree">
+# <span class="cmd-bold">show interface alias</span>
+ Chas/
+ Slot/     Admin     Link        WTR      WTS       Alias
+ Port      Status   Status      (sec)    (msec)
+--------+----------+---------+----------+----------+-----------------------
+ 1/1/1     enable     up      0          0          ""
+ 1/1/2     enable     up      0          0          ""
+ 1/1/3     disable    down    0          0          ""
+
+</pre>       
+                <h3><span class="vendor-tag alcatel-tag">Alcatel SW</span> 6250, 6450-10, 6450-24, 6900 X20 </h3>
+                    <pre class="tree">
+# <span class="cmd-bold">show interface port</span>
+Slot/    Admin     Link    Violations  Recovery   Recovery      WTR            Alias
+Port     Status   Status                 Time       Max        (sec)
+------+----------+---------+----------+----------+----------+----------+-----------------------------------------
+  1/1    enable      up        none           300         10          0 ""
+  1/2    enable      down      none           300         10          0 ""
+  1/3    enable      up        none           300         10          0 ""
+  1/4    enable      down      none           300         10          0 ""
+
+</pre>  
+                <h3><span class="vendor-tag huawei-tag">Huawei PE</span>NE 8000 M1D / NE 8000 F1A-8H20Q, CE 6730</h3>        
+<pre class="tree">
+# <span class="cmd-bold">display interface description</span>
+PHY: Physical
+*down: administratively down
+^down: standby
+(l): loopback
+(s): spoofing
+(E): E-Trunk down
+(b): BFD down
+(B): Bit-error-detection down
+(e): ETHOAM down
+(d): Dampening Suppressed
+(p): port alarm down
+(ld): loop-detect trigger down
+(c): CFM down
+(D): DF backup down
+Interface                     PHY     Protocol Description                     
+100GE0/2/24                   down    down                                     
+100GE0/2/25                   down    down                                     
+100GE0/2/26                   up      up       
+100GE0/2/27                   up      up      
+25GE0/2/8                     down    down                                     
+25GE0/2/9                     down    down                                     
+25GE0/2/10                    down    down         
+</pre>
+
+                 <h3><span class="vendor-tag cisco-tag">Cisco PE</span>ASR9K / 9901 / 9903, NCS 540 / 5501 / 55A1-24H / 55A1-36H, <span class="cmd-bold-1">SW 2950</span> / 3850</h3>
+                    <pre class="tree">
+# <span class="cmd-bold">show interface description</span>
+Interface                      Status         Protocol Description
+Gi0/0/0                        down           down     
+Gi0/0/1                        admin down     down     
+Gi0/0/2                        admin down     down
+</pre>     
+
+                 <h3><span class="vendor-tag cisco-tag">BDCOM PE</span>??</h3>
+                    <pre class="tree">
+??
+</pre>       
+
+                 <h3><span class="vendor-tag cisco-tag">RAISECOM PE</span>??</h3>
+                    <pre class="tree">
+??
+</pre>       
+            </article>
